@@ -3,9 +3,9 @@ from distutils.core import setup
 
 from setuptools import find_packages
 
-setup(name='audiopyle',
+setup(name='audiopyle_xtracter',
       version='0.1.0',
-      description='Module extacting features from mono wav files',
+      description='Audiopyle module extracting features from audio files',
       author='Mateusz Korzeniowski',
       author_email='emkor93@gmail.com',
       url='',
