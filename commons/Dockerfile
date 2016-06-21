@@ -1,4 +1,4 @@
-FROM python:2.7.11-wheezy
+FROM python:2.7.11-alpine
 
 # SETTING GLOBAL ENV FOR FURTHER USE
 ENV AUDIOPYLE_HOME "/audiopyle"
