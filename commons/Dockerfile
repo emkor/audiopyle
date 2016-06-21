@@ -11,8 +11,8 @@ WORKDIR "$AUDIOPYLE_HOME/commons"
 
 # COPY MODULE FILES
 ADD ./commons ./commons
-ADD ./requirements.txt .
-ADD ./setup.py .
+ADD ./requirements.txt ./requirements.txt
+ADD ./setup.py ./setup.py
 
 # DEPLOY
 ADD ./deploy.sh .
