@@ -1,4 +1,4 @@
-FROM python:2-onbuild
+FROM endlessdrones/audiopyle-commons:latest
 
 RUN pip install tox && \
 	    pip install numpy && \
