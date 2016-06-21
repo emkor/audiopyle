@@ -15,11 +15,11 @@ ADD ./requirements.txt ./requirements.txt
 ADD ./setup.py ./setup.py
 
 # DEPLOY
-ADD ./deploy.sh .
+ADD ./deploy.sh ./deploy.sh
 RUN chmod -R 775 ./deploy.sh
 RUN ./deploy.sh
 
 # INSTALL TEST FRAMEWORK AND RUN TESTS
 RUN pip install tox
-ADD ./tox.ini .
+ADD ./tox.ini ./tox.ini
 RUN tox
