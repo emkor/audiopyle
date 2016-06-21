@@ -6,6 +6,9 @@ RUN mkdir -p "$AUDIOPYLE_HOME/xtracter"
 # CURRENT OPS WILL BE CALLED HERE
 WORKDIR "$AUDIOPYLE_HOME/xtracter"
 
+# INSTALL GLIBC NECESSARY TO RUN SOME OF THE PLUGINS
+RUN apt-get install libc6-dev
+
 # COPY MODULE FILES
 ADD ./xtracter ./xtracter
 ADD ./devops ./devops
