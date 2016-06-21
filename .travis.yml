@@ -5,6 +5,10 @@ language: python
 services:
   - docker
 
-before_install:
+#before_install:
+#  - docker build -t endlessdrones/audiopyle-commons ./commons
+#  - docker build -t endlessdrones/audiopyle-xtracter ./xtracter
+
+script:
   - docker build -t endlessdrones/audiopyle-commons ./commons
   - docker build -t endlessdrones/audiopyle-xtracter ./xtracter
