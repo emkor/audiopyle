@@ -1,4 +1,4 @@
-FROM python:2.7.11-alpine
+FROM python:2.7.11-wheezy
 
 # SETTING GLOBAL ENV FOR FURTHER USE
 ENV AUDIOPYLE_HOME "/audiopyle"
@@ -17,7 +17,7 @@ ADD ./setup.py ./setup.py
 # DEPLOY
 ADD ./deploy.sh ./deploy.sh
 RUN chmod -R 775 ./deploy.sh
-RUN /bin/bash ./deploy.sh
+RUN ./deploy.sh
 
 # INSTALL TEST FRAMEWORK AND RUN TESTS
 RUN pip install tox

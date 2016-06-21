@@ -8,12 +8,6 @@ WORKDIR "$AUDIOPYLE_HOME/xtracter"
 
 RUN dpkg -l libc6
 
-# INSTALL GLIBC NECESSARY TO RUN SOME OF THE PLUGINS
-RUN apt-get install libc6-dev
-RUN apt-get install libc6
-
-RUN dpkg -l libc6
-
 # COPY MODULE FILES
 ADD ./xtracter ./xtracter
 ADD ./devops ./devops
