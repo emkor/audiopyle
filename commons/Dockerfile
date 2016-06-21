@@ -11,6 +11,7 @@ WORKDIR "$AUDIOPYLE_HOME/commons"
 
 # COPY ONLY NECESSARY FILES
 ADD ./deploy.sh .
+RUN chmod -R 775 ./deploy.sh
 ADD ./requirements.txt .
 ADD ./setup.py .
 ADD ./commons ./commons
