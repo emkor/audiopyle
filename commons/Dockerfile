@@ -1,0 +1,19 @@
+FROM python:2-onbuild
+
+# SETTING GLOBAL ENV FOR FURTHER USE
+ENV AUDIOPYLE_HOME "/audiopyle"
+
+# CREATING DIR FOR THIS MODULE
+RUN mkdir -p "$AUDIOPYLE_HOME/commons"
+
+# CURRENT OPS WILL BE CALLED HERE
+WORKDIR "$AUDIOPYLE_HOME/commons"
+
+# COPY ONLY NECESSARY FILES
+ADD ./deploy.sh .
+ADD ./requirements.txt .
+ADD ./setup.py .
+ADD ./commons ./commons
+
+# INSTALL REQUIREMENTS AND COMMONS MODULE
+RUN ./deploy.sh
