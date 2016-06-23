@@ -17,7 +17,7 @@ ADD ./setup.py ./setup.py
 # DEPLOY
 ADD ./deploy.sh ./deploy.sh
 RUN chmod -R 775 ./deploy.sh
-RUN ./deploy.sh
+RUN bash ./deploy.sh
 ENV VAMP_PATH "$AUDIOPYLE_HOME/xtracter/resources/vamp_plugins"
 
 # INSTALL TEST FRAMEWORK AND RUN TESTS
