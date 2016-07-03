@@ -2,14 +2,14 @@ import numpy
 
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
-from commons.utils.constants import Const
+from commons.utils.constants import AudiopyleConst
 from xtracter.utils.xtracter_const import XtracterConst
 
 
 class XtracterUtils(object):
     @staticmethod
     def get_test_resources_path():
-        project_path = OsEnvAccessor.get_env_variable(Const.PROJECT_HOME_ENV)
+        project_path = OsEnvAccessor.get_env_variable(AudiopyleConst.PROJECT_HOME_ENV)
         return FileAccessor.join(project_path, XtracterConst.TEST_RESOURCES_PATH)
 
     @staticmethod
@@ -29,5 +29,5 @@ class XtracterUtils(object):
 
     @staticmethod
     def get_wav_file_path():
-        project_path = OsEnvAccessor.get_env_variable(Const.PROJECT_HOME_ENV)
+        project_path = OsEnvAccessor.get_env_variable(AudiopyleConst.PROJECT_HOME_ENV)
         return FileAccessor.join(project_path, XtracterConst.AUDIO_FILES_CACHE_PATH)
