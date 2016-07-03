@@ -17,3 +17,4 @@ class XtracterConst(object):
     TEST_CSV_FILE_NAME = "102bpm_drum_loop_mono_44.1k.csv"
     DEFAULT_BLOCK_SIZE = 2048
     DEFAULT_STEP_SIZE = 1024  # deprecated
+    AUDIO_FILES_CACHE_PATH = "wav_temp"
