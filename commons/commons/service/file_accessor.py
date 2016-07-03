@@ -22,3 +22,12 @@ class FileAccessor(object):
     def join(*path_parts):
         normed = [os.path.normpath(path) for path in path_parts]
         return os.path.join(normed[0], *(normed[1:]))
+
+    @staticmethod
+    def remove_file(file_path):
+        try:
+            os.remove(file_path)
+            return True
+        except Exception as e:
+            print(e)
+            return False
