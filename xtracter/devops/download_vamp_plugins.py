@@ -9,8 +9,8 @@ from b2.progress import make_progress_listener
 REALM = 'production'
 ACCOUNT_ID = 'a56c121eaece'
 APPLICATION_KEY = '001de304a2f988ad8266285ebbfcebe6aed90717b7'
-VAMP_PLUGINS_BUCKET_NAME = 'vamp-plugins'
-PLATFORM_DIR = "linux_x64"
+VAMP_PLUGINS_BUCKET_NAME = 'audiopyle-resources'
+PLATFORM_DIR = "vamp_plugins_linux_x64"
 DESTINATION = "../resources/vamp_plugins/"
 
 
