@@ -5,7 +5,7 @@ from commons.model.b2_config import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
-from commons.utils.constants import AudiopyleConst
+from commons.utils.constant import AudiopyleConst
 
 
 class B2AudioProviderIntegrationTest(unittest.TestCase):

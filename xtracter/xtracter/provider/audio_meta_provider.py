@@ -2,12 +2,12 @@ import logging
 import wave
 
 from commons.service.file_accessor import FileAccessor
-from commons.service.unit_converter import UnitConverter
+from commons.utils.conversion import Converter
 from xtracter.model.audio_meta import AudioMeta
 
 
 class LocalAudioMetaProvider(object):
-    def __init__(self, file_provider=FileAccessor, unit_converter=UnitConverter):
+    def __init__(self, file_provider=FileAccessor, unit_converter=Converter):
         self.file_provider = file_provider
         self.unit_converter = unit_converter
 

@@ -1,4 +1,4 @@
-from commons.service.unit_converter import UnitConverter
+from commons.utils.conversion import Converter
 
 
 class AudioSegmentMeta(object):
@@ -11,7 +11,7 @@ class AudioSegmentMeta(object):
         return self.length
 
     def length_sec(self):
-        return UnitConverter.frames_to_sec(self.length_frames(), self.sample_rate)
+        return Converter.frames_to_sec(self.length_frames(), self.sample_rate)
 
     def next_offset(self):
         return self.offset + self.length_frames() + 1
