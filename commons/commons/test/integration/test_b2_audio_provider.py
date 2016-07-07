@@ -1,6 +1,6 @@
+import json
 import unittest
 from assertpy import assert_that
-
 from commons.model.b2_config import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.service.file_accessor import FileAccessor
@@ -39,3 +39,7 @@ class B2AudioProviderIntegrationTest(unittest.TestCase):
         local_file_path = self.audio_provider.download(AudiopyleConst.B2_TEST_FILE_PATH)
         assert_that(FileAccessor.exists(local_file_path)).is_true()
         FileAccessor.remove_file(local_file_path)
+
+    def test_get_files_info_should_contain_anything(self):
+        file_infos = self.audio_provider.get_file_infos()
+        assert_that(file_infos).is_not_none().is_not_empty()
