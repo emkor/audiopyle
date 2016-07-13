@@ -1,5 +1,9 @@
 from pydub import AudioSegment
 
+DEFAULT_TARGET_CHANNEL_NUMBER = 1
+DEFAULT_TARGET_SAMPLE_RATE = 44100
+DEFAULT_TARGET_SAMPLE_WIDTH = 2
+
 
 class AudioFileConverter(object):
     def __init__(self, input_dir, output_dir):
@@ -13,7 +17,9 @@ class AudioFileConverter(object):
         self.full_output_path = self.output_dir + self.output_file
 
         self.song = AudioSegment.from_mp3(self.full_input_path)
-        self.song_mono = self.song.set_channels(1)
-        self.song_44100 = self.song_mono.set_frame_rate(44100)
-        self.song_sample_width = self.song_44100.set_sample_width(2)
+        self.song_mono = self.song.set_channels(DEFAULT_TARGET_CHANNEL_NUMBER)
+        self.song_sample_rate = self.song_mono.set_frame_rate(
+            DEFAULT_TARGET_SAMPLE_RATE)
+        self.song_sample_width = self.song_sample_rate.set_sample_width(
+            DEFAULT_TARGET_SAMPLE_WIDTH)
         self.song_sample_width.export(self.full_output_path, format="wav")
