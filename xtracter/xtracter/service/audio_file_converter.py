@@ -1,5 +1,6 @@
-from commons.service.file_accessor import FileAccessor
 from pydub import AudioSegment
+
+from commons.service.file_accessor import FileAccessor
 
 DEFAULT_TARGET_CHANNEL_NUMBER = 1
 DEFAULT_TARGET_SAMPLE_RATE = 44100
