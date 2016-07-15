@@ -13,23 +13,20 @@ class AudioFileConverter(object):
         self.output_dir = output_dir
 
     def convert(self, input_file):
-        self.input_file = input_file
-        self.output_file = self.input_file + ".wav"
+        output_file = input_file + ".wav"
 
-        self.full_input_path = FileAccessor.join(
-            self.input_dir, self.input_file)
+        full_input_path = FileAccessor.join(self.input_dir, input_file)
 
-        self.full_output_path = FileAccessor.join(
-            self.output_dir, self.output_file)
+        full_output_path = FileAccessor.join(self.output_dir, output_file)
 
-        self.song = AudioSegment.from_mp3(self.full_input_path)
+        song = AudioSegment.from_mp3(full_input_path)
 
-        self.song_mono = self.song.set_channels(DEFAULT_TARGET_CHANNEL_NUMBER)
+        song_mono = song.set_channels(DEFAULT_TARGET_CHANNEL_NUMBER)
 
-        self.song_sample_rate = self.song_mono.set_frame_rate(
+        song_sample_rate = song_mono.set_frame_rate(
             DEFAULT_TARGET_SAMPLE_RATE)
 
-        self.song_sample_width = self.song_sample_rate.set_sample_width(
+        song_sample_width = song_sample_rate.set_sample_width(
             DEFAULT_TARGET_SAMPLE_WIDTH)
 
-        self.song_sample_width.export(self.full_output_path, format="wav")
+        song_sample_width.export(full_output_path, format="wav")
