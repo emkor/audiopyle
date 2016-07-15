@@ -16,17 +16,11 @@ class AudioFileConverter(object):
         output_file = input_file + ".wav"
 
         full_input_path = FileAccessor.join(self.input_dir, input_file)
-
         full_output_path = FileAccessor.join(self.output_dir, output_file)
 
-        song = AudioSegment.from_mp3(full_input_path)
+        song = AudioSegment.from_mp3(full_input_path)\
+            .set_channels(DEFAULT_TARGET_CHANNEL_NUMBER)\
+            .set_frame_rate(DEFAULT_TARGET_SAMPLE_RATE)\
+            .set_sample_width(DEFAULT_TARGET_SAMPLE_WIDTH)\
 
-        song_mono = song.set_channels(DEFAULT_TARGET_CHANNEL_NUMBER)
-
-        song_sample_rate = song_mono.set_frame_rate(
-            DEFAULT_TARGET_SAMPLE_RATE)
-
-        song_sample_width = song_sample_rate.set_sample_width(
-            DEFAULT_TARGET_SAMPLE_WIDTH)
-
-        song_sample_width.export(full_output_path, format="wav")
+        song.export(full_output_path, format="wav")
