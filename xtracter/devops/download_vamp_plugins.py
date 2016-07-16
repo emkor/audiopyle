@@ -47,8 +47,7 @@ def download_remote_files_to(bucket, local_dest_dir):
                 print('Skipping already existing file: {}'.format(destination_file_path))
             else:
                 print('Downloading remote file: {} to: {}'.format(remote_file_path, destination_file_path))
-                destination_object = DownloadDestLocalFile(destination_file_path,
-                                                           make_progress_listener(destination_file_path, True))
+                destination_object = DownloadDestLocalFile(destination_file_path)
                 bucket.download_file_by_name(remote_file_path, destination_object)
         else:
             print('Skipping hidden file: {}'.format(file_name))
