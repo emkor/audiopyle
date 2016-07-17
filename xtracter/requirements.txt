@@ -3,3 +3,4 @@ mock
 assertpy
 numpy
 vamp
+pydub
