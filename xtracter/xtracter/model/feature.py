@@ -1,4 +1,4 @@
-from commons.utils.conversion import Converter
+from commons.utils.conversion import frames_to_sec
 
 
 class AudioFeature(object):
@@ -14,7 +14,7 @@ class AudioFeature(object):
         return self.segment_meta.length
 
     def length_sec(self):
-        return Converter.frames_to_sec(self.length_frames(), self.audio_meta.sample_rate)
+        return frames_to_sec(self.length_frames(), self.audio_meta.sample_rate)
 
     def next_offset(self):
         return self.segment_meta.offset + self.length_frames() + 1

@@ -1,4 +1,4 @@
-from commons.utils.conversion import Converter
+from commons.utils.conversion import b_to_B, B_to_b, to_kilo, frames_to_sec
 
 
 class AudioMeta(object):
@@ -10,10 +10,10 @@ class AudioMeta(object):
         self.bit_depth = bit_depth
 
     def size_kB(self):
-        return Converter.to_kilo(Converter.b_to_B(self.bit_depth) * self.channels_count * self.frames_count)
+        return to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)
 
     def length_sec(self):
-        return Converter.frames_to_sec(self.frames_count, self.sample_rate)
+        return frames_to_sec(self.frames_count, self.sample_rate)
 
     def avg_kbps(self):
-        return Converter.B_to_b(self.size_kB()) / self.length_sec()
+        return B_to_b(self.size_kB()) / self.length_sec()
