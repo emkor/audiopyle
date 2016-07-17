@@ -49,5 +49,5 @@ class B2AudioProvider(object):
     def _create_destination_object(self, remote_file_path):
         file_name = FileAccessor.get_file_name(remote_file_path)
         dest_file_path = FileAccessor.join(self.local_wave_dir, file_name)
-        destination_object = DownloadDestLocalFile(dest_file_path, make_progress_listener(dest_file_path, True))
+        destination_object = DownloadDestLocalFile(dest_file_path)
         return destination_object
