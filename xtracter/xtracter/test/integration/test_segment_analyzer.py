@@ -32,7 +32,7 @@ class AudioSegmentAnalyzerIntegrationTest(unittest.TestCase):
     def test_analysis_on_single_semgent_with_multiple_plugins(self):
         segment = self.audio_segments[0]
         result_dict = {}
-        for plugin in self.plugins[0:4]:
+        for plugin in self.plugins[0:10]:
             result_dict.update({plugin.key: {}})
             for output in plugin.outputs:
                 result_dict.get(plugin.key).update({output: self.analyzer.analyze(plugin.key, output, segment)})
