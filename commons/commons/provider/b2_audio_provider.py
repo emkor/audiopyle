@@ -5,7 +5,7 @@ from b2.download_dest import DownloadDestLocalFile
 from b2.progress import make_progress_listener
 
 from commons.service.file_accessor import FileAccessor
-from commons.utils.constants import AudiopyleConst
+from commons.utils.constant import AudiopyleConst
 
 
 class B2AudioProvider(object):

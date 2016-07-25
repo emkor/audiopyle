@@ -72,9 +72,9 @@ class AudioSegmentTest(unittest.TestCase):
         assert_that(self.test_segment_3.length_frames()).is_equal_to(44100)
 
     def test_length_sec(self):
-        assert_that(self.test_segment_1.length_sec()).is_equal_to(0.5)
-        assert_that(self.test_segment_2.length_sec()).is_equal_to(1)
-        assert_that(self.test_segment_3.length_sec()).is_equal_to(1)
+        assert_that(self.test_segment_1.length_sec).is_equal_to(0.5)
+        assert_that(self.test_segment_2.length_sec).is_equal_to(1)
+        assert_that(self.test_segment_3.length_sec).is_equal_to(1)
 
     def test_next_segment_offset(self):
         assert_that(self.test_segment_1.next_offset()).is_equal_to(22051)
