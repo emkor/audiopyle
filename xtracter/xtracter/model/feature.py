@@ -15,10 +15,10 @@ class RawFeature(object):
 
 
 class AudioFeature(object):
-    def __init__(self, audio_file_meta, audio_segment_meta, vamp_plugin, plugin_output, raw_features):
+    def __init__(self, audio_file_meta, audio_segment_meta, vampy_plugin, plugin_output, raw_features):
         self.audio_meta = audio_file_meta
         self.segment_meta = audio_segment_meta
-        self.plugin = vamp_plugin
+        self.plugin = vampy_plugin
         self.plugin_output = plugin_output
         self.raw_features = raw_features
 
