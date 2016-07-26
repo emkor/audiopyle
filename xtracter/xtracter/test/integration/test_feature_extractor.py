@@ -15,8 +15,8 @@ class FeatureExtractorIntegrationTest(unittest.TestCase):
     def setUp(self):
         self.mock_plugin_provider = Mock()
         test_segment_provider = LocalAudioSegmentProvider(XtracterUtils.get_test_resources_path())
-        self.feature_extractor = FeatureExtractor(plugin_provider=self.mock_plugin_provider, segment_provider=test_segment_provider)
-
+        self.feature_extractor = FeatureExtractor(plugin_provider=self.mock_plugin_provider,
+                                                  segment_provider=test_segment_provider)
 
     def test_should_analyze_with_first_plugin(self):
         test_file_audio_meta = AudioMeta(XtracterConst.TEST_WAV_FILE_NAME,

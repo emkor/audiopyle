@@ -1,6 +1,7 @@
-from xtracter.model.feature import AudioFeature, RawFeature
+from xtracter.model.feature import AudioFeature
 from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
 from xtracter.provider.plugin_provider import VampyPluginProvider
+from xtracter.service.feature_mapper import FeatureMapper
 from xtracter.service.segment_analyzer import AudioSegmentAnalyzer
 from xtracter.utils.xtracter_const import XtracterConst
 
@@ -35,5 +36,5 @@ class FeatureExtractor(object):
 
     def _extract_feature(self, audio_file_meta, plugin, plugin_output, segment):
         raw_features_dicts = self.segment_analyzer.analyze(plugin.key, plugin_output, segment)
-        raw_features = RawFeature.from_dict_list(raw_features_dicts)
+        raw_features = FeatureMapper.from_dict(raw_features_dicts)
         return AudioFeature(audio_file_meta, segment.get_meta_of(), plugin, plugin_output, raw_features)
