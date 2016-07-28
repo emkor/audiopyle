@@ -18,10 +18,6 @@ class XtracterUtils(object):
         return FileAccessor.join(resource_path, XtracterConst.TEST_WAV_FILE_NAME)
 
     @staticmethod
-    def get_test_mp3_file_name():
-        return XtracterConst.TEST_MP3_FILE_NAME
-
-    @staticmethod
     def get_test_csv_file_path():
         resource_path = XtracterUtils.get_test_resources_path()
         return FileAccessor.join(resource_path, XtracterConst.TEST_CSV_FILE_NAME)
