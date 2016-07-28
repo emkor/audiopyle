@@ -2,7 +2,7 @@ import numpy
 
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
-from commons.utils.constants import AudiopyleConst
+from commons.utils.constant import AudiopyleConst
 from xtracter.utils.xtracter_const import XtracterConst
 
 
