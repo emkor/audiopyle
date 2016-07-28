@@ -1,4 +1,4 @@
-FROM endlessdrones/audiopyle-base-image:latest
+FROM endlessdrones/audiopyle-base-image:tests-audio-converter
 
 # SETTING GLOBAL ENV FOR FURTHER USE
 ENV AUDIOPYLE_HOME "/audiopyle"
