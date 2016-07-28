@@ -1,4 +1,4 @@
-FROM endlessdrones/audiopyle-commons:latest
+FROM endlessdrones/audiopyle-commons:tests-audio-converter
 
 # CREATING DIR FOR THIS MODULE
 RUN mkdir -p "$AUDIOPYLE_HOME/xtracter"
