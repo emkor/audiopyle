@@ -14,7 +14,7 @@ class AudioFileConverterIntegrationTest(unittest.TestCase):
             XtracterUtils.get_test_resources_path(),
             XtracterUtils.get_test_resources_path())
 
-    def test_should_be_equal(self):
+    def test_should_convert_mp3_to_wav(self):
         self.converter.convert(XtracterUtils.get_test_mp3_file_name())
 
         song = AudioSegment.from_wav(
