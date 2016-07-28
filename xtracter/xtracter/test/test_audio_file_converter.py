@@ -23,4 +23,9 @@ class AudioFileConverterIntegrationTest(unittest.TestCase):
                 XtracterUtils.get_test_resources_path(),
                 XtracterConst.TEST_MP3_FILE_NAME + ".wav"))
 
+        assert_that(
+            FileAccessor.join(
+                XtracterUtils.get_test_resources_path(),
+                XtracterConst.TEST_MP3_FILE_NAME + ".wav")).exists()
+
         assert_that(song).is_instance_of(AudioSegment)
