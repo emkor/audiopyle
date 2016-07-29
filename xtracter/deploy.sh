@@ -13,3 +13,8 @@ pip install .
 mkdir -p resources/vamp_plugins
 cd devops && python download_vamp_plugins.py && cd ..
 
+cd ..
+if [ ! -d "wav_temp" ]; then
+        mkdir wav_temp
+fi
+cd xtracter

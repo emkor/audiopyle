@@ -21,7 +21,7 @@ class AudioFileConverter(object):
         song = AudioSegment.from_mp3(full_input_path)\
             .set_channels(DEFAULT_TARGET_CHANNEL_NUMBER)\
             .set_frame_rate(DEFAULT_TARGET_SAMPLE_RATE)\
-            .set_sample_width(DEFAULT_TARGET_SAMPLE_WIDTH)\
+            .set_sample_width(DEFAULT_TARGET_SAMPLE_WIDTH)
 
         try:
             song.export(full_output_path, format="wav")

@@ -10,6 +10,7 @@ class XtracterConst(object):
     VAMPY_RAW_FEATURE_TIMESTAMP_KEY = 'timestamp'
     TEST_RESOURCES_PATH = "xtracter/xtracter/test/resources"
     TEST_WAV_FILE_NAME = "102bpm_drum_loop_mono_44.1k.wav"
+    TEST_MP3_FILE_NAME = "102bpm_drum_loop_mono.mp3"
     TEST_WAV_FILE_FRAME_COUNT = 103936
     TEST_WAV_FILE_CHANNELS_COUNT = 1
     TEST_WAV_FILE_BIT_DEPTH = 16
