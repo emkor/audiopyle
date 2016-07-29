@@ -18,14 +18,11 @@ class AudioFileConverterIntegrationTest(unittest.TestCase):
     def test_should_convert_mp3_to_wav(self):
         self.converter.convert(XtracterConst.TEST_MP3_FILE_NAME)
 
-        song = AudioSegment.from_wav(
-            FileAccessor.join(
-                XtracterUtils.get_test_resources_path(),
-                XtracterConst.TEST_MP3_FILE_NAME + ".wav"))
+        output_file_path = FileAccessor.join(
+            XtracterUtils.get_test_resources_path(),
+            XtracterConst.TEST_MP3_FILE_NAME + ".wav")
 
-        assert_that(
-            FileAccessor.join(
-                XtracterUtils.get_test_resources_path(),
-                XtracterConst.TEST_MP3_FILE_NAME + ".wav")).exists()
+        song = AudioSegment.from_wav(output_file_path)
 
+        assert_that(output_file_path).exists()
         assert_that(song).is_instance_of(AudioSegment)
