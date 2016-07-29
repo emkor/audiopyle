@@ -26,4 +26,4 @@ RUN tox
 
 # CLEANUP AFTER TESTS
 RUN rm -rf .tox && rm -rf audiopyle_commons.egg-info
-RUN pip uninstall tox
+RUN pip uninstall -y tox
