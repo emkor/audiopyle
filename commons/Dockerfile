@@ -18,8 +18,3 @@ ADD ./setup.py ./setup.py
 ADD ./deploy.sh ./deploy.sh
 RUN chmod -R 775 ./deploy.sh
 RUN bash ./deploy.sh
-
-# INSTALL TEST FRAMEWORK AND RUN TESTS
-RUN pip install tox
-ADD ./tox.ini ./tox.ini
-RUN tox
