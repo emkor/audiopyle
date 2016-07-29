@@ -8,7 +8,9 @@ services:
 #before_install:
 #  - docker build -t endlessdrones/audiopyle-commons ./commons
 #  - docker build -t endlessdrones/audiopyle-xtracter ./xtracter
+#  - docker build -t endlessdrones/audiopyle-coordinator ./coordinator
 
 script:
   - docker build -t endlessdrones/audiopyle-commons ./commons
   - docker build -t endlessdrones/audiopyle-xtracter ./xtracter
+  - docker build -t endlessdrones/audiopyle-coordinator ./coordinator
