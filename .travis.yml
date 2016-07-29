@@ -5,19 +5,6 @@ language: python
 services:
   - docker
 
-before_install:
-  - pip install tox
-  - cd ./commons
-  - chmod 755 ./deploy.sh && tox
-  - rm -rf .tox && rm -rf audiopyle_commons.egg-info
-  - cd ../coordinator
-  - chmod 755 ./deploy.sh && tox
-  - rm -rf .tox && rm -rf .audiopyle_coordinator.egg-info
-  - cd ../xtracter
-  - chmod 755 ./deploy.sh && tox
-  - rm -rf .tox && rm -rf .audiopyle_xtracter.egg-info
-  - cd ..
-
 script:
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
   - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
