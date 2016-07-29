@@ -8,13 +8,13 @@ services:
 before_install:
   - pip install tox
   - cd ./commons
-  - tox
+  - chmod 755 ./deploy.sh && tox
   - rm -rf .tox && rm -rf audiopyle_commons.egg-info
   - cd ../coordinator
-  - tox
+  - chmod 755 ./deploy.sh && tox
   - rm -rf .tox && rm -rf .audiopyle_coordinator.egg-info
   - cd ../xtracter
-  - tox
+  - chmod 755 ./deploy.sh && tox
   - rm -rf .tox && rm -rf .audiopyle_xtracter.egg-info
   - cd ..
 
