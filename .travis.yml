@@ -1,7 +1,3 @@
-travis env set DOCKER_EMAIL mkorzeniowski93@gmail.com
-travis env set DOCKER_USERNAME endlessdrones
-travis env set DOCKER_PASSWORD h2bbIt9Wpcuf8x
-
 sudo: required
 
 language: python
