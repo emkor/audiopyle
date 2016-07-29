@@ -24,3 +24,7 @@ ENV VAMP_PATH "$AUDIOPYLE_HOME/xtracter/resources/vamp_plugins"
 RUN pip install tox
 ADD ./tox.ini ./tox.ini
 RUN tox
+
+# CLEANUP AFTER TESTS
+RUN rm -rf .tox && rm -rf audiopyle_xtracter.egg-info
+RUN pip uninstall -y tox

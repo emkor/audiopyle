@@ -20,3 +20,7 @@ RUN bash ./deploy.sh
 RUN pip install tox
 ADD ./tox.ini ./tox.ini
 RUN tox
+
+# CLEANUP AFTER TESTS
+RUN rm -rf .tox && rm -rf audiopyle_coordinator.egg-info
+RUN pip uninstall -y tox

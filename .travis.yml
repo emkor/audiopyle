@@ -5,12 +5,15 @@ language: python
 services:
   - docker
 
-#before_install:
-#  - docker build -t endlessdrones/audiopyle-commons ./commons
-#  - docker build -t endlessdrones/audiopyle-xtracter ./xtracter
-#  - docker build -t endlessdrones/audiopyle-coordinator ./coordinator
-
 script:
-  - docker build -t endlessdrones/audiopyle-commons ./commons
-  - docker build -t endlessdrones/audiopyle-xtracter ./xtracter
-  - docker build -t endlessdrones/audiopyle-coordinator ./coordinator
+  - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
+  - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
+  - docker build -t "$DOCKER_USERNAME"/audiopyle-xtracter ./xtracter
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+    docker push "$DOCKER_USERNAME"/audiopyle-commons
+    docker push "$DOCKER_USERNAME"/audiopyle-coordinator
+    docker push "$DOCKER_USERNAME"/audiopyle-xtracter
+    fi
