@@ -5,12 +5,12 @@ language: python
 services:
   - docker
 
-#before_install:
-#  - docker build -t endlessdrones/audiopyle-commons ./commons
-#  - docker build -t endlessdrones/audiopyle-xtracter ./xtracter
-#  - docker build -t endlessdrones/audiopyle-coordinator ./coordinator
-
 script:
-  - docker build -t endlessdrones/audiopyle-commons ./commons
-  - docker build -t endlessdrones/audiopyle-xtracter ./xtracter
-  - docker build -t endlessdrones/audiopyle-coordinator ./coordinator
+  - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
+  - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
+  - docker build -t "$DOCKER_USERNAME"/audiopyle-xtracter ./xtracter
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    bash ./push-docker-images.sh;
+    fi
