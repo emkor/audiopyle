@@ -10,6 +10,7 @@ script:
   - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
   - docker build -t "$DOCKER_USERNAME"/audiopyle-xtracter ./xtracter
   - bash devops/run_code_analysis.sh
+  - cat ./commons/
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
