@@ -6,12 +6,12 @@ services:
   - docker
 
 script:
-  - bash run-code-analysis.sh
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
   - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
   - docker build -t "$DOCKER_USERNAME"/audiopyle-xtracter ./xtracter
+  - bash devops/run_code_analysis.sh
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    bash ./push-docker-images.sh;
+    bash devops/push_docker_images.sh;
     fi
