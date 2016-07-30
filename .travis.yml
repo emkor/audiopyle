@@ -6,6 +6,7 @@ services:
   - docker
 
 script:
+  - bash run-code-analysis.sh
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
   - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
   - docker build -t "$DOCKER_USERNAME"/audiopyle-xtracter ./xtracter
