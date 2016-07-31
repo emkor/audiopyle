@@ -2,7 +2,6 @@ import logging
 
 from b2.api import B2Api
 from b2.download_dest import DownloadDestLocalFile
-from b2.progress import make_progress_listener
 
 from commons.service.file_accessor import FileAccessor
 from commons.utils.constant import AudiopyleConst
