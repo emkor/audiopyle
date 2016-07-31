@@ -6,8 +6,6 @@ RUN mkdir -p "$AUDIOPYLE_HOME/xtracter"
 # CURRENT OPS WILL BE CALLED HERE
 WORKDIR "$AUDIOPYLE_HOME/xtracter"
 
-RUN dpkg -l libc6
-
 # COPY MODULE FILES
 ADD ./xtracter ./xtracter
 ADD ./devops ./devops
