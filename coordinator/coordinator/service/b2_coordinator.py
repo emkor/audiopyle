@@ -2,7 +2,7 @@ from commons.model.b2_config import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
-from coordinator.model.remote_audio_file import RemoteFileMeta
+from coordinator.model.remote_file_meta import RemoteFileMeta
 
 
 class B2Coordinator(object):
