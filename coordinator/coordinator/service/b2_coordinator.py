@@ -2,7 +2,7 @@ from commons.model.b2_config import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
-from coordinator.model.remote_audio_file import RemoteAudioFile
+from coordinator.model.remote_audio_file import RemoteFileMeta
 
 
 class B2Coordinator(object):
@@ -22,9 +22,9 @@ class B2Coordinator(object):
 
         remote_audio_files = []
         for file in audio_file_infos:
-            remote_audio_files.append(RemoteAudioFile(file[u'fileName'],
-                                                      file[u'size'],
-                                                      file[u'uploadTimestamp']))
+            remote_audio_files.append(RemoteFileMeta(file[u'fileName'],
+                                                     file[u'size'],
+                                                     file[u'uploadTimestamp']))
 
         return remote_audio_files
 
