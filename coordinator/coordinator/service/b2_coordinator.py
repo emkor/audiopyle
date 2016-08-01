@@ -7,7 +7,7 @@ from coordinator.model.remote_file_meta import RemoteFileMeta
 
 class B2Coordinator(object):
     def __init__(self, audio_provider=None):
-        if(audio_provider is None):
+        if(audio_provider is not None):
             self.audio_provider = audio_provider
         else:
             self.audio_provider = B2AudioProvider(
