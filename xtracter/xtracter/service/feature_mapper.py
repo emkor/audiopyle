@@ -20,7 +20,7 @@ class FeatureMapper(object):
             timestamp = feature_dict.get("timestamp").to_float()
             values_list = feature_dict.get("values").tolist() if feature_dict.get("values") is not None else None
             label = feature_dict.get('label') or ''
-            output.append(RawFeature(timestamp=timestamp, value=values_list,label=label))
+            output.append(RawFeature(timestamp=timestamp, value=values_list, label=label))
         return output
 
     @staticmethod
