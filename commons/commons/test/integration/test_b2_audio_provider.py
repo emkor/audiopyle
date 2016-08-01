@@ -1,4 +1,3 @@
-import json
 import unittest
 from assertpy import assert_that
 from commons.model.b2_config import B2Config
