@@ -6,17 +6,16 @@ from coordinator.model.remote_file_meta import RemoteFileMeta
 
 
 class B2Coordinator(object):
-    def __init__(self,
-                 audio_provider=None,
-                 b2_config=B2Config(
-                     AudiopyleConst.B2_ACCOUNT_ID,
-                     AudiopyleConst.B2_APPLICATION_KEY,
-                     AudiopyleConst.B2_RESOURCES_BUCKET),
-                 local_cache_dir=OsEnvAccessor.get_env_variable(
-                     AudiopyleConst.PROJECT_HOME_ENV)):
-
-        self.audio_provider = audio_provider \
-            or B2AudioProvider(b2_config, local_cache_dir)
+    def __init__(self, audio_provider=None):
+        if(audio_provider is None):
+            self.audio_provider = audio_provider
+        else:
+            self.audio_provider = B2AudioProvider(
+                B2Config(AudiopyleConst.B2_ACCOUNT_ID,
+                         AudiopyleConst.B2_APPLICATION_KEY,
+                         AudiopyleConst.B2_RESOURCES_BUCKET),
+                OsEnvAccessor.get_env_variable(
+                    AudiopyleConst.PROJECT_HOME_ENV))
 
     def get_remote_audio_files(self):
         file_infos = self.audio_provider.get_file_infos()
