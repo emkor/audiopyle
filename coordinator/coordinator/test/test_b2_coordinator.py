@@ -7,9 +7,8 @@ from coordinator.service.b2_coordinator import B2Coordinator
 
 class TestB2Coordinator(unittest.TestCase):
     def setUp(self):
-        self.coordinator = B2Coordinator()
-        self.coordinator.audio_provider = Mock()
-        self.coordinator.audio_provider.get_file_infos.return_value = \
+        audio_provider = Mock()
+        audio_provider.get_file_infos.return_value = \
             [{u'contentType': u'audio',
               u'fileName': u'audio-file',
               u'size': 100,
@@ -18,6 +17,8 @@ class TestB2Coordinator(unittest.TestCase):
               u'fileName': u'some-file',
               u'size': 300,
               u'uploadTimestamp': 400}]
+
+        self.coordinator = B2Coordinator(audio_provider)
 
     def test_should_filter_audio_file(self):
         files = self.coordinator.get_remote_audio_files()
