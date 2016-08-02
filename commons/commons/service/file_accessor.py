@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 
 class FileAccessor(object):
@@ -22,6 +23,10 @@ class FileAccessor(object):
     def join(*path_parts):
         normed = [os.path.normpath(path) for path in path_parts]
         return os.path.join(normed[0], *(normed[1:]))
+
+    @staticmethod
+    def run_command(*words):
+        return subprocess.call(map(lambda word: str(word), words))
 
     @staticmethod
     def remove_file(file_path):

@@ -5,11 +5,16 @@ language: python
 services:
   - docker
 
+before_install:
+  - chmod 755 setup.sh
+  - setup.sh
+
 script:
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
   - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
   - docker build -t "$DOCKER_USERNAME"/audiopyle-xtracter ./xtracter
   - bash devops/run_code_analysis.sh
+  - cd testcases && tox && cd ..
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then

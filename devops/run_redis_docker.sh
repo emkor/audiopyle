@@ -20,8 +20,9 @@ if [[ -z "$INSTANCE_NAME" ]]; then
     INSTANCE_NAME=${DEFAULT_INSTANCE_NAME}
 fi
 
-
 # run docker
 echo "Starting redis container named $INSTANCE_NAME locally on port $EXPOSE_PORT..."
-docker run -p 127.0.0.1:"$EXPOSE_PORT":6379 --name "$INSTANCE_NAME"-on-"$EXPOSE_PORT" -d redis
+docker run -p 127.0.0.1:"$EXPOSE_PORT":6379 --name "$INSTANCE_NAME" -d redis
 echo "Started redis!"
+
+exit 0
