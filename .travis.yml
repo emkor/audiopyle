@@ -7,7 +7,7 @@ services:
 
 before_install:
   - chmod 755 setup.sh
-  - setup.sh
+  - bash setup.sh
 
 script:
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons

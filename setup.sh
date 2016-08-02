@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # set executions permission on all sh files
 chmod u+x **/*.sh
