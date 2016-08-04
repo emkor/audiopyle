@@ -1,4 +1,5 @@
 import json
+
 import redis
 
 
@@ -26,7 +27,10 @@ class RedisQueueClient(object):
         return self.client.delete(self.queue_name)
 
     def _to_json(self, element):
-        return json.dumps(element.__dict__)
+        if isinstance(element, (int, float, basestring, list, set, dict)):
+            return json.dumps(element)
+        else:
+            return json.dumps(element.__dict__)
 
     def _from_json(self, json_element):
         return json.loads(json_element)

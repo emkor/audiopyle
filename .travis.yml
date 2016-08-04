@@ -5,10 +5,14 @@ language: python
 services:
   - docker
 
+before_install:
+  - chmod 755 setup.sh && bash setup.sh
+
 script:
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
   - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
   - docker build -t "$DOCKER_USERNAME"/audiopyle-xtracter ./xtracter
+  - cd testcases && tox && cd ..
   - bash devops/run_code_analysis.sh
 
 after_success:
