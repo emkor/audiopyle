@@ -4,3 +4,4 @@ assertpy
 numpy
 vamp
 pydub
+redis
