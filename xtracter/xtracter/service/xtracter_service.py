@@ -8,7 +8,7 @@ from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from xtracter.utils.xtracter_const import XtracterConst
 
-SLEEP_TIME_SEC = 1
+SLEEP_TIME_SEC = 3
 
 
 class Xtracter(object):
@@ -21,7 +21,7 @@ class Xtracter(object):
 
     def init(self):
         while True:
-            task_dict_or_none = self.redis_results_client
+            task_dict_or_none = self.redis_results_client.take()
             if task_dict_or_none is not None:
                 local_file_meta = self._download_file(task_dict_or_none)
                 audio_features = self._extract_features(local_file_meta)
