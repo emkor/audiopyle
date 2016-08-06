@@ -1,4 +1,6 @@
 from commons.provider.redis_queue_client import RedisQueueClient
+from commons.service.file_accessor import FileAccessor
+from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
 
 from commons.model.b2_config import B2Config
@@ -10,7 +12,7 @@ from xtracter.service.feature_extractor import FeatureExtractor
 from xtracter.service.segment_analyzer import AudioSegmentAnalyzer
 from xtracter.service.xtracter_service import Xtracter
 
-AUDIO_FILES_PATH = ""
+AUDIO_FILES_PATH = FileAccessor.join(OsEnvAccessor.get_env_variable("AUDIOPYLE_HOME"), "xtracter", "wav_temp")
 TASK_QUEUE_NAME = "xtracter_tasks"
 RESULTS_QUEUE_NAME = "xtracter_results"
 
@@ -30,7 +32,7 @@ redis_results_queue_client = RedisQueueClient(queue_name=RESULTS_QUEUE_NAME)
 # CREATE Xtracter SERVICE INSTANCE
 print("Initializing xtracter...")
 xtracter_service = Xtracter(feature_extractor=feature_extractor, audio_meta_provider=audio_meta_provider,
-                            b2_client=b2_client, redis_task_client=redis_results_queue_client,
+                            b2_client=b2_client, redis_task_client=redis_task_queue_client,
                             redis_results_client=redis_results_queue_client)
 
 # STARTING FEATURE EXTRACTION
