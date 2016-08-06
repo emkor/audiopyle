@@ -52,4 +52,4 @@ class RedisQueueClient(object):
             return json.dumps(element.__dict__)
 
     def _from_json(self, json_element):
-        return json.loads(json_element)
+        return json.loads(json_element) if json_element else None
