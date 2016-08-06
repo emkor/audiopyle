@@ -21,7 +21,7 @@ class Xtracter(object):
 
     def init(self):
         while True:
-            task_dict_or_none = self.redis_results_client.take()
+            task_dict_or_none = self.redis_task_client.take()
             if task_dict_or_none is not None:
                 local_file_meta = self._download_file(task_dict_or_none)
                 audio_features = self._extract_features(local_file_meta)
