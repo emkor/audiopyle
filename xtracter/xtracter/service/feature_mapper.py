@@ -3,7 +3,7 @@ from xtracter.model.feature import RawFeature
 
 class FeatureMapper(object):
     @staticmethod
-    def format_dict(features_dict):
+    def from_dict(features_dict):
         if 'list' in features_dict:
             return FeatureMapper._handle_list_feature_type(features_dict)
         elif 'vector' in features_dict:
@@ -20,9 +20,7 @@ class FeatureMapper(object):
             timestamp = feature_dict.get("timestamp").to_float()
             values_list = feature_dict.get("values").tolist() if feature_dict.get("values") is not None else None
             label = feature_dict.get('label') or ''
-            # FIXME this __dict__ here is just for purposes of serialization of nested object AudioFeature
-            # there should be nicer way to serializing nested objects to JSON
-            output.append(RawFeature(timestamp=timestamp, value=values_list, label=label).__dict__)
+            output.append(RawFeature(timestamp=timestamp, value=values_list, label=label))
         return output
 
     @staticmethod
@@ -32,7 +30,7 @@ class FeatureMapper(object):
         for index, value in enumerate(values):
             float_timestamp = step_seconds.to_float() * index
             list_values = value.tolist() if values is not None else None
-            output.append(RawFeature(timestamp=float_timestamp, value=list_values).__dict__)
+            output.append(RawFeature(timestamp=float_timestamp, value=list_values))
         return output
 
     @staticmethod
@@ -42,5 +40,5 @@ class FeatureMapper(object):
         for row, values in enumerate(values_matrix):
             float_timestamp = step_seconds.to_float() * row
             list_values = values.tolist() if values is not None else None
-            output.append(RawFeature(timestamp=float_timestamp, value=list_values).__dict__)
+            output.append(RawFeature(timestamp=float_timestamp, value=list_values))
         return output
