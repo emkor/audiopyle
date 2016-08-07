@@ -36,5 +36,5 @@ class FeatureExtractor(object):
 
     def _extract_feature(self, audio_file_meta, plugin, plugin_output, segment):
         raw_features_dicts = self.segment_analyzer.analyze(plugin.key, plugin_output, segment)
-        raw_features = FeatureMapper.from_dict(raw_features_dicts)
+        raw_features = FeatureMapper.format_dict(raw_features_dicts)
         return AudioFeature(audio_file_meta, segment.get_meta_of(), plugin, plugin_output, raw_features)
