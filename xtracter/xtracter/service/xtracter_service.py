@@ -25,7 +25,7 @@ class Xtracter(object):
             if task_dict_or_none is not None:
                 local_file_meta = self._download_file(task_dict_or_none)
                 audio_features = self._extract_features(local_file_meta)
-                self._send_to_redis(audio_features)
+                # self._send_to_redis(audio_features)
                 self._remove_file(local_file_meta)
             else:
                 sleep(SLEEP_TIME_SEC)
