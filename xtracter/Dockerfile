@@ -29,4 +29,4 @@ RUN pip uninstall -y tox
 
 # SET STARTUP SCRIPT AS ENTRYPOINT
 ADD ./start_xtracter.py ./start_xtracter.py
-ENTRYPOINT ["python ./start_xtracter.py"]
+ENTRYPOINT ["python", "./start_xtracter.py"]
