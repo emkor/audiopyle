@@ -44,5 +44,5 @@ class XtracterIntegrationTest(unittest.TestCase):
         self.redis_task_client.clear()
         self.redis_results_client.clear()
 
-    def test_shoud_extract_faetures_from_test_file(self):
-        FileAccessor.run_command("docker", "run", "endlessdrones/audiopyle-xtracter")
+    # def test_shoud_extract_faetures_from_test_file(self):
+    #     FileAccessor.run_command("docker", "run", "endlessdrones/audiopyle-xtracter")
