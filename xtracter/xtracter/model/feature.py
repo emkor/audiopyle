@@ -20,10 +20,10 @@ class RawFeature(object):
 
 
 class AudioFeature(object):
-    def __init__(self, audio_file_meta, audio_segment_meta, vampy_plugin, plugin_output, raw_features):
+    def __init__(self, audio_file_meta, audio_segment_meta, vampy_plugin_key, plugin_output, raw_features):
         self.audio_meta = audio_file_meta
         self.segment_meta = audio_segment_meta
-        self.plugin = vampy_plugin
+        self.plugin_key = vampy_plugin_key
         self.plugin_output = plugin_output
         self.raw_features = raw_features
 
@@ -44,7 +44,7 @@ class AudioFeature(object):
         return json.dumps(simple_dict)
 
     def __str__(self):
-        return "AudioFeature for {}:{} of an AudioFile: {} has {} raw features".format(self.plugin,
+        return "AudioFeature for {}:{} of an AudioFile: {} has {} raw features".format(self.plugin_key,
                                                                                        self.plugin_output,
                                                                                        self.audio_meta,
                                                                                        len(self.raw_features))
