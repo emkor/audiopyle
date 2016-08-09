@@ -59,7 +59,7 @@ class Xtracter(object):
 
     def _remove_file(self, local_file_meta):
         home = OsEnvAccessor.get_env_variable(AudiopyleConst.PROJECT_HOME_ENV)
-        file_path = FileAccessor.join(home, XtracterConst.AUDIO_FILES_CACHE_PATH, local_file_meta.filename)
+        file_path = FileAccessor.join(home, "xtracter", XtracterConst.AUDIO_FILES_CACHE_PATH, local_file_meta.filename)
         if FileAccessor.exists(file_path):
             FileAccessor.remove_file(file_path)
             print("Removed file: {}".format(file_path))
