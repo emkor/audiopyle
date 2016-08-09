@@ -1,5 +1,3 @@
-import json
-
 from commons.utils.conversion import b_to_B, B_to_b, to_kilo, frames_to_sec
 
 
@@ -20,8 +18,8 @@ class AudioMeta(object):
     def avg_kbps(self):
         return B_to_b(self.size_kB()) / self.length_sec()
 
-    def to_json(self):
-        return json.dumps(self.__dict__)
+    def to_dict(self):
+        return self.__dict__
 
     def __str__(self):
         return "AudioMeta: {}".format(self.__dict__)

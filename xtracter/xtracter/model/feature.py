@@ -1,5 +1,3 @@
-import json
-
 from commons.utils.conversion import frames_to_sec
 
 
@@ -15,8 +13,8 @@ class RawFeature(object):
     def __repr__(self):
         return self.__str__()
 
-    def to_json(self):
-        return json.dumps(self.__dict__)
+    def to_dict(self):
+        return self.__dict__
 
 
 class AudioFeature(object):
@@ -36,12 +34,12 @@ class AudioFeature(object):
     def next_offset(self):
         return self.segment_meta.offset + self.length_frames() + 1
 
-    def to_json(self):
+    def to_dict(self):
         simple_dict = self.__dict__
-        simple_dict.update({"audio_meta": self.audio_meta.to_json()})
-        simple_dict.update({"segment_meta": self.segment_meta.to_json()})
-        simple_dict.update({"raw_features": [feature.to_json() for feature in self.raw_features]})
-        return json.dumps(simple_dict)
+        simple_dict.update({"audio_meta": self.audio_meta.to_dict()})
+        simple_dict.update({"segment_meta": self.segment_meta.to_dict()})
+        simple_dict.update({"raw_features": [feature.to_dict() for feature in self.raw_features]})
+        return simple_dict
 
     def __str__(self):
         return "AudioFeature for {}:{} of an AudioFile: {} has {} raw features".format(self.plugin_key,

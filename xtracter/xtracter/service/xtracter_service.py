@@ -25,7 +25,7 @@ class Xtracter(object):
             if task_dict_or_none is not None:
                 local_file_meta = self._download_file(task_dict_or_none)
                 audio_features = self._extract_features(local_file_meta)
-                # self._send_to_redis(audio_features)
+                self._send_to_redis(audio_features)
                 self._remove_file(local_file_meta)
             else:
                 sleep(SLEEP_TIME_SEC)
@@ -53,7 +53,7 @@ class Xtracter(object):
         start_time = datetime.utcnow()
         print("{} exporting {} features to redis results queue...".format(start_time, len(audio_features)))
         for audio_feature in audio_features:
-            self.redis_results_client.add(audio_feature)
+            self.redis_results_client.add(audio_feature.to_dict())
         sending_took = (datetime.utcnow() - start_time).total_seconds()
         print("Ended exporting results in {} seconds.".format(sending_took))
 
