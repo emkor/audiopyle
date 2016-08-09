@@ -1,7 +1,8 @@
 import unittest
+
 from assertpy import assert_that
 
-from coordinator.model.remote_file_meta import RemoteFileMeta
+from commons.model.remote_file_meta import RemoteFileMeta
 from coordinator.service.b2_coordinator import B2Coordinator
 
 

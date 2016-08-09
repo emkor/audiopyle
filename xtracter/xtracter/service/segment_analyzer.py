@@ -1,11 +1,6 @@
 # coding=utf-8
 import logging
-
 import vamp
-from numpy import array
-
-from xtracter.model.feature import AudioFeature
-from xtracter.utils.xtracter_const import XtracterConst
 
 
 class AudioSegmentAnalyzer(object):
