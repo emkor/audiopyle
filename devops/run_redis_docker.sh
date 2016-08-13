@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # usage
-# run_redis_docker.sh [exposed port on host] [instance name]
+# run_redis_docker.sh [instance name] [exposed port on host]
 
 # parameters
-EXPOSE_PORT=$1
-INSTANCE_NAME=$2
+INSTANCE_NAME=$1
+EXPOSE_PORT=$2
 
 # defaults
 DEFAULT_EXPOSE_PORT=6379
