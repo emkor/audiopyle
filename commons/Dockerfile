@@ -10,18 +10,18 @@ RUN mkdir -p "$AUDIOPYLE_HOME/commons"
 WORKDIR "$AUDIOPYLE_HOME/commons"
 
 # COPY MODULE FILES
-ADD ./commons ./commons
-ADD ./requirements.txt ./requirements.txt
-ADD ./setup.py ./setup.py
+COPY ./commons ./commons
+COPY ./requirements.txt ./requirements.txt
+COPY ./setup.py ./setup.py
 
 # DEPLOY
-ADD ./deploy.sh ./deploy.sh
+COPY ./deploy.sh ./deploy.sh
 RUN chmod -R 775 ./deploy.sh
 RUN bash ./deploy.sh
 
 # INSTALL TEST FRAMEWORK AND RUN TESTS
 RUN pip install tox
-ADD ./tox.ini ./tox.ini
+COPY ./tox.ini ./tox.ini
 RUN tox
 
 # CLEANUP AFTER TESTS

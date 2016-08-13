@@ -7,20 +7,20 @@ RUN mkdir -p "$AUDIOPYLE_HOME/xtracter"
 WORKDIR "$AUDIOPYLE_HOME/xtracter"
 
 # COPY MODULE FILES
-ADD ./xtracter ./xtracter
-ADD ./devops ./devops
-ADD ./requirements.txt ./requirements.txt
-ADD ./setup.py ./setup.py
+COPY ./xtracter ./xtracter
+COPY ./devops ./devops
+COPY ./requirements.txt ./requirements.txt
+COPY ./setup.py ./setup.py
 
 # DEPLOY
-ADD ./deploy.sh ./deploy.sh
+COPY ./deploy.sh ./deploy.sh
 RUN chmod -R 775 ./deploy.sh
 RUN bash ./deploy.sh
 ENV VAMP_PATH "$AUDIOPYLE_HOME/xtracter/resources/vamp_plugins"
 
 # INSTALL TEST FRAMEWORK AND RUN TESTS
 RUN pip install tox
-ADD ./tox.ini ./tox.ini
+COPY ./tox.ini ./tox.ini
 RUN tox
 
 # CLEANUP AFTER TESTS
@@ -28,5 +28,5 @@ RUN rm -rf .tox && rm -rf audiopyle_xtracter.egg-info
 RUN pip uninstall -y tox
 
 # SET STARTUP SCRIPT AS ENTRYPOINT
-ADD ./start_xtracter.py ./start_xtracter.py
+COPY ./start_xtracter.py ./start_xtracter.py
 ENTRYPOINT ["python", "./start_xtracter.py"]
