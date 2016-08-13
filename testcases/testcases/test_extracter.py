@@ -9,7 +9,6 @@ from commons.utils.constant import AudiopyleConst
 
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
-from xtracter.utils.xtracter_const import XtracterConst
 
 DEVOPS_DIR = FileAccessor.join(OsEnvAccessor.get_env_variable(AudiopyleConst.PROJECT_HOME_ENV), 'devops')
 REDIS_DOCKER_RUN_SH = "run_redis_docker.sh"
@@ -58,9 +57,7 @@ class XtracterIntegrationTest(unittest.TestCase):
         assert_that(self.redis_task_client.length()).is_equal_to(1)
         sleep(TASK_TAKE_TIME)
         assert_that(self.redis_task_client.length()).is_equal_to(0)
-
-        self._keep_polling_for_results_until_timeout()
-        assert_that(self.redis_results_client.length()).is_greater_than(0)
+        assert_that(self._keep_polling_for_results_until_timeout()).is_true()
 
     def _add_test_file_task(self):
         self.redis_task_client.add(RemoteFileMeta(AudiopyleConst.B2_TEST_FILE_PATH, 0, 0).to_dict())
@@ -70,10 +67,11 @@ class XtracterIntegrationTest(unittest.TestCase):
         interval_time = 1
         while analysis_time < ANALYSIS_TIMEOUT:
             if self.redis_results_client.length() > 0:
-                break
+                return True
             else:
                 analysis_time += interval_time
                 sleep(interval_time)
+        return False
 
     @classmethod
     def _run_devops_container_boot_script(cls, container_name, boot_script, *boot_script_params):
