@@ -23,6 +23,6 @@ fi
 # run docker
 echo "Starting redis container named $INSTANCE_NAME locally on port $EXPOSE_PORT..."
 docker run -p 127.0.0.1:"$EXPOSE_PORT":6379 --name "$INSTANCE_NAME" -d redis
-echo "Started redis!"
+echo "Started redis named $INSTANCE_NAME!"
 
 exit 0
