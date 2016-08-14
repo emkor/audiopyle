@@ -64,7 +64,7 @@ class XtracterIntegrationTest(unittest.TestCase):
 
     def _keep_polling_for_results_until_timeout(self):
         analysis_time = 0
-        interval_time = 1
+        interval_time = 3
         while analysis_time < ANALYSIS_TIMEOUT:
             if self.redis_results_client.length() > 0:
                 print("Results appeared after {} seconds!".format(analysis_time))
