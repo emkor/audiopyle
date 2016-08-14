@@ -25,7 +25,7 @@ REDIS_PORT = 6379
 
 DOCKER_BOOT_TIME = 5
 TASK_TAKE_TIME = 4
-ANALYSIS_TIMEOUT = 60
+ANALYSIS_TIMEOUT = 90
 
 
 class XtracterIntegrationTest(unittest.TestCase):
@@ -67,10 +67,13 @@ class XtracterIntegrationTest(unittest.TestCase):
         interval_time = 1
         while analysis_time < ANALYSIS_TIMEOUT:
             if self.redis_results_client.length() > 0:
+                print("Results appeared after {} seconds!".format(analysis_time))
                 return True
             else:
                 analysis_time += interval_time
                 sleep(interval_time)
+                print("Waiting for results next {} seconds...".format(interval_time))
+        print("Results did not come up within {} seconds!".format(ANALYSIS_TIMEOUT))
         return False
 
     @classmethod
