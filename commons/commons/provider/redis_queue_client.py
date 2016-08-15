@@ -1,7 +1,10 @@
 import json
+import logging
 
 import redis
 from redis import ConnectionError
+
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
 
 
 class RedisQueueClient(object):
@@ -13,21 +16,21 @@ class RedisQueueClient(object):
         try:
             self.client.rpush(self.queue_name, self._to_json(element))
         except ConnectionError as e:
-            print("Could not add element: {} to Redis queue {} Details: {}".format(element, self.queue_name, e))
+            logging.error("Could not add element: {} to Redis queue {} Details: {}".format(element, self.queue_name, e))
 
     def take(self):
         try:
             json_element = self.client.lpop(self.queue_name)
             return self._from_json(json_element)
         except ConnectionError as e:
-            print("Could not read from Redis queue {} Details: {}".format(self.queue_name, e))
+            logging.error("Could not read from Redis queue {} Details: {}".format(self.queue_name, e))
             return None
 
     def length(self):
         try:
             return self.client.llen(self.queue_name)
         except ConnectionError as e:
-            print("Could not check length of Redis queue {} Details: {}".format(self.queue_name, e))
+            logging.error("Could not check length of Redis queue {} Details: {}".format(self.queue_name, e))
             return 0
 
     def list(self):
@@ -36,14 +39,14 @@ class RedisQueueClient(object):
             json_elements = self.client.lrange(self.queue_name, 0, queue_length)
             return map(lambda json_task: self._from_json(json_task), json_elements)
         except ConnectionError as e:
-            print("Could not list Redis {} queue elements. Details: {}".format(self.queue_name, e))
+            logging.error("Could not list Redis {} queue elements. Details: {}".format(self.queue_name, e))
             return []
 
     def clear(self):
         try:
             return self.client.delete(self.queue_name)
         except ConnectionError as e:
-            print("Could not clear Redis {} queue. Details: {}".format(self.queue_name, e))
+            logging.error("Could not clear Redis {} queue. Details: {}".format(self.queue_name, e))
 
     def _to_json(self, element):
         if isinstance(element, (int, float, basestring, list, set, dict)):

@@ -1,11 +1,14 @@
 import struct
 import wave
+import logging
 
 import numpy
 from numpy import array
 
 from commons.service.file_accessor import FileAccessor
 from xtracter.model.audio_segment import AudioSegment
+
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
 
 
 class LocalAudioSegmentProvider(object):
@@ -35,7 +38,7 @@ class LocalAudioSegmentProvider(object):
             wav_file.close()
             return struct.unpack_from("%dh" % end_on_frame * audio_meta.channels_count, read_frames)
         except Exception as e:
-            print(
+            logging.error(
                 'Error on reading audio from: {} with meta: {}. Details: {}'.format(file_path, audio_meta,
                                                                                     e))
             if wav_file:

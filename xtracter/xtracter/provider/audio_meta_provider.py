@@ -5,6 +5,8 @@ from commons.service.file_accessor import FileAccessor
 from commons.utils.conversion import B_to_b
 from xtracter.model.audio_meta import AudioMeta
 
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
+
 
 class LocalAudioMetaProvider(object):
     def __init__(self, file_provider=FileAccessor):

@@ -2,6 +2,8 @@
 import logging
 import vamp
 
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
+
 
 class AudioSegmentAnalyzer(object):
     def __init__(self, vamp_lib=vamp):

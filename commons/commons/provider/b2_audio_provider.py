@@ -6,6 +6,8 @@ from b2.download_dest import DownloadDestLocalFile
 from commons.service.file_accessor import FileAccessor
 from commons.utils.constant import AudiopyleConst
 
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
+
 
 class B2AudioProvider(object):
     def __init__(self, b2_config, local_wave_dir, b2_api=None):

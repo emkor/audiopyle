@@ -1,3 +1,4 @@
+import logging
 from pydub import AudioSegment
 
 from commons.service.file_accessor import FileAccessor
@@ -5,6 +6,8 @@ from commons.service.file_accessor import FileAccessor
 DEFAULT_TARGET_CHANNEL_NUMBER = 1
 DEFAULT_TARGET_SAMPLE_RATE = 44100
 DEFAULT_TARGET_SAMPLE_WIDTH = 2
+
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
 
 
 class AudioFileConverter(object):
@@ -26,5 +29,5 @@ class AudioFileConverter(object):
         try:
             song.export(full_output_path, format="wav")
         except Exception as ex:
-            print("Some problems on conversion file: {}".format(input_file))
-            print("Details: {}".format(ex))
+            logging.error("Some problems on conversion file: {}".format(input_file))
+            logging.error("Details: {}".format(ex))
