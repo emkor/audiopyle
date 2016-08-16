@@ -53,7 +53,7 @@ def download_remote_files_to(bucket, local_dest_dir):
                 bucket.download_file_by_name(remote_file_path, destination_object)
         else:
             logging.info('Skipping hidden file: {}'.format(file_name))
-        logging.info('Download completed.')
+    logging.info('Download completed.')
 
 
 def get_local_destination_dir():
