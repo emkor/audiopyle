@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # usage
-# run_redis_docker.sh [exposed port on host] [instance name]
+# run_redis_docker.sh [instance name] [exposed port on host]
 
 # parameters
-EXPOSE_PORT=$1
-INSTANCE_NAME=$2
+INSTANCE_NAME=$1
+EXPOSE_PORT=$2
 
 # defaults
 DEFAULT_EXPOSE_PORT=6379
@@ -23,6 +23,6 @@ fi
 # run docker
 echo "Starting redis container named $INSTANCE_NAME locally on port $EXPOSE_PORT..."
 docker run -p 127.0.0.1:"$EXPOSE_PORT":6379 --name "$INSTANCE_NAME" -d redis
-echo "Started redis!"
+echo "Started redis named $INSTANCE_NAME!"
 
 exit 0
