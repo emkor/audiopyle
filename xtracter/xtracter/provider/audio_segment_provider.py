@@ -1,20 +1,19 @@
 import struct
 import wave
-import logging
 
 import numpy
 from numpy import array
 
 from commons.service.file_accessor import FileAccessor
+from commons.commons.utils.logging_setup import myGetLogger
 from xtracter.model.audio_segment import AudioSegment
-
-logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
 
 
 class LocalAudioSegmentProvider(object):
     def __init__(self, audio_files_path, wav_lib=wave):
         self.audio_files_path = audio_files_path
         self.wav_lib = wav_lib
+        self.logger = myGetLogger()
 
     def read_segment(self, audio_meta, start_frame=0, end_on_frame=None, return_left_if_stereo=True):
         if not end_on_frame or end_on_frame > audio_meta.frames_count:
@@ -38,7 +37,7 @@ class LocalAudioSegmentProvider(object):
             wav_file.close()
             return struct.unpack_from("%dh" % end_on_frame * audio_meta.channels_count, read_frames)
         except Exception as e:
-            logging.error(
+            self.logger.error(
                 'Error on reading audio from: {} with meta: {}. Details: {}'.format(file_path, audio_meta,
                                                                                     e))
             if wav_file:

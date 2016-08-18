@@ -1,13 +1,13 @@
 # coding=utf-8
-import logging
 import vamp
 
-logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
+from commons.commons.utils.logging_setup import myGetLogger
 
 
 class AudioSegmentAnalyzer(object):
     def __init__(self, vamp_lib=vamp):
         self.vamp_lib = vamp_lib
+        self.logger = myGetLogger()
 
     def analyze_all(self, plugin_key, plugin_output, audio_segments):
         output = []
@@ -19,7 +19,7 @@ class AudioSegmentAnalyzer(object):
         try:
             return self.vamp_lib.collect(audio_segment.data, audio_segment.sample_rate, plugin_key, plugin_output)
         except Exception as e:
-            logging.error(
+            self.logger.error(
                 "Error on analyzing segment with plugin key: {} output: {}. Details: {}".format(plugin_key,
                                                                                                 plugin_output,
                                                                                                 e))

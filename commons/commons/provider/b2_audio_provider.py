@@ -1,12 +1,9 @@
-import logging
-
 from b2.api import B2Api
 from b2.download_dest import DownloadDestLocalFile
 
 from commons.service.file_accessor import FileAccessor
 from commons.utils.constant import AudiopyleConst
-
-logging.basicConfig(format='%(asctime)s %(levelname)s:%(funcName)s %(message)s', level=logging.INFO)
+from commons.commons.utils.logging_setup import myGetLogger
 
 
 class B2AudioProvider(object):
@@ -14,6 +11,7 @@ class B2AudioProvider(object):
         self.b2_api = b2_api or B2Api()
         self.b2_config = b2_config
         self.local_wave_dir = local_wave_dir
+        self.logger = myGetLogger()
 
     def is_connected(self):
         return self._connect_to_bucket() is not None
@@ -44,7 +42,7 @@ class B2AudioProvider(object):
             else:
                 return bucket
         except Exception as e:
-            logging.error("Error on checking backblaze connectivity. Details: {}".format(e))
+            self.logger.error("Error on checking backblaze connectivity. Details: {}".format(e))
             return None
 
     def _create_destination_object(self, remote_file_path):
