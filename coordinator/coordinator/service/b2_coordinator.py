@@ -1,12 +1,18 @@
+from time import sleep
+
 from commons.model.b2_config import B2Config
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.provider.b2_audio_provider import B2AudioProvider
+from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
 
+DEFAULT_QUEUE_NAME = 'RedisClientTestQueue'
+QUEUE_RELOAD_DELAY = 5
+
 
 class B2Coordinator(object):
-    def __init__(self, audio_provider=None):
+    def __init__(self, audio_provider=None, redis_queue_client=None):
         if(audio_provider is not None):
             self.audio_provider = audio_provider
         else:
@@ -16,6 +22,9 @@ class B2Coordinator(object):
                          AudiopyleConst.B2_RESOURCES_BUCKET),
                 OsEnvAccessor.get_env_variable(
                     AudiopyleConst.PROJECT_HOME_ENV))
+
+        self.redis_queue_client = redis_queue_client \
+            or RedisQueueClient(DEFAULT_QUEUE_NAME)
 
     def get_remote_audio_files(self):
         file_infos = self.audio_provider.get_file_infos()
@@ -34,3 +43,15 @@ class B2Coordinator(object):
                  u'uploadTimestamp': file[u'uploadTimestamp']}
                 for file in files
                 if u'audio' in file[u'contentType']]
+
+    def push_file_list_to_redis(self):
+        last_timestamp = 0
+        while (True):
+            files = self.get_remote_audio_files()
+            for file in files:
+                if (file and file.upload_timestamp > last_timestamp):
+                    self.redis_queue_client.add(file)
+                    timestamp = file.upload_timestamp
+                    print("Pushing to {}".format(self.redis_queue_client.queue_name))
+            last_timestamp = timestamp
+            sleep(QUEUE_RELOAD_DELAY)
