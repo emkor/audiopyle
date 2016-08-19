@@ -4,7 +4,7 @@ import os
 from b2.api import B2Api
 from b2.download_dest import DownloadDestLocalFile
 from b2.progress import make_progress_listener
-from commons.utils import logging_setup
+from commons.utils.logging_setup import myGetLogger
 
 # -------------------------- CONFIG --------------------------
 REALM = 'production'
