@@ -13,7 +13,7 @@ APPLICATION_KEY = '001de304a2f988ad8266285ebbfcebe6aed90717b7'
 VAMP_PLUGINS_BUCKET_NAME = 'audiopyle-resources'
 PLATFORM_DIR = "vamp_plugins_linux_x64"
 DESTINATION = "../resources/vamp_plugins/"
-logger = logging_setup.myGetLogger()
+logger = myGetLogger()
 
 
 # -------------------------- HELPER FUCNTIONS --------------------------
