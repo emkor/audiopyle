@@ -37,21 +37,24 @@ class B2Coordinator(object):
 
         return remote_audio_files
 
+    def get_and_push_file_list_loop(self):
+        last_timestamp = 0
+        while (True):
+            files = self.get_remote_audio_files()
+            last_timestamp = self.push_file_list_to_redis(files, last_timestamp)
+            sleep(QUEUE_RELOAD_DELAY)
+
+    def push_file_list_to_redis(self, files, last_timestamp):
+        for file in files:
+            if (file and file.upload_timestamp > last_timestamp):
+                self.redis_queue_client.add(file)
+                last_timestamp = file.upload_timestamp
+                print("Pushing to {}".format(self.redis_queue_client.queue_name))
+            return last_timestamp
+
     def _filter_audio_files(self, files):
         return [{u'fileName': file[u'fileName'],
                  u'size': file[u'size'],
                  u'uploadTimestamp': file[u'uploadTimestamp']}
                 for file in files
                 if u'audio' in file[u'contentType']]
-
-    def push_file_list_to_redis(self):
-        last_timestamp = 0
-        while (True):
-            files = self.get_remote_audio_files()
-            for file in files:
-                if (file and file.upload_timestamp > last_timestamp):
-                    self.redis_queue_client.add(file)
-                    timestamp = file.upload_timestamp
-                    print("Pushing to {}".format(self.redis_queue_client.queue_name))
-            last_timestamp = timestamp
-            sleep(QUEUE_RELOAD_DELAY)
