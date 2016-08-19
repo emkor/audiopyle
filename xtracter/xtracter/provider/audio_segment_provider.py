@@ -5,7 +5,7 @@ import numpy
 from numpy import array
 
 from commons.service.file_accessor import FileAccessor
-from commons.commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import myGetLogger
 from xtracter.model.audio_segment import AudioSegment
 
 

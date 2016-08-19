@@ -2,7 +2,7 @@ import wave
 
 from commons.service.file_accessor import FileAccessor
 from commons.utils.conversion import B_to_b
-from commons.commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import myGetLogger
 from xtracter.model.audio_meta import AudioMeta
 
 

@@ -2,7 +2,7 @@ import json
 
 import redis
 from redis import ConnectionError
-from commons.commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import myGetLogger
 
 
 class RedisQueueClient(object):

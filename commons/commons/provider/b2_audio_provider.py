@@ -3,7 +3,7 @@ from b2.download_dest import DownloadDestLocalFile
 
 from commons.service.file_accessor import FileAccessor
 from commons.utils.constant import AudiopyleConst
-from commons.commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import myGetLogger
 
 
 class B2AudioProvider(object):

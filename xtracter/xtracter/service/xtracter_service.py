@@ -7,7 +7,7 @@ from commons.model.remote_file_meta import RemoteFileMeta
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from xtracter.utils.xtracter_const import XtracterConst
-from commons.commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import myGetLogger
 
 SLEEP_TIME_SEC = 3
 

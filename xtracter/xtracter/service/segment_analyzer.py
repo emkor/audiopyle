@@ -1,7 +1,7 @@
 # coding=utf-8
 import vamp
 
-from commons.commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import myGetLogger
 
 
 class AudioSegmentAnalyzer(object):

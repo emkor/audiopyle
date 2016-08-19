@@ -2,7 +2,7 @@ from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
-from commons.commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import myGetLogger
 
 from commons.model.b2_config import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider

@@ -1,7 +1,7 @@
 from pydub import AudioSegment
 
 from commons.service.file_accessor import FileAccessor
-from commons.commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import myGetLogger
 
 DEFAULT_TARGET_CHANNEL_NUMBER = 1
 DEFAULT_TARGET_SAMPLE_RATE = 44100
