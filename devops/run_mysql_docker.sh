@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # usage
-# run_mysql_docker.sh [published port on host] [root password] [instance name]
+# run_mysql_docker.sh [instance name] [published port on host] [root password]
 
 # parameters
-PUBLISH_PORT=$1
-SQL_PASSWORD=$2
-INSTANCE_NAME=$3
+INSTANCE_NAME=$1
+PUBLISH_PORT=$2
+SQL_PASSWORD=$3
 
 # empty variable checks
 if [[ -z "$PUBLISH_PORT" ]]; then
