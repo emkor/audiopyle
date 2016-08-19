@@ -31,7 +31,7 @@ command='from coordinator.service.b2_coordinator import B2Coordinator
 from commons.provider.redis_queue_client import RedisQueueClient
 redis_queue_client = RedisQueueClient("'$REDIS_QUEUE_NAME'", "'$IP'")
 coordinator = B2Coordinator(redis_queue_client=redis_queue_client)
-coordinator.push_file_list_to_redis()'
+coordinator.get_and_push_file_list_loop()'
 
 # run docker
 echo "Starting coordinator container named $INSTANCE_NAME pushing to $REDIS_QUEUE_NAME..."
