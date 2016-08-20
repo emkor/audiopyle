@@ -17,3 +17,12 @@ class AudioMeta(object):
 
     def avg_kbps(self):
         return B_to_b(self.size_kB()) / self.length_sec()
+
+    def to_dict(self):
+        return self.__dict__
+
+    def __str__(self):
+        return "AudioMeta: {}".format(self.__dict__)
+
+    def __repr__(self):
+        return self.__str__()

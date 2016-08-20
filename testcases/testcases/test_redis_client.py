@@ -21,7 +21,7 @@ class RedisClientIntegrationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         run_redis_sh = FileAccessor.join(DEVOPS_DIR, RUN_REDIS_DOCKER_SH)
-        status = FileAccessor.run_command(run_redis_sh, REDIS_PORT, REDIS_CONTAINER_NAME)
+        status = FileAccessor.run_command(run_redis_sh, REDIS_CONTAINER_NAME, REDIS_PORT)
         assert_that(status).is_equal_to(SH_STATUS_OK)
         sleep(REDIS_BOOT_TIME)
 
