@@ -29,7 +29,7 @@ class RedisCoordinatorIntegrationTest(unittest.TestCase):
         sleep(REDIS_BOOT_TIME)
 
         run_coordinator_sh = FileAccessor.join(DEVOPS_DIR, RUN_COORDINATOR_DOCKER_SH)
-        status_coordinator = FileAccessor.run_command(run_coordinator_sh, COORDINATOR_CONTAINER_NAME, REDIS_CONTAINER_NAME, REDIS_QUEUE_NAME)
+        status_coordinator = FileAccessor.run_command(run_coordinator_sh, COORDINATOR_CONTAINER_NAME, REDIS_QUEUE_NAME)
         assert_that(status_coordinator).is_equal_to(SH_STATUS_OK)
         sleep(COORDINATOR_BOOT_TIME)
 
