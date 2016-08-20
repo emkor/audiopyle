@@ -7,7 +7,7 @@ from commons.model.remote_file_meta import RemoteFileMeta
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from xtracter.utils.xtracter_const import XtracterConst
-from commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import GetLogger
 
 SLEEP_TIME_SEC = 3
 
@@ -19,7 +19,7 @@ class Xtracter(object):
         self.audio_meta_provider = audio_meta_provider
         self.redis_task_client = redis_task_client
         self.redis_results_client = redis_results_client
-        self.logger = myGetLogger()
+        self.logger = GetLogger()
 
     def init(self):
         while True:

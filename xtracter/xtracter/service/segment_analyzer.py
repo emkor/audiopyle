@@ -1,13 +1,13 @@
 # coding=utf-8
 import vamp
 
-from commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import GetLogger
 
 
 class AudioSegmentAnalyzer(object):
     def __init__(self, vamp_lib=vamp):
         self.vamp_lib = vamp_lib
-        self.logger = myGetLogger()
+        self.logger = GetLogger()
 
     def analyze_all(self, plugin_key, plugin_output, audio_segments):
         output = []

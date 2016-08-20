@@ -2,14 +2,14 @@ import json
 
 import redis
 from redis import ConnectionError
-from commons.utils.logging_setup import myGetLogger
+from commons.utils.logging_setup import GetLogger
 
 
 class RedisQueueClient(object):
     def __init__(self, queue_name, redis_host="localhost", redis_port=6379):
         self.queue_name = queue_name
         self.client = redis.StrictRedis(redis_host, redis_port, db=0)
-        self.logger = myGetLogger()
+        self.logger = GetLogger()
 
     def add(self, element):
         try:
