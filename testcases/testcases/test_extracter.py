@@ -34,7 +34,6 @@ class XtracterIntegrationTest(unittest.TestCase):
     def setUpClass(cls):
         cls._run_devops_container_boot_script(REDIS_CONTAINER_NAME, REDIS_DOCKER_RUN_SH, REDIS_PORT)
         cls._run_devops_container_boot_script(XTRACTER_CONTAINER_NAME, XTRACTER_DOCKER_RUN_SH)
-        self.logger = get_logger()
 
     @classmethod
     def tearDownClass(cls):
@@ -49,6 +48,7 @@ class XtracterIntegrationTest(unittest.TestCase):
         self.redis_results_client = RedisQueueClient(REDIS_RESULT_QUEUE_NAME)
         assert_that(self.redis_task_client.length()).is_equal_to(0)
         assert_that(self.redis_results_client.length()).is_equal_to(0)
+        self.logger = get_logger()
 
     def tearDown(self):
         self.redis_task_client.clear()
