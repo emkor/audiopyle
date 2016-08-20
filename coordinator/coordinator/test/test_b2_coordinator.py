@@ -2,12 +2,14 @@ from mock import Mock
 import unittest
 from assertpy import assert_that
 
+from commons.model.remote_file_meta import RemoteFileMeta
 from coordinator.service.b2_coordinator import B2Coordinator
 
 
 class TestB2Coordinator(unittest.TestCase):
     def setUp(self):
         self.audio_provider = Mock()
+        self.redis_queue_client = Mock()
 
     def test_should_filter_audio_file(self):
         self.audio_provider.get_file_infos.return_value = \
@@ -25,3 +27,21 @@ class TestB2Coordinator(unittest.TestCase):
         files = coordinator.get_remote_audio_files()
         assert_that(len(files)).is_equal_to(1)
         assert_that(str(files[0])).contains("audio-file", "100", "200")
+
+    def test_should_push_list_to_redis(self):
+        dicts = \
+            [{u'contentType': u'audio',
+              u'fileName': u'first-file',
+              u'size': 100,
+              u'uploadTimestamp': 200},
+             {u'contentType': u'audio',
+              u'fileName': u'second-file',
+              u'size': 300,
+              u'uploadTimestamp': 400}]
+
+        files = [RemoteFileMeta.from_dict(dict) for dict in dicts]
+
+        coordinator = B2Coordinator(self.audio_provider, self.redis_queue_client)
+        coordinator.push_file_list_to_redis(files, 0)
+
+        assert_that(self.redis_queue_client.add.called).is_true()
