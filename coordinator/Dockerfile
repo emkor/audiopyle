@@ -24,3 +24,7 @@ RUN tox
 # CLEANUP AFTER TESTS
 RUN rm -rf .tox && rm -rf audiopyle_coordinator.egg-info
 RUN pip uninstall -y tox
+
+# SET STARTUP SCRIPT AS ENTRYPOINT
+COPY ./start_coordinator.py ./start_coordinator.py
+ENTRYPOINT ["python", "./start_coordinator.py"]
