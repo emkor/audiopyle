@@ -52,4 +52,4 @@ class XtracterTest(unittest.TestCase):
         # when
         self.xtracter._send_to_redis(expected_extracted_features)
         # then
-        self.results_queue.add.assert_called_once_with(self.audio_meta)
+        self.results_queue.add.assert_called_once_with(self.audio_meta.to_dict())

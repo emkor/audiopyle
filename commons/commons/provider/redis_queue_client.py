@@ -16,7 +16,7 @@ class RedisQueueClient(object):
             self.client.rpush(self.queue_name, self._to_json(element))
         except ConnectionError as e:
             self.logger.error(
-                "Could not add element: {} to Redis queue {} Details: {}".format(element, self.queue_name, e))
+                "Could not add element to Redis queue {} Details: {}".format(self.queue_name, e))
 
     def take(self):
         try:
