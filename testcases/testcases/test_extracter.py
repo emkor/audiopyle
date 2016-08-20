@@ -6,6 +6,7 @@ from assertpy import assert_that
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.utils.constant import AudiopyleConst
+from commons.utils.logging_setup import get_logger
 
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
@@ -33,6 +34,7 @@ class XtracterIntegrationTest(unittest.TestCase):
     def setUpClass(cls):
         cls._run_devops_container_boot_script(REDIS_CONTAINER_NAME, REDIS_DOCKER_RUN_SH, REDIS_PORT)
         cls._run_devops_container_boot_script(XTRACTER_CONTAINER_NAME, XTRACTER_DOCKER_RUN_SH)
+        self.logger = get_logger()
 
     @classmethod
     def tearDownClass(cls):
@@ -67,13 +69,13 @@ class XtracterIntegrationTest(unittest.TestCase):
         interval_time = 3
         while analysis_time < ANALYSIS_TIMEOUT:
             if self.redis_results_client.length() > 0:
-                print("Results appeared after {} seconds!".format(analysis_time))
+                self.logger.info("Results appeared after {} seconds!".format(analysis_time))
                 return True
             else:
                 analysis_time += interval_time
                 sleep(interval_time)
-                print("Waiting for results next {} seconds...".format(interval_time))
-        print("Results did not come up within {} seconds!".format(ANALYSIS_TIMEOUT))
+                self.logger.info("Waiting for results next {} seconds...".format(interval_time))
+        self.logger.error("Results did not come up within {} seconds!".format(ANALYSIS_TIMEOUT))
         return False
 
     @classmethod
