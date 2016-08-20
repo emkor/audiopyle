@@ -6,6 +6,7 @@ from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
+from commons.utils.logging_setup import get_logger
 
 DEFAULT_QUEUE_NAME = 'RedisClientTestQueue'
 QUEUE_RELOAD_DELAY = 5
@@ -25,6 +26,8 @@ class B2Coordinator(object):
 
         self.redis_queue_client = redis_queue_client \
             or RedisQueueClient(DEFAULT_QUEUE_NAME)
+
+        self.logger = get_logger()
 
     def get_remote_audio_files(self):
         file_infos = self.audio_provider.get_file_infos()
@@ -49,8 +52,9 @@ class B2Coordinator(object):
             if (file and file.upload_timestamp > last_timestamp):
                 self.redis_queue_client.add(file)
                 last_timestamp = file.upload_timestamp
-                print("Pushing to {}".format(self.redis_queue_client.queue_name))
-            return last_timestamp
+                self.logger.info("Pushing {} to {}".format(
+                    file, self.redis_queue_client.queue_name))
+        return last_timestamp
 
     def _filter_audio_files(self, files):
         return [{u'fileName': file[u'fileName'],
