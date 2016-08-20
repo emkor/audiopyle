@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # usage
-# run_coordinator_docker.sh [instance name]
+# run_coordinator_docker.sh [instance name] [redis queue name]
 
 INSTANCE_NAME=$1
 
@@ -11,10 +11,6 @@ DEFAULT_INSTANCE_NAME="CoordinatorTestInstance"
 # empty variable checks
 if [[ -z "$INSTANCE_NAME" ]]; then
         INSTANCE_NAME=${DEFAULT_INSTANCE_NAME}
-fi
-
-if [[ -z "$REDIS_QUEUE_NAME" ]]; then
-        REDIS_QUEUE_NAME=${DEFAULT_REDIS_QUEUE_NAME}
 fi
 
 # run docker
