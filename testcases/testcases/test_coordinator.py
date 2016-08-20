@@ -12,7 +12,7 @@ SH_STATUS_OK = 0
 RUN_REDIS_DOCKER_SH = "run_redis_docker.sh"
 RUN_COORDINATOR_DOCKER_SH = "run_coordinator_docker.sh"
 KILL_CONTAINER_SH = "kill_container.sh"
-REDIS_QUEUE_NAME = 'CoordinatorTestQueue'
+REDIS_QUEUE_NAME = 'xtracter_tasks'
 REDIS_PORT = 6379
 REDIS_CONTAINER_NAME = 'RedisClientTestInstance'
 COORDINATOR_CONTAINER_NAME = 'CoordinatorTestInstance'
@@ -29,7 +29,7 @@ class RedisCoordinatorIntegrationTest(unittest.TestCase):
         sleep(REDIS_BOOT_TIME)
 
         run_coordinator_sh = FileAccessor.join(DEVOPS_DIR, RUN_COORDINATOR_DOCKER_SH)
-        status_coordinator = FileAccessor.run_command(run_coordinator_sh, COORDINATOR_CONTAINER_NAME, REDIS_QUEUE_NAME)
+        status_coordinator = FileAccessor.run_command(run_coordinator_sh, COORDINATOR_CONTAINER_NAME)
         assert_that(status_coordinator).is_equal_to(SH_STATUS_OK)
         sleep(COORDINATOR_BOOT_TIME)
 
