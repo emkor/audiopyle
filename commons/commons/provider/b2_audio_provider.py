@@ -3,7 +3,7 @@ from b2.download_dest import DownloadDestLocalFile
 
 from commons.service.file_accessor import FileAccessor
 from commons.utils.constant import AudiopyleConst
-from commons.utils.logging_setup import GetLogger
+from commons.utils.logging_setup import get_logger
 
 
 class B2AudioProvider(object):
@@ -11,7 +11,7 @@ class B2AudioProvider(object):
         self.b2_api = b2_api or B2Api()
         self.b2_config = b2_config
         self.local_wave_dir = local_wave_dir
-        self.logger = GetLogger()
+        self.logger = get_logger()
 
     def is_connected(self):
         return self._connect_to_bucket() is not None

@@ -5,7 +5,7 @@ import numpy
 from numpy import array
 
 from commons.service.file_accessor import FileAccessor
-from commons.utils.logging_setup import GetLogger
+from commons.utils.logging_setup import get_logger
 from xtracter.model.audio_segment import AudioSegment
 
 
@@ -13,7 +13,7 @@ class LocalAudioSegmentProvider(object):
     def __init__(self, audio_files_path, wav_lib=wave):
         self.audio_files_path = audio_files_path
         self.wav_lib = wav_lib
-        self.logger = GetLogger()
+        self.logger = get_logger()
 
     def read_segment(self, audio_meta, start_frame=0, end_on_frame=None, return_left_if_stereo=True):
         if not end_on_frame or end_on_frame > audio_meta.frames_count:

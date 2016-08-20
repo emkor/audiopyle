@@ -4,7 +4,7 @@ import os
 from b2.api import B2Api
 from b2.download_dest import DownloadDestLocalFile
 from b2.progress import make_progress_listener
-from commons.utils.logging_setup import GetLogger
+from commons.utils.logging_setup import get_logger
 
 # -------------------------- CONFIG --------------------------
 REALM = 'production'
@@ -13,7 +13,7 @@ APPLICATION_KEY = '001de304a2f988ad8266285ebbfcebe6aed90717b7'
 VAMP_PLUGINS_BUCKET_NAME = 'audiopyle-resources'
 PLATFORM_DIR = "vamp_plugins_linux_x64"
 DESTINATION = "../resources/vamp_plugins/"
-logger = GetLogger()
+logger = get_logger()
 
 
 # -------------------------- HELPER FUCNTIONS --------------------------

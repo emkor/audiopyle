@@ -1,7 +1,7 @@
 import logging
 
 
-def GetLogger():
+def get_logger():
     logger = logging.getLogger("Audiopyle logs")
     logger.setLevel(logging.INFO)
     handler = logging.StreamHandler()

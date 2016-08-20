@@ -2,14 +2,14 @@ import wave
 
 from commons.service.file_accessor import FileAccessor
 from commons.utils.conversion import B_to_b
-from commons.utils.logging_setup import GetLogger
+from commons.utils.logging_setup import get_logger
 from xtracter.model.audio_meta import AudioMeta
 
 
 class LocalAudioMetaProvider(object):
     def __init__(self, file_provider=FileAccessor):
         self.file_provider = file_provider
-        self.logger = GetLogger()
+        self.logger = get_logger()
 
     def read_meta_from(self, audio_file_path):
         wave_reader = None

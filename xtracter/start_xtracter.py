@@ -2,7 +2,7 @@ from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
-from commons.utils.logging_setup import GetLogger
+from commons.utils.logging_setup import get_logger
 
 from commons.model.b2_config import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider
@@ -18,7 +18,7 @@ AUDIO_FILES_PATH = FileAccessor.join(OsEnvAccessor.get_env_variable("AUDIOPYLE_H
 TASK_QUEUE_NAME = "xtracter_tasks"
 RESULTS_QUEUE_NAME = "xtracter_results"
 
-logger = GetLogger()
+logger = get_logger()
 audio_meta_provider = LocalAudioMetaProvider()
 segment_provider = LocalAudioSegmentProvider(audio_files_path=AUDIO_FILES_PATH)
 plugin_provider = VampyPluginProvider()
