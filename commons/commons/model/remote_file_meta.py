@@ -1,6 +1,3 @@
-import uuid
-
-
 class RemoteFileMeta(object):
     @staticmethod
     def from_dict(remote_file_meta_dict):
