@@ -9,13 +9,23 @@ CREATE TABLE plugin (
   CONSTRAINT plugin_unique UNIQUE (plugin_key, output)
 );
 
+CREATE TABLE track_source (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  type VARCHAR(50) NOT NULL,
+  bucket_address VARCHAR(50) NOT NULL,
+  bucket_name VARCHAR(50) NOT NULL,
+  CONSTRAINT track_source_unique UNIQUE (type, bucket_address, bucket_name)
+);
+
 CREATE TABLE track (
   uuid BINARY(16) NOT NULL PRIMARY KEY,
+  source_id INT UNSIGNED NOT NULL,
   filename VARCHAR(256) NOT NULL,
   bit_depth INT UNSIGNED NOT NULL,
   sample_rate INT UNSIGNED NOT NULL,
   frames_count BIGINT UNSIGNED NOT NULL,
-  channels_count INT UNSIGNED NOT NULL
+  channels_count INT UNSIGNED NOT NULL,
+  FOREIGN KEY (source_id) REFERENCES track_source(id)
 );
 
 CREATE TABLE segment (
@@ -49,5 +59,3 @@ CREATE TABLE raw_feature_value (
   value FLOAT,
   FOREIGN KEY (raw_feature_id) REFERENCES raw_feature(id)
 );
-
-
