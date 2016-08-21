@@ -12,6 +12,12 @@ class RemoteFileMeta(object):
         self.size = size
         self.upload_timestamp = upload_timestamp
 
+    def __hash__(self):
+        return hash((self.name, self.size, self.upload_timestamp))
+
+    def __eq__(self, other):
+        return self.name == other.name, self.size == other.size, self.upload_timestamp == other.upload_timestamp
+
     def __str__(self):
         return "RemoteFileMeta: file name: {}, file size: {}, upload timestamp: {}." \
             .format(self.name, self.size, self.upload_timestamp)

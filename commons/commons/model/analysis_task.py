@@ -8,6 +8,10 @@ from commons.model.remote_file_source import RemoteFileSource
 class AnalysisTask(object):
     @staticmethod
     def from_dict(analysis_task_dict):
+        """
+        :type analysis_task_dict: dict
+        :rtype: commons.model.analysis_task.AnalysisTask
+        """
         remote_file_meta = RemoteFileMeta(**analysis_task_dict.get("remote_file_meta"))
         remote_file_source = RemoteFileSource(**analysis_task_dict.get("remote_file_source"))
         created_timestamp = analysis_task_dict.get("created_timestamp")
@@ -26,6 +30,9 @@ class AnalysisTask(object):
         self.created_timestamp = created_timestamp or utc_datetime_to_timestamp(datetime.utcnow())
 
     def to_dict(self):
+        """
+        :return: dict
+        """
         return {
             "remote_file_meta": self.remote_file_meta.to_dict(),
             "remote_file_source": self.remote_file_source.to_dict(),
@@ -37,3 +44,9 @@ class AnalysisTask(object):
 
     def __repr__(self):
         return self.__str__()
+
+    def __hash__(self):
+        return hash((self.remote_file_meta.__hash__(), self.remote_file_source.__hash__()))
+
+    def __eq__(self, other):
+        return self.remote_file_meta == other.remote_file_meta and self.remote_file_source == other.remote_file_source
