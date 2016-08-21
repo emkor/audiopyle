@@ -3,7 +3,7 @@ from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
 
-from commons.model.b2_config import B2Config
+from commons.model.remote_file_source import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from xtracter.provider.audio_meta_provider import LocalAudioMetaProvider
 from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider

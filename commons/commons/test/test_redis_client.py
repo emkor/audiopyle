@@ -4,7 +4,7 @@ from assertpy import assert_that
 from mock import Mock
 from redis import ConnectionError
 
-from commons.model.b2_config import B2Config
+from commons.model.remote_file_source import B2Config
 from commons.provider.redis_queue_client import RedisQueueClient
 
 

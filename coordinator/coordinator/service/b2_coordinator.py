@@ -1,6 +1,7 @@
 from time import sleep
 
-from commons.model.b2_config import B2Config
+from commons.model.analysis_task import AnalysisTask
+from commons.model.remote_file_source import B2Config
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.provider.redis_queue_client import RedisQueueClient
@@ -13,7 +14,7 @@ QUEUE_RELOAD_DELAY = 5
 
 class B2Coordinator(object):
     def __init__(self, audio_provider=None, redis_queue_client=None):
-        if(audio_provider is not None):
+        if audio_provider is not None:
             self.audio_provider = audio_provider
         else:
             self.audio_provider = B2AudioProvider(
@@ -23,8 +24,14 @@ class B2Coordinator(object):
                 OsEnvAccessor.get_env_variable(
                     AudiopyleConst.PROJECT_HOME_ENV))
 
-        self.redis_queue_client = redis_queue_client \
-            or RedisQueueClient(DEFAULT_QUEUE_NAME)
+        self.redis_queue_client = redis_queue_client or RedisQueueClient(DEFAULT_QUEUE_NAME)
+
+    def get_and_push_file_list_loop(self):
+        last_timestamp = 0
+        while True:
+            remote_files = self.get_remote_audio_files()
+            last_timestamp = self.push_file_list_to_redis(remote_files, last_timestamp)
+            sleep(QUEUE_RELOAD_DELAY)
 
     def get_remote_audio_files(self):
         file_infos = self.audio_provider.get_file_infos()
@@ -37,18 +44,12 @@ class B2Coordinator(object):
 
         return remote_audio_files
 
-    def get_and_push_file_list_loop(self):
-        last_timestamp = 0
-        while (True):
-            files = self.get_remote_audio_files()
-            last_timestamp = self.push_file_list_to_redis(files, last_timestamp)
-            sleep(QUEUE_RELOAD_DELAY)
-
-    def push_file_list_to_redis(self, files, last_timestamp):
-        for file in files:
-            if (file and file.upload_timestamp > last_timestamp):
-                self.redis_queue_client.add(file)
-                last_timestamp = file.upload_timestamp
+    def push_file_list_to_redis(self, remote_files, last_timestamp):
+        for remote_file in remote_files:
+            if remote_file and remote_file.upload_timestamp > last_timestamp:
+                task = AnalysisTask(remote_file, self.audio_provider.b2_config)
+                self.redis_queue_client.add(task.to_dict())
+                last_timestamp = remote_file.upload_timestamp
                 print("Pushing to {}".format(self.redis_queue_client.queue_name))
             return last_timestamp
 

@@ -1,6 +1,6 @@
 import unittest
 from assertpy import assert_that
-from commons.model.b2_config import B2Config
+from commons.model.remote_file_source import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
