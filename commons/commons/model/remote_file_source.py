@@ -1,5 +1,12 @@
 class RemoteFileSource(object):
     def __init__(self, type, address, bucket_name, password, **kwargs):
+        """
+        :type type: basestring
+        :type address: basestring
+        :type bucket_name: basestring
+        :type password: basestring
+        :type kwargs: dict
+        """
         self.type = type
         self.address = address
         self.bucket_name = bucket_name
