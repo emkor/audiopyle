@@ -9,6 +9,11 @@ from commons.utils.constant import AudiopyleConst
 
 class B2AudioProvider(object):
     def __init__(self, b2_config, local_wave_dir, b2_api=None):
+        """
+        :type b2_config: commons.model.remote_file_source.B2Config
+        :type local_wave_dir: basestring
+        :type b2_api: b2.api.B2Api
+        """
         self.b2_api = b2_api or B2Api()
         self.b2_config = b2_config
         self.local_wave_dir = local_wave_dir
@@ -34,8 +39,8 @@ class B2AudioProvider(object):
 
     def _connect_to_bucket(self):
         try:
-            self.b2_api.authorize_account(AudiopyleConst.B2_REALM, self.b2_config.account_id,
-                                          self.b2_config.application_key)
+            self.b2_api.authorize_account(AudiopyleConst.B2_REALM, self.b2_config.address,
+                                          self.b2_config.password)
             bucket = self.b2_api.get_bucket_by_name(self.b2_config.bucket_name)
             if bucket is None:
                 raise IOError("Retrieved bucket: {} was None.".format(self.b2_config.bucket_name))
