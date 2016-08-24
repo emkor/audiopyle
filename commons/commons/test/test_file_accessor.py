@@ -22,6 +22,9 @@ class TestFileAccessor(unittest.TestCase):
 
     def test_getting_extension(self):
         assert_that(FileAccessor.get_extension('song.ogg')).is_equal_to('ogg')
+        assert_that(FileAccessor.get_extension('song.ogg.wav')).is_equal_to('wav')
+        assert_that(FileAccessor.get_extension('config')).is_equal_to('')
+        assert_that(FileAccessor.get_extension('.vimrc')).is_equal_to('')
 
     def test_getting_dir_name(self):
         assert_that(FileAccessor.get_file_name('/home')).is_equal_to('home')
