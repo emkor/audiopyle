@@ -20,6 +20,11 @@ class FileAccessor(object):
         return os.path.basename(os.path.normpath(file_path))
 
     @staticmethod
+    def get_extension(file_path):
+        filename, extension = os.path.splitext(os.path.normpath(file_path))
+        return extension
+
+    @staticmethod
     def join(*path_parts):
         normed = [os.path.normpath(path) for path in path_parts]
         return os.path.join(normed[0], *(normed[1:]))
