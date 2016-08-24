@@ -22,7 +22,7 @@ class FileAccessor(object):
     @staticmethod
     def get_extension(file_path):
         filename, extension = os.path.splitext(os.path.normpath(file_path))
-        return extension
+        return extension[1:]
 
     @staticmethod
     def join(*path_parts):
