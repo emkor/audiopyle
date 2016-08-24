@@ -20,6 +20,9 @@ class TestFileAccessor(unittest.TestCase):
         assert_that(FileAccessor.get_file_name('D:/folder/file.txt')).is_equal_to('file.txt')
         assert_that(FileAccessor.get_file_name('D://folder//file.txt')).is_equal_to('file.txt')
 
+    def test_getting_extension(self):
+        assert_that(FileAccessor.get_extension('song.ogg')).is_equal_to('ogg')
+
     def test_getting_dir_name(self):
         assert_that(FileAccessor.get_file_name('/home')).is_equal_to('home')
 
