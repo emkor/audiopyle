@@ -1,3 +1,4 @@
+import logging
 from mock import Mock
 import unittest
 from assertpy import assert_that
@@ -5,8 +6,20 @@ from assertpy import assert_that
 from commons.model.remote_file_meta import RemoteFileMeta
 from coordinator.service.b2_coordinator import B2Coordinator
 
+LOGGER_NAME = "coordinator"
+
 
 class TestB2Coordinator(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        logger = logging.getLogger(LOGGER_NAME)
+        logger.setLevel(logging.INFO)
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(name)s | %(asctime)s | %(levelname)s | %(funcName)s | %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+
     def setUp(self):
         self.audio_provider = Mock()
         self.redis_queue_client = Mock()

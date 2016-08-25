@@ -1,15 +1,15 @@
+import logging
 import wave
 
 from commons.service.file_accessor import FileAccessor
 from commons.utils.conversion import B_to_b
-from commons.utils.logging_setup import get_logger
 from xtracter.model.audio_meta import AudioMeta
 
 
 class LocalAudioMetaProvider(object):
     def __init__(self, file_provider=FileAccessor):
         self.file_provider = file_provider
-        self.logger = get_logger()
+        self.logger = logging.getLogger(__name__)
 
     def read_meta_from(self, audio_file_path):
         wave_reader = None
@@ -24,7 +24,7 @@ class LocalAudioMetaProvider(object):
                 wave_reader.close()
                 return AudioMeta(filename, channels_count, sample_rate, frames_count, bit_depth)
             except Exception as e:
-                self.logger.error('Error on reading audio meta from file: {}. Details: {}'.format(audio_file_path, e))
+                self.logger.exception('Error on reading audio meta from file: {}. Details: {}'.format(audio_file_path, e))
                 if wave_reader is not None:
                     wave_reader.close()
                 return None

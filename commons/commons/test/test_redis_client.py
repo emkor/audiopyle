@@ -1,3 +1,4 @@
+import logging
 import unittest
 
 from assertpy import assert_that
@@ -7,8 +8,20 @@ from redis import ConnectionError
 from commons.model.b2_config import B2Config
 from commons.provider.redis_queue_client import RedisQueueClient
 
+LOGGER_NAME = "commons"
+
 
 class RedisQueueClientTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        logger = logging.getLogger(LOGGER_NAME)
+        logger.setLevel(logging.INFO)
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(name)s | %(asctime)s | %(levelname)s | %(funcName)s | %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+
     def setUp(self):
         self.redis_internal_client = Mock()
         self.test_queue_name = "TestQueueName"

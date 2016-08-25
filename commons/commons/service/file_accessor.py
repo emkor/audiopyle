@@ -1,9 +1,6 @@
-from commons.utils.logging_setup import get_logger
-
 import os
 import subprocess
 
-logger = get_logger()
 
 class FileAccessor(object):
     @staticmethod
@@ -37,5 +34,5 @@ class FileAccessor(object):
             os.remove(file_path)
             return True
         except Exception as e:
-            logger.error(e)
+            print(e)
             return False

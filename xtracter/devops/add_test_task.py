@@ -1,10 +1,18 @@
+import logging
+
 from commons.utils.constant import AudiopyleConst
-from commons.utils.logging_setup import get_logger
 
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.provider.redis_queue_client import RedisQueueClient
 
-logger = get_logger()
+logger = logging.getLogger(__name__)
+# logger = logging.getLogger("xtracter")
+# logger.setLevel(logging.INFO)
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.INFO)
+# formatter = logging.Formatter('%(name)s | %(asctime)s | %(levelname)s | %(funcName)s | %(message)s')
+# handler.setFormatter(formatter)
+# logger.addHandler(handler)
 
 logger.info("Adding test file to redis queue...")
 redis_client = RedisQueueClient("xtracter_tasks")

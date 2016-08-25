@@ -1,3 +1,4 @@
+import logging
 import unittest
 from time import sleep
 
@@ -6,7 +7,6 @@ from assertpy import assert_that
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.utils.constant import AudiopyleConst
-from commons.utils.logging_setup import get_logger
 
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
@@ -19,6 +19,8 @@ SH_STATUS_OK = 0
 
 XTRACTER_CONTAINER_NAME = "XtracterTestInstance"
 REDIS_CONTAINER_NAME = 'RedisTestInstance'
+
+LOGGER_NAME = "testcases"
 
 REDIS_TASK_QUEUE_NAME = 'xtracter_tasks'
 REDIS_RESULT_QUEUE_NAME = 'xtracter_results'
@@ -35,6 +37,15 @@ class XtracterIntegrationTest(unittest.TestCase):
         cls._run_devops_container_boot_script(REDIS_CONTAINER_NAME, REDIS_DOCKER_RUN_SH, REDIS_PORT)
         cls._run_devops_container_boot_script(XTRACTER_CONTAINER_NAME, XTRACTER_DOCKER_RUN_SH)
 
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(name)s | %(asctime)s | %(levelname)s | %(funcName)s | %(message)s')
+        handler.setFormatter(formatter)
+
+        coordinator_logger = logging.getLogger(LOGGER_NAME)
+        coordinator_logger.setLevel(logging.INFO)
+        coordinator_logger.addHandler(handler)
+
     @classmethod
     def tearDownClass(cls):
         kill_container_sh = FileAccessor.join(DEVOPS_DIR, KILL_CONTAINER_SH)
@@ -48,7 +59,7 @@ class XtracterIntegrationTest(unittest.TestCase):
         self.redis_results_client = RedisQueueClient(REDIS_RESULT_QUEUE_NAME)
         assert_that(self.redis_task_client.length()).is_equal_to(0)
         assert_that(self.redis_results_client.length()).is_equal_to(0)
-        self.logger = get_logger()
+        self.logger = logging.getLogger(__name__)
 
     def tearDown(self):
         self.redis_task_client.clear()

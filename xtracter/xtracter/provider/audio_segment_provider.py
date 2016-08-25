@@ -1,3 +1,4 @@
+import logging
 import struct
 import wave
 
@@ -5,7 +6,6 @@ import numpy
 from numpy import array
 
 from commons.service.file_accessor import FileAccessor
-from commons.utils.logging_setup import get_logger
 from xtracter.model.audio_segment import AudioSegment
 
 
@@ -13,7 +13,7 @@ class LocalAudioSegmentProvider(object):
     def __init__(self, audio_files_path, wav_lib=wave):
         self.audio_files_path = audio_files_path
         self.wav_lib = wav_lib
-        self.logger = get_logger()
+        self.logger = logging.getLogger(__name__)
 
     def read_segment(self, audio_meta, start_frame=0, end_on_frame=None, return_left_if_stereo=True):
         if not end_on_frame or end_on_frame > audio_meta.frames_count:
@@ -37,9 +37,9 @@ class LocalAudioSegmentProvider(object):
             wav_file.close()
             return struct.unpack_from("%dh" % end_on_frame * audio_meta.channels_count, read_frames)
         except Exception as e:
-            self.logger.error(
-                'Error on reading audio from: {} with meta: {}. Details: {}'.format(file_path, audio_meta,
-                                                                                    e))
+            self.logger.exception(
+                'Error on reading audio from: {} with meta: {}. Details: {}'
+                .format(file_path, audio_meta, e))
             if wav_file:
                 wav_file.close()
 
@@ -53,7 +53,7 @@ class LocalAudioSegmentProvider(object):
 
     def _normalize(self, int_channel):
         return numpy.asarray(
-                [signal_value / 32767.0 for signal_value in int_channel]) if int_channel is not None else None
+            [signal_value / 32767.0 for signal_value in int_channel]) if int_channel is not None else None
 
     def _cut(self, mono_channel, start_frame):
         return mono_channel[start_frame:] if mono_channel else None

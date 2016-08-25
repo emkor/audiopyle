@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 
 from commons.model.b2_config import B2Config
@@ -6,7 +7,6 @@ from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
-from commons.utils.logging_setup import get_logger
 
 DEFAULT_QUEUE_NAME = 'RedisClientTestQueue'
 QUEUE_RELOAD_DELAY = 5
@@ -27,7 +27,7 @@ class B2Coordinator(object):
         self.redis_queue_client = redis_queue_client \
             or RedisQueueClient(DEFAULT_QUEUE_NAME)
 
-        self.logger = get_logger()
+        self.logger = logging.getLogger(__name__)
 
     def get_remote_audio_files(self):
         file_infos = self.audio_provider.get_file_infos()

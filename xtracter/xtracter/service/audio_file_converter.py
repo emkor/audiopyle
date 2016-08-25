@@ -1,7 +1,8 @@
+import logging
+
 from pydub import AudioSegment
 
 from commons.service.file_accessor import FileAccessor
-from commons.utils.logging_setup import get_logger
 
 DEFAULT_TARGET_CHANNEL_NUMBER = 1
 DEFAULT_TARGET_SAMPLE_RATE = 44100
@@ -12,7 +13,7 @@ class AudioFileConverter(object):
     def __init__(self, input_dir, output_dir):
         self.input_dir = input_dir
         self.output_dir = output_dir
-        self.logger = get_logger()
+        self.logger = logging.getLogger(__name__)
 
     def convert(self, input_file):
         output_file = input_file + ".wav"
@@ -28,5 +29,5 @@ class AudioFileConverter(object):
         try:
             song.export(full_output_path, format="wav")
         except Exception as ex:
-            self.logger.error("Some problems on conversion file: {}".format(input_file))
-            self.logger.error("Details: {}".format(ex))
+            self.logger.exception("Some problems on conversion file: {}".format(input_file))
+            self.logger.exception("Details: {}".format(ex))

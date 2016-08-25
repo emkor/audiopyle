@@ -1,3 +1,4 @@
+import logging
 import unittest
 from assertpy import assert_that
 from commons.model.b2_config import B2Config
@@ -6,8 +7,20 @@ from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import AudiopyleConst
 
+LOGGER_NAME = "commons"
+
 
 class B2AudioProviderIntegrationTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        logger = logging.getLogger(LOGGER_NAME)
+        logger.setLevel(logging.INFO)
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(name)s | %(asctime)s | %(levelname)s | %(funcName)s | %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+
     def setUp(self):
         b2_test_config = B2Config(AudiopyleConst.B2_ACCOUNT_ID, AudiopyleConst.B2_APPLICATION_KEY,
                                   AudiopyleConst.B2_RESOURCES_BUCKET)
