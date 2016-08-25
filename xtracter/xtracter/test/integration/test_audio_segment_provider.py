@@ -3,18 +3,19 @@ from numpy.testing import assert_array_almost_equal
 from assertpy import assert_that
 from xtracter.model.audio_meta import AudioMeta
 from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
-from xtracter.utils.xtracter_const import XtracterConst
+from xtracter.utils.xtracter_const import TEST_WAV_FILE_NAME, TEST_WAV_FILE_CHANNELS_COUNT, TEST_WAV_FILE_SAMPLE_RATE, \
+    TEST_WAV_FILE_FRAME_COUNT, TEST_WAV_FILE_BIT_DEPTH
 from xtracter.utils.xtracter_utils import XtracterUtils
 
 
 class LocalAudioSegmentProviderIntegrationTest(unittest.TestCase):
     def setUp(self):
         self.segment_provider = LocalAudioSegmentProvider(XtracterUtils.get_test_resources_path())
-        self.test_file_audio_meta = AudioMeta(XtracterConst.TEST_WAV_FILE_NAME,
-                                              XtracterConst.TEST_WAV_FILE_CHANNELS_COUNT,
-                                              XtracterConst.TEST_WAV_FILE_SAMPLE_RATE,
-                                              XtracterConst.TEST_WAV_FILE_FRAME_COUNT,
-                                              XtracterConst.TEST_WAV_FILE_BIT_DEPTH)
+        self.test_file_audio_meta = AudioMeta(TEST_WAV_FILE_NAME,
+                                              TEST_WAV_FILE_CHANNELS_COUNT,
+                                              TEST_WAV_FILE_SAMPLE_RATE,
+                                              TEST_WAV_FILE_FRAME_COUNT,
+                                              TEST_WAV_FILE_BIT_DEPTH)
 
     def test_read_file(self):
         audio_segment = self.segment_provider.read_segment(self.test_file_audio_meta)

@@ -1,13 +1,13 @@
 import numpy
 
-from xtracter.utils.xtracter_const import XtracterConst
+from xtracter.utils.xtracter_const import DEFAULT_BLOCK_SIZE
 
 
 class AudioSegmentReader(object):
     def __init__(self, segment_provider):
         self.provider = segment_provider
 
-    def read_segments(self, audio_meta, block_size=XtracterConst.DEFAULT_BLOCK_SIZE):
+    def read_segments(self, audio_meta, block_size=DEFAULT_BLOCK_SIZE):
         current_frame = 0
         if not block_size:
             block_size = audio_meta.frames_count

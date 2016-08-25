@@ -3,7 +3,7 @@ from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
 from xtracter.provider.plugin_provider import VampyPluginProvider
 from xtracter.service.feature_mapper import FeatureMapper
 from xtracter.service.segment_analyzer import AudioSegmentAnalyzer
-from xtracter.utils.xtracter_const import XtracterConst
+from xtracter.utils.xtracter_const import AUDIO_FILES_CACHE_PATH
 
 
 class FeatureExtractor(object):
@@ -15,7 +15,7 @@ class FeatureExtractor(object):
         :type segment_analyzer: xtracter.service.segment_analyzer.AudioSegmentAnalyzer
         :rtype: xtracter.service.feature_extractor.FeatureExtractor
         """
-        self.segment_provider = segment_provider or LocalAudioSegmentProvider(XtracterConst.AUDIO_FILES_CACHE_PATH)
+        self.segment_provider = segment_provider or LocalAudioSegmentProvider(AUDIO_FILES_CACHE_PATH)
         self.plugin_provider = plugin_provider or VampyPluginProvider()
         self.segment_analyzer = segment_analyzer or AudioSegmentAnalyzer()
 
