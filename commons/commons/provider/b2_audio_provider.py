@@ -4,7 +4,7 @@ from b2.api import B2Api
 from b2.download_dest import DownloadDestLocalFile
 
 from commons.service.file_accessor import FileAccessor
-from commons.utils.constant import AudiopyleConst
+from commons.utils.constant import B2_REALM
 
 
 class B2AudioProvider(object):
@@ -34,7 +34,7 @@ class B2AudioProvider(object):
 
     def _connect_to_bucket(self):
         try:
-            self.b2_api.authorize_account(AudiopyleConst.B2_REALM, self.b2_config.account_id,
+            self.b2_api.authorize_account(B2_REALM, self.b2_config.account_id,
                                           self.b2_config.application_key)
             bucket = self.b2_api.get_bucket_by_name(self.b2_config.bucket_name)
             if bucket is None:

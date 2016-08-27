@@ -5,9 +5,9 @@ from assertpy import assert_that
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
-from commons.utils.constant import AudiopyleConst
+from commons.utils.constant import PROJECT_HOME_ENV
 
-DEVOPS_DIR = FileAccessor.join(OsEnvAccessor.get_env_variable(AudiopyleConst.PROJECT_HOME_ENV), 'devops')
+DEVOPS_DIR = FileAccessor.join(OsEnvAccessor.get_env_variable(PROJECT_HOME_ENV), 'devops')
 SH_STATUS_OK = 0
 RUN_REDIS_DOCKER_SH = "run_redis_docker.sh"
 RUN_COORDINATOR_DOCKER_SH = "run_coordinator_docker.sh"

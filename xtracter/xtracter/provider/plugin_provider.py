@@ -1,7 +1,7 @@
 import vamp
 
 from xtracter.model.vampy_plugin import VampyPlugin
-from xtracter.utils.xtracter_const import XtracterConst
+from xtracter.utils.xtracter_const import VAMP_PLUGIN_BLACKLIST
 
 
 class VampyPluginProvider(object):
@@ -29,4 +29,4 @@ class VampyPluginProvider(object):
         return key in self.__vamp.list_plugins() and not self._is_blacklisted(key)
 
     def _is_blacklisted(self, key):
-        return key in XtracterConst.VAMP_PLUGIN_BLACKLIST
+        return key in VAMP_PLUGIN_BLACKLIST

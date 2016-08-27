@@ -5,12 +5,12 @@ from assertpy import assert_that
 
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.provider.redis_queue_client import RedisQueueClient
-from commons.utils.constant import AudiopyleConst
+from commons.utils.constant import PROJECT_HOME_ENV, B2_TEST_FILE_PATH
 
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 
-DEVOPS_DIR = FileAccessor.join(OsEnvAccessor.get_env_variable(AudiopyleConst.PROJECT_HOME_ENV), 'devops')
+DEVOPS_DIR = FileAccessor.join(OsEnvAccessor.get_env_variable(PROJECT_HOME_ENV), 'devops')
 REDIS_DOCKER_RUN_SH = "run_redis_docker.sh"
 XTRACTER_DOCKER_RUN_SH = "run_xtracter_docker.sh"
 KILL_CONTAINER_SH = "kill_container.sh"
@@ -60,7 +60,7 @@ class XtracterIntegrationTest(unittest.TestCase):
         assert_that(self._keep_polling_for_results_until_timeout()).is_true()
 
     def _add_test_file_task(self):
-        self.redis_task_client.add(RemoteFileMeta(AudiopyleConst.B2_TEST_FILE_PATH, 0, 0).to_dict())
+        self.redis_task_client.add(RemoteFileMeta(B2_TEST_FILE_PATH, 0, 0).to_dict())
 
     def _keep_polling_for_results_until_timeout(self):
         analysis_time = 0

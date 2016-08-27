@@ -6,7 +6,8 @@ from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
 from xtracter.provider.plugin_provider import VampyPluginProvider
 from xtracter.service.audio_segment_reader import AudioSegmentReader
 from xtracter.service.segment_analyzer import AudioSegmentAnalyzer
-from xtracter.utils.xtracter_const import XtracterConst
+from xtracter.utils.xtracter_const import TEST_WAV_FILE_NAME, TEST_WAV_FILE_CHANNELS_COUNT, TEST_WAV_FILE_SAMPLE_RATE, \
+    TEST_WAV_FILE_FRAME_COUNT, TEST_WAV_FILE_BIT_DEPTH
 from xtracter.utils.xtracter_utils import XtracterUtils
 
 
@@ -41,7 +42,7 @@ class AudioSegmentAnalyzerIntegrationTest(unittest.TestCase):
     def _init_test(self):
         audio_segment_reader = AudioSegmentReader(
             LocalAudioSegmentProvider(XtracterUtils.get_test_resources_path()))
-        test_file_meta = AudioMeta(XtracterConst.TEST_WAV_FILE_NAME, XtracterConst.TEST_WAV_FILE_CHANNELS_COUNT,
-                                   XtracterConst.TEST_WAV_FILE_SAMPLE_RATE, XtracterConst.TEST_WAV_FILE_FRAME_COUNT,
-                                   XtracterConst.TEST_WAV_FILE_BIT_DEPTH)
+        test_file_meta = AudioMeta(TEST_WAV_FILE_NAME, TEST_WAV_FILE_CHANNELS_COUNT,
+                                   TEST_WAV_FILE_SAMPLE_RATE, TEST_WAV_FILE_FRAME_COUNT,
+                                   TEST_WAV_FILE_BIT_DEPTH)
         return audio_segment_reader.read_segments(test_file_meta)
