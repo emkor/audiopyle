@@ -28,7 +28,7 @@ class B2Coordinator(object):
             sleep(QUEUE_RELOAD_DELAY)
 
     def get_remote_audio_files(self):
-        file_infos = self.audio_provider.get_file_infos()
+        file_infos = self.audio_provider.get_raw_file_infos(self.b2_source_config)
         audio_file_infos = self._filter_audio_files(file_infos)
         audio_file_infos.sort(key=lambda k: k[u'uploadTimestamp'])
 
