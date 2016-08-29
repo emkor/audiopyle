@@ -12,8 +12,8 @@ class AnalysisTask(object):
         :type analysis_task_dict: dict
         :rtype: commons.model.analysis_task.AnalysisTask
         """
-        remote_file_meta = RemoteFileMeta(**analysis_task_dict.get("remote_file_meta"))
-        remote_file_source = RemoteFileSource(**analysis_task_dict.get("remote_file_source"))
+        remote_file_meta = RemoteFileMeta(**(analysis_task_dict.get("remote_file_meta")))
+        remote_file_source = RemoteFileSource(**(analysis_task_dict.get("remote_file_source")))
         created_timestamp = analysis_task_dict.get("created_timestamp")
         return AnalysisTask(remote_file_meta=remote_file_meta, remote_file_source=remote_file_source,
                             created_timestamp=created_timestamp)

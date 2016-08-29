@@ -25,13 +25,16 @@ class XtracterTest(unittest.TestCase):
 
     def test_should_call_services_when_downloading_file(self):
         # given
-        remote_file_meta_dict = {"fileName": "test/102bpm_drum_loop_mono_44.1k.wav", "uploadTimestamp": 1467569053000,
-                                 "size": 2651512}
+        task_dict = {
+            "remote_file_meta": {"fileName": "test/102bpm_drum_loop_mono_44.1k.wav", "uploadTimestamp": 1467569053000,
+                                 "size": 2651512},
+            "remote_file_source": {"type": "b2", "address": "address", "bucket_name": "bucket_name",
+                                   "password": "password"}}
         mocked_local_path = "/some_path/102bpm_drum_loop_mono_44.1k.wav"
         self.remote_file_provider.download.return_value = mocked_local_path
         self.meta_provider.read_meta_from.return_value = self.audio_meta
         # when
-        actual_audio_meta_output = self.xtracter._download_file(remote_file_meta_dict)
+        actual_audio_meta_output = self.xtracter._download_file(task_dict)
         # then
         self.remote_file_provider.download.assert_called_once_with("test/102bpm_drum_loop_mono_44.1k.wav")
         self.meta_provider.read_meta_from.assert_called_once_with("/some_path/102bpm_drum_loop_mono_44.1k.wav")
