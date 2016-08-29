@@ -4,8 +4,6 @@ from time import sleep
 from commons.model.analysis_task import AnalysisTask
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.utils.constant import PROJECT_HOME_ENV
-
-from commons.model.remote_file_meta import RemoteFileMeta
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from xtracter.utils.xtracter_const import AUDIO_FILES_CACHE_PATH
