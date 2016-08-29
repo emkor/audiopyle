@@ -5,7 +5,7 @@ from b2.download_dest import DownloadDestLocalFile
 
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.service.file_accessor import FileAccessor
-from commons.utils.constant import AudiopyleConst
+from commons.utils.constant import B2_REALM
 
 
 class AbstractRemoteAudioProvider(object):
@@ -79,7 +79,7 @@ class B2AudioProvider(AbstractRemoteAudioProvider):
 
     def _connect_to_bucket(self, remote_source_config):
         try:
-            self.b2_api.authorize_account(AudiopyleConst.B2_REALM, remote_source_config.address,
+            self.b2_api.authorize_account(B2_REALM, remote_source_config.address,
                                           remote_source_config.password)
             bucket = self.b2_api.get_bucket_by_name(remote_source_config.bucket_name)
             if bucket is None:
