@@ -26,7 +26,7 @@ class XtracterTest(unittest.TestCase):
     def test_should_call_services_when_downloading_file(self):
         # given
         task_dict = {
-            "remote_file_meta": {"fileName": "test/102bpm_drum_loop_mono_44.1k.wav", "uploadTimestamp": 1467569053000,
+            "remote_file_meta": {"name": "test/102bpm_drum_loop_mono_44.1k.wav", "upload_timestamp": 1467569053000,
                                  "size": 2651512},
             "remote_file_source": {"type": "b2", "address": "address", "bucket_name": "bucket_name",
                                    "password": "password"}}
