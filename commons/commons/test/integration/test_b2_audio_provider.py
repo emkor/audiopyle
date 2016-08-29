@@ -38,6 +38,8 @@ class B2AudioProviderIntegrationTest(unittest.TestCase):
         self.assertIn(expected_remote_file, remote_file_mets)
 
     def test_should_download_remote_file(self):
-        local_file_path = self.audio_provider.download(self.b2_test_config, B2_TEST_FILE_PATH)
+        expected_remote_file = RemoteFileMeta(B2_TEST_FILE_PATH, B2_TEST_FILE_SIZE,
+                                              B2_TEST_FILE_UPLOAD_TIMESTAMP)
+        local_file_path = self.audio_provider.download(self.b2_test_config, expected_remote_file)
         assert_that(FileAccessor.exists(local_file_path)).is_true()
         FileAccessor.remove_file(local_file_path)
