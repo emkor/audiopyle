@@ -17,8 +17,9 @@ class AudioFileConverter(object):
 
         full_input_path = FileAccessor.join(self.input_dir, input_file)
         full_output_path = FileAccessor.join(self.output_dir, output_file)
+        extension = FileAccessor.get_extension(input_file)
 
-        song = AudioSegment.from_mp3(full_input_path)\
+        song = AudioSegment.from_file(full_input_path, format=extension)\
             .set_channels(DEFAULT_TARGET_CHANNEL_NUMBER)\
             .set_frame_rate(DEFAULT_TARGET_SAMPLE_RATE)\
             .set_sample_width(DEFAULT_TARGET_SAMPLE_WIDTH)

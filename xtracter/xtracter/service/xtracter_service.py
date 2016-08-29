@@ -3,10 +3,12 @@ from time import sleep
 
 from commons.model.analysis_task import AnalysisTask
 from commons.provider.b2_audio_provider import B2AudioProvider
-from commons.utils.constant import AudiopyleConst
+from commons.utils.constant import PROJECT_HOME_ENV
+
+from commons.model.remote_file_meta import RemoteFileMeta
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
-from xtracter.utils.xtracter_const import XtracterConst
+from xtracter.utils.xtracter_const import AUDIO_FILES_CACHE_PATH
 
 SLEEP_TIME_SEC = 3
 
@@ -63,8 +65,8 @@ class Xtracter(object):
         print("Ended exporting results in {} seconds.".format(sending_took))
 
     def _remove_file(self, local_file_meta):
-        home = OsEnvAccessor.get_env_variable(AudiopyleConst.PROJECT_HOME_ENV)
-        file_path = FileAccessor.join(home, "xtracter", XtracterConst.AUDIO_FILES_CACHE_PATH, local_file_meta.filename)
+        home = OsEnvAccessor.get_env_variable(PROJECT_HOME_ENV)
+        file_path = FileAccessor.join(home, "xtracter", AUDIO_FILES_CACHE_PATH, local_file_meta.filename)
         if FileAccessor.exists(file_path):
             FileAccessor.remove_file(file_path)
             print("Removed file: {}".format(file_path))

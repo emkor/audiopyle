@@ -6,7 +6,7 @@ from commons.model.remote_file_meta import RemoteFileMeta
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.os_env_accessor import OsEnvAccessor
-from commons.utils.constant import AudiopyleConst
+from commons.utils.constant import B2_ACCOUNT_ID, B2_APPLICATION_KEY, B2_RESOURCES_BUCKET, PROJECT_HOME_ENV
 
 DEFAULT_QUEUE_NAME = 'RedisClientTestQueue'
 QUEUE_RELOAD_DELAY = 5
@@ -18,11 +18,11 @@ class B2Coordinator(object):
             self.audio_provider = audio_provider
         else:
             self.audio_provider = B2AudioProvider(
-                B2Config(AudiopyleConst.B2_ACCOUNT_ID,
-                         AudiopyleConst.B2_APPLICATION_KEY,
-                         AudiopyleConst.B2_RESOURCES_BUCKET),
+                B2Config(B2_ACCOUNT_ID,
+                         B2_APPLICATION_KEY,
+                         B2_RESOURCES_BUCKET),
                 OsEnvAccessor.get_env_variable(
-                    AudiopyleConst.PROJECT_HOME_ENV))
+                    PROJECT_HOME_ENV))
 
         self.redis_queue_client = redis_queue_client or RedisQueueClient(DEFAULT_QUEUE_NAME)
 

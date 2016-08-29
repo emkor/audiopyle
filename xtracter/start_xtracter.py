@@ -1,6 +1,7 @@
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
+from commons.provider.b2_audio_provider import B2AudioProvider
 from xtracter.provider.audio_meta_provider import LocalAudioMetaProvider
 from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
 from xtracter.provider.plugin_provider import VampyPluginProvider
@@ -18,6 +19,8 @@ plugin_provider = VampyPluginProvider()
 segment_analyzer = AudioSegmentAnalyzer()
 feature_extractor = FeatureExtractor(segment_provider=segment_provider, plugin_provider=plugin_provider,
                                      segment_analyzer=segment_analyzer)
+
+b2_client = B2AudioProvider(local_wave_dir=AUDIO_FILES_PATH)
 redis_task_queue_client = RedisQueueClient(queue_name=TASK_QUEUE_NAME)
 redis_results_queue_client = RedisQueueClient(queue_name=RESULTS_QUEUE_NAME)
 
