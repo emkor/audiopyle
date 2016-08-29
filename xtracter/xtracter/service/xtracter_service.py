@@ -12,9 +12,11 @@ SLEEP_TIME_SEC = 3
 
 
 class Xtracter(object):
-    def __init__(self, feature_extractor, audio_meta_provider, redis_task_client, redis_results_client):
+    def __init__(self, feature_extractor, audio_meta_provider, remote_file_provider, redis_task_client,
+                 redis_results_client):
         self.feature_extractor = feature_extractor
         self.audio_meta_provider = audio_meta_provider
+        self.remote_file_provider = remote_file_provider
         self.redis_task_client = redis_task_client
         self.redis_results_client = redis_results_client
         self.destination_path = FileAccessor.join(OsEnvAccessor.get_env_variable("AUDIOPYLE_HOME"), "xtracter",
@@ -38,7 +40,7 @@ class Xtracter(object):
         print("Starting downloading file: {} from: {}".format(analysis_task.remote_file_meta,
                                                               analysis_task.remote_file_source))
         b2_client = B2AudioProvider(analysis_task.remote_file_source, self.destination_path)
-        local_file_path = b2_client.download(analysis_task.remote_file_meta)
+        local_file_path = b2_client.download(analysis_task.remote_file_source, analysis_task.remote_file_meta)
         local_file_meta = self.audio_meta_provider.read_meta_from(local_file_path)
         download_took = (datetime.utcnow() - start_time).total_seconds()
         print("Ended downloading file: {}. Download took: {} seconds".format(local_file_meta, download_took))
