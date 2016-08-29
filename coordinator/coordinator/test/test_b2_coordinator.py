@@ -42,7 +42,7 @@ class TestB2Coordinator(unittest.TestCase):
               u'uploadTimestamp': 400}]
 
         files = [RemoteFileMeta.from_dict(dict) for dict in dicts]
-
+        self.redis_queue_client.queue_name = "some_name"
         coordinator = B2Coordinator(self.audio_provider, self.redis_queue_client)
         coordinator.push_file_list_to_redis(files, 0)
 
