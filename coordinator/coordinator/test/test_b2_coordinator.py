@@ -1,18 +1,20 @@
+from commons.provider.redis_queue_client import RedisQueueClient
 from mock import Mock
 import unittest
 from assertpy import assert_that
 
 from commons.model.remote_file_meta import RemoteFileMeta
+from commons.provider.b2_audio_provider import B2AudioProvider
 from coordinator.service.b2_coordinator import B2Coordinator
 
 
 class TestB2Coordinator(unittest.TestCase):
     def setUp(self):
-        self.audio_provider = Mock()
-        self.redis_queue_client = Mock()
+        self.audio_provider = Mock(B2AudioProvider)
+        self.redis_queue_client = Mock(RedisQueueClient)
 
     def test_should_filter_audio_file(self):
-        self.audio_provider.get_file_infos.return_value = \
+        self.audio_provider.get_raw_file_infos.return_value = \
             [{u'contentType': u'audio',
               u'fileName': u'audio-file',
               u'size': 100,
