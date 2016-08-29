@@ -7,7 +7,7 @@ from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
 from commons.utils.constant import B2_ACCOUNT_ID, B2_APPLICATION_KEY, B2_RESOURCES_BUCKET, PROJECT_HOME_ENV, \
-    B2_TEST_FILE_PATH
+    B2_TEST_FILE_PATH, B2_TEST_FILE_UPLOAD_TIMESTAMP, B2_TEST_FILE_SIZE
 
 
 class B2AudioProviderIntegrationTest(unittest.TestCase):
