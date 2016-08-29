@@ -50,4 +50,4 @@ class RedisCoordinatorIntegrationTest(unittest.TestCase):
 
     def test_should_push_file_list_to_redis(self):
         assert_that(self.redis_client.length()).is_equal_to(1)
-        assert_that(self.redis_client.list()[0][u'size']).is_equal_to(207916)
+        assert_that(self.redis_client.list()[0][u'remote_file_meta'][u'size']).is_equal_to(207916)
