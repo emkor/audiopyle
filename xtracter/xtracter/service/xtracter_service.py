@@ -14,6 +14,14 @@ SLEEP_TIME_SEC = 3
 class Xtracter(object):
     def __init__(self, feature_extractor, audio_meta_provider, remote_file_provider, redis_task_client,
                  redis_results_client):
+        """
+        :type feature_extractor: xtracter.service.feature_extractor.FeatureExtractor
+        :type audio_meta_provider: xtracter.provider.audio_meta_provider.LocalAudioMetaProvider
+        :type remote_file_provider: commons.provider.b2_audio_provider.AbstractRemoteAudioProvider
+        :type redis_task_client: commons.provider.redis_queue_client.RedisQueueClient
+        :type redis_results_client: commons.provider.redis_queue_client.RedisQueueClient
+        :rtype: xtracter.service.xtracter_service.Xtracter
+        """
         self.feature_extractor = feature_extractor
         self.audio_meta_provider = audio_meta_provider
         self.remote_file_provider = remote_file_provider
