@@ -47,8 +47,7 @@ class Xtracter(object):
         analysis_task = AnalysisTask.from_dict(task_dict_or_none)
         print("Starting downloading file: {} from: {}".format(analysis_task.remote_file_meta,
                                                               analysis_task.remote_file_source))
-        b2_client = B2AudioProvider(analysis_task.remote_file_source, self.destination_path)
-        local_file_path = b2_client.download(analysis_task.remote_file_source, analysis_task.remote_file_meta)
+        local_file_path = self.remote_file_provider.download(analysis_task.remote_file_source, analysis_task.remote_file_meta)
         local_file_meta = self.audio_meta_provider.read_meta_from(local_file_path)
         download_took = (datetime.utcnow() - start_time).total_seconds()
         print("Ended downloading file: {}. Download took: {} seconds".format(local_file_meta, download_took))

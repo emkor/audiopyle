@@ -3,6 +3,8 @@ import unittest
 from assertpy import assert_that
 from mock import Mock
 
+from commons.model.remote_file_meta import RemoteFileMeta
+from commons.model.remote_file_source import RemoteFileSource
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.provider.redis_queue_client import RedisQueueClient
 from xtracter.model.audio_meta import AudioMeta
@@ -25,18 +27,18 @@ class XtracterTest(unittest.TestCase):
 
     def test_should_call_services_when_downloading_file(self):
         # given
+        remote_file_meta = RemoteFileMeta("test/102bpm_drum_loop_mono_44.1k.wav", 2651512, 1467569053000)
+        remote_file_source = RemoteFileSource("b2", "address", "bucket_name", "password")
         task_dict = {
-            "remote_file_meta": {"name": "test/102bpm_drum_loop_mono_44.1k.wav", "upload_timestamp": 1467569053000,
-                                 "size": 2651512},
-            "remote_file_source": {"type": "b2", "address": "address", "bucket_name": "bucket_name",
-                                   "password": "password"}}
+            "remote_file_meta": remote_file_meta.to_dict(),
+            "remote_file_source": remote_file_source.to_dict()}
         mocked_local_path = "/some_path/102bpm_drum_loop_mono_44.1k.wav"
         self.remote_file_provider.download.return_value = mocked_local_path
         self.meta_provider.read_meta_from.return_value = self.audio_meta
         # when
         actual_audio_meta_output = self.xtracter._download_file(task_dict)
         # then
-        self.remote_file_provider.download.assert_called_once_with("test/102bpm_drum_loop_mono_44.1k.wav")
+        self.remote_file_provider.download.assert_called_once_with(remote_file_source, remote_file_meta)
         self.meta_provider.read_meta_from.assert_called_once_with("/some_path/102bpm_drum_loop_mono_44.1k.wav")
         assert_that(actual_audio_meta_output).is_equal_to(self.audio_meta)
 
