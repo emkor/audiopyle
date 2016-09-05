@@ -21,6 +21,7 @@ ratings:
    - "**.py"
 
 exclude_paths:
+- "**/.tox/*"
 - "**/test_*"
 - "**/setup.py"
 - "**/resources/**"
