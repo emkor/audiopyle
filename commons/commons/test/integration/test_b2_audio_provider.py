@@ -2,7 +2,7 @@ import unittest
 from assertpy import assert_that
 
 from commons.model.remote_file_meta import RemoteFileMeta
-from commons.model.remote_file_source import B2Config
+from commons.model.remote_file_source import create_b2_source_config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
@@ -12,7 +12,7 @@ from commons.utils.constant import B2_ACCOUNT_ID, B2_APPLICATION_KEY, B2_RESOURC
 
 class B2AudioProviderIntegrationTest(unittest.TestCase):
     def setUp(self):
-        self.b2_test_config = B2Config(B2_ACCOUNT_ID, B2_APPLICATION_KEY,
+        self.b2_test_config = create_b2_source_config(B2_ACCOUNT_ID, B2_APPLICATION_KEY,
                                        B2_RESOURCES_BUCKET)
         local_cache_dir = OsEnvAccessor.get_env_variable(PROJECT_HOME_ENV)
         self.audio_provider = B2AudioProvider(local_cache_dir)
