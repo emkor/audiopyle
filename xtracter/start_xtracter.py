@@ -1,9 +1,6 @@
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
-from commons.utils.constant import B2_ACCOUNT_ID, B2_APPLICATION_KEY, B2_RESOURCES_BUCKET
-
-from commons.model.b2_config import B2Config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from xtracter.provider.audio_meta_provider import LocalAudioMetaProvider
 from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
@@ -23,16 +20,14 @@ segment_analyzer = AudioSegmentAnalyzer()
 feature_extractor = FeatureExtractor(segment_provider=segment_provider, plugin_provider=plugin_provider,
                                      segment_analyzer=segment_analyzer)
 
-b2_config = B2Config(B2_ACCOUNT_ID, B2_APPLICATION_KEY,
-                     B2_RESOURCES_BUCKET)
-b2_client = B2AudioProvider(b2_config=b2_config, local_wave_dir=AUDIO_FILES_PATH)
+b2_client = B2AudioProvider(local_destination_dir=AUDIO_FILES_PATH)
 redis_task_queue_client = RedisQueueClient(queue_name=TASK_QUEUE_NAME)
 redis_results_queue_client = RedisQueueClient(queue_name=RESULTS_QUEUE_NAME)
 
 # CREATE Xtracter SERVICE INSTANCE
 print("Initializing xtracter...")
 xtracter_service = Xtracter(feature_extractor=feature_extractor, audio_meta_provider=audio_meta_provider,
-                            b2_client=b2_client, redis_task_client=redis_task_queue_client,
+                            remote_file_provider=b2_client, redis_task_client=redis_task_queue_client,
                             redis_results_client=redis_results_queue_client)
 
 # STARTING FEATURE EXTRACTION

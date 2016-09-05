@@ -18,22 +18,23 @@ CREATE TABLE track_source (
 );
 
 CREATE TABLE track (
-  uuid BINARY(16) NOT NULL PRIMARY KEY,
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   source_id INT UNSIGNED NOT NULL,
   filename VARCHAR(256) NOT NULL,
   bit_depth INT UNSIGNED NOT NULL,
   sample_rate INT UNSIGNED NOT NULL,
   frames_count BIGINT UNSIGNED NOT NULL,
   channels_count INT UNSIGNED NOT NULL,
-  FOREIGN KEY (source_id) REFERENCES track_source(id)
+  FOREIGN KEY (source_id) REFERENCES track_source(id),
+  CONSTRAINT track_unique UNIQUE (source_id, filename)
 );
 
 CREATE TABLE segment (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  track_uuid BINARY(16) NOT NULL,
+  track_id BIGINT UNSIGNED NOT NULL,
   offset BIGINT UNSIGNED NOT NULL,
   length BIGINT UNSIGNED NOT NULL,
-  FOREIGN KEY (track_uuid) REFERENCES track(uuid)
+  FOREIGN KEY (track_id) REFERENCES track(id)
 );
 
 CREATE TABLE feature (

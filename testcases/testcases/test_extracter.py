@@ -3,9 +3,12 @@ from time import sleep
 
 from assertpy import assert_that
 
+from commons.model.analysis_task import AnalysisTask
 from commons.model.remote_file_meta import RemoteFileMeta
+from commons.model.remote_file_source import B2Config
 from commons.provider.redis_queue_client import RedisQueueClient
-from commons.utils.constant import PROJECT_HOME_ENV, B2_TEST_FILE_PATH
+from commons.utils.constant import PROJECT_HOME_ENV, B2_TEST_FILE_PATH, B2_ACCOUNT_ID, B2_APPLICATION_KEY, \
+    B2_RESOURCES_BUCKET
 
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
@@ -60,7 +63,10 @@ class XtracterIntegrationTest(unittest.TestCase):
         assert_that(self._keep_polling_for_results_until_timeout()).is_true()
 
     def _add_test_file_task(self):
-        self.redis_task_client.add(RemoteFileMeta(B2_TEST_FILE_PATH, 0, 0).to_dict())
+        remote_file_meta = RemoteFileMeta(B2_TEST_FILE_PATH, 0, 0)
+        remote_file_source = B2Config(B2_ACCOUNT_ID, B2_APPLICATION_KEY, B2_RESOURCES_BUCKET)
+        task = AnalysisTask(remote_file_meta, remote_file_source)
+        self.redis_task_client.add(task.to_dict())
 
     def _keep_polling_for_results_until_timeout(self):
         analysis_time = 0
