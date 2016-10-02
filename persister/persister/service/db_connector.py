@@ -55,6 +55,7 @@ class DbConnector(object):
         return base_entity_class.metadata
 
     def _init_new_session(self):
+        print("Creating new DB session...")
         session_constructor = sessionmaker(bind=self._get_engine())
         return session_constructor()
 
@@ -68,6 +69,7 @@ class DbConnector(object):
         By the imports, SQL Alchemy acknowledges to have mapped classes under its control
         So it can drop / create schemas
         """
+        print("Registering DB entities...")
         from persister.entity.feature import Feature
         from persister.entity.raw_feature import RawFeature, RawFeatureValue
         from persister.entity.plugin import Plugin
