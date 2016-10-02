@@ -1,4 +1,4 @@
-from xtracter.model.feature import AudioFeature
+from commons.model.feature import AudioFeature
 from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
 from xtracter.provider.plugin_provider import VampyPluginProvider
 from xtracter.service.feature_mapper import FeatureMapper

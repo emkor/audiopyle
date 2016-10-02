@@ -3,12 +3,12 @@ import unittest
 from assertpy import assert_that
 from mock import Mock
 
+from commons.model.audio_meta import AudioMeta
+from commons.model.feature import AudioFeature
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.model.remote_file_source import RemoteFileSource
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.provider.redis_queue_client import RedisQueueClient
-from xtracter.model.audio_meta import AudioMeta
-from xtracter.model.feature import AudioFeature
 from xtracter.provider.audio_meta_provider import LocalAudioMetaProvider
 from xtracter.service.feature_extractor import FeatureExtractor
 from xtracter.service.xtracter_service import Xtracter

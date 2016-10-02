@@ -1,7 +1,9 @@
 import unittest
-from numpy.testing import assert_array_almost_equal
+
 from assertpy import assert_that
-from xtracter.model.audio_meta import AudioMeta
+from numpy.testing import assert_array_almost_equal
+
+from commons.model.audio_meta import AudioMeta
 from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
 from xtracter.utils.xtracter_const import TEST_WAV_FILE_NAME, TEST_WAV_FILE_CHANNELS_COUNT, TEST_WAV_FILE_SAMPLE_RATE, \
     TEST_WAV_FILE_FRAME_COUNT, TEST_WAV_FILE_BIT_DEPTH

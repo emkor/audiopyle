@@ -2,6 +2,14 @@ from commons.utils.conversion import b_to_B, B_to_b, to_kilo, frames_to_sec
 
 
 class AudioMeta(object):
+    @staticmethod
+    def from_dict(audio_meta_dict):
+        """
+        :type audio_meta_dict: dict
+        :rtype: commons.model.audio_meta.AudioMeta
+        """
+        return AudioMeta(**audio_meta_dict)
+
     def __init__(self, filename, channels_count, sample_rate, frames_count, bit_depth):
         self.filename = filename
         self.channels_count = channels_count

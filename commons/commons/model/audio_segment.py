@@ -2,6 +2,14 @@ from commons.utils.conversion import frames_to_sec
 
 
 class AudioSegmentMeta(object):
+    @staticmethod
+    def from_dict(audio_segment_meta_dict):
+        """
+        :type audio_segment_meta_dict: dict
+        :rtype: commons.model.audio_segment.AudioSegmentMeta
+        """
+        return AudioSegmentMeta(**audio_segment_meta_dict)
+
     def __init__(self, sample_rate, length, offset=0):
         self.sample_rate = sample_rate
         self.length = length
@@ -28,6 +36,14 @@ class AudioSegmentMeta(object):
 
 
 class AudioSegment(AudioSegmentMeta):
+    @staticmethod
+    def from_dict(audio_segment_dict):
+        """
+        :type audio_segment_dict: dict
+        :rtype: commons.model.audio_segment.AudioSegment
+        """
+        return AudioSegment(**audio_segment_dict)
+
     def __init__(self, data, sample_rate, offset=0):
         super(AudioSegment, self).__init__(sample_rate, len(data), offset)
         self.data = data

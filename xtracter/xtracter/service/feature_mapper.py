@@ -1,4 +1,4 @@
-from xtracter.model.feature import RawFeature
+from commons.model.feature import RawFeature
 
 
 class FeatureMapper(object):

@@ -1,7 +1,8 @@
 import unittest
+
 from assertpy import assert_that
 
-from xtracter.model.audio_meta import AudioMeta
+from commons.model.audio_meta import AudioMeta
 from xtracter.provider.audio_segment_provider import LocalAudioSegmentProvider
 from xtracter.provider.plugin_provider import VampyPluginProvider
 from xtracter.service.audio_segment_reader import AudioSegmentReader

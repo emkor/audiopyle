@@ -31,4 +31,4 @@ class RawFeature(DbEngine.get_base_entity_class()):
     feature_id = Column(BigInteger, ForeignKey('feature.id'))
     feature = relationship("Feature", back_populates="raw_features")
 
-    raw_feature_values = relationship("RawFeatureValue", order_by=RawFeatureValue.id, back_populates="raw_feature")
+    raw_feature_values = relationship("RawFeatureValue", order_by=RawFeatureValue.position, back_populates="raw_feature")

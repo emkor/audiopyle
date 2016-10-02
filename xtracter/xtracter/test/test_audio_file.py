@@ -1,8 +1,9 @@
 import unittest
+
 from assertpy import assert_that
 
-from xtracter.model.audio_meta import AudioMeta
-from xtracter.model.audio_segment import AudioSegment
+from commons.model.audio_meta import AudioMeta
+from commons.model.audio_segment import AudioSegment
 
 
 class AudioMetaTest(unittest.TestCase):

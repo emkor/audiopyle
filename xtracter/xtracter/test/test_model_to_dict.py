@@ -2,9 +2,9 @@ import unittest
 
 from assertpy import assert_that
 
-from xtracter.model.audio_meta import AudioMeta
-from xtracter.model.audio_segment import AudioSegmentMeta
-from xtracter.model.feature import RawFeature, AudioFeature
+from commons.model.audio_meta import AudioMeta
+from commons.model.audio_segment import AudioSegmentMeta
+from commons.model.feature import RawFeature, AudioFeature
 
 
 class ModelsToDictTest(unittest.TestCase):

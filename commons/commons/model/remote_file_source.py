@@ -1,4 +1,12 @@
 class RemoteFileSource(object):
+    @staticmethod
+    def from_dict(remote_file_meta_dict):
+        """
+        :type remote_file_meta_dict: dict
+        :rtype: commons.model.remote_file_source.RemoteFileSource
+        """
+        return RemoteFileSource(**remote_file_meta_dict)
+
     def __init__(self, type, address, bucket_name, password, **kwargs):
         """
         :type type: basestring

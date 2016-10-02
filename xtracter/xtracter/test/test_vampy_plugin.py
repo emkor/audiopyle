@@ -1,6 +1,8 @@
 import unittest
+
 from assertpy import assert_that
-from xtracter.model.vampy_plugin import VampyPlugin
+
+from commons.model.vampy_plugin import VampyPlugin
 
 
 class VampyPluginTest(unittest.TestCase):

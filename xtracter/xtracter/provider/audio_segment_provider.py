@@ -4,8 +4,8 @@ import wave
 import numpy
 from numpy import array
 
+from commons.model.audio_segment import AudioSegment
 from commons.service.file_accessor import FileAccessor
-from xtracter.model.audio_segment import AudioSegment
 
 
 class LocalAudioSegmentProvider(object):
