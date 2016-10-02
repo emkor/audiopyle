@@ -21,6 +21,7 @@ class DbEngine(object):
         :type db_access_data: persister.model.db_access_data.DbAccessData
         :type db_name: str
         :type db_type: str
+        :rtype: sqlalchemy.engine.base.Engine
         """
         if not DbEngine._ENGINE:
             DbEngine._ENGINE = create_engine(DbEngine._get_connection_url(db_access_data, db_name, db_type))
@@ -30,4 +31,3 @@ class DbEngine(object):
     def _get_connection_url(db_access_data, db_name, db_type):
         return '{}://{}:{}@{}/{}'.format(db_type, db_access_data.user, db_access_data.password,
                                          db_access_data.host, db_name)
-

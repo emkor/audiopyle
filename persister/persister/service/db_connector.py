@@ -1,4 +1,7 @@
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy_utils import create_database
+from sqlalchemy_utils import database_exists
+from sqlalchemy_utils import drop_database
 
 from persister.service.db_engine import DbEngine
 
@@ -14,22 +17,32 @@ class DbConnector(object):
         self._cached_session = None
 
     def initialize_db(self):
-        self._register_entities()
-        try:
-            base_entity_class_meta = self._get_entity_class_metadata()
-            base_entity_class_meta.create_all(self._get_engine())
-        except Exception as e:
-            print("Could not initialize DB. Details: {}".format(e))
+        engine = self._get_engine()
+        if not database_exists(engine.url):
+            create_database(engine.url)
+            self._register_entities()
+            try:
+                base_entity_class_meta = self._get_entity_class_metadata()
+                base_entity_class_meta.create_all(engine)
+            except Exception as e:
+                print("Could not initialize DB. Details: {}".format(e))
+        else:
+            print("No need to initialize DB: {} is already initialized.".format(engine.url))
 
     def drop_db(self):
-        self._register_entities()
-        try:
-            base_entity_class_meta = self._get_entity_class_metadata()
-            base_entity_class_meta.drop_all(self._get_engine())
-        except Exception as e:
-            print("Could not drop DB. Details: {}".format(e))
+        engine = self._get_engine()
+        if database_exists(engine.url):
+            self._register_entities()
+            try:
+                base_entity_class_meta = self._get_entity_class_metadata()
+                base_entity_class_meta.drop_all(self._get_engine())
+                drop_database(engine.url)
+            except Exception as e:
+                print("Could not drop DB. Details: {}".format(e))
+        else:
+            print("Could not drop DB: the db: {} was already dropped.".format(engine.url))
 
-    def get_session(self):
+    def get_db_session(self):
         """
         :rtype: sqlalchemy.orm.session.Session
         """
@@ -50,7 +63,10 @@ class DbConnector(object):
 
     def _register_entities(self):
         """
-        Imports all classes derived from sqlalchemy Base class. Important to do before initializing / dropping DB schemas
+        Imports all classes deriving from sqlalchemy Base class.
+        Important to do before initializing / dropping DB schemas
+        By the imports, SQL Alchemy acknowledges to have mapped classes under its control
+        So it can drop / create schemas
         """
         from persister.entity.feature import Feature
         from persister.entity.raw_feature import RawFeature, RawFeatureValue
