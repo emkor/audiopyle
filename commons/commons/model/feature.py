@@ -76,7 +76,7 @@ class AudioFeature(object):
         return self.segment_meta.offset + self.length_frames() + 1
 
     def to_dict(self):
-        simple_dict = deepcopy(self.__dict__)
+        simple_dict = {"plugin_key": self.plugin_key, "plugin_output": self.plugin_output}
         simple_dict.update({"audio_meta": self.audio_meta.to_dict()})
         simple_dict.update({"segment_meta": self.segment_meta.to_dict()})
         simple_dict.update({"raw_features": [feature.to_dict() for feature in self.raw_features]})
