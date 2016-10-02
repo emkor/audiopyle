@@ -1,11 +1,15 @@
 class RemoteFileMeta(object):
     @staticmethod
     def from_dict(remote_file_meta_dict):
-        return RemoteFileMeta(name=remote_file_meta_dict.get("fileName")
-                                   or remote_file_meta_dict.get("name"),
-                              size=remote_file_meta_dict.get("size"),
-                              upload_timestamp=remote_file_meta_dict.get("uploadTimestamp")
-                                               or remote_file_meta_dict.get("upload_timestamp"))
+        try:
+            return RemoteFileMeta(name=remote_file_meta_dict.get("fileName")
+                                       or remote_file_meta_dict.get("name"),
+                                  size=remote_file_meta_dict.get("size"),
+                                  upload_timestamp=remote_file_meta_dict.get("uploadTimestamp")
+                                                   or remote_file_meta_dict.get("upload_timestamp"))
+        except Exception as e:
+            print("Could not decode dict to RemoteFileMeta. Input: {} Details: {}".format(remote_file_meta_dict, e))
+            return None
 
     def __init__(self, name, size, upload_timestamp):
         self.name = name
