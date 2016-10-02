@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from commons.model.audio_meta import AudioMeta
 from commons.model.audio_segment import AudioSegmentMeta
 from commons.utils.conversion import frames_to_sec
@@ -24,7 +26,7 @@ class RawFeature(object):
         return self.__str__()
 
     def to_dict(self):
-        return self.__dict__
+        return deepcopy(self.__dict__)
 
 
 class AudioFeature(object):
@@ -74,7 +76,7 @@ class AudioFeature(object):
         return self.segment_meta.offset + self.length_frames() + 1
 
     def to_dict(self):
-        simple_dict = self.__dict__
+        simple_dict = deepcopy(self.__dict__)
         simple_dict.update({"audio_meta": self.audio_meta.to_dict()})
         simple_dict.update({"segment_meta": self.segment_meta.to_dict()})
         simple_dict.update({"raw_features": [feature.to_dict() for feature in self.raw_features]})

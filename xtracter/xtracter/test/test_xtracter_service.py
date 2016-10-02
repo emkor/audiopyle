@@ -57,8 +57,10 @@ class XtracterTest(unittest.TestCase):
     def test_should_call_services_when_sending_results_to_redis(self):
         # given
         result = AnalysisResult(analysis_task=Mock(AnalysisTask),
-                                features=[AudioFeature(self.audio_meta, Mock(AudioSegmentMeta), "", "", [])])
+                                features=[AudioFeature(self.audio_meta, Mock(AudioSegmentMeta), "", "", []),
+                                          AudioFeature(self.audio_meta, Mock(AudioSegmentMeta), "", "", [])])
         # when
         self.xtracter._send_to_redis(result)
         # then
-        self.results_queue.add.assert_any_call()
+        self.results_queue.add.assert_called_once_with(result.to_dict())
+        # self.results_queue.add.assert_any_call()

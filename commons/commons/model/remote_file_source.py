@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class RemoteFileSource(object):
     @staticmethod
     def from_dict(remote_file_meta_dict):
@@ -20,7 +23,7 @@ class RemoteFileSource(object):
         self.password = password
 
     def to_dict(self):
-        return self.__dict__
+        return deepcopy(self.__dict__)
 
     def __hash__(self):
         return hash((self.type, self.address, self.bucket_name))

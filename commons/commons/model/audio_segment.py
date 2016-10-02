@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from commons.utils.conversion import frames_to_sec
 
 
@@ -26,7 +28,7 @@ class AudioSegmentMeta(object):
         return self.offset + self.length_frames() + 1
 
     def to_dict(self):
-        return self.__dict__
+        return deepcopy(self.__dict__)
 
     def __str__(self):
         return "AudioSegmentMeta: {}".format(self.__dict__)
@@ -52,4 +54,4 @@ class AudioSegment(AudioSegmentMeta):
         return AudioSegmentMeta(self.sample_rate, self.length, self.offset)
 
     def to_dict(self):
-        return self.__dict__
+        return deepcopy(self.__dict__)

@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class RemoteFileMeta(object):
     @staticmethod
     def from_dict(remote_file_meta_dict):
@@ -30,4 +33,4 @@ class RemoteFileMeta(object):
         return self.__str__()
 
     def to_dict(self):
-        return self.__dict__
+        return deepcopy(self.__dict__)
