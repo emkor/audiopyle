@@ -4,7 +4,9 @@ from assertpy import assert_that
 from mock import Mock
 
 from commons.model.analysis_result import AnalysisResult
+from commons.model.analysis_task import AnalysisTask
 from commons.model.audio_meta import AudioMeta
+from commons.model.audio_segment import AudioSegmentMeta
 from commons.model.feature import AudioFeature
 from commons.model.remote_file_meta import RemoteFileMeta
 from commons.model.remote_file_source import RemoteFileSource
@@ -54,8 +56,9 @@ class XtracterTest(unittest.TestCase):
 
     def test_should_call_services_when_sending_results_to_redis(self):
         # given
-        expected_extracted_features = [self.audio_meta]
+        result = AnalysisResult(analysis_task=Mock(AnalysisTask),
+                                features=[AudioFeature(self.audio_meta, Mock(AudioSegmentMeta), "", "", [])])
         # when
-        self.xtracter._send_to_redis(expected_extracted_features)
+        self.xtracter._send_to_redis(result)
         # then
         self.results_queue.add.assert_any_call()
