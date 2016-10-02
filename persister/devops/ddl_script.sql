@@ -57,6 +57,7 @@ CREATE TABLE raw_feature (
 CREATE TABLE raw_feature_value (
   id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   raw_feature_id BIGINT UNSIGNED NOT NULL,
+  position INT UNSIGNED NOT NULL,
   value FLOAT,
   FOREIGN KEY (raw_feature_id) REFERENCES raw_feature(id)
 );
