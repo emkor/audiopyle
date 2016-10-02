@@ -1,6 +1,7 @@
 from sqlalchemy import BigInteger
 from sqlalchemy import Column, Integer
 from sqlalchemy import ForeignKey
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from persister.entity.raw_feature import RawFeature
@@ -19,3 +20,5 @@ class Feature(DbEngine.get_base_entity_class()):
     segment = relationship("Segment", back_populates="features")
 
     raw_features = relationship("RawFeature", order_by=RawFeature.id, back_populates="feature")
+
+    UniqueConstraint(plugin_id, segment_id, name='uix_feature')

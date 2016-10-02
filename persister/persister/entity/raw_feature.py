@@ -13,8 +13,8 @@ class RawFeatureValue(DbEngine.get_base_entity_class()):
 
     id = Column(BigInteger, primary_key=True)
 
-    position = Column(Integer())
-    value = Column(Float())
+    position = Column(Integer(), nullable=False)
+    value = Column(Float(), nullable=False)
 
     raw_feature_id = Column(BigInteger, ForeignKey('raw_feature.id'))
     raw_feature = relationship("RawFeature", back_populates="raw_feature_values")
@@ -25,8 +25,8 @@ class RawFeature(DbEngine.get_base_entity_class()):
 
     id = Column(BigInteger, primary_key=True)
 
-    label = Column(String(100))
-    timestamp = Column(Float())
+    label = Column(String(100), nullable=True)
+    timestamp = Column(Float(), nullable=False)
 
     feature_id = Column(BigInteger, ForeignKey('feature.id'))
     feature = relationship("Feature", back_populates="raw_features")
