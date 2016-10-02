@@ -3,6 +3,7 @@ import unittest
 from assertpy import assert_that
 from mock import Mock
 
+from commons.model.analysis_result import AnalysisResult
 from commons.model.audio_meta import AudioMeta
 from commons.model.feature import AudioFeature
 from commons.model.remote_file_meta import RemoteFileMeta
@@ -57,4 +58,4 @@ class XtracterTest(unittest.TestCase):
         # when
         self.xtracter._send_to_redis(expected_extracted_features)
         # then
-        self.results_queue.add.assert_called_once_with(self.audio_meta.to_dict())
+        self.results_queue.add.assert_any_call()
