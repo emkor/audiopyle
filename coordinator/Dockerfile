@@ -27,4 +27,4 @@ RUN pip uninstall -y tox
 
 # SET STARTUP SCRIPT AS ENTRYPOINT
 COPY ./start_coordinator.py ./start_coordinator.py
-ENTRYPOINT ["python", "./start_coordinator.py"]
+ENTRYPOINT ["python", "-u", "./start_coordinator.py"]
