@@ -10,12 +10,18 @@ class RedisQueueClient(object):
         self.client = redis.StrictRedis(redis_host, redis_port, db=0)
 
     def add(self, element):
+        """
+        :type element: dict
+        """
         try:
             self.client.rpush(self.queue_name, self._to_json(element))
         except ConnectionError as e:
             print("Could not add element to Redis queue {} Details: {}".format(self.queue_name, e))
 
     def take(self):
+        """
+        :rtype: dict
+        """
         try:
             json_element = self.client.lpop(self.queue_name)
             return self._from_json(json_element)

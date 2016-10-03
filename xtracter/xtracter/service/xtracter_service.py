@@ -34,18 +34,18 @@ class Xtracter(object):
         while True:
             task_dict_or_none = self.redis_task_client.take()
             if task_dict_or_none is not None:
-                local_file_meta = self._download_file(task_dict_or_none)
+                analysis_task = AnalysisTask.from_dict(task_dict_or_none)
+                local_file_meta = self._download_file(analysis_task)
                 audio_features = self._extract_features(local_file_meta)
-                analysis_result = AnalysisResult(task_dict_or_none, audio_features)
+                analysis_result = AnalysisResult(analysis_task, audio_features)
                 self._send_to_redis(analysis_result)
                 self._remove_file(local_file_meta)
             else:
                 sleep(SLEEP_TIME_SEC)
 
-    def _download_file(self, task_dict_or_none):
+    def _download_file(self, analysis_task):
         start_time = datetime.utcnow()
-        print("{} received task: {}".format(start_time, task_dict_or_none))
-        analysis_task = AnalysisTask.from_dict(task_dict_or_none)
+        print("{} received task: {}".format(start_time, analysis_task))
         print("Starting downloading file: {} from: {}".format(analysis_task.remote_file_meta,
                                                               analysis_task.remote_file_source))
         local_file_path = self.remote_file_provider.download(analysis_task.remote_file_source,
