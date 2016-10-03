@@ -32,14 +32,12 @@ class XtracterTest(unittest.TestCase):
         # given
         remote_file_meta = RemoteFileMeta("test/102bpm_drum_loop_mono_44.1k.wav", 2651512, 1467569053000)
         remote_file_source = RemoteFileSource("b2", "address", "bucket_name", "password")
-        task_dict = {
-            "remote_file_meta": remote_file_meta.to_dict(),
-            "remote_file_source": remote_file_source.to_dict()}
+        analysis_task = AnalysisTask(remote_file_meta, remote_file_source)
         mocked_local_path = "/some_path/102bpm_drum_loop_mono_44.1k.wav"
         self.remote_file_provider.download.return_value = mocked_local_path
         self.meta_provider.read_meta_from.return_value = self.audio_meta
         # when
-        actual_audio_meta_output = self.xtracter._download_file(task_dict)
+        actual_audio_meta_output = self.xtracter._download_file(analysis_task)
         # then
         self.remote_file_provider.download.assert_called_once_with(remote_file_source, remote_file_meta)
         self.meta_provider.read_meta_from.assert_called_once_with("/some_path/102bpm_drum_loop_mono_44.1k.wav")
@@ -63,4 +61,3 @@ class XtracterTest(unittest.TestCase):
         self.xtracter._send_to_redis(result)
         # then
         self.results_queue.add.assert_called_once_with(result.to_dict())
-        # self.results_queue.add.assert_any_call()
