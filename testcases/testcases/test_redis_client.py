@@ -1,35 +1,23 @@
 import unittest
-from time import sleep
 
 from assertpy import assert_that
 from commons.provider.redis_queue_client import RedisQueueClient
-from commons.service.file_accessor import FileAccessor
-from commons.service.os_env_accessor import OsEnvAccessor
-from commons.utils.constant import PROJECT_HOME_ENV
+from testcases.docker.container import Container
+from testcases.docker.utils import IMAGE_REDIS
 
-DEVOPS_DIR = FileAccessor.join(OsEnvAccessor.get_env_variable(PROJECT_HOME_ENV), 'devops')
-SH_STATUS_OK = 0
-RUN_REDIS_DOCKER_SH = "run_redis_docker.sh"
-KILL_CONTAINER_SH = "kill_container.sh"
 REDIS_QUEUE_NAME = 'RedisClientTestQueue'
-REDIS_PORT = 6379
-REDIS_CONTAINER_NAME = 'RedisClientTestInstance'
-REDIS_BOOT_TIME = 8
 
 
 class RedisClientIntegrationTest(unittest.TestCase):
+    REDIS_CONTAINER = None
+
     @classmethod
     def setUpClass(cls):
-        run_redis_sh = FileAccessor.join(DEVOPS_DIR, RUN_REDIS_DOCKER_SH)
-        status = FileAccessor.run_command(run_redis_sh, REDIS_CONTAINER_NAME, REDIS_PORT)
-        assert_that(status).is_equal_to(SH_STATUS_OK)
-        sleep(REDIS_BOOT_TIME)
+        cls.REDIS_CONTAINER = Container(IMAGE_REDIS, 'RedisClientTestInstance')
 
     @classmethod
     def tearDownClass(cls):
-        kill_container_sh = FileAccessor.join(DEVOPS_DIR, KILL_CONTAINER_SH)
-        status = FileAccessor.run_command(kill_container_sh, REDIS_CONTAINER_NAME)
-        assert_that(status).is_equal_to(0)
+        cls.REDIS_CONTAINER.destroy()
 
     def setUp(self):
         self.redis_client = RedisQueueClient(REDIS_QUEUE_NAME)
