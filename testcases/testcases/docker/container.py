@@ -59,9 +59,9 @@ class Container(object):
 
     def destroy(self):
         try:
-            print("Destroying container: {}...".format(self.container_name))
             if self.is_running():
                 self.stop()
+            print("Destroying container: {}...".format(self.container_name))
             subprocess.call(
                 ["docker", "rm", self.container_name],
                 stdout=self.FNULL,

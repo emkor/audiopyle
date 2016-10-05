@@ -14,6 +14,7 @@ class RedisClientIntegrationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.REDIS_CONTAINER = Container(IMAGE_REDIS, 'RedisClientTestInstance')
+        cls.REDIS_CONTAINER.run(extra_args=["-p", "127.0.0.1:6379:6379"])
 
     @classmethod
     def tearDownClass(cls):
