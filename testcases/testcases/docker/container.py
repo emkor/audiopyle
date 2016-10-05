@@ -106,3 +106,17 @@ class Container(object):
             ["docker", "inspect", "-f", "{{.State.Status}}", self.container_name],
             stderr=subprocess.STDOUT
         )
+
+xtracter_container = Container(IMAGE_XTRACTER, "test-xtracter")
+xtracter_container.run(wait_until_ready=True, extra_args=["--net=host"])
+print("AAA")
+print(xtracter_container.logs())
+redis_container = Container(IMAGE_REDIS, "test-redis")
+redis_container.run(extra_args=["-p", "127.0.0.1:6379:6379"])
+print("BBB")
+print(xtracter_container.logs())
+print("CCC")
+xtracter_container.destroy()
+print("DDD")
+redis_container.destroy()
+print("EEE")
