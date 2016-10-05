@@ -18,6 +18,7 @@ REDIS_RESULT_QUEUE_NAME = 'xtracter_results'
 TASK_TAKE_TIME = 4
 ANALYSIS_TIMEOUT = 90
 
+
 class XtracterIntegrationTest(unittest.TestCase):
     REDIS_CONTAINER = None
     XTRACTER_CONTAINER = None
@@ -63,10 +64,13 @@ class XtracterIntegrationTest(unittest.TestCase):
         while analysis_time < ANALYSIS_TIMEOUT:
             if self.redis_results_client.length() > 0:
                 print("Results appeared after {} seconds!".format(analysis_time))
+                print("Xtracter logs: {}".format(self.XTRACTER_CONTAINER.logs()))
                 return True
             else:
                 analysis_time += interval_time
                 sleep(interval_time)
                 print("Waiting for results next {} seconds...".format(interval_time))
         print("Results did not come up within {} seconds!".format(ANALYSIS_TIMEOUT))
+        print("Xtracter log: {}".format(self.XTRACTER_CONTAINER.logs()))
+        print("Redis log: {}".format(self.REDIS_CONTAINER.logs()))
         return False
