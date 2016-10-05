@@ -33,7 +33,6 @@ class Container(object):
                                                                                          build_commands_string(
                                                                                              commands_list)))
             subprocess.Popen(commands_list, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            sleep(1)
         except subprocess.CalledProcessError as e:
             raise ContainerException(e,
                                      "Could not run container: {} from image {}.".format(self.container_name,
