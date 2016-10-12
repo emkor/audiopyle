@@ -18,6 +18,7 @@ class Container(object):
         """
         self.image_name = image_name
         self.container_name = container_name
+        self._pull_image()
 
     def run(self, wait_until_ready=True, extra_args=None):
         """
@@ -82,6 +83,13 @@ class Container(object):
     def is_running(self):
         status = self.status().lower().strip()
         return status == "running"
+
+    def _pull_image(self):
+        try:
+            print("Pulling image: {} for: {}...".format(self.image_name, self.container_name))
+            subprocess.call(["docker", "pull", self.image_name], stdout=self.FNULL, stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as e:
+            raise ContainerException(e, "Could not pull image named {}. Details: {}".format(self.image_name, e))
 
     def _wait_until_ready(self):
         start_timestamp = utc_datetime_to_timestamp(datetime.now())
