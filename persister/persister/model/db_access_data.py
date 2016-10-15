@@ -1,5 +1,5 @@
 class DbAccessData(object):
-    def __init__(self, user, password, host="localhost", port=3306):
+    def __init__(self, user, password, host="127.0.0.1", port=3306):
         self.user = user
         self.password = password
         self.host = host
