@@ -3,3 +3,4 @@ mock
 redis
 b2
 sqlalchemy
+sqlalchemy_utils

@@ -2,3 +2,4 @@ assertpy
 mock
 b2
 sqlalchemy
+sqlalchemy_utils
