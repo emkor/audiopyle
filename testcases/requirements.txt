@@ -1,3 +1,5 @@
 assertpy
 mock
 redis
+b2
+sqlalchemy
