@@ -1,4 +1,6 @@
 assertpy
 mock
 b2
+mysql-python
 sqlalchemy
+sqlalchemy_utils
