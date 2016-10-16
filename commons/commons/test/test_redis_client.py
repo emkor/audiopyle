@@ -4,7 +4,7 @@ from assertpy import assert_that
 from mock import Mock
 from redis import ConnectionError
 
-from commons.model.remote_file_source import B2Config
+from commons.model.remote_file_source import create_b2_source_config
 from commons.provider.redis_queue_client import RedisQueueClient
 
 
@@ -39,7 +39,7 @@ class RedisQueueClientTest(unittest.TestCase):
         assert_that(example_list_json).is_instance_of(basestring).contains("1", "2", "text", "inner", "4")
 
     def test_should_serialize_custom_objects(self):
-        example_object = B2Config("acc_id", "app_key", "b_name")
+        example_object = create_b2_source_config("acc_id", "app_key", "b_name")
         example_object_json = self.redis_client._to_json(example_object)
         assert_that(example_object_json).is_instance_of(basestring).contains("acc_id", "app_key", "b_name")
 

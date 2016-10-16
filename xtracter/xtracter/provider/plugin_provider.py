@@ -1,6 +1,6 @@
 import vamp
 
-from xtracter.model.vampy_plugin import VampyPlugin
+from commons.model.vampy_plugin import VampyPlugin
 from xtracter.utils.xtracter_const import VAMP_PLUGIN_BLACKLIST
 
 

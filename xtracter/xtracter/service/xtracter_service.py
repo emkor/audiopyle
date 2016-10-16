@@ -1,8 +1,8 @@
 from datetime import datetime
 from time import sleep
 
+from commons.model.analysis_result import AnalysisResult
 from commons.model.analysis_task import AnalysisTask
-from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.utils.constant import PROJECT_HOME_ENV
 from commons.service.file_accessor import FileAccessor
 from commons.service.os_env_accessor import OsEnvAccessor
@@ -34,20 +34,22 @@ class Xtracter(object):
         while True:
             task_dict_or_none = self.redis_task_client.take()
             if task_dict_or_none is not None:
-                local_file_meta = self._download_file(task_dict_or_none)
+                analysis_task = AnalysisTask.from_dict(task_dict_or_none)
+                local_file_meta = self._download_file(analysis_task)
                 audio_features = self._extract_features(local_file_meta)
-                self._send_to_redis(audio_features)
+                analysis_result = AnalysisResult(analysis_task, audio_features)
+                self._send_to_redis(analysis_result)
                 self._remove_file(local_file_meta)
             else:
                 sleep(SLEEP_TIME_SEC)
 
-    def _download_file(self, task_dict_or_none):
+    def _download_file(self, analysis_task):
         start_time = datetime.utcnow()
-        print("{} received task: {}".format(start_time, task_dict_or_none))
-        analysis_task = AnalysisTask.from_dict(task_dict_or_none)
+        print("{} received task: {}".format(start_time, analysis_task))
         print("Starting downloading file: {} from: {}".format(analysis_task.remote_file_meta,
                                                               analysis_task.remote_file_source))
-        local_file_path = self.remote_file_provider.download(analysis_task.remote_file_source, analysis_task.remote_file_meta)
+        local_file_path = self.remote_file_provider.download(analysis_task.remote_file_source,
+                                                             analysis_task.remote_file_meta)
         local_file_meta = self.audio_meta_provider.read_meta_from(local_file_path)
         download_took = (datetime.utcnow() - start_time).total_seconds()
         print("Ended downloading file: {}. Download took: {} seconds".format(local_file_meta, download_took))
@@ -61,11 +63,11 @@ class Xtracter(object):
         print("Extracted {} features in {} seconds.".format(len(audio_features), extraction_took))
         return audio_features
 
-    def _send_to_redis(self, audio_features):
+    def _send_to_redis(self, analysis_result):
         start_time = datetime.utcnow()
-        print("{} exporting {} features to redis results queue...".format(start_time, len(audio_features)))
-        for audio_feature in audio_features:
-            self.redis_results_client.add(audio_feature.to_dict())
+        print("{} exporting {} features to redis results queue...".format(start_time,
+                                                                          len(analysis_result.features)))
+        self.redis_results_client.add(analysis_result.to_dict())
         sending_took = (datetime.utcnow() - start_time).total_seconds()
         print("Ended exporting results in {} seconds.".format(sending_took))
 

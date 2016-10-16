@@ -1,9 +1,9 @@
 import unittest
-from mock import Mock
 
 from assertpy import assert_that
+from mock import Mock
 
-from xtracter.model.audio_segment import AudioSegment
+from commons.model.audio_segment import AudioSegment
 from xtracter.service.audio_segment_reader import AudioSegmentReader
 from xtracter.utils.xtracter_utils import XtracterUtils
 

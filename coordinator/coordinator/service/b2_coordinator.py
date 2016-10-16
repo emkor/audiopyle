@@ -1,8 +1,8 @@
 from time import sleep
 
 from commons.model.analysis_task import AnalysisTask
-from commons.model.remote_file_source import B2Config
 from commons.model.remote_file_meta import RemoteFileMeta
+from commons.model.remote_file_source import create_b2_source_config
 from commons.provider.b2_audio_provider import B2AudioProvider
 from commons.provider.redis_queue_client import RedisQueueClient
 from commons.service.os_env_accessor import OsEnvAccessor
@@ -14,7 +14,7 @@ QUEUE_RELOAD_DELAY = 5
 
 class B2Coordinator(object):
     def __init__(self, audio_provider=None, redis_queue_client=None):
-        self.b2_source_config = B2Config(B2_ACCOUNT_ID,
+        self.b2_source_config = create_b2_source_config(B2_ACCOUNT_ID,
                                          B2_APPLICATION_KEY,
                                          B2_RESOURCES_BUCKET)
         self.audio_provider = audio_provider or B2AudioProvider(OsEnvAccessor.get_env_variable(PROJECT_HOME_ENV))

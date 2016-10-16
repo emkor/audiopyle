@@ -11,13 +11,15 @@ class Container(object):
     BOOT_TIMEOUT = 60
     FNULL = open(os.devnull, 'w')
 
-    def __init__(self, image_name, container_name):
+    def __init__(self, image_name, container_name, default_boot_time=3):
         """
         :type image_name: str
         :type container_name: str
+        :type default_boot_time: int
         """
         self.image_name = image_name
         self.container_name = container_name
+        self.default_boot_time = default_boot_time
         self._pull_image()
 
     def run(self, wait_until_ready=True, extra_args=None):
@@ -35,6 +37,7 @@ class Container(object):
                                                                                          build_commands_string(
                                                                                              commands_list)))
             subprocess.Popen(commands_list, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            sleep(self.default_boot_time)
         except subprocess.CalledProcessError as e:
             raise ContainerException(e,
                                      "Could not run container: {} from image {}.".format(self.container_name,
@@ -81,6 +84,9 @@ class Container(object):
             raise ContainerException(e, "Could not check status of a container: {}".format(self.container_name))
 
     def is_running(self):
+        """
+        :rtype: bool
+        """
         status = self.status().lower().strip()
         return status == "running"
 

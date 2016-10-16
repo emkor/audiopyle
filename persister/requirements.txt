@@ -1,3 +1,6 @@
 assertpy
-b2
 mock
+b2
+mysql-python
+sqlalchemy
+sqlalchemy_utils

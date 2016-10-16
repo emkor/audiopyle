@@ -1,9 +1,9 @@
 import logging
 import wave
 
+from commons.model.audio_meta import AudioMeta
 from commons.service.file_accessor import FileAccessor
 from commons.utils.conversion import B_to_b
-from xtracter.model.audio_meta import AudioMeta
 
 
 class LocalAudioMetaProvider(object):
