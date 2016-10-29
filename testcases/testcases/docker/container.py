@@ -83,6 +83,19 @@ class Container(object):
         except subprocess.CalledProcessError as e:
             raise ContainerException(e, "Could not check status of a container: {}".format(self.container_name))
 
+    def execute(self, command):
+        """
+        :type command: str
+        """
+        final_commands = ["docker", "exec", self.container_name, "sh", "-c", command]
+        try:
+            print("Sending command: {} to container: {}...".format(command, self.container_name))
+            subprocess.call(final_commands)
+            print("Command ended!")
+        except subprocess.CalledProcessError as e:
+            raise ContainerException(e, "Could not execute command: {} on a container: {}".format(command,
+                                                                                                  self.container_name))
+
     def is_running(self):
         """
         :rtype: bool
