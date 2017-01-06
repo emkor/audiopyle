@@ -1,7 +1,7 @@
 FROM debian:jessie-slim
 
 MAINTAINER emkor93@gmail.com
-LABEL version="0.2"
+LABEL version="1.0"
 LABEL description="Debian 8 based image containing up-to-date version of python2 and pip."
 
 # copy necessary scripts
