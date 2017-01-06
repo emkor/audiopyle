@@ -2,7 +2,7 @@ FROM debian:jessie-slim
 
 MAINTAINER emkor93@gmail.com
 LABEL version="1.0"
-LABEL description="Debian 8 based image containing up-to-date version of python2 and pip."
+LABEL description="Debian 8 based image containing up-to-date version of python2, pip and setuptools"
 
 # copy necessary scripts
 COPY ./install_os_deps.sh ./install_os_deps.sh
