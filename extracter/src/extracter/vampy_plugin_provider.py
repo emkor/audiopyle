@@ -1,11 +1,13 @@
 import vamp
 from vampyhost import get_library_for
 
+from extracter.vampy_plugin import VampyPlugin
+
 
 def build_plugin_from_key(key):
     """
     :type key: str
-    :rtype: aapy.audiopyle_commons.commons.model.vampy_plugin.VampyPlugin
+    :rtype: extracter.vampy_plugin.VampyPlugin
     """
     plugin_categories = vamp.get_category_of(key)
     plugin_outputs = vamp.get_outputs_of(key)
@@ -17,7 +19,7 @@ def build_plugin_from_key(key):
 def list_vampy_plugins():
     """
     Returns list of VAMPy plugins available in OS
-    :rtype: list[aapy.audiopyle_commons.commons.model.vampy_plugin.VampyPlugin]
+    :rtype: list[extracter.vampy_plugin.VampyPlugin]
     """
     return map(lambda key: build_plugin_from_key(key=key), vamp.list_plugins())
 
@@ -25,7 +27,7 @@ def list_vampy_plugins():
 def list_categories(plugins):
     """
     Returns list of categories from installed plugins.
-    :type plugins: list[aapy.audiopyle_commons.commons.model.vampy_plugin.VampyPlugin]
+    :type plugins: list[extracter.vampy_plugin.VampyPlugin]
     :rtype: list[str]
     """
     all_categories = []

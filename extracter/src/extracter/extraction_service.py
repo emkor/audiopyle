@@ -4,7 +4,7 @@ from extracter.vampy_feature import VampyFeatureMeta, VampyVariableStepFeature, 
 
 def extract_features(audio_segment, vampy_plugin, output_name, step_size=0, block_size=0):
     """
-    :type audio_segment: common.audio_segment.MonoAudioSegment
+    :type audio_segment: commons.audio_segment.MonoAudioSegment
     :type vampy_plugin: extracter.vampy_plugin.VampyPlugin
     :type output_name: str
     :type step_size: int
