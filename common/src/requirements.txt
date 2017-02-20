@@ -1,4 +1,3 @@
-b2
-redis
+numpy
 assertpy
 mock
