@@ -6,7 +6,7 @@ from datetime import datetime
 def b_to_B(b):
     """
     Bits to bytes
-    :type b: int
+    :type b: int | float
     :rtype: int
     """
     return math.ceil(b / 8.0)
@@ -15,7 +15,7 @@ def b_to_B(b):
 def B_to_b(B):
     """
     Bytes to bits
-    :type B: int
+    :type B: int | float
     :rtype: int
     """
     return int(B * 8)

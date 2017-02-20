@@ -1,29 +1,18 @@
-FROM endlessdrones/audiopyle-base-image:latest
+FROM endlessdrones/debian8-python2
 
-# SETTING GLOBAL ENV FOR FURTHER USE
-ENV AUDIOPYLE_HOME "/audiopyle"
+MAINTAINER mkorzeniowski93@gmail.com
+LABEL version="0.1"
+LABEL description="Image containing common functionalities of an audiopyle app"
 
-# CREATING DIR FOR THIS MODULE
-RUN mkdir -p "$AUDIOPYLE_HOME/commons"
+# CREATE AND SET DIRECTORIES
+RUN mkdir /commons
+WORKDIR /commons
 
-# CURRENT OPS WILL BE CALLED HERE
-WORKDIR "$AUDIOPYLE_HOME/commons"
+# COPY SOURCE CODE FOR AUDIOPYLE
+COPY ./src .
 
-# COPY MODULE FILES
-COPY ./commons ./commons
-COPY ./requirements.txt ./requirements.txt
-COPY ./setup.py ./setup.py
+# INSTALL MODULE DEPENDENCIES
+RUN pip install -r ./requirements.txt
 
-# DEPLOY
-COPY ./deploy.sh ./deploy.sh
-RUN chmod -R 775 ./deploy.sh
-RUN bash ./deploy.sh
-
-# INSTALL TEST FRAMEWORK AND RUN TESTS
-RUN pip install tox
-COPY ./tox.ini ./tox.ini
-RUN tox
-
-# CLEANUP AFTER TESTS
-RUN rm -rf .tox && rm -rf audiopyle_commons.egg-info
-RUN pip uninstall -y tox
+# INSTALL AUDIOPYLE COMMON
+RUN pip install .

@@ -1,12 +1,12 @@
-FROM endlessdrones/debian8-python2
+FROM endlessdrones/audiopyle-common
 
 MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
-LABEL description="Image containing common functionalities of an audiopyle app"
+LABEL description="Image containing extracter module of an audiopyle app"
 
 # CREATE AND SET DIRECTORIES
-RUN mkdir /commons
-WORKDIR /commons
+RUN mkdir /extracter
+WORKDIR /extracter
 
 # COPY SOURCE CODE FOR AUDIOPYLE
 COPY ./src .
