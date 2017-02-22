@@ -1,4 +1,4 @@
-FROM endlessdrones/audiopyle-common
+FROM endlessdrones/audiopyle-commons
 
 MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
@@ -8,11 +8,22 @@ LABEL description="Image containing extracter module of an audiopyle app"
 RUN mkdir /extracter
 WORKDIR /extracter
 
-# COPY SOURCE CODE FOR AUDIOPYLE
+# ESPOSE HTTP PORTS
+EXPOSE 80
+EXPOSE 8080
+
+# COPY SOURCE CODE FOR AUDIOPYLE EXTACTER
 COPY ./src .
+
+# COPY START SCRIPT AND CONFIG
+COPY ./app.py .
+COPY ./http_server.conf .
 
 # INSTALL MODULE DEPENDENCIES
 RUN pip install -r ./requirements.txt
 
-# INSTALL AUDIOPYLE COMMON
+# INSTALL AUDIOPYLE EXTRACTER
 RUN pip install .
+
+# RUN EXTRACTER API
+ENTRYPOINT ["python", "-u", "./app.py"]
