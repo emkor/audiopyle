@@ -16,7 +16,7 @@ class Model(object):
 
     def __eq__(self, other):
         """
-        :type other: common.abstraction.Model
+        :type other: commons.abstraction.Model
         :rtype: bool
         """
         return self.__dict__ == other.__dict__
