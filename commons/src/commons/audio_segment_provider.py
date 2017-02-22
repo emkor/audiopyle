@@ -3,9 +3,9 @@ import wave
 import numpy
 from numpy import array
 
-from common.audio_file import LocalAudioFileMeta
-from common.audio_segment import MonoAudioSegment
-from common.conversion import B_to_b
+from commons.audio_file import LocalAudioFileMeta
+from commons.audio_segment import MonoAudioSegment
+from commons.conversion import B_to_b
 
 
 def read_audio_file_meta(absolute_path):

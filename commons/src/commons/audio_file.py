@@ -1,7 +1,7 @@
-from common.abstraction import Model
-from common.conversion import b_to_B, frames_to_sec, B_to_b
-from common.conversion import to_kilo
-from common.file_system import get_file_name
+from commons.abstraction import Model
+from commons.conversion import b_to_B, frames_to_sec, B_to_b
+from commons.conversion import to_kilo
+from commons.file_system import get_file_name
 
 
 class AudioFileMeta(Model):

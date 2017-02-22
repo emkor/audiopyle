@@ -1,5 +1,5 @@
-from audiopyle.commons.model.abstraction import Model
-from audiopyle.commons.utils.conversion import frames_to_sec
+from commons.abstraction import Model
+from commons.conversion import frames_to_sec
 
 
 class AudioSegmentMeta(Model):
