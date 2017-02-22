@@ -8,8 +8,7 @@ LABEL description="Image containing extracter module of an audiopyle app"
 RUN mkdir /extracter
 WORKDIR /extracter
 
-# ESPOSE HTTP PORTS
-EXPOSE 80
+# ESPOSE HTTP PORT
 EXPOSE 8080
 
 # COPY SOURCE CODE FOR AUDIOPYLE EXTACTER
