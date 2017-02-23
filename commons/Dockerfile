@@ -5,13 +5,11 @@ LABEL version="0.1"
 LABEL description="Image containing common functionalities of an audiopyle app"
 
 # CREATE AND SET DIRECTORIES
-RUN mkdir /commons
-WORKDIR /commons
+RUN mkdir -p /audiopyle/commons
+WORKDIR /audiopyle/commons
 
 # COPY SOURCE CODE FOR AUDIOPYLE
-COPY ./commons .
-COPY ./requirements.txt .
-COPY ./setup.py .
+COPY . .
 
 # INSTALL MODULE DEPENDENCIES
 RUN pip install -r ./requirements.txt
