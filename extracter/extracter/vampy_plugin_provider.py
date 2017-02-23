@@ -11,8 +11,7 @@ def build_plugin_from_key(key):
     plugin_categories = vamp.get_category_of(key)
     plugin_outputs = vamp.get_outputs_of(key)
     library_file = get_library_for(key)
-    return VampyPlugin(provider=_get_provider_from_key(key), name=_get_name_from_key(key), categories=plugin_categories,
-                       outputs=plugin_outputs, library_path=library_file)
+    return VampyPlugin(key=key, categories=plugin_categories, outputs=plugin_outputs, library_path=library_file)
 
 
 def list_vampy_plugins():
@@ -33,19 +32,3 @@ def list_categories(plugins):
     for plugin in plugins:
         all_categories.extend(plugin.categories)
     return list(set(all_categories))
-
-
-def _get_name_from_key(key):
-    """
-    :type key: str
-    :rtype: str
-    """
-    return key.split(":")[1]
-
-
-def _get_provider_from_key(key):
-    """
-    :type key: str
-    :rtype: str
-    """
-    return key.split(":")[0]
