@@ -12,11 +12,11 @@ WORKDIR /extracter
 EXPOSE 8080
 
 # COPY SOURCE CODE FOR AUDIOPYLE EXTACTER
-COPY ./src .
-
-# COPY START SCRIPT AND CONFIG
-COPY ./app.py .
+COPY ./extracter .
 COPY ./http_server.conf .
+COPY ./app.py .
+COPY ./requirements.txt .
+COPY ./setup.py .
 
 # INSTALL MODULE DEPENDENCIES
 RUN pip install -r ./requirements.txt
@@ -24,5 +24,5 @@ RUN pip install -r ./requirements.txt
 # INSTALL AUDIOPYLE EXTRACTER
 RUN pip install .
 
-# RUN EXTRACTER API
-ENTRYPOINT ["python", "-u", "./app.py"]
+# DEFINE ENTRYPOINT AS EXTRACTER API
+ENTRYPOINT ["python", "./app.py"]

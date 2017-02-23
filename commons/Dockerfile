@@ -9,7 +9,9 @@ RUN mkdir /commons
 WORKDIR /commons
 
 # COPY SOURCE CODE FOR AUDIOPYLE
-COPY ./src .
+COPY ./commons .
+COPY ./requirements.txt .
+COPY ./setup.py .
 
 # INSTALL MODULE DEPENDENCIES
 RUN pip install -r ./requirements.txt
