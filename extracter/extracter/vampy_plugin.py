@@ -1,4 +1,4 @@
-from commons.abstraction import Model
+from commons.model import Model
 
 
 class VampyPlugin(Model):

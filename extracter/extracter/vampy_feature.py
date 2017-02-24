@@ -1,7 +1,7 @@
 import vampyhost
 import numpy
 
-from commons.abstraction import Model
+from commons.model import Model
 
 
 class VampyFeatureMeta(Model):

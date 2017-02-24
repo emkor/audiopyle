@@ -1,6 +1,4 @@
-import cherrypy
-
-from commons.serializer import to_json
+from commons.api import AudiopyleApi
 from commons.file_system import list_files
 from extracter.vampy_plugin_provider import list_vampy_plugins
 
@@ -8,24 +6,43 @@ AUDIO_FILES_DIR = "/audio"
 TMP_DIR = "/audio_tmp"
 
 
-class ExtracterApi(object):
-    @cherrypy.expose
-    def index(self):
-        """
-        :rtype: str
-        """
-        return to_json({"api": "extracter", "status": "ok"})
+class ExtracterApi(AudiopyleApi):
+    def get(self, *args, **kwargs):
+        return {"api": "extracter", "status": "ok"}
 
-    @cherrypy.expose
-    def plugins(self):
-        """
-        :rtype: str
-        """
-        return to_json(list_vampy_plugins())
+    def post(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
 
-    @cherrypy.expose
-    def audio(self):
-        """
-        :rtype: str
-        """
-        return to_json(list_files(AUDIO_FILES_DIR))
+    def delete(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
+
+    def put(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
+
+
+class PluginsApi(AudiopyleApi):
+    def get(self, *args, **kwargs):
+        return list_vampy_plugins()
+
+    def post(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
+
+    def delete(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
+
+    def put(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
+
+
+class AudioApi(AudiopyleApi):
+    def get(self, *args, **kwargs):
+        return list_files(AUDIO_FILES_DIR)
+
+    def post(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
+
+    def delete(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
+
+    def put(self, *args, **kwargs):
+        raise self.NOT_IMPLEMENTED_API_METHOD
