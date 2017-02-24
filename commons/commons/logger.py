@@ -5,7 +5,7 @@ import time
 GLOBAL_LOGGER = None
 
 
-def setup_logger(level=logging.DEBUG):
+def setup_logger(level=logging.INFO):
     print("*** Initializing logger, should happen once per app! ***")
     logging.basicConfig(format='%(levelname)s | %(asctime)s UTC | %(message)s', level=level)
     logging.Formatter.converter = time.gmtime

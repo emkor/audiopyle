@@ -7,8 +7,13 @@ from commons.serializer import to_json
 
 class AudiopyleApi(object):
     exposed = True
-    NOT_IMPLEMENTED_API_METHOD = cherrypy.HTTPError(405, 'Method Not Allowed')
-    logger = get_logger()
+
+    def __init__(self, logger=None):
+        """
+        :type logger: logging.Logger
+        """
+        self.not_implemented_api_method = cherrypy.HTTPError(405, 'Method Not Allowed')
+        self.logger = logger or get_logger()
 
     @abc.abstractmethod
     def get(self, request_url, query_params):
@@ -17,7 +22,7 @@ class AudiopyleApi(object):
         :type query_params: dict[str, str]
         :rtype: basestring | int | float | list | dict | None
         """
-        raise self.NOT_IMPLEMENTED_API_METHOD
+        raise self.not_implemented_api_method
 
     @abc.abstractmethod
     def post(self, request_url, query_params, request_payload):
@@ -27,7 +32,7 @@ class AudiopyleApi(object):
         :type request_payload: dict
         :rtype: basestring | int | float | list | dict | None
         """
-        raise self.NOT_IMPLEMENTED_API_METHOD
+        raise self.not_implemented_api_method
 
     @abc.abstractmethod
     def put(self, request_url, query_params, request_payload):
@@ -37,7 +42,7 @@ class AudiopyleApi(object):
         :type request_payload: dict
         :rtype: basestring | int | float | list | dict | None
         """
-        raise self.NOT_IMPLEMENTED_API_METHOD
+        raise self.not_implemented_api_method
 
     @abc.abstractmethod
     def delete(self, request_url, query_params):
@@ -46,7 +51,7 @@ class AudiopyleApi(object):
         :type query_params: dict
         :rtype: basestring | int | float | list | dict | None
         """
-        raise self.NOT_IMPLEMENTED_API_METHOD
+        raise self.not_implemented_api_method
 
     @cherrypy.tools.accept(media='text/plain')
     def GET(self, **query_params):
