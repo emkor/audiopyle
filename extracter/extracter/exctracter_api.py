@@ -7,7 +7,7 @@ TMP_DIR = "/audio_tmp"
 
 
 class ExtracterApi(AudiopyleApi):
-    def get(self, *args, **kwargs):
+    def get(self, *args, **query_params):
         return {"api": "extracter", "status": "ok"}
 
     def post(self, *args, **kwargs):
@@ -20,8 +20,8 @@ class ExtracterApi(AudiopyleApi):
         raise self.NOT_IMPLEMENTED_API_METHOD
 
 
-class PluginsApi(AudiopyleApi):
-    def get(self, *args, **kwargs):
+class PluginApi(AudiopyleApi):
+    def get(self, *args, **query_params):
         return list_vampy_plugins()
 
     def post(self, *args, **kwargs):
@@ -35,7 +35,7 @@ class PluginsApi(AudiopyleApi):
 
 
 class AudioApi(AudiopyleApi):
-    def get(self, *args, **kwargs):
+    def get(self, *args, **query_params):
         return list_files(AUDIO_FILES_DIR)
 
     def post(self, *args, **kwargs):

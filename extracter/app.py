@@ -1,20 +1,23 @@
 import cherrypy
 
-from extracter.exctracter_api import ExtracterApi, PluginsApi, AudioApi
+from commons.logger import setup_logger
+from extracter.exctracter_api import ExtracterApi, PluginApi, AudioApi
 
 HTTP_CHERRYPY_CONFIG_FILE = "http_server.conf"
+EXTRACTER_API_CONF = {
+    '/': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher()
+    }
+}
 
 if __name__ == '__main__':
-    root_conf = {
-        '/': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher()
-        }
-    }
-    cherrypy.config.update(HTTP_CHERRYPY_CONFIG_FILE)
+    setup_logger()
+    root_api = ExtracterApi()
+    root_api.plugin = PluginApi()
+    root_api.audio = AudioApi()
 
-    cherrypy.tree.mount(ExtracterApi(), '/', root_conf)
-    cherrypy.tree.mount(PluginsApi(), '/plugin', root_conf)
-    cherrypy.tree.mount(AudioApi(), '/audio', root_conf)
+    cherrypy.config.update(HTTP_CHERRYPY_CONFIG_FILE)
+    cherrypy.tree.mount(root_api, '/', EXTRACTER_API_CONF)
 
     cherrypy.engine.start()
     cherrypy.engine.block()
