@@ -91,3 +91,7 @@ ENV/
 # IDEA files
 .idea/
 *.iml
+
+# tox files
+.tox
+*coverage.xml

@@ -5,6 +5,10 @@ language: python
 services:
   - docker
 
+before_script:
+  - chmod u+x setup.sh && ./setup.sh
+  - cd ./commons && tox && cd ..
+
 script:
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
   - docker build -t "$DOCKER_USERNAME"/audiopyle-extracter ./extracter
