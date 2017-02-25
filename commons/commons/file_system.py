@@ -1,6 +1,7 @@
 import os
+import shutil
 
-from os.path import isfile, join
+from os.path import isfile, join, splitext
 
 
 def get_file_name(absolute_path):
@@ -18,3 +19,21 @@ def list_files(path="/"):
     :rtype: list[str]
     """
     return [f for f in os.listdir(path) if isfile(join(path, f))]
+
+
+def copy_file(source, destination):
+    """
+    :type source: str
+    :type destination: str
+    """
+    shutil.copy2(source, destination)
+
+
+def extract_extension(file_path):
+    """
+    :type file_path: str
+    :rtype: str
+    """
+    if len(file_path.split('.')) > 2:
+        return file_path.split('.')[0], '.'.join(file_path.split('.')[-2:])
+    return splitext(file_path)

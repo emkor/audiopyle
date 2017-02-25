@@ -1,7 +1,0 @@
-b2
-mock
-assertpy
-numpy
-vamp
-pydub
-redis

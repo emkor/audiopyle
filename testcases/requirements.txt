@@ -1,7 +1,0 @@
-assertpy
-mock
-redis
-b2
-mysql-python
-sqlalchemy
-sqlalchemy_utils
