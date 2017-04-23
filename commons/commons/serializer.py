@@ -3,12 +3,44 @@ import json
 from decimal import Decimal
 
 
+class DeserializationError(Exception):
+    def __init__(self, root_cause, input_json, target_class):
+        """
+        :type root_cause: Exception
+        :type input_json: dict
+        :type target_class: class
+        """
+        self.target_class = target_class
+        self.input_json = input_json
+        self.root_cause = root_cause
+
+    def __str__(self):
+        return "DeserializationError: could not create model {} from: {}. Root cause: {}".format(self.target_class,
+                                                                                                 self.input_json,
+                                                                                                 self.root_cause)
+
+    def __repr__(self):
+        return self.__str__()
+
+
 def to_json(v):
     """
     :type v: object
     :rtype: str
     """
     return json.dumps(v, default=custom_handling)
+
+
+def from_json(input_json, target_class):
+    """
+    :type input_json: dict
+    :type target_class: class
+    :rtype: str
+    """
+    try:
+        return target_class(**input_json)
+    except Exception as e:
+        raise DeserializationError(e, input_json=input_json, target_class=target_class)
 
 
 def custom_handling(v):

@@ -93,3 +93,11 @@ def utc_timestamp_to_datetime(timestamp):
     :rtype: datetime
     """
     return datetime.utcfromtimestamp(round(timestamp))
+
+
+def normalize(text):
+    """
+    :type text: str
+    :rtype: str
+    """
+    return text.lower().strip()

@@ -5,7 +5,7 @@ from commons.logger import get_logger
 from commons.serializer import to_json
 
 
-class AudiopyleApi(object):
+class AudiopyleRestApi(object):
     exposed = True
 
     def __init__(self, logger=None):
@@ -61,6 +61,7 @@ class AudiopyleApi(object):
         return response_json
 
     @cherrypy.tools.accept(media='application/json')
+    @cherrypy.tools.json_in()
     def POST(self, **query_params):
         request_url = cherrypy.url()
         request_json = cherrypy.request.json

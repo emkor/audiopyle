@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from os.path import isfile, join, splitext
+from os.path import isfile, join
 
 
 def get_file_name(absolute_path):
@@ -35,3 +35,10 @@ def extract_extension(file_path):
     :rtype: str
     """
     return os.path.splitext(file_path)[1][1:].strip()
+
+
+def remove_file(file_path):
+    """
+    :type file_path: str
+    """
+    os.remove(file_path)
