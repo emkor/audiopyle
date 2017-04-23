@@ -60,6 +60,3 @@ class FileMeta(Model):
         :rtype: str
         """
         return extract_extension(self.file_name)
-
-
-print(get_file_meta("/home/mkorzeni/projects/audiopyle/resources/102bpm_drum_loop_mono_44.1k.wav"))

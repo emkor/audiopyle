@@ -34,6 +34,4 @@ def extract_extension(file_path):
     :type file_path: str
     :rtype: str
     """
-    if len(file_path.split('.')) > 2:
-        return file_path.split('.')[0], '.'.join(file_path.split('.')[-2:])
-    return splitext(file_path)
+    return os.path.splitext(file_path)[1][1:].strip()
