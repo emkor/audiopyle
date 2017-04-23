@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set executions permission on all sh files
+# add executions permission on all .sh files
 chmod u+x **/*.sh
 
 # install test framework

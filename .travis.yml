@@ -6,17 +6,9 @@ services:
   - docker
 
 before_script:
-  - chmod u+x setup.sh && ./setup.sh
   - cd ./commons && tox && cd ..
 
 script:
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
   - docker build -t "$DOCKER_USERNAME"/audiopyle-extracter ./extracter
   - docker run --interactive --tty --rm --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze
-
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-    docker push "$DOCKER_USERNAME"/audiopyle-commons
-    docker push "$DOCKER_USERNAME"/audiopyle-extracter
-    fi
