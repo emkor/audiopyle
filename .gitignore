@@ -95,3 +95,4 @@ ENV/
 # tox files
 .tox
 *coverage.xml
+*-coverage/
