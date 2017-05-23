@@ -1,0 +1,29 @@
+rabbit1:
+  image: "rabbitmq:3-management"
+  hostname: "rabbit1"
+  environment:
+    RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+    RABBITMQ_DEFAULT_USER: "rabbitmq"
+    RABBITMQ_DEFAULT_PASS: "rabbitmq"
+    RABBITMQ_DEFAULT_VHOST: "/"
+  ports:
+    - "15672:15672"
+    - "5672:5672"
+extracter1:
+  image: "endlessdrones/audiopyle-extracter"
+  hostname: "extracter1"
+  links:
+    - rabbit1
+  ports:
+    - "8080:8080"
+  volumes:
+    - "/home/mkorzeni/vamp:/root/vamp"
+    - "/home/mkorzeni/projects/audiopyle/resources:/audio"
+analyzer1:
+  image: "endlessdrones/audiopyle-analyzer"
+  hostname: "analyzer1"
+  links:
+    - rabbit1
+  volumes:
+    - "/home/mkorzeni/vamp:/root/vamp"
+    - "/home/mkorzeni/projects/audiopyle/resources:/audio"
