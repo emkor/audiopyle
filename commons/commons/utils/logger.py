@@ -1,5 +1,4 @@
 import logging
-
 import time
 
 GLOBAL_LOGGER = None

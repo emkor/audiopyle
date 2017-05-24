@@ -1,14 +1,14 @@
 import vampyhost
 import numpy
 
-from commons.model import Model
+from commons.abstractions.model import Model
 
 
 class VampyFeatureMeta(Model):
     def __init__(self, vampy_plugin, segment_meta, plugin_output):
         """
-        :type vampy_plugin: coordinator.vampy_plugin.VampyPlugin
-        :type segment_meta: commons.audio_segment.AudioSegmentMeta
+        :type vampy_plugin: commons.vampy.plugin.VampyPlugin
+        :type segment_meta: commons.audio.segment.AudioSegmentMeta
         :type plugin_output: str
         """
         self.vampy_plugin = vampy_plugin
@@ -43,8 +43,8 @@ class VampyFeatureMeta(Model):
 class VampyConstantStepFeature(VampyFeatureMeta):
     def __init__(self, vampy_plugin, segment_meta, plugin_output, time_step, matrix):
         """
-        :type vampy_plugin: extracter.vampy_plugin.VampyPlugin
-        :type segment_meta: commons.audio_segment.AudioSegmentMeta
+        :type vampy_plugin: commons.vampy.plugin.VampyPlugin
+        :type segment_meta: commons.audio.segment.AudioSegmentMeta
         :type plugin_output: str
         :type time_step: vampyhost.RealTime
         :type matrix: numpy.ndarray
@@ -93,8 +93,8 @@ class VampyConstantStepFeature(VampyFeatureMeta):
 class VampyVariableStepFeature(VampyFeatureMeta):
     def __init__(self, vampy_plugin, segment_meta, plugin_output, value_list):
         """
-        :type vampy_plugin: extracter.vampy_plugin.VampyPlugin
-        :type segment_meta: commons.audio_segment.AudioSegmentMeta
+        :type vampy_plugin: commons.vampy.plugin.VampyPlugin
+        :type segment_meta: commons.audio.segment.AudioSegmentMeta
         :type plugin_output: str
         :type value_list: list[dict[float, str, numpy.ndarray]]
         """

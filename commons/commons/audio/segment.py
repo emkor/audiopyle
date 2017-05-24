@@ -1,12 +1,12 @@
-from commons.model import Model
-from commons.conversion import frames_to_sec
+from commons.abstractions.model import Model
+from commons.utils.conversion import frames_to_sec
 
 
 class AudioSegmentMeta(Model):
     def __init__(self, source_file_meta, frame_from, frame_to):
         """
         Represents metadata of a part of an audio wave
-        :type source_file_meta: commons.audio_file.AudioFileMeta
+        :type source_file_meta: commons.audio.file_meta.AudioFileMeta
         :type frame_from: int
         :type frame_to: int
         """
@@ -31,7 +31,7 @@ class MonoAudioSegment(AudioSegmentMeta):
     def __init__(self, source_file_meta, frame_from, frame_to, data):
         """
         Represents metadata of a part of an audio wave
-        :type source_file_meta: commons.audio_file.AudioFileMeta
+        :type source_file_meta: commons.audio.file_meta.AudioFileMeta
         :type frame_from: int
         :type frame_to: int
         :type data: numpy.core.multiarray.ndarray
@@ -41,7 +41,7 @@ class MonoAudioSegment(AudioSegmentMeta):
 
     def get_meta(self):
         """
-        :rtype: commons.audio_segment.AudioSegmentMeta
+        :rtype: commons.audio.segment.AudioSegmentMeta
         """
         return AudioSegmentMeta(self.source_file_meta, self.frame_from, self.frame_to)
 

@@ -3,15 +3,15 @@ import wave
 import numpy
 from numpy import array
 
-from commons.audio_file import LocalAudioFileMeta
-from commons.audio_segment import MonoAudioSegment
-from commons.conversion import B_to_b
+from commons.audio.file_meta import LocalAudioFileMeta
+from commons.audio.segment import MonoAudioSegment
+from commons.utils.conversion import B_to_b
 
 
 def read_audio_file_meta(absolute_path):
     """
     :type absolute_path: str
-    :rtype: commons.audio_file.LocalAudioFileMeta
+    :rtype: commons.audio.file_meta.LocalAudioFileMeta
     """
     audio_file = wave.open(f=absolute_path, mode="r")
     (nchannels, sampwidth, framerate, nframes, comptype, compname) = audio_file.getparams()
@@ -22,8 +22,8 @@ def read_audio_file_meta(absolute_path):
 
 def read_segment(local_audio_file_meta):
     """
-    :type local_audio_file_meta: commons.audio_file.LocalAudioFileMeta
-    :rtype: commons.audio_segment.MonoAudioSegment
+    :type local_audio_file_meta: commons.audio.file_meta.LocalAudioFileMeta
+    :rtype: commons.audio.segment.MonoAudioSegment
     """
     audio_frames = _read_raw_frames(local_audio_file_meta)
     if local_audio_file_meta.channels_count == 2:
@@ -40,7 +40,7 @@ def read_segment(local_audio_file_meta):
 def _read_raw_frames(local_audio_file_meta):
     """
     Reads audio data.
-    :type local_audio_file_meta: commons.audio_file.LocalAudioFileMeta
+    :type local_audio_file_meta: commons.audio.file_meta.LocalAudioFileMeta
     :rtype: list[float]
     """
     wav_file = wave.open(local_audio_file_meta.absolute_path, "r")

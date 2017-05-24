@@ -1,15 +1,29 @@
 import vamp
-from coordinator.vampy_feature import VampyFeatureMeta, VampyVariableStepFeature, VampyConstantStepFeature
+
+from commons.abstractions.model import Model
+from commons.vampy.feature import VampyFeatureMeta, VampyVariableStepFeature, VampyConstantStepFeature
+
+
+class ExtractionRequest(Model):
+    def __init__(self, audio_file_name, plugin_key, plugin_output):
+        """
+        :type audio_file_name: str
+        :type plugin_key: str
+        :type plugin_output: str
+        """
+        self.audio_file_name = audio_file_name
+        self.plugin_key = plugin_key
+        self.plugin_output = plugin_output
 
 
 def extract_features(audio_segment, vampy_plugin, output_name, step_size=0, block_size=0):
     """
-    :type audio_segment: commons.audio_segment.MonoAudioSegment
-    :type vampy_plugin: extracter.vampy_plugin.VampyPlugin
+    :type audio_segment: commons.audio.segment.MonoAudioSegment
+    :type vampy_plugin: commons.vampy.plugin.VampyPlugin
     :type output_name: str
     :type step_size: int
     :type block_size: int
-    :rtype: extracter.vampy_feature.VampyConstantStepFeature | extracter.vampy_feature.VampyVariableStepFeature
+    :rtype: commons.vampy.feature.VampyConstantStepFeature | commons.vampy.feature.VampyVariableStepFeature
     """
     feature_meta = VampyFeatureMeta(vampy_plugin=vampy_plugin, segment_meta=audio_segment.get_meta(),
                                     plugin_output=output_name)
@@ -21,9 +35,9 @@ def extract_features(audio_segment, vampy_plugin, output_name, step_size=0, bloc
 
 def _map_feature(feature_meta, extracted_data):
     """
-    :type feature_meta: extracter.vampy_feature.VampyFeatureMeta
+    :type feature_meta: commons.vampy.feature.VampyFeatureMeta
     :type extracted_data: dict[str, tuple | list]
-    :rtype: extracter.vampy_feature.VampyConstantStepFeature | extracter.vampy_feature.VampyVariableStepFeature
+    :rtype: commons.vampy.feature.VampyConstantStepFeature | commons.vampy.feature.VampyVariableStepFeature
     """
     data_type = extracted_data.keys()[0]
     if data_type == "list":

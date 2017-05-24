@@ -1,8 +1,8 @@
 import abc
 import cherrypy
 
-from commons.logger import get_logger
-from commons.serializer import to_json
+from commons.utils.logger import get_logger
+from commons.utils.serialization import to_json
 
 
 class AudiopyleRestApi(object):
