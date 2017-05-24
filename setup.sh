@@ -4,4 +4,5 @@
 chmod u+x **/*.sh
 
 # install test framework
-pip install tox
+pip install tox numpy
+pip install vamp
