@@ -28,9 +28,9 @@ coordinator1:
   volumes:
     - "/home/mkorzeni/vamp:/root/vamp"
     - "/home/mkorzeni/projects/audiopyle/resources:/audio"
-analyzer1:
+extractor1:
   image: "endlessdrones/audiopyle-extractor"
-  hostname: "analyzer1"
+  hostname: "extractor1"
   links:
     - rabbit1
     - redis1
