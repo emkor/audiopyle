@@ -5,6 +5,3 @@ chmod u+x **/*.sh
 
 # install test framework
 pip install tox
-
-# hack / workaround: need to install numpy before running tox in commons
-pip install numpy
