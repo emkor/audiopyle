@@ -1,4 +1,4 @@
-FROM endlessdrones/debian8-python2
+FROM python:2.7-slim
 
 MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
@@ -10,6 +10,9 @@ WORKDIR /audiopyle/commons
 
 # COPY SOURCE CODE FOR AUDIOPYLE
 COPY . .
+
+# HACK
+RUN pip install numpy
 
 # INSTALL MODULE DEPENDENCIES
 RUN pip install -r ./requirements.txt
