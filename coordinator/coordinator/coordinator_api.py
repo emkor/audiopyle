@@ -1,8 +1,8 @@
-from commons.api import AudiopyleRestApi
-from commons.file_system import list_files
-from commons.serializer import from_json, to_json
-from coordinator.extraction_request import ExtractionRequest
-from coordinator.vampy_plugin_provider import list_vampy_plugins
+from commons.abstractions.api import AudiopyleRestApi
+from commons.utils.file_system import list_files
+from commons.utils.serialization import from_json
+from commons.vampy.plugin_providing import list_vampy_plugins
+from commons.services.extraction import ExtractionRequest
 
 AUDIO_FILES_DIR = "/audio"
 TMP_DIR = "/audio_tmp"
