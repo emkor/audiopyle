@@ -28,4 +28,4 @@ RUN pip install .
 RUN ls
 
 # DEFINE ENTRYPOINT AS EXTRACTER API
-ENTRYPOINT ["celery", "-A", "tasks", "worker", "--loglevel=debug"]
+ENTRYPOINT ["celery", "-A", "analyzer", "worker", "--loglevel=debug"]
