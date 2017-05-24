@@ -2,11 +2,11 @@ FROM endlessdrones/audiopyle-commons
 
 MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
-LABEL description="Image containing coordinator module of an audiopyle app"
+LABEL description="Image containing Coordinator module of an audiopyle app"
 
 # SET WORKDIR
-RUN mkdir -p /audiopyle/coordinator
-WORKDIR /audiopyle/coordinator
+RUN mkdir -p /audiopyle/api
+WORKDIR /audiopyle/api
 
 # ESPOSE HTTP PORT
 EXPOSE 8080
