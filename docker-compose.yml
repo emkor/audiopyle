@@ -6,14 +6,17 @@ rabbit1:
     RABBITMQ_DEFAULT_USER: "rabbitmq"
     RABBITMQ_DEFAULT_PASS: "rabbitmq"
     RABBITMQ_DEFAULT_VHOST: "/"
-  ports:
-    - "15672:15672"
-    - "5672:5672"
 redis1:
     image: redis:3.0-alpine
     hostname: "redis1"
-    ports:
-        - "6379"
+redisCommander:
+  image: tenstartups/redis-commander
+  hostname: "redisCommander"
+  command: --redis-host redis1
+  links:
+    - redis1
+  ports:
+    - "8081:8081"
 extracter1:
   image: "endlessdrones/audiopyle-extracter"
   hostname: "extracter1"
