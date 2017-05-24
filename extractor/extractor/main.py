@@ -1,6 +1,6 @@
 from celery import Celery
 
-app = Celery('analyzer', include=['analyzer.tasks'])
+app = Celery('extractor', include=['extractor.tasks'])
 app.config_from_object('config')
 
 if __name__ == '__main__':

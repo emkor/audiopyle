@@ -29,7 +29,7 @@ coordinator1:
     - "/home/mkorzeni/vamp:/root/vamp"
     - "/home/mkorzeni/projects/audiopyle/resources:/audio"
 analyzer1:
-  image: "endlessdrones/audiopyle-analyzer"
+  image: "endlessdrones/audiopyle-extractor"
   hostname: "analyzer1"
   links:
     - rabbit1

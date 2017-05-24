@@ -1,4 +1,4 @@
-from analyzer.celery.main import app
+from extractor.main import app
 
 
 @app.task
