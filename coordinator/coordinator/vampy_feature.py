@@ -7,7 +7,7 @@ from commons.model import Model
 class VampyFeatureMeta(Model):
     def __init__(self, vampy_plugin, segment_meta, plugin_output):
         """
-        :type vampy_plugin: extracter.vampy_plugin.VampyPlugin
+        :type vampy_plugin: coordinator.vampy_plugin.VampyPlugin
         :type segment_meta: commons.audio_segment.AudioSegmentMeta
         :type plugin_output: str
         """
