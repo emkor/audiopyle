@@ -17,9 +17,9 @@ redisCommander:
     - redis1
   ports:
     - "8081:8081"
-extracter1:
-  image: "endlessdrones/audiopyle-extracter"
-  hostname: "extracter1"
+coordinator1:
+  image: "endlessdrones/audiopyle-coordinator"
+  hostname: "coordinator1"
   links:
     - rabbit1
     - redis1

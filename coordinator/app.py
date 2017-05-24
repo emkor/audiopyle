@@ -1,10 +1,10 @@
 import cherrypy
 
 from commons.logger import setup_logger, get_logger
-from extracter.exctracter_api import ExtracterApi, PluginApi, AudioApi
+from coordinator.coordinator_api import CoordinatorApi, AudioApi, PluginApi
 
 HTTP_CHERRYPY_CONFIG_FILE = "http_server.conf"
-EXTRACTER_API_CONF = {
+COORDINATOR_API_CONF = {
     '/': {
         'request.dispatch': cherrypy.dispatch.MethodDispatcher()
     }
@@ -13,17 +13,17 @@ EXTRACTER_API_CONF = {
 if __name__ == '__main__':
     setup_logger()
     logger = get_logger()
-    logger.info("Initializing Extracter app...")
+    logger.info("Initializing Coordinator app...")
 
-    root_api = ExtracterApi(logger=logger)
+    root_api = CoordinatorApi(logger=logger)
     root_api.plugin = PluginApi(logger=logger)
     root_api.audio = AudioApi(logger=logger)
 
     cherrypy.log.error_log.propagate = False
     cherrypy.log.access_log.propagate = False
     cherrypy.config.update(HTTP_CHERRYPY_CONFIG_FILE)
-    cherrypy.tree.mount(root_api, '/', EXTRACTER_API_CONF)
+    cherrypy.tree.mount(root_api, '/', COORDINATOR_API_CONF)
 
-    logger.info("Starting Extracter API...")
+    logger.info("Starting Coordinator API...")
     cherrypy.engine.start()
     cherrypy.engine.block()

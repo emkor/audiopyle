@@ -1,6 +1,6 @@
 import vamp
 from vampyhost import get_library_for
-from extracter.vampy_plugin import VampyPlugin
+from coordinator.vampy_plugin import VampyPlugin
 
 
 def build_plugin_from_key(key):

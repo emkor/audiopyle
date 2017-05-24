@@ -1,5 +1,5 @@
 import vamp
-from extracter.vampy_feature import VampyFeatureMeta, VampyVariableStepFeature, VampyConstantStepFeature
+from coordinator.vampy_feature import VampyFeatureMeta, VampyVariableStepFeature, VampyConstantStepFeature
 
 
 def extract_features(audio_segment, vampy_plugin, output_name, step_size=0, block_size=0):

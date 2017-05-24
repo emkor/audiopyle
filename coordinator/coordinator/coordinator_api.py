@@ -1,19 +1,19 @@
 from commons.api import AudiopyleRestApi
 from commons.file_system import list_files
 from commons.serializer import from_json, to_json
-from extracter.extraction_request import ExtractionRequest
-from extracter.vampy_plugin_provider import list_vampy_plugins
+from coordinator.extraction_request import ExtractionRequest
+from coordinator.vampy_plugin_provider import list_vampy_plugins
 
 AUDIO_FILES_DIR = "/audio"
 TMP_DIR = "/audio_tmp"
 RESULTS_DIR = "/result"
 
-EXTRACTER_STATUS_RESPONSE = {"api": "extracter", "status": "ok"}
+COORDINATOR_STATUS_RESPONSE = {"api": "coordinator", "status": "ok"}
 
 
-class ExtracterApi(AudiopyleRestApi):
+class CoordinatorApi(AudiopyleRestApi):
     def get(self, request_url, query_params):
-        return EXTRACTER_STATUS_RESPONSE
+        return COORDINATOR_STATUS_RESPONSE
 
     def post(self, request_url, query_params, request_payload):
         return self._read_request(request_payload)
