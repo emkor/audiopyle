@@ -1,5 +1,5 @@
 rabbit1:
-  image: "rabbitmq:3-management"
+  image: "rabbitmq:3.6-alpine"
   hostname: "rabbit1"
   environment:
     RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
@@ -9,11 +9,17 @@ rabbit1:
   ports:
     - "15672:15672"
     - "5672:5672"
+redis1:
+    image: redis:3.0-alpine
+    hostname: "redis1"
+    ports:
+        - "6379"
 extracter1:
   image: "endlessdrones/audiopyle-extracter"
   hostname: "extracter1"
   links:
     - rabbit1
+    - redis1
   ports:
     - "8080:8080"
   volumes:
@@ -24,6 +30,7 @@ analyzer1:
   hostname: "analyzer1"
   links:
     - rabbit1
+    - redis1
   volumes:
     - "/home/mkorzeni/vamp:/root/vamp"
     - "/home/mkorzeni/projects/audiopyle/resources:/audio"
