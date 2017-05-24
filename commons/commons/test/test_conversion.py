@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.conversion import b_to_B, B_to_b, to_kilo, to_mega, frames_to_sec, sec_to_frames
+from commons.utils.conversion import b_to_B, B_to_b, to_kilo, to_mega, frames_to_sec, sec_to_frames
 
 
 class UnitConverterTest(unittest.TestCase):

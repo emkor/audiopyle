@@ -1,7 +1,7 @@
 import unittest
 from assertpy import assert_that
 
-from commons.file_system import extract_extension, get_file_name
+from commons.utils.file_system import get_file_name, extract_extension
 
 
 class TestFileAccessor(unittest.TestCase):
