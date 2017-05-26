@@ -4,6 +4,14 @@ import shutil
 from os.path import isfile, join
 
 
+def file_exists(absolute_path):
+    """
+    :type absolute_path: str
+    :rtype: bool
+    """
+    return os.path.exists(absolute_path)
+
+
 def get_file_name(absolute_path):
     """
     Returns file name from an absolute path

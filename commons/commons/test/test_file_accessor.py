@@ -1,10 +1,14 @@
 import unittest
 from assertpy import assert_that
 
-from commons.utils.file_system import get_file_name, extract_extension
+from commons.utils.file_system import get_file_name, extract_extension, file_exists
 
 
 class TestFileAccessor(unittest.TestCase):
+    def test_checking_if_file_exists(self):
+        assert_that(file_exists("/dev/null")).is_true()
+        assert_that(file_exists("/dev/24e3re34d17")).is_false()
+
     def test_getting_file_name(self):
         assert_that(get_file_name('/etc/passwd')).is_equal_to('passwd')
         assert_that(get_file_name('D:/folder/file.txt')).is_equal_to('file.txt')
