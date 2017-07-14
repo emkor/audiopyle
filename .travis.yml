@@ -7,6 +7,8 @@ services:
 before_script:
   - chmod u+x **/*.sh
   - pip install tox
+  - pip install numpy
+  - pip install vamp
   - cd commons && tox && cd ..
 
 script:
