@@ -6,18 +6,14 @@ services:
 
 before_script:
   - chmod u+x **/*.sh
-  - pip install tox
-  - pip install numpy
-  - pip install vamp
+  - scripts/setup.sh
   - cd commons && tox && cd ..
 
 script:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     scripts/build_base_image.sh;
     fi
-  - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
-  - docker build -t "$DOCKER_USERNAME"/audiopyle-extractor ./extractor
-  - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
+  - scripts/build_app_images.sh
 
 after_success:
   - docker run --interactive --tty --rm --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze
