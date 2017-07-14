@@ -1,7 +1,7 @@
 import os
 
 
-TEST_AUDIO_FILE = "resources/102bpm_drum_loop_mono_44.1k.wav"
+TEST_AUDIO_FILE = "resources/audio/102bpm_drum_loop_mono_44.1k.wav"
 
 def get_absolute_path_for_project_file(caller_file_object, project_file_path):
     """
