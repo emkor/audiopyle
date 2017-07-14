@@ -15,7 +15,7 @@ mysql1:
     - MYSQL_PASSWORD=celery
     - MYSQL_DATABASE=results
   ports:
-    - "3306:3306"
+    - "3305:3306"
 coordinator1:
   image: "endlessdrones/audiopyle-coordinator"
   hostname: "coordinator1"
