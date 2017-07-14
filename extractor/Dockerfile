@@ -16,7 +16,6 @@ COPY . .
 
 # CREATE DIRECTORY FOR INPUT FILES
 RUN mkdir /audio
-RUN mkdir /audio_tmp
 RUN mkdir /root/vamp
 
 # INSTALL MODULE DEPENDENCIES
@@ -25,7 +24,5 @@ RUN pip install -r ./requirements.txt
 # INSTALL AUDIOPYLE EXTRACTOR
 RUN pip install .
 
-RUN ls
-
 # DEFINE ENTRYPOINT AS EXTRACTOR API
-ENTRYPOINT ["celery", "-A", "extractor", "worker", "--loglevel=debug"]
+ENTRYPOINT ["celery", "-A", "extractor", "worker", "--loglevel=info"]

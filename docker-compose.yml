@@ -6,34 +6,33 @@ rabbit1:
     RABBITMQ_DEFAULT_USER: "rabbitmq"
     RABBITMQ_DEFAULT_PASS: "rabbitmq"
     RABBITMQ_DEFAULT_VHOST: "/"
-redis1:
-    image: redis:3.0-alpine
-    hostname: "redis1"
-redisCommander:
-  image: tenstartups/redis-commander
-  hostname: "redisCommander"
-  command: --redis-host redis1
-  links:
-    - redis1
+mysql1:
+  image: mysql:5.7
+  hostname: "mysql1"
+  environment:
+    - MYSQL_ROOT_PASSWORD=secret
+    - MYSQL_USER=celery
+    - MYSQL_PASSWORD=celery
+    - MYSQL_DATABASE=results
   ports:
-    - "8081:8081"
+    - "3306:3306"
 coordinator1:
   image: "endlessdrones/audiopyle-coordinator"
   hostname: "coordinator1"
   links:
     - rabbit1
-    - redis1
+    - mysql1
   ports:
     - "8080:8080"
   volumes:
-    - "/home/mkorzeni/vamp:/root/vamp"
-    - "/home/mkorzeni/projects/audiopyle/resources:/audio"
+    - "./resources/vamp:/root/vamp"
+    - "./resources/audio:/audio"
 extractor1:
   image: "endlessdrones/audiopyle-extractor"
   hostname: "extractor1"
   links:
     - rabbit1
-    - redis1
+    - mysql1
   volumes:
-    - "/home/mkorzeni/vamp:/root/vamp"
-    - "/home/mkorzeni/projects/audiopyle/resources:/audio"
+    - "./resources/vamp:/root/vamp"
+    - "./resources/audio:/audio"
