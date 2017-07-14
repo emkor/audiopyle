@@ -1,0 +1,4 @@
+requests
+assertpy
+nose
+tox
