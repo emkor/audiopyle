@@ -1,4 +1,4 @@
-FROM endlessdrones/debian8-python2
+FROM endlessdrones/audiopyle-base
 
 MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
