@@ -1,4 +1,3 @@
 requests
 assertpy
 nose
-tox

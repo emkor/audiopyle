@@ -36,3 +36,11 @@ extractor1:
   volumes:
     - "./resources/vamp:/root/vamp"
     - "./resources/audio:/audio"
+#testcases1:
+#  image: "endlessdrones/audiopyle-testcases"
+#  hostname: "testcases1"
+#  environment:
+#    AUDIOPYLE_BOOT_TIME: "8"
+#  links:
+#    - coordinator1
+#    - extractor1
