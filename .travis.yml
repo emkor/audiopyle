@@ -1,16 +1,24 @@
 sudo: required
-
 language: python
 
 services:
   - docker
 
 before_script:
-  - chmod u+x setup.sh && ./setup.sh
-  - cd ./commons && tox && cd ..
+  - chmod u+x **/*.sh
+  - pip install tox
+  - cd commons && tox && cd ..
 
 script:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    scripts/build_base_image.sh;
+    fi
   - docker build -t "$DOCKER_USERNAME"/audiopyle-commons ./commons
   - docker build -t "$DOCKER_USERNAME"/audiopyle-extractor ./extractor
   - docker build -t "$DOCKER_USERNAME"/audiopyle-coordinator ./coordinator
+
+after_success:
   - docker run --interactive --tty --rm --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    scripts/push-base-image.sh;
+    fi
