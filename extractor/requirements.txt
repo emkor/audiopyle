@@ -1,2 +1,2 @@
-mysql-python
+pymysql
 celery[sqlalchemy]
