@@ -5,8 +5,7 @@ LABEL version="0.4"
 LABEL description="Latest Python Alpine image with numpy and vamp"
 
 
-RUN apk update \
-    && apk add --no-cache g++ \
+RUN apk add --no-cache g++ \
 	&& pip install numpy \
 	&& pip install vamp
 
