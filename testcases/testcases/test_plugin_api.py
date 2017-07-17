@@ -11,7 +11,7 @@ class PluginApiTest(TestCase):
     def setUp(self):
         self.plugin_url = "http://{}:8080/plugin".format(get_service_host_name("coordinator"))
 
-    def test_should_return_ok_after_boot(self):
+    def test_should_list_plugins(self):
         expected_status_code = 200
         expected_plugin_count = 6
         expected_first_plugin = VampyPlugin(key="vamp-example-plugins:amplitudefollower",

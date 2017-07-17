@@ -10,7 +10,7 @@ class AudioApiTest(TestCase):
     def setUp(self):
         self.audio_api_url = "http://{}:8080/audio".format(get_service_host_name("coordinator"))
 
-    def test_should_return_ok_after_boot(self):
+    def test_should_list_audio_file(self):
         expected_status_code = 200
         expected_plugin_count = 1
         expected_audio = "102bpm_drum_loop_mono_44.1k.wav"
