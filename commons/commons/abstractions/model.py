@@ -1,7 +1,14 @@
-import json
+from copy import copy
 
 
 class Model(object):
+    @classmethod
+    def deserialize(cls, serialized):
+        return cls(**serialized)
+
+    def serialize(self):
+        return copy(self.__dict__)
+
     def __str__(self):
         """
         :rtype: str
@@ -26,9 +33,3 @@ class Model(object):
         :rtype: str
         """
         return hash(self.__dict__)
-
-    def serialize(self):
-        """
-        :rtype: str
-        """
-        return json.dumps(self.__dict__)

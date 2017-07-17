@@ -1,6 +1,5 @@
 from commons.abstractions.api import AudiopyleRestApi
-from commons.utils.file_system import list_files
-from coordinator.utils import AUDIO_FILES_DIR
+from commons.utils.file_system import list_files, AUDIO_FILES_DIR
 
 
 class AudioApi(AudiopyleRestApi):
