@@ -18,7 +18,7 @@ SERVICE_HOSTS = {
 
 
 def get_service_host_name(service_name):
-    if os.environ.get("TRAVIS") == "true":
+    if os.environ.get("CI_BUILD") == "1":
         return SERVICE_HOSTS.get(service_name)
     else:
         return "localhost"
