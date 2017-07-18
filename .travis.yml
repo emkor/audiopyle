@@ -12,9 +12,7 @@ before_script:
   - cd commons && tox && cd ..
 
 script:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    scripts/build_base_image.sh;
-    fi
+  - scripts/build_base_image.sh
   - scripts/build_app_images.sh
   - scripts/build_test_image.sh
   - docker-compose -f docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 20 --exit-code-from testcases

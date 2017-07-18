@@ -1,12 +1,15 @@
-FROM python:alpine
+FROM python:3.5-slim
 
 MAINTAINER mkorzeniowski93@gmail.com
-LABEL version="0.4"
+LABEL version="0.5"
 LABEL description="Latest Python Alpine image with numpy and vamp"
 
+# install_os_deps
+RUN apt-get update
+RUN apt-get install -y wget build-essential zlib1g-dev libssl-dev libffi-dev libmysqlclient-dev gcc
 
-RUN apk add --no-cache g++ \
-	&& pip install numpy \
-	&& pip install vamp
+# install numpy and vamp
+RUN pip install numpy
+RUN pip install vamp
 
-CMD ["/bin/sh"]
+CMD ["/bin/bash"]
