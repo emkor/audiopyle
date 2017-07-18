@@ -3,6 +3,9 @@ import shutil
 
 from os.path import isfile, join
 
+AUDIO_FILES_DIR = "/audio"
+TMP_DIR = "/audio_tmp"
+
 
 def file_exists(absolute_path):
     """

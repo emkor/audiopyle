@@ -1,4 +1,3 @@
-import abc
 import cherrypy
 
 from commons.utils.logger import get_logger
@@ -15,7 +14,6 @@ class AudiopyleRestApi(object):
         self.not_implemented_api_method = cherrypy.HTTPError(405, 'Method Not Allowed')
         self.logger = logger or get_logger()
 
-    @abc.abstractmethod
     def get(self, request_url, query_params):
         """
         :type request_url: str
@@ -24,7 +22,6 @@ class AudiopyleRestApi(object):
         """
         raise self.not_implemented_api_method
 
-    @abc.abstractmethod
     def post(self, request_url, query_params, request_payload):
         """
         :type request_url: str
@@ -34,7 +31,6 @@ class AudiopyleRestApi(object):
         """
         raise self.not_implemented_api_method
 
-    @abc.abstractmethod
     def put(self, request_url, query_params, request_payload):
         """
         :type request_url: str
@@ -44,7 +40,6 @@ class AudiopyleRestApi(object):
         """
         raise self.not_implemented_api_method
 
-    @abc.abstractmethod
     def delete(self, request_url, query_params):
         """
         :type request_url: str

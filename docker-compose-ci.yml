@@ -41,6 +41,7 @@ testcases:
   hostname: "testcases"
   environment:
     AUDIOPYLE_BOOT_TIME: "10"
+    CI_BUILD: "1"
   links:
     - coordinator1
     - extractor1

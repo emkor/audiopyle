@@ -4,6 +4,7 @@ from decimal import Decimal
 from vampyhost import RealTime
 
 from numpy.core.multiarray import ndarray
+from commons.abstractions.model import Model
 
 
 class DeserializationError(Exception):
@@ -33,22 +34,15 @@ def to_json(v):
     """
     return json.dumps(v, default=custom_handling)
 
-def to_json_file(v, file_object):
-    """
-    :type v: object
-    :type file_object: file
-    :rtype: str
-    """
-    return json.dump(v, file_object, default=custom_handling)
 
 def from_json(input_json, target_class):
     """
     :type input_json: dict
-    :type target_class: class
+    :type target_class: Model
     :rtype: str
     """
     try:
-        return target_class(**input_json)
+        return target_class.deserialize(input_json)
     except Exception as e:
         raise DeserializationError(e, input_json=input_json, target_class=target_class)
 
@@ -58,6 +52,8 @@ def custom_handling(v):
     :type v: object
     :rtype: basestring | int | float | list | dict | None
     """
+    if isinstance(v, Model):
+        return v.serialize()
     if isinstance(v, datetime.datetime):
         return v.isoformat()
     elif isinstance(v, Decimal):

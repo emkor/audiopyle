@@ -1,4 +1,4 @@
-FROM endlessdrones/audiopyle-commons
+FROM endlessdrones/audiopyle-extractor
 
 MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
@@ -13,11 +13,6 @@ EXPOSE 8080
 
 # COPY SOURCE CODE FOR AUDIOPYLE COORDINATOR
 COPY . .
-
-# CREATE DIRECTORY FOR INPUT FILES
-RUN mkdir /audio
-RUN mkdir /audio_tmp
-RUN mkdir /root/vamp
 
 # INSTALL MODULE DEPENDENCIES
 RUN pip install -r ./requirements.txt
