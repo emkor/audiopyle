@@ -1,7 +1,10 @@
 from __future__ import absolute_import, unicode_literals
 from celery import Celery
+import pymysql
 
 from commons.utils.logger import setup_logger
+
+pymysql.install_as_MySQLdb()
 
 app = Celery(main='extractor', include=['extractor.tasks'])
 app.config_from_object('extractor.config')
