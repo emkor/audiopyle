@@ -1,4 +1,3 @@
-import vampyhost
 import numpy
 
 from commons.abstractions.model import Model
@@ -57,13 +56,13 @@ class VampyConstantStepFeature(VampyFeatureMeta):
         """
         :rtype: list[int]
         """
-        return [i * self._step_as_frames() for i in xrange(0, len(self._matrix))]
+        return [i * self._step_as_frames() for i in range(0, len(self._matrix))]
 
     def timestamps(self):
         """
         :rtype: list[float]
         """
-        return [i * self._step_as_sec() for i in xrange(0, len(self._matrix))]
+        return [i * self._step_as_sec() for i in range(0, len(self._matrix))]
 
     def values(self):
         """

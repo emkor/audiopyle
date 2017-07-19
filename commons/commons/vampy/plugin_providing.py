@@ -20,7 +20,7 @@ def list_vampy_plugins():
     Returns list of VAMPy plugins available in OS
     :rtype: list[commons.vampy.plugin.VampyPlugin]
     """
-    return map(lambda key: build_plugin_from_key(key=key), vamp.list_plugins())
+    return list(map(lambda key: build_plugin_from_key(key=key), vamp.list_plugins()))
 
 
 def list_categories(plugins):

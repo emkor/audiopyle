@@ -39,7 +39,7 @@ def _map_feature(feature_meta, extracted_data):
     :type extracted_data: dict[str, tuple | list]
     :rtype: commons.vampy.feature.VampyConstantStepFeature | commons.vampy.feature.VampyVariableStepFeature
     """
-    data_type = extracted_data.keys()[0]
+    data_type = list(extracted_data.keys())[0]
     if data_type == "list":
         return VampyVariableStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,
                                         plugin_output=feature_meta.plugin_output, value_list=extracted_data.get("list"))

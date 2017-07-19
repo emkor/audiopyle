@@ -13,11 +13,6 @@ logger = get_logger()
 
 
 @app.task
-def add(x, y):
-    return x + y
-
-
-@app.task
 def extract_feature(extraction_request):
     request = ExtractionRequest.deserialize(extraction_request)
     logger.info("Building context for: {}...".format(request))
