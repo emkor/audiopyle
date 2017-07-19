@@ -15,6 +15,15 @@ def file_exists(absolute_path):
     return os.path.exists(absolute_path)
 
 
+def concatenate_paths(path, file_name):
+    """
+    :type path: str
+    :type file_name: str
+    :rtype: str
+    """
+    return os.path.join(path, file_name)
+
+
 def get_file_name(absolute_path):
     """
     Returns file name from an absolute path
