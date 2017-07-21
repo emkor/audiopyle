@@ -2,8 +2,8 @@ import cherrypy
 
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio import AudioApi
+from coordinator.api.plugin import PluginApi
 from coordinator.api.root import CoordinatorApi
-from coordinator.api.plugins import PluginApi
 from coordinator.api.extraction import ExtractionApi
 
 HTTP_CHERRYPY_CONFIG_FILE = "http_server.conf"

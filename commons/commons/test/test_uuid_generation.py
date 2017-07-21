@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.utils.uuid_generation import generate_uuid
+from commons.services.uuid_generation import generate_uuid
 
 
 class TestUuidGeneration(unittest.TestCase):
