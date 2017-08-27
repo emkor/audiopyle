@@ -3,10 +3,18 @@ language: python
 python:
     - "3.6"
 
+addons:
+  apt:
+    packages:
+      - oracle-java8-set-default
+      - maven
+
 services:
   - docker
 
 before_script:
+  - java -version
+  - mvn --version
   - chmod u+x **/*.sh
   - scripts/setup.sh
   - cd commons && tox && cd ..
