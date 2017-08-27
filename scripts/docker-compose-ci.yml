@@ -1,14 +1,14 @@
-rabbit1:
+rabbitmq_host:
   image: "rabbitmq:3.6-alpine"
-  hostname: "rabbit1"
+  hostname: "rabbitmq_host"
   environment:
     RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
     RABBITMQ_DEFAULT_USER: "rabbitmq"
     RABBITMQ_DEFAULT_PASS: "rabbitmq"
     RABBITMQ_DEFAULT_VHOST: "/"
-mysql1:
+mysql_host:
   image: mysql:5.7
-  hostname: "mysql1"
+  hostname: "mysql_host"
   environment:
     - MYSQL_ROOT_PASSWORD=secret
     - MYSQL_USER=celery
@@ -16,23 +16,23 @@ mysql1:
     - MYSQL_DATABASE=results
   ports:
     - "3305:3306"
-coordinator1:
+coordinator_host:
   image: "endlessdrones/audiopyle-coordinator"
-  hostname: "coordinator1"
+  hostname: "coordinator_host"
   links:
-    - rabbit1
-    - mysql1
+    - rabbitmq_host
+    - mysql_host
   ports:
     - "8080:8080"
   volumes:
     - "./resources/vamp:/root/vamp"
     - "./resources/audio:/audio"
-extractor1:
+extractor_host_1:
   image: "endlessdrones/audiopyle-extractor"
-  hostname: "extractor1"
+  hostname: "extractor_host_1"
   links:
-    - rabbit1
-    - mysql1
+    - rabbitmq_host
+    - mysql_host
   volumes:
     - "./resources/vamp:/root/vamp"
     - "./resources/audio:/audio"
@@ -43,5 +43,5 @@ testcases:
     AUDIOPYLE_BOOT_TIME: "10"
     CI_BUILD: "1"
   links:
-    - coordinator1
-    - extractor1
+    - coordinator_host
+    - extractor_host_1

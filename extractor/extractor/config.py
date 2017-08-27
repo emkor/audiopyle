@@ -1,5 +1,5 @@
-broker_url = 'pyamqp://rabbitmq:rabbitmq@rabbit1//'
-result_backend = 'db+mysql://celery:celery@mysql1:3306/results'
+broker_url = 'pyamqp://rabbitmq:rabbitmq@rabbitmq_host//'
+result_backend = 'db+mysql://celery:celery@mysql_host:3306/results'
 
 task_serializer = 'json'
 result_serializer = 'json'
