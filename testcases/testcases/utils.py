@@ -9,7 +9,7 @@ DEFAULT_TICK_TIME = .5
 DEFAULT_EXPECTED_STATUS = 200
 
 SERVICE_HOSTS = {
-    "coordinator": "coordinator",
+    "coordinator": "coordinator_host",
     "mysql": "mysql_host",
     "rabbitmq": "rabbitmq_host",
     "extractor": "extractor_host_1",
