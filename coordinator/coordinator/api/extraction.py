@@ -1,7 +1,9 @@
+import cherrypy
+
 from commons.abstractions.api import AudiopyleRestApi
 from commons.services.extraction import ExtractionRequest
 from commons.services.uuid_generation import generate_uuid
-from extractor.service import run_task, retrieve_result
+from extractor.service import run_task, retrieve_result, delete_result
 from extractor.tasks import extract_feature
 
 
@@ -22,3 +24,11 @@ class ExtractionApi(AudiopyleRestApi):
                                 extraction_request=serialized_request)
         self.logger.info("Sent feature extraction task! ID: {}.".format(async_result.task_id))
         return async_result.task_id
+
+    def delete(self, request_url, query_params):
+        task_id = str(query_params.get("id"))
+        was_successful = delete_result(task_id)
+        if was_successful:
+            return task_id
+        else:
+            raise cherrypy.HTTPError(status=410, message="Did not find result with given task id: {}".format(task_id))
