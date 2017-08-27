@@ -10,7 +10,7 @@ DEFAULT_EXPECTED_STATUS = 200
 
 SERVICE_HOSTS = {
     "coordinator": "coordinator1",
-    "mysql": "mysql1",
+    "mysql": "mysql_results",
     "rabbitmq": "rabbit1",
     "extractor": "extractor1",
     "testcases": "testcases1"

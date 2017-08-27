@@ -6,9 +6,9 @@ rabbit1:
     RABBITMQ_DEFAULT_USER: "rabbitmq"
     RABBITMQ_DEFAULT_PASS: "rabbitmq"
     RABBITMQ_DEFAULT_VHOST: "/"
-mysql1:
+mysql_results:
   image: mysql:5.7
-  hostname: "mysql1"
+  hostname: "mysql_results"
   environment:
     - MYSQL_ROOT_PASSWORD=secret
     - MYSQL_USER=celery
@@ -16,12 +16,22 @@ mysql1:
     - MYSQL_DATABASE=results
   ports:
     - "3305:3306"
+mysql_brain:
+  image: mysql:5.7
+  hostname: "mysql_brain"
+  environment:
+    - MYSQL_ROOT_PASSWORD=secret
+    - MYSQL_USER=brain
+    - MYSQL_PASSWORD=brain
+    - MYSQL_DATABASE=brain
+  ports:
+    - "3304:3306"
 coordinator1:
   image: "endlessdrones/audiopyle-coordinator"
   hostname: "coordinator1"
   links:
     - rabbit1
-    - mysql1
+    - mysql_results
   ports:
     - "8080:8080"
   volumes:
@@ -32,7 +42,7 @@ extractor1:
   hostname: "extractor1"
   links:
     - rabbit1
-    - mysql1
+    - mysql_results
   volumes:
     - "./resources/vamp:/root/vamp"
     - "./resources/audio:/audio"
