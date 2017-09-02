@@ -1,93 +1,74 @@
+from logging import Logger
+
 import cherrypy
 
+from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpMethod
+from commons.utils.conversion import seconds_between
 from commons.utils.logger import get_logger
 from commons.utils.serialization import to_json
+
+TEXT_PLAIN_HEADER = 'text/plain'
+APPLICATION_JSON_HEADER = 'application/json'
 
 
 class AudiopyleRestApi(object):
     exposed = True
 
-    def __init__(self, logger=None):
-        """
-        :type logger: logging.Logger
-        """
+    def __init__(self, logger: Logger = None) -> None:
         self.not_implemented_api_method = cherrypy.HTTPError(405, 'Method Not Allowed')
         self.logger = logger or get_logger()
 
-    def get(self, request_url, query_params):
-        """
-        :type request_url: str
-        :type query_params: dict[str, str]
-        :rtype: basestring | int | float | list | dict | None
-        """
+    def get(self, request: ApiRequest) -> ApiResponse:
         raise self.not_implemented_api_method
 
-    def post(self, request_url, query_params, request_payload):
-        """
-        :type request_url: str
-        :type query_params: dict
-        :type request_payload: dict
-        :rtype: basestring | int | float | list | dict | None
-        """
+    def post(self, request: ApiRequest) -> ApiResponse:
         raise self.not_implemented_api_method
 
-    def put(self, request_url, query_params, request_payload):
-        """
-        :type request_url: str
-        :type query_params: dict
-        :type request_payload: dict
-        :rtype: basestring | int | float | list | dict | None
-        """
+    def put(self, request: ApiRequest) -> ApiResponse:
         raise self.not_implemented_api_method
 
-    def delete(self, request_url, query_params):
-        """
-        :type request_url: str
-        :type query_params: dict
-        :rtype: basestring | int | float | list | dict | None
-        """
+    def delete(self, request: ApiRequest) -> ApiResponse:
         raise self.not_implemented_api_method
 
-    @cherrypy.tools.accept(media='text/plain')
+    @cherrypy.tools.accept(media=TEXT_PLAIN_HEADER)
     def GET(self, **query_params):
-        request_url = cherrypy.url()
-        response_json = to_json(self.get(request_url=request_url, query_params=query_params))
-        self._log_api_call("GET", request_url, response_json)
+        request = ApiRequest(url=cherrypy.url(), method=HttpMethod.GET, query_params=query_params,
+                             headers=cherrypy.request.headers, payload={})
+        response = self.get(request)
+        response_json = to_json(response.payload)
+        self._log_api_call(request, response)
         return response_json
 
-    @cherrypy.tools.accept(media='application/json')
+    @cherrypy.tools.accept(media=APPLICATION_JSON_HEADER)
     @cherrypy.tools.json_in()
     def POST(self, **query_params):
-        request_url = cherrypy.url()
-        request_json = cherrypy.request.json
-        response_json = to_json(
-            self.post(request_url=request_url, query_params=query_params, request_payload=request_json))
-        self._log_api_call("POST", request_url, response_json, request_json)
+        request = ApiRequest(url=cherrypy.url(), method=HttpMethod.POST, query_params=query_params,
+                             headers=cherrypy.request.headers, payload=cherrypy.request.json)
+        response = self.post(request)
+        response_json = to_json(response.payload)
+        self._log_api_call(request, response)
         return response_json
 
-    @cherrypy.tools.accept(media='application/json')
+    @cherrypy.tools.accept(media=APPLICATION_JSON_HEADER)
     def PUT(self, **query_params):
-        request_url = cherrypy.url()
-        request_json = cherrypy.request.json
-        response_json = to_json(
-            self.post(request_url=request_url, query_params=query_params, request_payload=request_json))
-        self._log_api_call("PUT", request_url, response_json, request_json)
+        request = ApiRequest(url=cherrypy.url(), method=HttpMethod.POST, query_params=query_params,
+                             headers=cherrypy.request.headers, payload=cherrypy.request.json)
+        response = self.post(request)
+        response_json = to_json(response)
+        self._log_api_call(request, response)
         return response_json
 
-    @cherrypy.tools.accept(media='text/plain')
+    @cherrypy.tools.accept(media=TEXT_PLAIN_HEADER)
     def DELETE(self, **query_params):
-        request_url = cherrypy.url()
-        response_json = to_json(self.delete(request_url=request_url, query_params=query_params))
-        self._log_api_call("DELETE", request_url, response_json)
+        request = ApiRequest(url=cherrypy.url(), method=HttpMethod.POST, query_params=query_params,
+                             headers=cherrypy.request.headers, payload=cherrypy.request.json)
+        response = self.delete(request)
+        response_json = to_json(response)
+        self._log_api_call(request, response)
         return response_json
 
-    def _log_api_call(self, method_name, request_url, response_json, request_json=None):
-        """
-        :type method_name: str
-        :type request_url: str
-        :type response_json: str
-        :type request_json: str
-        """
-        self.logger.debug(
-            "{} on {} at {} with payload {} and response {}".format(method_name, self.__class__.__name__, request_url,
-                                                                    request_json, response_json))
+    def _log_api_call(self, api_request: ApiRequest, api_response: ApiResponse):
+        serving_time = seconds_between(api_request.creation_time)
+        self.logger.debug("{} served {} on {} with {} in {}s.".format(self.__class__.__name__, api_request.method,
+                                                                      api_request.url, api_response.status_code.name,
+                                                                      serving_time))

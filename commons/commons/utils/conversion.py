@@ -101,3 +101,7 @@ def normalize(text):
     :rtype: str
     """
     return text.lower().strip()
+
+
+def seconds_between(start_time_point: datetime, end_time_point: datetime = datetime.utcnow(), precision: int = 2):
+    return round((end_time_point - start_time_point).total_seconds(), precision)
