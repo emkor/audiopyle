@@ -25,8 +25,8 @@ coordinator_host:
   ports:
     - "8080:8080"
   volumes:
-    - "./resources/vamp:/root/vamp"
-    - "./resources/audio:/audio"
+    - "../resources/vamp:/root/vamp"
+    - "../resources/audio:/audio"
 extractor_host_1:
   image: "endlessdrones/audiopyle-extractor"
   hostname: "extractor_host_1"
@@ -34,8 +34,8 @@ extractor_host_1:
     - rabbitmq_host
     - mysql_host
   volumes:
-    - "./resources/vamp:/root/vamp"
-    - "./resources/audio:/audio"
+    - "../resources/vamp:/root/vamp"
+    - "../resources/audio:/audio"
 testcases:
   image: "endlessdrones/audiopyle-testcases"
   hostname: "testcases"
