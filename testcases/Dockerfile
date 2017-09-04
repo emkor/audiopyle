@@ -1,4 +1,4 @@
-FROM endlessdrones/audiopyle-commons
+FROM endlessdrones/audiopyle-extractor
 
 MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
