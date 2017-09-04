@@ -55,7 +55,7 @@ class AudiopyleRestApi(object):
     def _handle_request(self,
                         request_url: Text,
                         http_method: HttpMethod,
-                        method_handler: Callable[ApiRequest, ApiResponse],
+                        method_handler: Callable[..., ApiResponse],
                         query_params: Dict[Text, Any],
                         headers: Dict[Text, Any],
                         request_payload: Optional[Dict[Text, Any]] = None):
@@ -63,7 +63,7 @@ class AudiopyleRestApi(object):
                              headers=headers, payload=request_payload or {})
         try:
             response = method_handler(request)
-            response_json = to_json(response)
+            response_json = to_json(response.payload)
             self._log_api_call(request, response)
             return response_json
         except ClientError as e:
