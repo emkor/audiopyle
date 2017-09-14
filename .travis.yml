@@ -9,6 +9,7 @@ services:
 before_script:
   - chmod u+x **/*.sh
   - scripts/setup.sh
+  - cd commons && mypy --ignore-missing-imports -p commons && cd ..
   - cd commons && tox && cd ..
 
 script:
