@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import os
+from typing import Any, Text, Dict
 
 from commons.audio.segment_providing import read_audio_file_meta, read_segment
 from commons.services.extraction import extract_features, ExtractionRequest
@@ -13,7 +14,7 @@ logger = get_logger()
 
 
 @app.task
-def extract_feature(extraction_request):
+def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     request = ExtractionRequest.deserialize(extraction_request)
     logger.info("Building context for: {}...".format(request))
     audio_file_absolute_path = os.path.join(AUDIO_FILES_DIR, request.audio_file_name)
