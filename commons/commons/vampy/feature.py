@@ -29,7 +29,7 @@ class VampyFeatureMeta(Model):
 
 class VampyConstantStepFeature(VampyFeatureMeta):
     def __init__(self, vampy_plugin: VampyPlugin, segment_meta: AudioSegmentMeta, plugin_output: Text,
-                 time_step: RealTime, matrix: numpy.ndarray):
+                 time_step: RealTime, matrix: numpy.ndarray) -> None:
         super(VampyConstantStepFeature, self).__init__(vampy_plugin, segment_meta, plugin_output)
         self._time_step = time_step
         self._matrix = matrix
@@ -55,7 +55,7 @@ class VampyConstantStepFeature(VampyFeatureMeta):
 
 class VampyVariableStepFeature(VampyFeatureMeta):
     def __init__(self, vampy_plugin: VampyPlugin, segment_meta: AudioSegmentMeta, plugin_output: Text,
-                 value_list: List[Dict[Text, Union[numpy.ndarray, RealTime]]]):
+                 value_list: List[Dict[Text, Union[numpy.ndarray, RealTime]]]) -> None:
         super(VampyVariableStepFeature, self).__init__(vampy_plugin, segment_meta, plugin_output)
         self._value_list = value_list
 

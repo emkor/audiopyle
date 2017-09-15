@@ -4,7 +4,7 @@ from commons.abstractions.model import Model
 
 
 class VampyPlugin(Model):
-    def __init__(self, key: Text, categories: List[Text], outputs: List[Text], library_path: Text):
+    def __init__(self, key: Text, categories: List[Text], outputs: List[Text], library_path: Text) -> None:
         """Represents VAMPy plugin for feature extraction"""
         self.key = key
         self.categories = categories

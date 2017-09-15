@@ -1,4 +1,4 @@
-from typing import Text, List, Tuple, Union, Dict
+from typing import Text, List, Tuple, Union, Dict, Any
 
 import vamp
 
@@ -25,7 +25,7 @@ def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin,
     return _map_feature(feature_meta=feature_meta, extracted_data=raw_results)
 
 
-def _map_feature(feature_meta: VampyFeatureMeta, extracted_data: Dict[Text, Union[Tuple, List]]) -> VampyFeatureMeta:
+def _map_feature(feature_meta: VampyFeatureMeta, extracted_data: Dict[Text, List[Dict[str, Any]]]) -> VampyFeatureMeta:
     data_type = list(extracted_data.keys())[0]
     if data_type == "list":
         return VampyVariableStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,

@@ -32,7 +32,7 @@ def from_json(input_json: Text, target_class: Type[Model]) -> Model:
     try:
         return target_class.deserialize(serialized)
     except Exception as e:
-        raise DeserializationError(e, input_json=input_json, target_class=target_class)
+        raise DeserializationError(e, input_json=serialized, target_class=target_class)
 
 
 def custom_handling(v: Any) -> Any:
