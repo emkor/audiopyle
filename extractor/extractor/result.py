@@ -6,7 +6,7 @@ from commons.abstractions.model import Model
 
 
 class ExtractionResult(Model):
-    def __init__(self, task_id: Text, status: Text, data: Optional[Dict[Text, Any]]):
+    def __init__(self, task_id: Text, status: Text, data: Optional[Dict[Text, Any]]) -> None:
         self.task_id = task_id
         self.status = status
         self.data = data
