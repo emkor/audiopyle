@@ -12,7 +12,7 @@ class CoordinatorApiTest(TestCase):
 
     def test_should_return_ok_after_boot(self):
         expected_status_code = 200
-        expected_response = "ok"
+        expected_response = {'status': 'ok'}
         response = requests.get(url=self.coordinator_url)
         assert_that(response.status_code).is_equal_to(expected_status_code)
         assert_that(response.json()).is_equal_to(expected_response)

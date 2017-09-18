@@ -1,11 +1,12 @@
 import os
+from typing import Text, Type, Any, Optional
 
 from commons.utils.logger import get_logger
 
 logger = get_logger()
 
 
-def get_environment_variable(variable_name, expected_type, default=None):
+def get_environment_variable(variable_name: Text, expected_type: Type, default: Optional[Any] = None):
     env_var = os.environ.get(variable_name)
     if env_var is not None:
         try:

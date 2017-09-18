@@ -10,10 +10,7 @@ app = Celery(main='extractor', include=['extractor.tasks'])
 app.config_from_object('extractor.config')
 
 
-def get_celery():
-    """
-    :rtype: celery.Celery
-    """
+def get_celery() -> Celery:
     global app
     return app
 

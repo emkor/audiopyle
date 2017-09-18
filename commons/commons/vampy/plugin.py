@@ -1,30 +1,20 @@
+from typing import Text, List
+
 from commons.abstractions.model import Model
 
 
 class VampyPlugin(Model):
-    def __init__(self, key, categories, outputs, library_path):
-        """
-        Represents VAMPy plugin for feature extraction
-        :type key: str
-        :type categories: list[str]
-        :type outputs: list[str]
-        :type library_path: str
-        """
+    def __init__(self, key: Text, categories: List[Text], outputs: List[Text], library_path: Text) -> None:
+        """Represents VAMPy plugin for feature extraction"""
         self.key = key
         self.categories = categories
         self.outputs = outputs
         self.library_path = library_path
 
     @property
-    def provider(self):
-        """
-        :rtype: str
-        """
+    def provider(self) -> Text:
         return self.key.split(":")[0]
 
     @property
-    def name(self):
-        """
-        :rtype: str
-        """
+    def name(self) -> Text:
         return self.key.split(":")[1]

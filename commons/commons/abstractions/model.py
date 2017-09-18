@@ -1,35 +1,23 @@
 from copy import copy
+from typing import Type, Any, Text, Dict
 
 
 class Model(object):
     @classmethod
-    def deserialize(cls, serialized):
+    def deserialize(cls: Type, serialized: Dict[Text, Any]) -> Any:
         return cls(**serialized)
 
-    def serialize(self):
+    def serialize(self) -> Dict[Text, Any]:
         return copy(self.__dict__)
 
-    def __str__(self):
-        """
-        :rtype: str
-        """
-        return "{}: {}".format(self.__class__.__name__, self.__dict__)
+    def __str__(self) -> Text:
+        return "<{}: {}>".format(self.__class__.__name__, self.__dict__)
 
-    def __repr__(self):
-        """
-        :rtype: str
-        """
+    def __repr__(self) -> Text:
         return self.__str__()
 
-    def __eq__(self, other):
-        """
-        :type other: commons.model.Model
-        :rtype: bool
-        """
-        return self.__dict__ == other.__dict__
+    def __eq__(self, other: Any) -> bool:
+        return self.serialize() == other.serialize()
 
-    def __hash__(self):
-        """
-        :rtype: str
-        """
+    def __hash__(self) -> int:
         return hash(self.__dict__)
