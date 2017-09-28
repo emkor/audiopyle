@@ -2,3 +2,4 @@ numpy
 vamp
 cherrypy
 assertpy
+mutagen
