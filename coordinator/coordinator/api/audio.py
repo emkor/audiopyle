@@ -18,6 +18,6 @@ class AudioTagApi(AudiopyleRestApi):
     def get(self, request: ApiRequest):
         audio_file_name = request.query_params.get("file")
         self.logger.info("Reading ID3 tags of {}...".format(audio_file_name))
-        full_audio_file_name = concatenate_paths("/home/mkorzeni/projects/audiopyle/resources/audio", audio_file_name)
+        full_audio_file_name = concatenate_paths(AUDIO_FILES_DIR, audio_file_name)
         id3_tag = Id3Tag.from_easy_id3_object(EasyID3(full_audio_file_name))
         return ApiResponse(HttpStatusCode.ok, id3_tag.serialize())
