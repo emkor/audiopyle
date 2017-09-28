@@ -12,7 +12,7 @@ class AudioApiTest(TestCase):
 
     def test_should_list_audio_file(self):
         expected_status_code = 200
-        expected_audio_file_count = 1
+        expected_audio_file_count = 2
         expected_audio = [{'created_on': '2017-07-19T17:42:15', 'last_modification': '2017-07-19T17:42:15',
                            'last_access': '2017-07-19T17:42:15', 'file_name': '/audio/102bpm_drum_loop_mono_44.1k.wav',
                            'size': 207916}]
