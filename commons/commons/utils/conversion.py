@@ -1,7 +1,7 @@
 import calendar
 import math
 from datetime import datetime
-from typing import Text, Any, Type
+from typing import Text, Any, Type, List
 
 
 def b_to_B(b: float) -> int:
@@ -63,3 +63,8 @@ def safe_cast(value: Any, expected_type: Type, default: Any = None) -> Any:
         return expected_type(value)
     except ValueError:
         return default
+
+
+def first_element_or(collection, default=None):
+    # type: (List[Any], Any) -> Any
+    return collection[0] if len(collection) else default
