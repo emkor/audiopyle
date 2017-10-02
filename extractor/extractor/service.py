@@ -1,4 +1,4 @@
-from typing import Any, Callable, Text
+from typing import Text
 
 from celery import Task
 from celery.result import AsyncResult

@@ -1,7 +1,7 @@
 import calendar
 import math
 from datetime import datetime
-from typing import Text
+from typing import Text, Any, Type, List
 
 
 def b_to_B(b: float) -> int:
@@ -56,3 +56,15 @@ def normalize(text: Text) -> Text:
 
 def seconds_between(start_time_point: datetime, end_time_point: datetime = datetime.utcnow(), precision: int = 2):
     return round((end_time_point - start_time_point).total_seconds(), precision)
+
+
+def safe_cast(value: Any, expected_type: Type, default: Any = None) -> Any:
+    try:
+        return expected_type(value)
+    except ValueError:
+        return default
+
+
+def first_element_or(collection, default=None):
+    # type: (List[Any], Any) -> Any
+    return collection[0] if len(collection) else default
