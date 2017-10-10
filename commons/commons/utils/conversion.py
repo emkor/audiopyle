@@ -3,6 +3,8 @@ import math
 from datetime import datetime
 from typing import Text, Any, Type, List
 
+from pympler.asizeof import asizeof
+
 
 def b_to_B(b: float) -> int:
     return int(math.ceil(b / 8.0))
@@ -65,6 +67,17 @@ def safe_cast(value: Any, expected_type: Type, default: Any = None) -> Any:
         return default
 
 
-def first_element_or(collection, default=None):
-    # type: (List[Any], Any) -> Any
+def first_element_or(collection: List[Any], default: Any = None) -> Any:
     return collection[0] if len(collection) else default
+
+
+def object_size_humanized(any_object: Any) -> Text:
+    return sizeof_fmt(asizeof(any_object))
+
+
+def sizeof_fmt(num: float, suffix: Text = 'B') -> Text:
+    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
+        if abs(num) < 1024.0:
+            return "%3.1f%s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f%s%s" % (num, 'Yi', suffix)

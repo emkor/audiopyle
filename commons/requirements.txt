@@ -3,3 +3,4 @@ vamp
 cherrypy
 assertpy
 mutagen
+pympler

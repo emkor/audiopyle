@@ -16,6 +16,7 @@ COPY . .
 
 # CREATE DIRECTORY FOR INPUT FILES
 RUN mkdir /audio
+RUN mkdir /audio_tmp
 RUN mkdir /root/vamp
 
 # INSTALL MODULE DEPENDENCIES
