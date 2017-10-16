@@ -26,6 +26,11 @@ class VampyFeatureMeta(Model):
     def value_shape(self) -> Tuple[int, int]:
         raise NotImplementedError()
 
+    def serialize(self):
+        return {"vampy_plugin": self.vampy_plugin.serialize(),
+                "segment_meta": self.segment_meta.serialize(),
+                "plugin_output": self.plugin_output}
+
 
 class VampyConstantStepFeature(VampyFeatureMeta):
     def __init__(self, vampy_plugin: VampyPlugin, segment_meta: AudioSegmentMeta, plugin_output: Text,
@@ -52,6 +57,12 @@ class VampyConstantStepFeature(VampyFeatureMeta):
     def _step_as_frames(self) -> int:
         return self._time_step.to_frame(self.segment_meta.source_file_meta.sample_rate)
 
+    def serialize(self):
+        super_serialized = super(VampyConstantStepFeature, self).serialize()
+        super_serialized.update({"_time_step": self._time_step.to_float(),
+                                 "_matrix": self._matrix.tolist()})
+        return super_serialized
+
 
 class VampyVariableStepFeature(VampyFeatureMeta):
     def __init__(self, vampy_plugin: VampyPlugin, segment_meta: AudioSegmentMeta, plugin_output: Text,
@@ -72,3 +83,8 @@ class VampyVariableStepFeature(VampyFeatureMeta):
     def value_shape(self) -> Tuple[int, int]:
         first_value = self._value_list[0].get("values") or []
         return len(self._value_list), len(first_value)
+
+    def serialize(self):
+        super_serialized = super(VampyVariableStepFeature, self).serialize()
+        super_serialized.update({"_value_list": self._value_list})
+        return super_serialized

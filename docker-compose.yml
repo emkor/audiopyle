@@ -27,6 +27,7 @@ coordinator_host:
   volumes:
     - "./resources/vamp:/root/vamp"
     - "./resources/audio:/audio"
+    - "./resources/results:/results"
   environment:
     - BLACKLISTED_PLUGINS=vamp-example-plugins:zerocrossing,vamp-example-plugins:powerspectrum
 extractor_host_1:
@@ -38,6 +39,7 @@ extractor_host_1:
   volumes:
     - "./resources/vamp:/root/vamp"
     - "./resources/audio:/audio"
+    - "./resources/results:/results"
   environment:
     - EXTRACTION_CONCURRENCY=2
     - EXTRACTION_BROKER_CONN_POOL_SIZE=4

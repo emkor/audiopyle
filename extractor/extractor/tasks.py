@@ -1,3 +1,4 @@
+import json
 import os
 from typing import Any, Text, Dict
 
@@ -6,18 +7,18 @@ from billiard.exceptions import SoftTimeLimitExceeded
 from commons.audio.segment_providing import read_audio_file_meta, read_segment
 from commons.services.extraction import extract_features, ExtractionRequest
 from commons.services.automation import read_id3_tag, copy_or_convert
-from commons.services.uuid_generation import generate_uuid
-from commons.utils.file_system import AUDIO_FILES_DIR, remove_file
+from commons.utils.file_system import AUDIO_FILES_DIR, remove_file, RESULTS_DIR
 from commons.utils.logger import get_logger
 from commons.vampy.plugin_providing import build_plugin_from_key
 from extractor.celery import app
 
 
 @app.task
-def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
+def extract_feature(extraction_request: Dict[Text, Any]) -> Text:
+    tmp_audio_file_name, feature_file_path = None, None
     logger = get_logger()
-    task_id = generate_uuid(extraction_request)
     request = ExtractionRequest.deserialize(extraction_request)
+    task_id = request.uuid()
     logger.info("Building context for extraction {}: {}...".format(task_id, request))
     audio_file_absolute_path = os.path.join(AUDIO_FILES_DIR, request.audio_file_name)
     id3_tag = read_id3_tag(audio_file_absolute_path)
@@ -30,14 +31,21 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     try:
         feature = extract_features(audio_segment, plugin, request.plugin_output)
         logger.info("Extracted {} feature!".format(feature.__class__.__name__))
-        if tmp_audio_file_name != audio_file_absolute_path:
-            logger.info("Removing temporary file: {}...".format(tmp_audio_file_name))
-            remove_file(tmp_audio_file_name)
-            logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
-        return feature.serialize()
+        feature_file_name = "{}.{}".format(task_id, "json")
+        feature_file_path = os.path.join(RESULTS_DIR, feature_file_name)
+        with open(feature_file_path, mode="w") as feature_file:
+            json.dump(feature.serialize(), feature_file)
+        logger.info("Removing temporary file: {}...".format(tmp_audio_file_name))
+        remove_file(tmp_audio_file_name)
+        logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
+        return feature_file_name
     except SoftTimeLimitExceeded as e:
-        logger.exception(e)
-        if tmp_audio_file_name != audio_file_absolute_path:
-            logger.info("Removing temporary file: {}...".format(tmp_audio_file_name))
+        if tmp_audio_file_name:
+            logger.warning("Time's out, removing temporary file: {}...".format(tmp_audio_file_name))
             remove_file(tmp_audio_file_name)
             logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
+        if feature_file_path:
+            logger.warning("Time's out, removing temporary file: {}...".format(tmp_audio_file_name))
+            remove_file(tmp_audio_file_name)
+            logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
+        raise e
