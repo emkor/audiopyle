@@ -4,3 +4,4 @@ cherrypy
 assertpy
 mutagen
 pympler
+pydub

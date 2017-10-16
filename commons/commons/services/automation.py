@@ -8,6 +8,7 @@ from commons.audio.audio_tag import Id3Tag
 from commons.audio.segment_providing import read_audio_file_meta, read_segment
 from commons.services.extraction import extract_features
 from commons.utils.conversion import object_size_humanized
+from commons.utils.env_var import get_environment_variable
 from commons.utils.file_system import extract_extension
 from commons.utils.logger import get_logger
 from commons.vampy.feature import VampyFeatureMeta
@@ -33,12 +34,18 @@ def convert_if_needed(audio_file_absolute_path: Text) -> Text:
 def extract_features_with_all_plugins(output_file_name: Text) -> List[VampyFeatureMeta]:
     logger.info("Preparing for feature extraction of file {}...".format(output_file_name))
     audio_segment = read_segment(read_audio_file_meta(output_file_name))
-    plugins = list_vampy_plugins()
+    blacklisted_plugins = get_environment_variable(variable_name="BLACKLISTED_PLUGINS", expected_type=str,
+                                                   default="").split(",")
+    if blacklisted_plugins:
+        logger.info("Omitting blacklisted plugins ({}): {}...".format(len(blacklisted_plugins), blacklisted_plugins))
+    plugins = list_vampy_plugins(blacklisted_plugins)
     features = []
     for plugin in plugins:
         for plugin_output in plugin.outputs:
             try:
-                logger.info("Extracting {}: {}...".format(plugin.name, plugin_output))
+                logger.info("Extracting {}: {} from {} ({})...".format(plugin.name, plugin_output,
+                                                                       audio_segment.source_file_meta.file_name,
+                                                                       audio_segment.size_humanized()))
                 feature = extract_features(audio_segment, plugin, plugin_output)
                 logger.info(
                     "Extracted {}: {} with size of {}!".format(plugin.name, plugin_output,

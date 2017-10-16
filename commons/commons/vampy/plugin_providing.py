@@ -1,4 +1,4 @@
-from typing import Text, List
+from typing import Text, List, Optional
 
 import vamp
 from vampyhost import get_library_for
@@ -13,9 +13,9 @@ def build_plugin_from_key(key: Text) -> VampyPlugin:
     return VampyPlugin(key=key, categories=plugin_categories, outputs=plugin_outputs, library_path=library_file)
 
 
-def list_vampy_plugins() -> List[VampyPlugin]:
+def list_vampy_plugins(blacklisted_plugin_keys: Optional[List[Text]] = None) -> List[VampyPlugin]:
     """Returns list of VAMPy plugins available in OS"""
-    return list(map(lambda key: build_plugin_from_key(key=key), vamp.list_plugins()))
+    return [build_plugin_from_key(key=k) for k in vamp.list_plugins() if k not in (blacklisted_plugin_keys or [])]
 
 
 def list_categories(plugins: List[VampyPlugin]) -> List[Text]:

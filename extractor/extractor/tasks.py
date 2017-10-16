@@ -5,7 +5,7 @@ from commons.audio.segment_providing import read_audio_file_meta, read_segment
 from commons.services.extraction import extract_features, ExtractionRequest
 from commons.services.automation import read_id3_tag, extract_features_with_all_plugins, convert_if_needed
 from commons.utils.conversion import object_size_humanized
-from commons.utils.file_system import AUDIO_FILES_DIR, copy_file, TMP_DIR, remove_file
+from commons.utils.file_system import AUDIO_FILES_DIR
 from commons.utils.logger import get_logger
 from commons.vampy.plugin_providing import build_plugin_from_key
 from extractor.celery import app
@@ -17,13 +17,10 @@ logger = get_logger()
 def extract_all_features(audio_file_name: Text) -> int:
     logger.info("Doing extract all on {}...".format(audio_file_name))
     audio_file_absolute_path = os.path.join(AUDIO_FILES_DIR, audio_file_name)
-    target_audio_file_absolute_path = os.path.join(TMP_DIR, audio_file_name)
-    copy_file(audio_file_absolute_path, target_audio_file_absolute_path)
-    id3_tag = read_id3_tag(target_audio_file_absolute_path)
+    id3_tag = read_id3_tag(audio_file_absolute_path)
     logger.info("Read file tags: {}".format(id3_tag))
-    output_file_name = convert_if_needed(target_audio_file_absolute_path)
+    output_file_name = convert_if_needed(audio_file_absolute_path)
     features = extract_features_with_all_plugins(output_file_name)
-    remove_file(output_file_name)
     logger.info(
         "Done extracting all features from {}! Size: {}".format(audio_file_name, object_size_humanized(features)))
     return len(features)

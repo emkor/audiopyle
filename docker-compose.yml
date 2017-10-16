@@ -40,3 +40,4 @@ extractor_host_1:
     - EXTRACTION_CONCURRENCY=2
     - EXTRACTION_BROKER_CONN_POOL_SIZE=4
     - EXTRACTION_HARD_TIME_LIMIT_SECONDS=600
+    - BLACKLISTED_PLUGINS=vamp-example-plugins:zerocrossing,vamp-example-plugins:powerspectrum
