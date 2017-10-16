@@ -41,3 +41,4 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
             logger.info("Removing temporary file: {}...".format(tmp_audio_file_name))
             remove_file(tmp_audio_file_name)
             logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
+        raise e
