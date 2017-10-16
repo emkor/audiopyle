@@ -4,6 +4,7 @@ import vamp
 
 from commons.abstractions.model import Model
 from commons.audio.segment import MonoAudioSegment
+from commons.services.uuid_generation import generate_uuid
 from commons.utils.logger import get_logger
 from commons.vampy.feature import VampyFeatureMeta, VampyVariableStepFeature, VampyConstantStepFeature
 from commons.vampy.plugin import VampyPlugin
@@ -16,6 +17,9 @@ class ExtractionRequest(Model):
         self.audio_file_name = audio_file_name
         self.plugin_key = plugin_key
         self.plugin_output = plugin_output
+
+    def uuid(self) -> Text:
+        return generate_uuid("{};{};{}".format(self.audio_file_name, self.plugin_key, self.plugin_output))
 
 
 def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin, output_name: Text, step_size: int = 0,

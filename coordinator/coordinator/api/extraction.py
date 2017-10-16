@@ -23,8 +23,9 @@ class ExtractionApi(AudiopyleRestApi):
         execution_request = ExtractionRequest.deserialize(request.payload)
         self.logger.info("Sending feature extraction task: {}...".format(execution_request))
         serialized_request = execution_request.serialize()
+        task_id = generate_uuid(serialized_request)
         async_result = run_task(task=extract_feature,
-                                task_id=generate_uuid(serialized_request),
+                                task_id=task_id,
                                 extraction_request=serialized_request)
         self.logger.info("Sent feature extraction task! ID: {}.".format(async_result.task_id))
         return ApiResponse(HttpStatusCode.accepted, {"task_id": async_result.task_id})
