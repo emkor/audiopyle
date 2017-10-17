@@ -1,6 +1,8 @@
-from typing import Text, List, Dict, Any
+from typing import Text, List, Dict, Union, Tuple, Optional
+from vampyhost import RealTime
 
 import vamp
+from numpy.core.multiarray import ndarray
 
 from commons.abstractions.model import Model
 from commons.audio.segment import MonoAudioSegment
@@ -30,7 +32,9 @@ def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin,
     return _map_feature(feature_meta=feature_meta, extracted_data=raw_results)
 
 
-def _map_feature(feature_meta: VampyFeatureMeta, extracted_data: Dict[Text, List[Dict[str, Any]]]) -> VampyFeatureMeta:
+def _map_feature(feature_meta: VampyFeatureMeta,
+                 extracted_data: Dict[Text, Union[Tuple[RealTime, ndarray], List[
+                     Dict[Text, Union[RealTime, ndarray, Optional[Text]]]]]]) -> VampyFeatureMeta:
     data_type = list(extracted_data.keys())[0]
     if data_type == "list":
         value_list = [StepFeature(f.get("timestamp").to_float(), f.get("values"), f.get("label") or None)
@@ -41,6 +45,6 @@ def _map_feature(feature_meta: VampyFeatureMeta, extracted_data: Dict[Text, List
         data = extracted_data.get("vector") or extracted_data.get("matrix")
         return VampyConstantStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,
                                         plugin_output=feature_meta.plugin_output, time_step=data[0].to_float(),
-                                        matrix=data[1])  # type: ignore
+                                        matrix=data[1])
     else:
         raise NotImplementedError("Can not recognize feature type: {}".format(extracted_data.keys()))
