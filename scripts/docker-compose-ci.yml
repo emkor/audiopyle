@@ -40,7 +40,7 @@ testcases:
   image: "endlessdrones/audiopyle-testcases"
   hostname: "testcases"
   environment:
-    AUDIOPYLE_BOOT_TIME: "10"
+    AUDIOPYLE_BOOT_TIME: "20"
     CI_BUILD: "1"
   links:
     - coordinator_host
