@@ -30,7 +30,7 @@ def copy_file(source: Text, destination: Text) -> None:
 
 
 def extract_extension(file_path: Text) -> Text:
-    return os.path.splitext(file_path)[1][1:].strip()
+    return os.path.splitext(file_path)[1][1:].strip().lower()
 
 
 def remove_file(file_path: Text) -> None:

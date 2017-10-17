@@ -3,3 +3,5 @@ vamp
 cherrypy
 assertpy
 mutagen
+pympler
+pydub

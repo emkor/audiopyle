@@ -9,6 +9,9 @@ from commons.audio.file_meta import LocalAudioFileMeta
 from commons.audio.segment import MonoAudioSegment
 from commons.utils.conversion import B_to_b
 from commons.utils.file_system import file_exists
+from commons.utils.logger import get_logger
+
+logger = get_logger()
 
 
 def read_audio_file_meta(absolute_path: Text) -> Optional[LocalAudioFileMeta]:

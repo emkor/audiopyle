@@ -1,6 +1,8 @@
 from copy import copy
 from typing import Type, Any, Text, Dict
 
+from commons.utils.conversion import object_size, object_size_humanized
+
 
 class Model(object):
     @classmethod
@@ -21,3 +23,9 @@ class Model(object):
 
     def __hash__(self) -> int:
         return hash(self.__dict__)
+
+    def size_bytes(self) -> float:
+        return object_size(self)
+
+    def size_humanized(self) -> Text:
+        return object_size_humanized(self)

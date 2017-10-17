@@ -27,6 +27,8 @@ coordinator_host:
   volumes:
     - "./resources/vamp:/root/vamp"
     - "./resources/audio:/audio"
+  environment:
+    - BLACKLISTED_PLUGINS=vamp-example-plugins:zerocrossing,vamp-example-plugins:powerspectrum
 extractor_host_1:
   image: "endlessdrones/audiopyle-extractor"
   hostname: "extractor_host_1"
@@ -39,4 +41,5 @@ extractor_host_1:
   environment:
     - EXTRACTION_CONCURRENCY=2
     - EXTRACTION_BROKER_CONN_POOL_SIZE=4
+    - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=300
     - EXTRACTION_HARD_TIME_LIMIT_SECONDS=600

@@ -1,4 +1,3 @@
 pymysql
 celery[sqlalchemy]
-pydub
 mutagen

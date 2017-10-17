@@ -1,11 +1,15 @@
-from typing import Text, List, Tuple, Union, Dict, Any
+from typing import Text, List, Dict, Any
 
 import vamp
 
 from commons.abstractions.model import Model
 from commons.audio.segment import MonoAudioSegment
+from commons.services.uuid_generation import generate_uuid
+from commons.utils.logger import get_logger
 from commons.vampy.feature import VampyFeatureMeta, VampyVariableStepFeature, VampyConstantStepFeature
 from commons.vampy.plugin import VampyPlugin
+
+logger = get_logger()
 
 
 class ExtractionRequest(Model):
@@ -13,6 +17,9 @@ class ExtractionRequest(Model):
         self.audio_file_name = audio_file_name
         self.plugin_key = plugin_key
         self.plugin_output = plugin_output
+
+    def uuid(self) -> Text:
+        return generate_uuid("{};{};{}".format(self.audio_file_name, self.plugin_key, self.plugin_output))
 
 
 def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin, output_name: Text, step_size: int = 0,
@@ -32,11 +39,6 @@ def _map_feature(feature_meta: VampyFeatureMeta, extracted_data: Dict[Text, List
                                         plugin_output=feature_meta.plugin_output, value_list=extracted_data.get("list"))
     elif data_type in ("vector", "matrix"):
         data = extracted_data.get("vector") or extracted_data.get("matrix")
-
-        print(
-            "feature_meta: {} / {} is a {}".format(feature_meta.vampy_plugin.key, feature_meta.plugin_output,
-                                                   data_type))
-
         return VampyConstantStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,
                                         plugin_output=feature_meta.plugin_output, time_step=data[0], matrix=data[1])
     else:
