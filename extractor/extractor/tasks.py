@@ -1,5 +1,6 @@
 import json
 import os
+from logging import Logger
 from typing import Any, Text, Dict
 
 from billiard.exceptions import SoftTimeLimitExceeded
@@ -23,10 +24,8 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Text:
     audio_file_absolute_path = os.path.join(AUDIO_FILES_DIR, request.audio_file_name)
     id3_tag = read_id3_tag(audio_file_absolute_path)
     tmp_audio_file_name = copy_or_convert(audio_file_absolute_path, task_id)
-    audio_file_meta = read_audio_file_meta(tmp_audio_file_name)
-    audio_segment = read_segment(audio_file_meta)
+    audio_segment = read_segment(read_audio_file_meta(tmp_audio_file_name))
     plugin = build_plugin_from_key(str(request.plugin_key))
-    logger.info("Built extraction context: {} {} {}".format(audio_segment, plugin, request.plugin_output))
     logger.info("Starting feature extraction...")
     try:
         feature = extract_features(audio_segment, plugin, request.plugin_output)
@@ -35,17 +34,16 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Text:
         feature_file_path = os.path.join(RESULTS_DIR, feature_file_name)
         with open(feature_file_path, mode="w") as feature_file:
             json.dump(feature.serialize(), feature_file)
-        logger.info("Removing temporary file: {}...".format(tmp_audio_file_name))
-        remove_file(tmp_audio_file_name)
-        logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
+        _remove_file_if_not_none(tmp_audio_file_name, logger)
         return feature_file_name
     except SoftTimeLimitExceeded as e:
-        if tmp_audio_file_name:
-            logger.warning("Time's out, removing temporary file: {}...".format(tmp_audio_file_name))
-            remove_file(tmp_audio_file_name)
-            logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
-        if feature_file_path:
-            logger.warning("Time's out, removing temporary file: {}...".format(tmp_audio_file_name))
-            remove_file(tmp_audio_file_name)
-            logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
+        _remove_file_if_not_none(tmp_audio_file_name, logger)
+        _remove_file_if_not_none(feature_file_path, logger)
         raise e
+
+
+def _remove_file_if_not_none(tmp_audio_file_name: Text, logger: Logger = get_logger()) -> None:
+    if tmp_audio_file_name:
+        logger.warning("Removing temporary file: {}...".format(tmp_audio_file_name))
+        remove_file(tmp_audio_file_name)
+        logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))

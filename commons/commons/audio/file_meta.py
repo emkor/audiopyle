@@ -52,14 +52,11 @@ class AudioFileMeta(Model):
         self.frames_count = frames_count
         self.bit_depth = bit_depth
 
-    def size_kB(self) -> float:
-        return to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)
-
     def length_sec(self) -> float:
         return frames_to_sec(self.frames_count, self.sample_rate)
 
     def avg_kbps(self) -> float:
-        return B_to_b(self.size_kB()) / self.length_sec()
+        return B_to_b(to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)) / self.length_sec()
 
 
 class LocalAudioFileMeta(AudioFileMeta):
