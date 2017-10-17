@@ -65,7 +65,7 @@ class VampyConstantStepFeature(VampyFeatureMeta):
 
 
 class StepFeature(Model):
-    def __init__(self, timestamp: float, values: numpy.ndarray, label: Optional[Text] = None):
+    def __init__(self, timestamp: float, values: numpy.ndarray, label: Optional[Text] = None) -> None:
         self.timestamp = timestamp
         self.values = values
         self.label = label

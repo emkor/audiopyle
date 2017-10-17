@@ -41,6 +41,6 @@ def _map_feature(feature_meta: VampyFeatureMeta, extracted_data: Dict[Text, List
         data = extracted_data.get("vector") or extracted_data.get("matrix")
         return VampyConstantStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,
                                         plugin_output=feature_meta.plugin_output, time_step=data[0].to_float(),
-                                        matrix=data[1])
+                                        matrix=data[1])  # type: ignore
     else:
         raise NotImplementedError("Can not recognize feature type: {}".format(extracted_data.keys()))
