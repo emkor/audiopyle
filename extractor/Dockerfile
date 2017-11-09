@@ -4,6 +4,10 @@ MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
 LABEL description="Image containing extractor module of an audiopyle app"
 
+RUN apt-get install -y libav-tools
+RUN apt-get clean
+RUN apt-get autoclean
+
 # SET WORKDIR
 RUN mkdir -p /audiopyle/extractor
 WORKDIR /audiopyle/extractor
