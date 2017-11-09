@@ -1,8 +1,6 @@
-from typing import Text, List, Dict, Union, Tuple, Optional
-from vampyhost import RealTime
+from typing import Text, Dict, Any
 
 import vamp
-from numpy.core.multiarray import ndarray
 
 from commons.abstractions.model import Model
 from commons.audio.segment import MonoAudioSegment
@@ -32,9 +30,7 @@ def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin,
     return _map_feature(feature_meta=feature_meta, extracted_data=raw_results)
 
 
-def _map_feature(feature_meta: VampyFeatureMeta,
-                 extracted_data: Dict[Text, Union[Tuple[RealTime, ndarray], List[
-                     Dict[Text, Union[RealTime, ndarray, Optional[Text]]]]]]) -> VampyFeatureMeta:
+def _map_feature(feature_meta: VampyFeatureMeta, extracted_data: Dict[Text, Any]) -> VampyFeatureMeta:
     data_type = list(extracted_data.keys())[0]
     if data_type == "list":
         value_list = [StepFeature(f.get("timestamp").to_float(), f.get("values"), f.get("label") or None)
