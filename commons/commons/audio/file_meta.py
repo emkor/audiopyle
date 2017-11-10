@@ -42,11 +42,11 @@ def get_file_meta(file_name: Text) -> FileMeta:
                     last_modification=last_modification_utc, created_on=created_on_utc)
 
 
-class AudioFileMeta(Model):
-    def __init__(self, file_name: Text, channels_count: int, sample_rate: int, frames_count: int,
+class LocalAudioFileMeta(Model):
+    def __init__(self, absolute_path: Text, channels_count: int, sample_rate: int, frames_count: int,
                  bit_depth: int) -> None:
         """Represents metadata of a raw audio file"""
-        self.file_name = file_name
+        self.absolute_path = absolute_path
         self.channels_count = channels_count
         self.sample_rate = sample_rate
         self.frames_count = frames_count
@@ -57,12 +57,3 @@ class AudioFileMeta(Model):
 
     def avg_kbps(self) -> float:
         return B_to_b(to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)) / self.length_sec()
-
-
-class LocalAudioFileMeta(AudioFileMeta):
-    def __init__(self, absolute_path: Text, channels_count: int, sample_rate: int, frames_count: int,
-                 bit_depth: int) -> None:
-        """Represents metadata of a raw audio file"""
-        super(LocalAudioFileMeta, self).__init__(get_file_name(absolute_path), channels_count, sample_rate,
-                                                 frames_count, bit_depth)
-        self.absolute_path = absolute_path
