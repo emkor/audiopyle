@@ -10,6 +10,12 @@ class AudioFileMetaTest(unittest.TestCase):
     def setUp(self):
         self.audio_file_meta = LocalAudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
                                                   sample_rate=44100, frames_count=22050, bit_depth=16)
+        self.audio_file_meta_avg_kbps = 1410.0
+        self.audio_file_meta_length_seconds = 0.5
+
+    def test_should_calculate_properties_correctly(self):
+        assert_that(self.audio_file_meta.avg_kbps()).is_equal_to(self.audio_file_meta_avg_kbps)
+        assert_that(self.audio_file_meta.length_sec()).is_equal_to(self.audio_file_meta_length_seconds)
 
     def test_should_serialize_and_deserialize_audio_meta_file(self):
         audio_file_meta_serialized = self.audio_file_meta.serialize()

@@ -1,3 +1,5 @@
+from typing import Any, Text, Dict
+
 from numpy.core.multiarray import ndarray
 
 from commons.abstractions.model import Model
@@ -13,7 +15,7 @@ class AudioSegmentMeta(Model):
         self.frame_to = frame_to
 
     def length_frames(self) -> int:
-        return abs(self.frame_to - self.frame_from)
+        return abs(self.frame_to - self.frame_from + 1)
 
     def length_sec(self) -> float:
         return frames_to_sec(self.length_frames(), self.source_file_meta.sample_rate)
@@ -23,10 +25,15 @@ class AudioSegmentMeta(Model):
         super_serialized.update({"source_file_meta": self.source_file_meta.serialize()})
         return super_serialized
 
+    @classmethod
+    def deserialize(cls, serialized: Dict[Text, Any]):
+        source_file_meta = LocalAudioFileMeta.deserialize(serialized.pop("source_file_meta"))
+        serialized.update({"source_file_meta": source_file_meta})
+        return AudioSegmentMeta(**serialized)
+
 
 class MonoAudioSegment(AudioSegmentMeta):
     def __init__(self, source_file_meta: LocalAudioFileMeta, frame_from: int, frame_to: int, data: ndarray) -> None:
-        """Represents metadata of a part of an audio wave"""
         super(MonoAudioSegment, self).__init__(source_file_meta, frame_from, frame_to)
         self.data = data
 
