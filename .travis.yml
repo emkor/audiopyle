@@ -9,9 +9,11 @@ services:
 before_script:
   - chmod u+x **/*.sh
   - scripts/setup.sh
-  - cd commons && tox && cd ..
 
 script:
+  - cd commons && tox && cd ..
+  - cd coordinator && tox && cd ..
+  - cd extractor && tox && cd ..
   - scripts/build_base_image.sh
   - scripts/build_app_images.sh
   - scripts/build_test_image.sh
@@ -19,7 +21,6 @@ script:
   - docker run --interactive --tty --rm --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze
 
 after_success:
-
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     scripts/push-base-image.sh;
     fi
