@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from distutils.core import setup
 
+from distutils.core import setup
 from pkg_resources import parse_requirements
 from setuptools import find_packages
 

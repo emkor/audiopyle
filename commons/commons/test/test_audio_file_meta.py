@@ -5,12 +5,12 @@ from assertpy import assert_that
 
 from commons.audio.file_meta import LocalAudioFileMeta
 from commons.audio.segment_providing import read_audio_file_meta
-from commons.test.utils import get_absolute_path_for_project_file, TEST_AUDIO_FILE
+from commons.test.utils import get_absolute_path_for_project_file, TEST_WAV_AUDIO_FILE
 
 
 class AudioFileMetaTest(unittest.TestCase):
     def setUp(self):
-        self.audio_file_name = get_absolute_path_for_project_file(__file__, TEST_AUDIO_FILE)
+        self.audio_file_name = get_absolute_path_for_project_file(__file__, TEST_WAV_AUDIO_FILE)
         self.non_existing_file_name = "/dev/21343983908329089832"
 
     def test_should_create_audio_file_meta(self):
