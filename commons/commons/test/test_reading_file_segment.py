@@ -3,7 +3,8 @@ import unittest
 from assertpy import assert_that
 from numpy.core.multiarray import ndarray
 
-from commons.audio.segment_providing import read_audio_file_meta, read_segment
+from commons.audio.file_meta_providing import read_audio_file_meta
+from commons.audio.segment_providing import read_segment
 from commons.test.utils import get_absolute_path_for_project_file, TEST_WAV_AUDIO_FILE
 
 

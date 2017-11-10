@@ -14,16 +14,6 @@ from commons.utils.logger import get_logger
 logger = get_logger()
 
 
-def read_audio_file_meta(absolute_path: Text) -> Optional[LocalAudioFileMeta]:
-    if file_exists(absolute_path):
-        audio_file = wave.open(f=absolute_path, mode="r")
-        (nchannels, sampwidth, framerate, nframes, comptype, compname) = audio_file.getparams()
-        audio_file.close()
-        return LocalAudioFileMeta(absolute_path=absolute_path, channels_count=nchannels, sample_rate=framerate,
-                                  frames_count=nframes, bit_depth=B_to_b(sampwidth))
-    return None
-
-
 def read_segment(local_audio_file_meta: LocalAudioFileMeta) -> MonoAudioSegment:
     audio_frames = _read_raw_frames(local_audio_file_meta)
     if local_audio_file_meta.channels_count == 2:

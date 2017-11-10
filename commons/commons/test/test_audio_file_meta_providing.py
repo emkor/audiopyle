@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.audio.segment_providing import read_audio_file_meta
+from commons.audio.file_meta_providing import read_audio_file_meta
 from commons.test.utils import get_absolute_path_for_project_file, TEST_WAV_AUDIO_FILE
 
 
