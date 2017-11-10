@@ -11,8 +11,5 @@ WORKDIR /audiopyle/commons
 # COPY SOURCE CODE FOR AUDIOPYLE
 COPY . .
 
-# INSTALL MODULE DEPENDENCIES
-RUN pip install -r ./requirements.txt
-
 # INSTALL AUDIOPYLE COMMON
 RUN pip install .
