@@ -1,35 +1,7 @@
-from datetime import datetime
 from typing import Text
 
 from commons.abstractions.model import Model
-from commons.utils.conversion import to_kilo, to_mega, b_to_B, frames_to_sec, B_to_b
-from commons.utils.file_system import extract_extension, get_file_name
-
-
-class FileMeta(Model):
-    def __init__(self, file_name: Text, size: int, last_access: datetime, last_modification: datetime,
-                 created_on: datetime) -> None:
-        self.created_on = created_on
-        self.last_modification = last_modification
-        self.last_access = last_access
-        self.size = size
-        self.file_name = file_name
-
-    @property
-    def size_kB(self) -> float:
-        return to_kilo(self.size)
-
-    @property
-    def size_mB(self) -> float:
-        return to_mega(self.size)
-
-    @property
-    def file_base_name(self) -> Text:
-        return get_file_name(self.file_name)
-
-    @property
-    def extension(self) -> Text:
-        return extract_extension(self.file_name)
+from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b
 
 
 class LocalAudioFileMeta(Model):
