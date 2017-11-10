@@ -1,9 +1,8 @@
-import os
 from datetime import datetime
 from typing import Text
 
 from commons.abstractions.model import Model
-from commons.utils.conversion import utc_timestamp_to_datetime, to_kilo, to_mega, b_to_B, frames_to_sec, B_to_b
+from commons.utils.conversion import to_kilo, to_mega, b_to_B, frames_to_sec, B_to_b
 from commons.utils.file_system import extract_extension, get_file_name
 
 
@@ -31,9 +30,6 @@ class FileMeta(Model):
     @property
     def extension(self) -> Text:
         return extract_extension(self.file_name)
-
-
-
 
 
 class LocalAudioFileMeta(Model):

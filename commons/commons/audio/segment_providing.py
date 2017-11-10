@@ -1,14 +1,12 @@
 import struct
 import wave
-from typing import Text, Optional, List
+from typing import List
 
 import numpy
 from numpy import array
 
 from commons.audio.file_meta import LocalAudioFileMeta
 from commons.audio.segment import MonoAudioSegment
-from commons.utils.conversion import B_to_b
-from commons.utils.file_system import file_exists
 from commons.utils.logger import get_logger
 
 logger = get_logger()
