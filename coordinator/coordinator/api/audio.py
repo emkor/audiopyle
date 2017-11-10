@@ -3,7 +3,7 @@ from mutagen.easyid3 import EasyID3
 from commons.abstractions.api import AudiopyleRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.audio.audio_tag import Id3Tag
-from commons.audio.file_meta import get_file_meta
+from commons.audio.file_meta_providing import get_file_meta
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, concatenate_paths, TMP_DIR, remove_file
 
 

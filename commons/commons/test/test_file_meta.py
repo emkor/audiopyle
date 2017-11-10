@@ -3,7 +3,7 @@ import unittest
 from assertpy import assert_that
 from datetime import datetime
 
-from commons.audio.file_meta import get_file_meta
+from commons.audio.file_meta_providing import get_file_meta
 
 
 class FileMetaGatheringTest(unittest.TestCase):
