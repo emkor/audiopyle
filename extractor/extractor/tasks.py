@@ -3,10 +3,11 @@ from typing import Any, Text, Dict
 
 from billiard.exceptions import SoftTimeLimitExceeded
 
+from commons.audio.audio_tag_providing import read_id3_tag
 from commons.audio.file_meta_providing import read_audio_file_meta
 from commons.audio.segment_providing import read_segment
 from commons.services.extraction import extract_features, ExtractionRequest
-from commons.services.automation import read_id3_tag, copy_or_convert
+from commons.services.conversion import copy_or_convert
 from commons.services.uuid_generation import generate_uuid
 from commons.utils.file_system import AUDIO_FILES_DIR, remove_file
 from commons.utils.logger import get_logger
