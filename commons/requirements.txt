@@ -1,6 +1,0 @@
-numpy
-vamp
-cherrypy
-mutagen
-pympler
-pydub
