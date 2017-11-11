@@ -19,7 +19,8 @@ def read_wav_file_meta(absolute_path: Text) -> Optional[WavAudioFileMeta]:
             audio_file = wave.open(f=absolute_path, mode="r")
             (nchannels, sampwidth, framerate, nframes, comptype, compname) = audio_file.getparams()
             audio_file.close()
-            return WavAudioFileMeta(absolute_path=absolute_path, file_size_bytes=audio_file_size, channels_count=nchannels,
+            return WavAudioFileMeta(absolute_path=absolute_path, file_size_bytes=audio_file_size,
+                                    channels_count=nchannels,
                                     bit_depth=B_to_b(sampwidth), sample_rate=framerate, frames_count=nframes)
         except Exception as e:
             logger.exception("Could not read audio file meta from {}. Details: {}".format(absolute_path, e))
@@ -42,6 +43,3 @@ def read_mp3_file_meta(absolute_path: Text) -> Optional[Mp3AudioFileMeta]:
             if audio_file:
                 audio_file.close()
     return None
-
-
-print(read_mp3_file_meta("/home/mat/projects/audiopyle/resources/audio/102bpm_drum_loop_mono_44.1k.mp3"))
