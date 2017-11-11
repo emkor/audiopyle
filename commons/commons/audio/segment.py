@@ -3,7 +3,7 @@ from typing import Any, Text, Dict
 from numpy.core.multiarray import ndarray
 
 from commons.abstractions.model import Model
-from commons.audio.file_meta import AudioFileMeta
+from commons.audio.file_meta import AudioFileMeta, WavAudioFileMeta
 from commons.utils.conversion import frames_to_sec
 
 
@@ -27,7 +27,7 @@ class AudioSegmentMeta(Model):
 
     @classmethod
     def deserialize(cls, serialized: Dict[Text, Any]):
-        source_file_meta = AudioFileMeta.deserialize(serialized.pop("source_file_meta"))
+        source_file_meta = WavAudioFileMeta.deserialize(serialized.pop("source_file_meta"))
         serialized.update({"source_file_meta": source_file_meta})
         return AudioSegmentMeta(**serialized)
 
