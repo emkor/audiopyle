@@ -44,21 +44,21 @@ class Mp3AudioFileMeta(AudioFileMeta):
         self.absolute_path = absolute_path
         self.channels_count = channels_count
         self.sample_rate = sample_rate
-        self.__length_sec = length_sec
-        self.__bit_rate_kbps = bit_rate_kbps
+        self._length_sec = length_sec
+        self._bit_rate_kbps = bit_rate_kbps
 
     @property
     def bit_rate_kbps(self) -> float:
-        return self.__bit_rate_kbps
+        return self._bit_rate_kbps
 
     @property
     def length_sec(self) -> float:
-        return self.__length_sec
+        return self._length_sec
 
     def serialize(self):
         base_serialized = super().serialize()
-        base_serialized.pop("__length_sec")
-        base_serialized.pop("__bit_rate_kbps")
-        base_serialized.update({"length_sec": self.__length_sec,
-                                "bit_rate_kbps": self.__bit_rate_kbps})
+        base_serialized.pop("_length_sec")
+        base_serialized.pop("_bit_rate_kbps")
+        base_serialized.update({"length_sec": self._length_sec,
+                                "bit_rate_kbps": self._bit_rate_kbps})
         return base_serialized
