@@ -4,7 +4,7 @@ from commons.abstractions.model import Model
 from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b
 
 
-class LocalAudioFileMeta(Model):
+class AudioFileMeta(Model):
     def __init__(self, absolute_path: Text, channels_count: int, sample_rate: int, frames_count: int,
                  bit_depth: int) -> None:
         """Represents metadata of a raw audio file"""

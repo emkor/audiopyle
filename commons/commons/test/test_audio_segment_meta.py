@@ -3,14 +3,14 @@ import unittest
 import json
 from assertpy import assert_that
 
-from commons.audio.file_meta import LocalAudioFileMeta
+from commons.audio.file_meta import AudioFileMeta
 from commons.audio.segment import AudioSegmentMeta
 
 
 class AudioSegmentMetaTest(unittest.TestCase):
     def setUp(self):
-        self.audio_file_meta = LocalAudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
-                                                  sample_rate=44100, frames_count=22050, bit_depth=16)
+        self.audio_file_meta = AudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
+                                             sample_rate=44100, frames_count=22050, bit_depth=16)
         self.audio_segment_meta = AudioSegmentMeta(self.audio_file_meta, frame_from=0, frame_to=22049)
 
     def test_should_calculate_properties_correctly(self):
