@@ -30,15 +30,18 @@ class WavAudioFileMeta(AudioFileMeta):
 
     @property
     def length_sec(self) -> float:
-        return frames_to_sec(self.frames_count, self.sample_rate)
+        return round(frames_to_sec(self.frames_count, self.sample_rate), 3)
 
     @property
     def bit_rate_kbps(self) -> float:
-        return B_to_b(to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)) / self.length_sec
+        return round(
+            B_to_b(to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)) / self.length_sec,
+            ndigits=1)
 
 
 class Mp3AudioFileMeta(AudioFileMeta):
-    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, sample_rate: int, length_sec: float,
+    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, sample_rate: int,
+                 length_sec: float,
                  bit_rate_kbps: float) -> None:
         super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
         self.absolute_path = absolute_path
@@ -49,11 +52,11 @@ class Mp3AudioFileMeta(AudioFileMeta):
 
     @property
     def bit_rate_kbps(self) -> float:
-        return self._bit_rate_kbps
+        return round(self._bit_rate_kbps, ndigits=1)
 
     @property
     def length_sec(self) -> float:
-        return self._length_sec
+        return round(self._length_sec, ndigits=3)
 
     def serialize(self):
         base_serialized = super().serialize()

@@ -5,7 +5,7 @@ from billiard.exceptions import SoftTimeLimitExceeded
 
 from commons.audio.audio_tag_providing import read_id3_tag
 from commons.audio.file_meta_providing import read_wav_file_meta
-from commons.audio.segment_providing import read_segment
+from commons.audio.segment_providing import read_wav_segment
 from commons.services.extraction import extract_features, ExtractionRequest
 from commons.services.conversion import copy_or_convert
 from commons.services.uuid_generation import generate_uuid
@@ -25,7 +25,7 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     id3_tag = read_id3_tag(audio_file_absolute_path)
     tmp_audio_file_name = copy_or_convert(audio_file_absolute_path, task_id)
     audio_file_meta = read_wav_file_meta(tmp_audio_file_name)
-    audio_segment = read_segment(audio_file_meta)
+    audio_segment = read_wav_segment(audio_file_meta)
     plugin = build_plugin_from_key(str(request.plugin_key))
     logger.info("Built extraction context: {} {} {}".format(audio_segment, plugin, request.plugin_output))
     logger.info("Starting feature extraction...")
