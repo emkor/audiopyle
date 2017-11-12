@@ -24,10 +24,6 @@ class FileMeta(Model):
         return to_mega(self.size)
 
     @property
-    def file_base_name(self) -> Text:
-        return get_file_name(self.file_name)
-
-    @property
     def extension(self) -> Text:
         return extract_extension(self.file_name)
 
