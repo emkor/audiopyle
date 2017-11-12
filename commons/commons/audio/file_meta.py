@@ -68,9 +68,6 @@ class Mp3AudioFileMeta(AudioFileMeta):
                  length_sec: float,
                  bit_rate_kbps: float) -> None:
         super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
-        self.absolute_path = absolute_path
-        self.channels_count = channels_count
-        self.sample_rate = sample_rate
         self._length_sec = length_sec
         self._bit_rate_kbps = bit_rate_kbps
 

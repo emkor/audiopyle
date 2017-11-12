@@ -8,7 +8,7 @@ services:
 
 before_script:
   - chmod u+x **/*.sh
-  - pip install numpy vamp
+  - pip install numpy vamp assertpy mypy pytest pytest-cov
 
 script:
   - scripts/run_type_check.sh
