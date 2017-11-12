@@ -1,7 +1,8 @@
 import cherrypy
 
 from commons.utils.logger import setup_logger, get_logger
-from coordinator.api.audio import AudioApi, AudioTagApi, TmpAudioApi
+from coordinator.api.audio_file import AudioFileApi
+from coordinator.api.audio_meta import AudioMetaApi, AudioTagApi, TmpAudioApi
 from coordinator.api.automation import AutomationApi
 from coordinator.api.plugin import PluginApi
 from coordinator.api.root import CoordinatorApi
@@ -21,9 +22,10 @@ if __name__ == '__main__':
 
     root_api = CoordinatorApi(logger=logger)
     root_api.plugin = PluginApi(logger=logger)
-    root_api.audio = AudioApi(logger=logger)
-    root_api.audio.tag = AudioTagApi(logger=logger)
+    root_api.audio = AudioFileApi(logger=logger)
     root_api.audio.tmp = TmpAudioApi(logger=logger)
+    root_api.audio.meta = AudioMetaApi(logger=logger)
+    root_api.audio.tag = AudioTagApi(logger=logger)
     root_api.extraction = ExtractionApi(logger=logger)
     root_api.automation = AutomationApi(logger=logger)
 

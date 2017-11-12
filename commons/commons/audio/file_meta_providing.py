@@ -1,14 +1,24 @@
 import wave
 from typing import Text, Optional
 
+import os
 from mutagen.mp3 import MP3
 
-from commons.audio.file_meta import WavAudioFileMeta, Mp3AudioFileMeta
-from commons.utils.conversion import B_to_b, to_kilo
+from commons.audio.file_meta import WavAudioFileMeta, Mp3AudioFileMeta, FileMeta
+from commons.utils.conversion import B_to_b, to_kilo, utc_timestamp_to_datetime
 from commons.utils.file_system import file_exists, file_size_bytes
 from commons.utils.logger import get_logger
 
 logger = get_logger()
+
+
+def read_file_meta(file_name: Text) -> Optional[FileMeta]:
+    file_stats = os.stat(file_name)
+    last_access_utc = utc_timestamp_to_datetime(file_stats.st_atime)
+    last_modification_utc = utc_timestamp_to_datetime(file_stats.st_mtime)
+    created_on_utc = utc_timestamp_to_datetime(file_stats.st_ctime)
+    return FileMeta(file_name=file_name, size=file_stats.st_size, last_access=last_access_utc,
+                    last_modification=last_modification_utc, created_on=created_on_utc)
 
 
 def read_wav_file_meta(absolute_path: Text) -> Optional[WavAudioFileMeta]:
