@@ -12,7 +12,7 @@ class AudioApiTest(TestCase):
 
     def test_should_list_audio_file(self):
         expected_status_code = 200
-        expected_audio_file_count = 2
+        expected_audio_file_count = 1
         response = requests.get(url=self.audio_api_url)
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_response = response.json()
