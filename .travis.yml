@@ -8,9 +8,10 @@ services:
 
 before_script:
   - chmod u+x **/*.sh
-  - pip install tox numpy vamp
+  - pip install numpy vamp
 
 script:
+  - scripts/run_type_check.sh
   - scripts/run_unit_tests.sh
   - scripts/build_base_image.sh
   - scripts/build_app_images.sh

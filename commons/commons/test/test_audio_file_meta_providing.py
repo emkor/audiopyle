@@ -36,7 +36,7 @@ class Mp3AudioFileMetaProvidingTest(unittest.TestCase):
         self.mp3_audio_file_name = get_absolute_path_for_project_file(__file__, TEST_MP3_AUDIO_FILE)
         self.mp3_audio_file_sample_rate = 44100
         self.mp3_audio_file_length_seconds = 2.403
-        self.mp3_audio_file_bit_rate_kbps = 128.
+        self.mp3_audio_file_bit_rate_kbps = 129.4
         self.non_existing_file_name = "/dev/21343983908329089832"
 
     def test_should_create_mp3_audio_file_meta(self):

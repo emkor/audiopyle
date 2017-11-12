@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-cd ./commons && tox && cd ..
-cd ./coordinator && tox && cd ..
-cd ./extractor && tox && cd ..
+cd ./commons && py.test -v --cov=commons && cd ..
+cd ./coordinator && py.test -v --cov=coordinator && cd ..
+cd ./extractor && py.test -v --cov=extractor && cd ..
