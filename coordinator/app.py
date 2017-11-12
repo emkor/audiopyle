@@ -1,8 +1,8 @@
 import cherrypy
 
 from commons.utils.logger import setup_logger, get_logger
-from coordinator.api.audio_file import AudioFileApi
-from coordinator.api.audio_meta import AudioMetaApi, AudioTagApi, TmpAudioApi
+from coordinator.api.audio_file import AudioFileApi, TmpAudioApi
+from coordinator.api.audio_meta import AudioMetaApi, AudioTagApi
 from coordinator.api.automation import AutomationApi
 from coordinator.api.plugin import PluginApi
 from coordinator.api.root import CoordinatorApi
