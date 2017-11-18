@@ -3,7 +3,7 @@ from typing import Text, List
 from commons.abstractions.api import AudiopyleRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.models.plugin import VampyPlugin
-from commons.services.extraction import ExtractionRequest
+from commons.services.feature_extraction import ExtractionRequest
 from commons.services.plugin_providing import list_vampy_plugins
 from commons.utils.env_var import get_environment_variable
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, extract_extension

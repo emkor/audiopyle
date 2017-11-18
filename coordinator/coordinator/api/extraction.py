@@ -1,6 +1,6 @@
 from commons.abstractions.api import AudiopyleRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode, ClientError
-from commons.services.extraction import ExtractionRequest
+from commons.services.feature_extraction import ExtractionRequest
 from commons.services.uuid_generation import generate_uuid
 from extractor.service import run_task, retrieve_result, delete_result
 from extractor.tasks import extract_feature

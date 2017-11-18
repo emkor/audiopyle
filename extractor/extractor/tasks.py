@@ -4,8 +4,8 @@ import os
 from billiard.exceptions import SoftTimeLimitExceeded
 
 from commons.services.audio_tag_providing import read_id3_tag
-from commons.services.conversion import convert_to_wav, generate_output_wav_file_path
-from commons.services.extraction import extract_features, ExtractionRequest
+from commons.services.audio_conversion import convert_to_wav, generate_output_wav_file_path
+from commons.services.feature_extraction import extract_features, ExtractionRequest
 from commons.services.file_meta_providing import read_wav_file_meta
 from commons.services.plugin_providing import build_plugin_from_key
 from commons.services.segment_providing import read_wav_segment
