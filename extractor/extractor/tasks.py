@@ -1,13 +1,13 @@
-import os
 from typing import Any, Text, Dict
 
+import os
 from billiard.exceptions import SoftTimeLimitExceeded
 
-from commons.audio.audio_tag_providing import read_id3_tag
-from commons.audio.file_meta_providing import read_wav_file_meta
-from commons.audio.segment_providing import read_wav_segment
-from commons.services.extraction import extract_features, ExtractionRequest
+from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.conversion import convert_to_wav, generate_output_wav_file_path
+from commons.services.extraction import extract_features, ExtractionRequest
+from commons.services.file_meta_providing import read_wav_file_meta
+from commons.services.segment_providing import read_wav_segment
 from commons.services.uuid_generation import generate_uuid
 from commons.utils.file_system import AUDIO_FILES_DIR, remove_file
 from commons.utils.logger import get_logger

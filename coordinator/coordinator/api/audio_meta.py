@@ -1,7 +1,7 @@
 from commons.abstractions.api import AudiopyleRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.audio.audio_tag_providing import read_id3_tag
-from commons.audio.file_meta_providing import read_mp3_file_meta
+from commons.services.audio_tag_providing import read_id3_tag
+from commons.services.file_meta_providing import read_mp3_file_meta
 from commons.utils.file_system import AUDIO_FILES_DIR, concatenate_paths, extract_extension, file_exists
 
 

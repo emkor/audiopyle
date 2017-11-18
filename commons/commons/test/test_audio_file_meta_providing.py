@@ -3,7 +3,7 @@ from datetime import datetime
 
 from assertpy import assert_that
 
-from commons.audio.file_meta_providing import read_wav_file_meta, read_mp3_file_meta, read_file_meta
+from commons.services.file_meta_providing import read_wav_file_meta, read_mp3_file_meta, read_file_meta
 from commons.test.utils import get_absolute_path_for_project_file, TEST_WAV_AUDIO_FILE, TEST_MP3_AUDIO_FILE
 
 
