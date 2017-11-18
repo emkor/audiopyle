@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.audio.audio_tag import Id3Tag
+from commons.models.audio_tag import Id3Tag
 from commons.services.audio_tag_providing import read_id3_tag
 from commons.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDIO_FILE, TEST_WAV_AUDIO_FILE
 

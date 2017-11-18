@@ -3,7 +3,7 @@ from typing import Text, Optional
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import ID3NoHeaderError
 
-from commons.audio.audio_tag import Id3Tag
+from commons.models.audio_tag import Id3Tag
 from commons.utils.conversion import first_if_collection, safe_cast
 from commons.utils.logger import get_logger
 

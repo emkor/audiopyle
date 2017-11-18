@@ -3,8 +3,8 @@ import unittest
 import json
 from assertpy import assert_that
 
-from commons.audio.file_meta import WavAudioFileMeta
-from commons.audio.segment import AudioSegmentMeta
+from commons.models.file_meta import WavAudioFileMeta
+from commons.models.segment import AudioSegmentMeta
 
 
 class AudioSegmentMetaTest(unittest.TestCase):

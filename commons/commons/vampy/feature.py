@@ -3,7 +3,7 @@ from typing import Text, List, Tuple, Optional
 import numpy
 
 from commons.abstractions.model import Model
-from commons.audio.segment import AudioSegmentMeta
+from commons.models.segment import AudioSegmentMeta
 from commons.utils.conversion import sec_to_frames
 from commons.vampy.plugin import VampyPlugin
 

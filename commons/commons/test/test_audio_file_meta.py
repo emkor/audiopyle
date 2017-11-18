@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from commons.audio.file_meta import WavAudioFileMeta, Mp3AudioFileMeta
+from commons.models.file_meta import WavAudioFileMeta, Mp3AudioFileMeta
 
 
 class WavAudioFileMetaTest(unittest.TestCase):

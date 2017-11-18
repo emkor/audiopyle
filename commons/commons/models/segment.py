@@ -3,7 +3,7 @@ from typing import Any, Text, Dict
 from numpy.core.multiarray import ndarray
 
 from commons.abstractions.model import Model
-from commons.audio.file_meta import AudioFileMeta, WavAudioFileMeta
+from commons.models.file_meta import AudioFileMeta, WavAudioFileMeta
 from commons.utils.conversion import frames_to_sec
 
 

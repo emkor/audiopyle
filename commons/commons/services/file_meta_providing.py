@@ -4,7 +4,7 @@ from typing import Text, Optional
 import os
 from mutagen.mp3 import MP3
 
-from commons.audio.file_meta import WavAudioFileMeta, Mp3AudioFileMeta, FileMeta
+from commons.models.file_meta import WavAudioFileMeta, Mp3AudioFileMeta, FileMeta
 from commons.utils.conversion import B_to_b, to_kilo, utc_timestamp_to_datetime
 from commons.utils.file_system import file_exists, file_size_bytes, get_file_name
 from commons.utils.logger import get_logger
