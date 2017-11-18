@@ -4,9 +4,9 @@ from commons.abstractions.api import AudiopyleRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.models.plugin import VampyPlugin
 from commons.services.extraction import ExtractionRequest
+from commons.services.plugin_providing import list_vampy_plugins
 from commons.utils.env_var import get_environment_variable
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, extract_extension
-from commons.vampy.plugin_providing import list_vampy_plugins
 from extractor.service import run_task
 from extractor.tasks import extract_feature
 
