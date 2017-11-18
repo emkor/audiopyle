@@ -1,9 +1,9 @@
 from typing import Text, List, Optional
-
-import vamp
 from vampyhost import get_library_for
 
-from commons.vampy.plugin import VampyPlugin
+import vamp
+
+from commons.models.plugin import VampyPlugin
 
 
 def build_plugin_from_key(key: Text) -> VampyPlugin:

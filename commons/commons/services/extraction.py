@@ -3,11 +3,11 @@ from typing import Text, Dict, Any
 import vamp
 
 from commons.abstractions.model import Model
+from commons.models.feature import VampyFeatureMeta, VampyVariableStepFeature, VampyConstantStepFeature, StepFeature
+from commons.models.plugin import VampyPlugin
 from commons.models.segment import MonoAudioSegment
 from commons.services.uuid_generation import generate_uuid
 from commons.utils.logger import get_logger
-from commons.vampy.feature import VampyFeatureMeta, VampyVariableStepFeature, VampyConstantStepFeature, StepFeature
-from commons.vampy.plugin import VampyPlugin
 
 logger = get_logger()
 
