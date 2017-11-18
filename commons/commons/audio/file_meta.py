@@ -3,7 +3,7 @@ from typing import Text
 
 from commons.abstractions.model import Model
 from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b, to_mega
-from commons.utils.file_system import get_file_name, extract_extension
+from commons.utils.file_system import extract_extension
 
 
 class FileMeta(Model):

@@ -3,7 +3,7 @@ from typing import Optional, Any, Text, Dict, Callable
 
 import cherrypy
 
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpMethod, ClientError, ServerError
+from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpMethod, ClientError
 from commons.utils.conversion import seconds_between
 from commons.utils.logger import get_logger
 from commons.utils.serialization import to_json

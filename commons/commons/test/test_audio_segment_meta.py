@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from commons.audio.file_meta import AudioFileMeta, WavAudioFileMeta
+from commons.audio.file_meta import WavAudioFileMeta
 from commons.audio.segment import AudioSegmentMeta
 
 

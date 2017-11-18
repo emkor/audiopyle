@@ -1,7 +1,7 @@
 import calendar
 import math
 from datetime import datetime
-from typing import Text, Any, Type, List, Union, Iterable
+from typing import Text, Any, Type, List, Union
 
 from pympler.asizeof import asizeof
 
