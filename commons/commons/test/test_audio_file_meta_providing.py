@@ -57,7 +57,7 @@ class Mp3AudioFileMetaProvidingTest(unittest.TestCase):
         self.mp3_audio_file_name = get_absolute_path_for_project_file(__file__, TEST_MP3_AUDIO_FILE)
         self.mp3_audio_file_sample_rate = 44100
         self.mp3_audio_file_length_seconds = 2.403
-        self.mp3_audio_file_bit_rate_kbps = 129.4
+        self.mp3_audio_file_bit_rate_kbps_between = 127.0, 130.0
         self.non_existing_file_name = "/dev/21343983908329089832"
 
     def test_should_create_mp3_audio_file_meta(self):
@@ -66,7 +66,8 @@ class Mp3AudioFileMetaProvidingTest(unittest.TestCase):
         assert_that(mp3_audio_file_meta.channels_count).is_equal_to(1)
         assert_that(mp3_audio_file_meta.sample_rate).is_equal_to(self.mp3_audio_file_sample_rate)
         assert_that(mp3_audio_file_meta.absolute_path).is_equal_to(self.mp3_audio_file_name)
-        assert_that(mp3_audio_file_meta.bit_rate_kbps).is_equal_to(self.mp3_audio_file_bit_rate_kbps)
+        assert_that(mp3_audio_file_meta.bit_rate_kbps).is_between(self.mp3_audio_file_bit_rate_kbps_between[0],
+                                                                  self.mp3_audio_file_bit_rate_kbps_between[1])
         assert_that(mp3_audio_file_meta.length_sec).is_equal_to(self.mp3_audio_file_length_seconds)
 
     def test_should_return_none_on_non_existing_file(self):
