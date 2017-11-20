@@ -1,7 +1,6 @@
 import os
 import shutil
 
-from os.path import isfile, join
 from typing import Text, List
 
 AUDIO_FILES_DIR = "/audio"
@@ -12,8 +11,8 @@ def file_exists(absolute_path: Text) -> bool:
     return os.path.exists(absolute_path)
 
 
-def concatenate_paths(path: Text, file_name: Text) -> Text:
-    return os.path.join(path, file_name)
+def concatenate_paths(base_path: Text, file_name: Text) -> Text:
+    return os.path.join(base_path, file_name)
 
 
 def get_file_name(absolute_path: Text) -> Text:
@@ -22,7 +21,7 @@ def get_file_name(absolute_path: Text) -> Text:
 
 
 def list_files(path: Text = "/") -> List[Text]:
-    return [f for f in os.listdir(path) if isfile(join(path, f))]
+    return [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
 
 
 def copy_file(source: Text, destination: Text) -> None:
@@ -35,3 +34,7 @@ def extract_extension(file_path: Text) -> Text:
 
 def remove_file(file_path: Text) -> None:
     os.remove(file_path)
+
+
+def file_size_bytes(absolute_path: Text) -> int:
+    return os.path.getsize(absolute_path)

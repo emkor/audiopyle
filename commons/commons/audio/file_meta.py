@@ -1,20 +1,19 @@
-import os
 from datetime import datetime
 from typing import Text
 
 from commons.abstractions.model import Model
-from commons.utils.conversion import utc_timestamp_to_datetime, to_kilo, to_mega, b_to_B, frames_to_sec, B_to_b
-from commons.utils.file_system import extract_extension, get_file_name
+from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b, to_mega
+from commons.utils.file_system import extract_extension
 
 
 class FileMeta(Model):
     def __init__(self, file_name: Text, size: int, last_access: datetime, last_modification: datetime,
                  created_on: datetime) -> None:
+        self.file_name = file_name
         self.created_on = created_on
         self.last_modification = last_modification
         self.last_access = last_access
         self.size = size
-        self.file_name = file_name
 
     @property
     def size_kB(self) -> float:
@@ -25,44 +24,65 @@ class FileMeta(Model):
         return to_mega(self.size)
 
     @property
-    def file_base_name(self) -> Text:
-        return get_file_name(self.file_name)
-
-    @property
     def extension(self) -> Text:
         return extract_extension(self.file_name)
 
 
-def get_file_meta(file_name: Text) -> FileMeta:
-    file_stats = os.stat(file_name)
-    last_access_utc = utc_timestamp_to_datetime(file_stats.st_atime)
-    last_modification_utc = utc_timestamp_to_datetime(file_stats.st_mtime)
-    created_on_utc = utc_timestamp_to_datetime(file_stats.st_ctime)
-    return FileMeta(file_name=file_name, size=file_stats.st_size, last_access=last_access_utc,
-                    last_modification=last_modification_utc, created_on=created_on_utc)
-
-
 class AudioFileMeta(Model):
-    def __init__(self, file_name: Text, channels_count: int, sample_rate: int, frames_count: int,
-                 bit_depth: int) -> None:
+    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, sample_rate: int) -> None:
         """Represents metadata of a raw audio file"""
-        self.file_name = file_name
+        self.absolute_path = absolute_path
         self.channels_count = channels_count
         self.sample_rate = sample_rate
+        self.file_size_bytes = file_size_bytes
+
+    @property
+    def length_sec(self) -> float:
+        raise NotImplementedError()
+
+    @property
+    def bit_rate_kbps(self) -> float:
+        raise NotImplementedError()
+
+
+class WavAudioFileMeta(AudioFileMeta):
+    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, bit_depth: int,
+                 sample_rate: int, frames_count: int) -> None:
+        super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
         self.frames_count = frames_count
         self.bit_depth = bit_depth
 
+    @property
     def length_sec(self) -> float:
-        return frames_to_sec(self.frames_count, self.sample_rate)
+        return round(frames_to_sec(self.frames_count, self.sample_rate), 3)
 
-    def avg_kbps(self) -> float:
-        return B_to_b(to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)) / self.length_sec()
+    @property
+    def bit_rate_kbps(self) -> float:
+        return round(
+            B_to_b(to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)) / self.length_sec,
+            ndigits=1)
 
 
-class LocalAudioFileMeta(AudioFileMeta):
-    def __init__(self, absolute_path: Text, channels_count: int, sample_rate: int, frames_count: int,
-                 bit_depth: int) -> None:
-        """Represents metadata of a raw audio file"""
-        super(LocalAudioFileMeta, self).__init__(get_file_name(absolute_path), channels_count, sample_rate,
-                                                 frames_count, bit_depth)
-        self.absolute_path = absolute_path
+class Mp3AudioFileMeta(AudioFileMeta):
+    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, sample_rate: int,
+                 length_sec: float,
+                 bit_rate_kbps: float) -> None:
+        super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
+        self._length_sec = length_sec
+        self._bit_rate_kbps = bit_rate_kbps
+
+    @property
+    def bit_rate_kbps(self) -> float:
+        return round(self._bit_rate_kbps, ndigits=1)
+
+    @property
+    def length_sec(self) -> float:
+        return round(self._length_sec, ndigits=3)
+
+    def serialize(self):
+        base_serialized = super().serialize()
+        base_serialized.pop("_length_sec")
+        base_serialized.pop("_bit_rate_kbps")
+        base_serialized.update({"length_sec": self._length_sec,
+                                "bit_rate_kbps": self._bit_rate_kbps})
+        return base_serialized
