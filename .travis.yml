@@ -8,7 +8,8 @@ services:
 
 before_script:
   - chmod u+x **/*.sh
-  - pip install numpy vamp tox mypy
+  - scripts/install_os_deps.sh
+  - scripts/install_build_deps.sh
 
 script:
   - scripts/run_type_check.sh
