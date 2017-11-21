@@ -36,7 +36,7 @@ def _map_feature(feature_meta: VampyFeatureAbstraction, extracted_data: Dict[Tex
         value_list = [StepFeature(f.get("timestamp").to_float(), f.get("values"), f.get("label") or None)
                       for f in extracted_data.get("list")]
         return VampyVariableStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,
-                                        plugin_output=feature_meta.plugin_output, value_list=value_list)
+                                        plugin_output=feature_meta.plugin_output, step_features=value_list)
     elif data_type in ("vector", "matrix"):
         data = extracted_data.get("vector") or extracted_data.get("matrix")
         return VampyConstantStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,

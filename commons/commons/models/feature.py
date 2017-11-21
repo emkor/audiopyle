@@ -79,15 +79,21 @@ class StepFeature(Model):
 
     def serialize(self):
         super_serialized = super(StepFeature, self).serialize()
-        super_serialized.update({"values": self.values.tolist() if self.values else None})
+        super_serialized.update({"values": self.values.tolist()})
         return super_serialized
+    
+    @classmethod
+    def deserialize(cls, serialized: Dict[Text, Any]):
+        values = serialized.pop("values")
+        serialized.update({"values": numpy.asarray(values)})
+        return StepFeature(**serialized)
 
 
 class VampyVariableStepFeature(VampyFeatureAbstraction):
     def __init__(self, vampy_plugin: VampyPlugin, segment_meta: AudioSegmentMeta, plugin_output: Text,
-                 value_list: List[StepFeature]) -> None:
+                 step_features: List[StepFeature]) -> None:
         super(VampyVariableStepFeature, self).__init__(vampy_plugin, segment_meta, plugin_output)
-        self.step_features = value_list
+        self.step_features = step_features
 
     def frames(self) -> List[int]:
         return [sec_to_frames(step_feature.timestamp, self.segment_meta.source_file_meta.sample_rate)
@@ -105,5 +111,16 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
 
     def serialize(self):
         super_serialized = super(VampyVariableStepFeature, self).serialize()
-        super_serialized.update({"step_features": [s.serialize() for s in self.step_features]})
+        super_serialized.update({"value_list": [s.serialize() for s in self.step_features]})
         return super_serialized
+
+    @classmethod
+    def deserialize(cls, serialized: Dict[Text, Any]):
+        vampy_plugin = VampyPlugin.deserialize(serialized.pop("vampy_plugin"))
+        segment_meta = AudioSegmentMeta.deserialize(serialized.pop("segment_meta"))
+        step_features_serialized = numpy.asarray(serialized.pop("value_list"))
+        step_features = [StepFeature.deserialize(sf) for sf in step_features_serialized]
+        serialized.update({"vampy_plugin": vampy_plugin,
+                           "segment_meta": segment_meta,
+                           "step_features": step_features})
+        return VampyVariableStepFeature(**serialized)
