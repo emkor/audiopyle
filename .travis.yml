@@ -8,8 +8,8 @@ services:
 
 before_script:
   - chmod u+x **/*.sh
-  - scripts/install_os_deps.sh
-  - scripts/install_build_deps.sh
+  - scripts/install_os_build_deps.sh
+  - scripts/install_py_build_deps.sh
 
 script:
   - scripts/run_type_check.sh
