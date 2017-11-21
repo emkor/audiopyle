@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-apt-get install -y libav-tools
+sudo apt-get install -y libav-tools
