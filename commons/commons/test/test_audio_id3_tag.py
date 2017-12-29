@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from commons.audio.audio_tag import Id3Tag
+from commons.models.audio_tag import Id3Tag
 
 
 class AudioFileId3TagTest(unittest.TestCase):

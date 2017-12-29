@@ -1,6 +1,6 @@
 from commons.abstractions.api import AudiopyleRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.vampy.plugin_providing import list_vampy_plugins
+from commons.services.plugin_providing import list_vampy_plugins
 
 
 class PluginApi(AudiopyleRestApi):

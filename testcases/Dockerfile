@@ -17,4 +17,4 @@ RUN pip install -r ./requirements.txt
 # INSTALL AUDIOPYLE TESTCASES
 RUN pip install .
 
-ENTRYPOINT sleep $AUDIOPYLE_BOOT_TIME && nosetests -v
+ENTRYPOINT sleep $AUDIOPYLE_BOOT_TIME && pytest -v

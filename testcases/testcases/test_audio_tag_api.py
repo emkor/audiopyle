@@ -3,7 +3,7 @@ from unittest import TestCase
 import requests
 from assertpy import assert_that
 
-from commons.audio.audio_tag import Id3Tag
+from commons.models.audio_tag import Id3Tag
 from testcases.utils import get_service_host_name
 
 

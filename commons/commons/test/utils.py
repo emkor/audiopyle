@@ -1,5 +1,7 @@
 import os
 
+from commons.utils.file_system import concatenate_paths
+
 TEST_WAV_AUDIO_FILE = "resources/audio/102bpm_drum_loop_mono_44.1k.wav"
 TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop_mono_44.1k.mp3"
 
@@ -11,7 +13,7 @@ def get_absolute_path_for_project_file(caller_file_object, project_file_path):
     :type project_file_path: str
     :rtype: str
     """
-    return os.path.join(get_audiopyle_root_dir(caller_file_object), project_file_path)
+    return concatenate_paths(get_audiopyle_root_dir(caller_file_object), project_file_path)
 
 
 def get_audiopyle_root_dir(test_file_object):
@@ -23,4 +25,4 @@ def get_audiopyle_root_dir(test_file_object):
     """
     current_test_directory = os.path.dirname(os.path.realpath(test_file_object))
     code_directory, audiopyle_directory, _ = current_test_directory.partition("audiopyle/")
-    return os.path.join(code_directory, audiopyle_directory)
+    return concatenate_paths(code_directory, audiopyle_directory)

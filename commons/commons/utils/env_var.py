@@ -20,3 +20,4 @@ def get_environment_variable(variable_name: Text, expected_type: Type, default: 
             return default
     else:
         logger.warning("Variable {} was not set. Using default: {}".format(variable_name, default))
+        return default

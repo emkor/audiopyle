@@ -1,14 +1,14 @@
-from typing import Text, List, Tuple, Optional
+from typing import Text, List, Tuple, Optional, Dict, Any
 
 import numpy
 
 from commons.abstractions.model import Model
-from commons.audio.segment import AudioSegmentMeta
+from commons.models.plugin import VampyPlugin
+from commons.models.segment import AudioSegmentMeta
 from commons.utils.conversion import sec_to_frames
-from commons.vampy.plugin import VampyPlugin
 
 
-class VampyFeatureMeta(Model):
+class VampyFeatureAbstraction(Model):
     def __init__(self, vampy_plugin: VampyPlugin, segment_meta: AudioSegmentMeta, plugin_output: Text) -> None:
         self.vampy_plugin = vampy_plugin
         self.segment_meta = segment_meta
@@ -32,7 +32,7 @@ class VampyFeatureMeta(Model):
                 "plugin_output": self.plugin_output}
 
 
-class VampyConstantStepFeature(VampyFeatureMeta):
+class VampyConstantStepFeature(VampyFeatureAbstraction):
     def __init__(self, vampy_plugin: VampyPlugin, segment_meta: AudioSegmentMeta, plugin_output: Text,
                  time_step: float, matrix: numpy.ndarray) -> None:
         super(VampyConstantStepFeature, self).__init__(vampy_plugin, segment_meta, plugin_output)
@@ -43,7 +43,7 @@ class VampyConstantStepFeature(VampyFeatureMeta):
         return [i * self._step_as_frames() for i in range(0, len(self._matrix))]
 
     def timestamps(self) -> List[float]:
-        return [i * self._step_as_sec() for i in range(0, len(self._matrix))]
+        return [i * self._time_step for i in range(0, len(self._matrix))]
 
     def values(self) -> numpy.ndarray:
         return self._matrix
@@ -51,17 +51,24 @@ class VampyConstantStepFeature(VampyFeatureMeta):
     def value_shape(self) -> Tuple[int, int]:
         return (self._matrix.shape[0], 1) if len(self._matrix.shape) < 2 else self._matrix.shape
 
-    def _step_as_sec(self) -> float:
-        return self._time_step
-
     def _step_as_frames(self) -> int:
-        return sec_to_frames(self._step_as_sec(), self.segment_meta.source_file_meta.sample_rate)
+        return sec_to_frames(self._time_step, self.segment_meta.source_file_meta.sample_rate)
 
     def serialize(self):
         super_serialized = super(VampyConstantStepFeature, self).serialize()
-        super_serialized.update({"_time_step": self._time_step,
-                                 "_matrix": self._matrix.tolist()})
+        super_serialized.update({"matrix": self._matrix.tolist(),
+                                 "time_step": self._time_step})
         return super_serialized
+
+    @classmethod
+    def deserialize(cls, serialized: Dict[Text, Any]):
+        vampy_plugin = VampyPlugin.deserialize(serialized.pop("vampy_plugin"))
+        segment_meta = AudioSegmentMeta.deserialize(serialized.pop("segment_meta"))
+        _matrix = numpy.asarray(serialized.pop("matrix"))
+        serialized.update({"vampy_plugin": vampy_plugin,
+                           "segment_meta": segment_meta,
+                           "matrix": _matrix})
+        return VampyConstantStepFeature(**serialized)
 
 
 class StepFeature(Model):
@@ -72,15 +79,21 @@ class StepFeature(Model):
 
     def serialize(self):
         super_serialized = super(StepFeature, self).serialize()
-        super_serialized.update({"values": self.values.tolist() if self.values else None})
+        super_serialized.update({"values": self.values.tolist()})
         return super_serialized
+    
+    @classmethod
+    def deserialize(cls, serialized: Dict[Text, Any]):
+        values = serialized.pop("values")
+        serialized.update({"values": numpy.asarray(values)})
+        return StepFeature(**serialized)
 
 
-class VampyVariableStepFeature(VampyFeatureMeta):
+class VampyVariableStepFeature(VampyFeatureAbstraction):
     def __init__(self, vampy_plugin: VampyPlugin, segment_meta: AudioSegmentMeta, plugin_output: Text,
-                 value_list: List[StepFeature]) -> None:
+                 step_features: List[StepFeature]) -> None:
         super(VampyVariableStepFeature, self).__init__(vampy_plugin, segment_meta, plugin_output)
-        self.step_features = value_list
+        self.step_features = step_features
 
     def frames(self) -> List[int]:
         return [sec_to_frames(step_feature.timestamp, self.segment_meta.source_file_meta.sample_rate)
@@ -98,5 +111,16 @@ class VampyVariableStepFeature(VampyFeatureMeta):
 
     def serialize(self):
         super_serialized = super(VampyVariableStepFeature, self).serialize()
-        super_serialized.update({"step_features": [s.serialize() for s in self.step_features]})
+        super_serialized.update({"value_list": [s.serialize() for s in self.step_features]})
         return super_serialized
+
+    @classmethod
+    def deserialize(cls, serialized: Dict[Text, Any]):
+        vampy_plugin = VampyPlugin.deserialize(serialized.pop("vampy_plugin"))
+        segment_meta = AudioSegmentMeta.deserialize(serialized.pop("segment_meta"))
+        step_features_serialized = numpy.asarray(serialized.pop("value_list"))
+        step_features = [StepFeature.deserialize(sf) for sf in step_features_serialized]
+        serialized.update({"vampy_plugin": vampy_plugin,
+                           "segment_meta": segment_meta,
+                           "step_features": step_features})
+        return VampyVariableStepFeature(**serialized)

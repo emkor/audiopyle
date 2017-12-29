@@ -5,8 +5,8 @@ from typing import List
 import numpy
 from numpy import array
 
-from commons.audio.file_meta import WavAudioFileMeta
-from commons.audio.segment import MonoAudioSegment
+from commons.models.file_meta import WavAudioFileMeta
+from commons.models.segment import MonoAudioSegment
 from commons.utils.logger import get_logger
 
 logger = get_logger()

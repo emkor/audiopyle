@@ -1,9 +1,9 @@
 from unittest import TestCase
-from assertpy import assert_that
 
 import requests
+from assertpy import assert_that
 
-from commons.vampy.plugin import VampyPlugin
+from commons.models.plugin import VampyPlugin
 from testcases.utils import get_service_host_name
 
 

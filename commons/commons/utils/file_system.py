@@ -21,7 +21,7 @@ def get_file_name(absolute_path: Text) -> Text:
 
 
 def list_files(path: Text = "/") -> List[Text]:
-    return [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+    return [f for f in os.listdir(path) if os.path.isfile(concatenate_paths(path, f))]
 
 
 def copy_file(source: Text, destination: Text) -> None:
