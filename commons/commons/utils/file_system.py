@@ -5,6 +5,7 @@ from typing import Text, List
 
 AUDIO_FILES_DIR = "/audio"
 TMP_DIR = "/audio_tmp"
+RESULTS_DIR = "/root/result"
 
 
 def file_exists(absolute_path: Text) -> bool:
