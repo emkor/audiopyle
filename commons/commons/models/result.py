@@ -4,7 +4,7 @@ from enum import Enum
 
 from commons.abstractions.model import Model
 from commons.models.audio_tag import Id3Tag
-from commons.models.file_meta import FileMeta, AudioFileMeta
+from commons.models.file_meta import FileMeta, Mp3AudioFileMeta, WavAudioFileMeta
 
 
 class ResultVersion(Enum):
@@ -36,23 +36,27 @@ class AnalysisResultData(Model):
 
 
 class AnalysisResult(Model):
-    def __init__(self, file_meta: FileMeta, audio_meta: AudioFileMeta,
+    def __init__(self, file_meta: FileMeta, audio_meta: Mp3AudioFileMeta, raw_audio_meta: WavAudioFileMeta,
                  id3_tag: Id3Tag, data: AnalysisResultData):
         self.file_meta = file_meta
         self.audio_meta = audio_meta
+        self.raw_audio_meta = raw_audio_meta
         self.id3_tag = id3_tag
         self.data = data
 
     def serialize(self):
         return {"file_meta": self.file_meta.serialize(), "audio_meta": self.audio_meta.serialize(),
-                "id3_tag": self.id3_tag.serialize(), "data": self.data.serialize()}
+                "raw_audio_meta": self.raw_audio_meta.serialize(), "id3_tag": self.id3_tag.serialize(),
+                "data": self.data.serialize()}
 
     @classmethod
     def deserialize(cls, serialized: Dict[Text, Any]):
         file_meta_object = FileMeta.deserialize(serialized.get("file_meta"))
-        audio_meta_object = AudioFileMeta.deserialize(serialized.get("audio_meta"))
+        audio_meta_object = Mp3AudioFileMeta.deserialize(serialized.get("audio_meta"))
+        raw_audio_meta_object = WavAudioFileMeta.deserialize(serialized.get("raw_audio_meta"))
         id3_tag_object = Id3Tag.deserialize(serialized.get("id3_tag"))
         result_data_object = AnalysisResultData.deserialize(serialized.get("data"))
         serialized.update({"file_meta": file_meta_object, "audio_meta": audio_meta_object,
-                           "id3_tag": id3_tag_object, "data": result_data_object})
-        return AnalysisResultData(**serialized)
+                           "raw_audio_meta": raw_audio_meta_object, "id3_tag": id3_tag_object,
+                           "data": result_data_object})
+        return AnalysisResult(**serialized)
