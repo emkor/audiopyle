@@ -16,6 +16,7 @@ WORKDIR /audiopyle/extractor
 RUN mkdir /audio
 RUN mkdir /audio_tmp
 RUN mkdir /root/vamp
+RUN mkdir /root/result
 
 # ESPOSE PORTS
 EXPOSE 8080
