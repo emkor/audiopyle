@@ -17,10 +17,10 @@ class AudioApiTest(TestCase):
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_response = response.json()
         assert_that(actual_response).is_length(expected_audio_file_count)
-        assert_that(actual_response[0].get("file_name")).is_not_empty()
-        assert_that(actual_response[0].get("created_on")).is_not_empty()
-        assert_that(actual_response[0].get("last_modification")).is_not_empty()
-        assert_that(actual_response[0].get("last_access")).is_not_empty()
+        assert_that(actual_response[0].get("file_name")).is_not_none()
+        assert_that(actual_response[0].get("created_on")).is_not_none()
+        assert_that(actual_response[0].get("last_modification")).is_not_none()
+        assert_that(actual_response[0].get("last_access")).is_not_none()
 
 
 class AudioMetaApiTest(TestCase):
