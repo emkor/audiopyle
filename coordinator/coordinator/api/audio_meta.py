@@ -10,7 +10,7 @@ class AudioMetaApi(AudiopyleRestApi):
         audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, request.query_params.get("file"))
         if file_exists(audio_file_absolute_path):
             audio_files_meta = read_mp3_file_meta(audio_file_absolute_path)
-            return ApiResponse(HttpStatusCode.ok, audio_files_meta)
+            return ApiResponse(HttpStatusCode.ok, audio_files_meta.to_serializable())
         else:
             return ApiResponse(HttpStatusCode.not_found,
                                "Given file: {} does not exist".format(audio_file_absolute_path))

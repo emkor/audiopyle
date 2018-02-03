@@ -8,7 +8,7 @@ from commons.utils.file_system import list_files, AUDIO_FILES_DIR, concatenate_p
 class AudioFileApi(AudiopyleRestApi):
     def get(self, request: ApiRequest) -> ApiResponse:
         absolute_files_paths = [concatenate_paths(AUDIO_FILES_DIR, f) for f in list_files(AUDIO_FILES_DIR)]
-        audio_files_metas = list(map(lambda p: read_file_meta(p), absolute_files_paths))
+        audio_files_metas = list(map(lambda p: read_file_meta(p).to_serializable(), absolute_files_paths))
         return ApiResponse(HttpStatusCode.ok, audio_files_metas)
 
 
@@ -16,7 +16,7 @@ class TmpAudioApi(AudiopyleRestApi):
     def get(self, request: ApiRequest) -> ApiResponse:
         absolute_files_paths = [concatenate_paths(TMP_DIR, f) for f in list_files(TMP_DIR)]
         wav_absolute_file_paths = [f for f in absolute_files_paths if extract_extension(f) == "wav"]
-        audio_files_metas = list(map(lambda p: read_file_meta(p), wav_absolute_file_paths))
+        audio_files_metas = list(map(lambda p: read_file_meta(p).to_serializable(), wav_absolute_file_paths))
         return ApiResponse(HttpStatusCode.ok, audio_files_metas)
 
     def delete(self, request: ApiRequest):

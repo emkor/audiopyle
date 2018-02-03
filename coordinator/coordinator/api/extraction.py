@@ -15,7 +15,7 @@ class ExtractionApi(AudiopyleRestApi):
             self.logger.info("Querying result of {}...".format(task_id))
             extraction_result = retrieve_result(task_id)
             self.logger.info("Returning result of {}: {}".format(task_id, extraction_result.status))
-            return ApiResponse(HttpStatusCode.ok, extraction_result)
+            return ApiResponse(HttpStatusCode.ok, extraction_result.to_serializable())
         else:
             raise NO_TASK_ID_IN_QUERY_PARAM
 

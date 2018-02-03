@@ -9,7 +9,7 @@ class AudioApi(AudiopyleRestApi):
     def get(self, request: ApiRequest) -> ApiResponse:
         absolute_files_paths = [concatenate_paths(AUDIO_FILES_DIR, f) for f in list_files(AUDIO_FILES_DIR)]
         mp3_absolute_file_paths = [f for f in absolute_files_paths if extract_extension(f) == "mp3"]
-        audio_files_metas = list(map(lambda p: read_mp3_file_meta(p), mp3_absolute_file_paths))
+        audio_files_metas = list(map(lambda p: read_mp3_file_meta(p).to_serializable(), mp3_absolute_file_paths))
         return ApiResponse(HttpStatusCode.ok, audio_files_metas)
 
 
