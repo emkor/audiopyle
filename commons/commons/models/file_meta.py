@@ -1,8 +1,9 @@
 from datetime import datetime
-from typing import Text
+from typing import Text, Dict, Any
 
 from commons.abstractions.model import Model
-from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b, to_mega
+from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b, to_mega, utc_datetime_to_timestamp, \
+    utc_timestamp_to_datetime
 from commons.utils.file_system import extract_extension
 
 
@@ -26,6 +27,22 @@ class FileMeta(Model):
     @property
     def extension(self) -> Text:
         return extract_extension(self.file_name)
+
+    def serialize(self):
+        base_serialized = super().serialize()
+        base_serialized.update({"created_on": utc_datetime_to_timestamp(self.created_on),
+                                "last_modification": utc_datetime_to_timestamp(self.last_modification),
+                                "last_access": utc_datetime_to_timestamp(self.last_access)})
+        return base_serialized
+
+    @classmethod
+    def deserialize(cls, serialized: Dict[Text, Any]):
+        serialized.update({
+            "created_on": utc_timestamp_to_datetime(serialized["created_on"]),
+            "last_modification": utc_timestamp_to_datetime(serialized["last_modification"]),
+            "last_access": utc_timestamp_to_datetime(serialized["last_access"])
+        })
+        return FileMeta(**serialized)
 
 
 class AudioFileMeta(Model):

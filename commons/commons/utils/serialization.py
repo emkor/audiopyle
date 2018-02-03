@@ -24,7 +24,7 @@ class DeserializationError(Exception):
 
 
 def to_json(v: Any) -> Text:
-    return json.dumps(v, default=custom_handling)
+    return json.dumps(v)
 
 
 def from_json(input_json: Text, target_class: Type[Model]) -> Model:
@@ -33,20 +33,3 @@ def from_json(input_json: Text, target_class: Type[Model]) -> Model:
         return target_class.deserialize(serialized)
     except Exception as e:
         raise DeserializationError(e, input_json=serialized, target_class=target_class)
-
-
-def custom_handling(v: Any) -> Any:
-    if isinstance(v, Model):
-        return v.serialize()
-    if isinstance(v, datetime.datetime):
-        return v.isoformat()
-    elif isinstance(v, Decimal):
-        return float(v)
-    elif isinstance(v, set):
-        return list(v)
-    elif isinstance(v, ndarray):
-        return v.tolist()
-    elif isinstance(v, RealTime):
-        return v.to_float()
-    else:
-        return v.__dict__

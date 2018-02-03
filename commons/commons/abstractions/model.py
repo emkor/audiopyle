@@ -13,7 +13,7 @@ class Model(object):
         return copy(self.__dict__)
 
     def __str__(self) -> Text:
-        return "<{}: {}>".format(self.__class__.__name__, self.__dict__)
+        return "<{}: {} {}>".format(self.__class__.__name__, self.__dict__, self.size_humanized())
 
     def __repr__(self) -> Text:
         return self.__str__()
