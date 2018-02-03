@@ -20,14 +20,14 @@ class AudioPluginModelTest(unittest.TestCase):
         assert_that(self.vampy_plugin.provider).is_equal_to(self.test_plugin_provider)
 
     def test_should_serialize_and_deserialize_plugin(self):
-        serialized = self.vampy_plugin.serialize()
+        serialized = self.vampy_plugin.to_serializable()
         assert_that(serialized).is_not_none().is_not_empty()
-        from_serialized = VampyPlugin.deserialize(serialized)
+        from_serialized = VampyPlugin.from_serializable(serialized)
 
         assert_that(from_serialized).is_not_none().is_equal_to(self.vampy_plugin)
 
     def test_should_serialize_plugin_to_json(self):
-        plugin_as_json = json.dumps(self.vampy_plugin.serialize())
+        plugin_as_json = json.dumps(self.vampy_plugin.to_serializable())
         assert_that(plugin_as_json).is_not_none().is_not_empty()
 
     def test_should_have_size_defined(self):

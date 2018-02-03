@@ -22,4 +22,4 @@ class PluginApiTest(TestCase):
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_response = response.json()
         assert_that(actual_response).is_length(expected_plugin_count)
-        assert_that(actual_response).contains(expected_first_plugin.serialize())
+        assert_that(actual_response).contains(expected_first_plugin.to_serializable())

@@ -30,6 +30,6 @@ def to_json(v: Any) -> Text:
 def from_json(input_json: Text, target_class: Type[Model]) -> Model:
     serialized = json.loads(input_json)
     try:
-        return target_class.deserialize(serialized)
+        return target_class.from_serializable(serialized)
     except Exception as e:
         raise DeserializationError(e, input_json=serialized, target_class=target_class)

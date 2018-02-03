@@ -20,14 +20,14 @@ class AudioSegmentMeta(Model):
     def length_sec(self) -> float:
         return frames_to_sec(self.length_frames(), self.source_file_meta.sample_rate)
 
-    def serialize(self):
-        super_serialized = super(AudioSegmentMeta, self).serialize()
-        super_serialized.update({"source_file_meta": self.source_file_meta.serialize()})
+    def to_serializable(self):
+        super_serialized = super(AudioSegmentMeta, self).to_serializable()
+        super_serialized.update({"source_file_meta": self.source_file_meta.to_serializable()})
         return super_serialized
 
     @classmethod
-    def deserialize(cls, serialized: Dict[Text, Any]):
-        source_file_meta = WavAudioFileMeta.deserialize(serialized.pop("source_file_meta"))
+    def from_serializable(cls, serialized: Dict[Text, Any]):
+        source_file_meta = WavAudioFileMeta.from_serializable(serialized.pop("source_file_meta"))
         serialized.update({"source_file_meta": source_file_meta})
         return AudioSegmentMeta(**serialized)
 
@@ -43,7 +43,7 @@ class MonoAudioSegment(AudioSegmentMeta):
     def __str__(self):
         return super(MonoAudioSegment, self).__str__()
 
-    def serialize(self):
-        super_serialized = super(MonoAudioSegment, self).serialize()
+    def to_serializable(self):
+        super_serialized = super(MonoAudioSegment, self).to_serializable()
         super_serialized.update({"data": self.data.tolist()})
         return super_serialized

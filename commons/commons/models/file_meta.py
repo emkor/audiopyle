@@ -28,15 +28,15 @@ class FileMeta(Model):
     def extension(self) -> Text:
         return extract_extension(self.file_name)
 
-    def serialize(self):
-        base_serialized = super().serialize()
+    def to_serializable(self):
+        base_serialized = super().to_serializable()
         base_serialized.update({"created_on": utc_datetime_to_timestamp(self.created_on),
                                 "last_modification": utc_datetime_to_timestamp(self.last_modification),
                                 "last_access": utc_datetime_to_timestamp(self.last_access)})
         return base_serialized
 
     @classmethod
-    def deserialize(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[Text, Any]):
         serialized.update({
             "created_on": utc_timestamp_to_datetime(serialized["created_on"]),
             "last_modification": utc_timestamp_to_datetime(serialized["last_modification"]),
@@ -96,8 +96,8 @@ class Mp3AudioFileMeta(AudioFileMeta):
     def length_sec(self) -> float:
         return round(self._length_sec, ndigits=3)
 
-    def serialize(self):
-        base_serialized = super().serialize()
+    def to_serializable(self):
+        base_serialized = super().to_serializable()
         base_serialized.pop("_length_sec")
         base_serialized.pop("_bit_rate_kbps")
         base_serialized.update({"length_sec": self._length_sec,

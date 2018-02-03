@@ -23,7 +23,7 @@ class AudioTagApi(AudiopyleRestApi):
         if extract_extension(audio_file_name) == "mp3":
             audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, audio_file_name)
             id3_tag = read_id3_tag(audio_file_absolute_path)
-            return ApiResponse(HttpStatusCode.ok, id3_tag.serialize())
+            return ApiResponse(HttpStatusCode.ok, id3_tag.to_serializable())
         else:
             return ApiResponse(HttpStatusCode.bad_request,
                                "Can not read tags from non-mp3 file: {}".format(audio_file_name))

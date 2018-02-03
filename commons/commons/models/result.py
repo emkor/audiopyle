@@ -23,12 +23,12 @@ class AnalysisResultData(Model):
         self.result_id = result_id
         self.feature_type = feature_type
 
-    def serialize(self):
+    def to_serializable(self):
         return {"result_id": self.result_id, "result_version": self.result_version.value,
                 "feature_type": self.feature_type.value}
 
     @classmethod
-    def deserialize(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[Text, Any]):
         version_enum_object = ResultVersion(serialized.get("result_version"))
         type_enum_object = FeatureType(serialized.get("feature_type"))
         serialized.update({"result_version": version_enum_object, "feature_type": type_enum_object})
@@ -44,18 +44,18 @@ class AnalysisResult(Model):
         self.id3_tag = id3_tag
         self.data = data
 
-    def serialize(self):
-        return {"file_meta": self.file_meta.serialize(), "audio_meta": self.audio_meta.serialize(),
-                "raw_audio_meta": self.raw_audio_meta.serialize(), "id3_tag": self.id3_tag.serialize(),
-                "data": self.data.serialize()}
+    def to_serializable(self):
+        return {"file_meta": self.file_meta.to_serializable(), "audio_meta": self.audio_meta.to_serializable(),
+                "raw_audio_meta": self.raw_audio_meta.to_serializable(), "id3_tag": self.id3_tag.to_serializable(),
+                "data": self.data.to_serializable()}
 
     @classmethod
-    def deserialize(cls, serialized: Dict[Text, Any]):
-        file_meta_object = FileMeta.deserialize(serialized.get("file_meta"))
-        audio_meta_object = Mp3AudioFileMeta.deserialize(serialized.get("audio_meta"))
-        raw_audio_meta_object = WavAudioFileMeta.deserialize(serialized.get("raw_audio_meta"))
-        id3_tag_object = Id3Tag.deserialize(serialized.get("id3_tag"))
-        result_data_object = AnalysisResultData.deserialize(serialized.get("data"))
+    def from_serializable(cls, serialized: Dict[Text, Any]):
+        file_meta_object = FileMeta.from_serializable(serialized.get("file_meta"))
+        audio_meta_object = Mp3AudioFileMeta.from_serializable(serialized.get("audio_meta"))
+        raw_audio_meta_object = WavAudioFileMeta.from_serializable(serialized.get("raw_audio_meta"))
+        id3_tag_object = Id3Tag.from_serializable(serialized.get("id3_tag"))
+        result_data_object = AnalysisResultData.from_serializable(serialized.get("data"))
         serialized.update({"file_meta": file_meta_object, "audio_meta": audio_meta_object,
                            "raw_audio_meta": raw_audio_meta_object, "id3_tag": id3_tag_object,
                            "data": result_data_object})

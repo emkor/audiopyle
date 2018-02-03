@@ -6,10 +6,10 @@ from commons.utils.conversion import object_size, object_size_humanized
 
 class Model(object):
     @classmethod
-    def deserialize(cls: Type, serialized: Dict[Text, Any]) -> Any:
+    def from_serializable(cls: Type, serialized: Dict[Text, Any]) -> Any:
         return cls(**serialized)
 
-    def serialize(self) -> Dict[Text, Any]:
+    def to_serializable(self) -> Dict[Text, Any]:
         return copy(self.__dict__)
 
     def __str__(self) -> Text:
@@ -19,7 +19,7 @@ class Model(object):
         return self.__str__()
 
     def __eq__(self, other: Any) -> bool:
-        return self.serialize() == other.serialize()
+        return self.to_serializable() == other.to_serializable()
 
     def __hash__(self) -> int:
         return hash(self.__dict__)

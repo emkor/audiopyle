@@ -26,12 +26,12 @@ class ConstantStepAudioFeatureModelTest(unittest.TestCase):
                                                               matrix=self.feature_values)
 
     def test_should_serialize_and_deserialize_feature(self):
-        serialized = self.constant_step_feature.serialize()
-        deserialized = VampyConstantStepFeature.deserialize(serialized)
+        serialized = self.constant_step_feature.to_serializable()
+        deserialized = VampyConstantStepFeature.from_serializable(serialized)
         assert_that(deserialized).is_not_none().is_equal_to(self.constant_step_feature)
 
     def test_should_serialized_to_json(self):
-        as_json = json.dumps(self.constant_step_feature.serialize())
+        as_json = json.dumps(self.constant_step_feature.to_serializable())
         assert_that(as_json).is_not_none().is_not_empty()
 
     def test_should_calculate_frames_properly(self):
@@ -65,10 +65,10 @@ class VariableStepAudioFeatureModelTest(unittest.TestCase):
                                                               plugin_output="output1", step_features=self.feature_steps)
 
     def test_should_serialize_and_deserialize_feature(self):
-        serialized = self.variable_step_feature.serialize()
-        deserialized = VampyVariableStepFeature.deserialize(serialized)
+        serialized = self.variable_step_feature.to_serializable()
+        deserialized = VampyVariableStepFeature.from_serializable(serialized)
         assert_that(deserialized).is_not_none().is_equal_to(self.variable_step_feature)
 
     def test_should_serialized_to_json(self):
-        as_json = json.dumps(self.variable_step_feature.serialize())
+        as_json = json.dumps(self.variable_step_feature.to_serializable())
         assert_that(as_json).is_not_none().is_not_empty()

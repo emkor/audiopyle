@@ -20,9 +20,9 @@ class ExtractionApi(AudiopyleRestApi):
             raise NO_TASK_ID_IN_QUERY_PARAM
 
     def post(self, request: ApiRequest) -> ApiResponse:
-        execution_request = ExtractionRequest.deserialize(request.payload)
+        execution_request = ExtractionRequest.from_serializable(request.payload)
         self.logger.info("Sending feature extraction task: {}...".format(execution_request))
-        serialized_request = execution_request.serialize()
+        serialized_request = execution_request.to_serializable()
         task_id = generate_uuid(serialized_request)
         async_result = run_task(task=extract_feature,
                                 task_id=task_id,

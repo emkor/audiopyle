@@ -15,12 +15,12 @@ class AnalysisResultDataModelTest(unittest.TestCase):
                                                       FeatureType.ConstantStepFeature)
 
     def test_should_serialize_and_deserialize_analysis_result_data_model(self):
-        serialized = self.result_data_example.serialize()
-        deserialized = AnalysisResultData.deserialize(serialized)
+        serialized = self.result_data_example.to_serializable()
+        deserialized = AnalysisResultData.from_serializable(serialized)
         assert_that(deserialized).is_not_none().is_equal_to(self.result_data_example)
 
     def test_should_serialized_to_json(self):
-        as_json = to_json(self.result_data_example.serialize())
+        as_json = to_json(self.result_data_example.to_serializable())
         assert_that(as_json).is_not_none().is_not_empty()
 
 
@@ -42,10 +42,10 @@ class AnalysisResultModelTest(unittest.TestCase):
                                                       self.result_data_example)
 
     def test_should_serialize_and_deserialize_analysis_result_data_model(self):
-        serialized = self.analysis_result_example.serialize()
-        deserialized = AnalysisResult.deserialize(serialized)
+        serialized = self.analysis_result_example.to_serializable()
+        deserialized = AnalysisResult.from_serializable(serialized)
         assert_that(deserialized).is_not_none().is_equal_to(self.analysis_result_example)
 
     def test_should_serialized_to_json(self):
-        as_json = to_json(self.analysis_result_example.serialize())
+        as_json = to_json(self.analysis_result_example.to_serializable())
         assert_that(as_json).is_not_none().is_not_empty()

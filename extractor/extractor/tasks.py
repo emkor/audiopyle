@@ -18,7 +18,7 @@ from extractor.celery import app
 def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     logger = get_logger()
     task_id = generate_uuid(extraction_request)
-    request = ExtractionRequest.deserialize(extraction_request)
+    request = ExtractionRequest.from_serializable(extraction_request)
     logger.info("Building context for extraction {}: {}...".format(task_id, request))
     audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, request.audio_file_name)
     id3_tag = read_id3_tag(audio_file_absolute_path)
@@ -35,7 +35,7 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
             logger.info("Removing temporary file: {}...".format(tmp_audio_file_name))
             remove_file(tmp_audio_file_name)
             logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
-        return feature.serialize()
+        return feature.to_serializable()
     except SoftTimeLimitExceeded as e:
         logger.exception(e)
         if tmp_audio_file_name != audio_file_absolute_path:
