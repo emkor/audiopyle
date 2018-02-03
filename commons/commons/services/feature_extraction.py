@@ -3,7 +3,8 @@ from typing import Text, Dict, Any
 import vamp
 
 from commons.abstractions.model import Model
-from commons.models.feature import VampyFeatureAbstraction, VampyVariableStepFeature, VampyConstantStepFeature, StepFeature
+from commons.models.feature import VampyFeatureAbstraction, VampyVariableStepFeature, VampyConstantStepFeature, \
+    StepFeature
 from commons.models.plugin import VampyPlugin
 from commons.models.segment import MonoAudioSegment
 from commons.services.uuid_generation import generate_uuid
@@ -22,7 +23,8 @@ class ExtractionRequest(Model):
         return generate_uuid("{};{};{}".format(self.audio_file_name, self.plugin_key, self.plugin_output))
 
 
-def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin, output_name: Text) -> VampyFeatureAbstraction:
+def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin,
+                     output_name: Text) -> VampyFeatureAbstraction:
     feature_meta = VampyFeatureAbstraction(vampy_plugin=vampy_plugin, segment_meta=audio_segment.get_meta(),
                                            plugin_output=output_name)
     raw_results = vamp.collect(data=audio_segment.data, sample_rate=audio_segment.source_file_meta.sample_rate,
