@@ -58,7 +58,7 @@ class VariableStepAudioFeatureModelTest(unittest.TestCase):
         self.vampy_plugin = VampyPlugin(key="plugin_provider:plugin_name", categories=["category1"],
                                         outputs=["output1"], library_path="/some/path")
         self.feature_values = [1.0, 2.0, 3.0, 4.0]
-        self.feature_steps = [StepFeature(v, values=numpy.asarray(self.feature_values), label="text_{}".format(v))
+        self.feature_steps = [StepFeature(v, values=numpy.asanyarray(self.feature_values), label="text_{}".format(v))
                               for v in self.feature_values]
         self.variable_step_feature = VampyVariableStepFeature(vampy_plugin=self.vampy_plugin,
                                                               segment_meta=self.audio_segment_meta,

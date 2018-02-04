@@ -10,3 +10,9 @@ def generate_uuid(content: Any) -> Text:
     :rtype: str
     """
     return str(uuid5(SEED_TEXT, str(content)))
+
+
+import numpy as np
+
+mylist = [1.0, 2.0, 3.0, 2.0, 1.0, 0.0]
+print(np.std(np.asanyarray(mylist)))

@@ -22,7 +22,7 @@ def read_wav_segment(wav_audio_file_meta: WavAudioFileMeta) -> MonoAudioSegment:
     else:
         raise NotImplementedError("Can not read segment from such audio file: {}".format(wav_audio_file_meta))
     return MonoAudioSegment(source_file_meta=wav_audio_file_meta, frame_from=0,
-                            frame_to=wav_audio_file_meta.frames_count, data=numpy.asarray(mono))
+                            frame_to=wav_audio_file_meta.frames_count, data=numpy.asanyarray(mono))
 
 
 def _read_raw_frames(wav_audio_file_meta: WavAudioFileMeta) -> List[float]:

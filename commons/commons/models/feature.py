@@ -64,7 +64,7 @@ class VampyConstantStepFeature(VampyFeatureAbstraction):
     def from_serializable(cls, serialized: Dict[Text, Any]):
         vampy_plugin = VampyPlugin.from_serializable(serialized.pop("vampy_plugin"))
         segment_meta = AudioSegmentMeta.from_serializable(serialized.pop("segment_meta"))
-        _matrix = numpy.asarray(serialized.pop("matrix"))
+        _matrix = numpy.asanyarray(serialized.pop("matrix"))
         serialized.update({"vampy_plugin": vampy_plugin,
                            "segment_meta": segment_meta,
                            "matrix": _matrix})
@@ -85,7 +85,7 @@ class StepFeature(Model):
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
         values = serialized.pop("values")
-        serialized.update({"values": numpy.asarray(values)})
+        serialized.update({"values": numpy.asanyarray(values)})
         return StepFeature(**serialized)
 
 
@@ -118,7 +118,7 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
     def from_serializable(cls, serialized: Dict[Text, Any]):
         vampy_plugin = VampyPlugin.from_serializable(serialized.pop("vampy_plugin"))
         segment_meta = AudioSegmentMeta.from_serializable(serialized.pop("segment_meta"))
-        step_features_serialized = numpy.asarray(serialized.pop("value_list"))
+        step_features_serialized = numpy.asanyarray(serialized.pop("value_list"))
         step_features = [StepFeature.from_serializable(sf) for sf in step_features_serialized]
         serialized.update({"vampy_plugin": vampy_plugin,
                            "segment_meta": segment_meta,
