@@ -36,6 +36,7 @@ extractor_host_1:
   volumes:
     - "../resources/vamp:/root/vamp"
     - "../resources/audio:/audio"
+    - "../resources/result:/root/result"
 testcases:
   image: "endlessdrones/audiopyle-testcases"
   hostname: "testcases"
