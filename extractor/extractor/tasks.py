@@ -11,7 +11,7 @@ from commons.services.file_meta_providing import read_wav_file_meta, read_file_m
 from commons.services.plugin_providing import build_plugin_from_key
 from commons.services.segment_providing import read_wav_segment
 from commons.services.uuid_generation import generate_uuid
-from commons.utils.file_system import AUDIO_FILES_DIR, remove_file, concatenate_paths
+from commons.utils.file_system import AUDIO_FILES_DIR, remove_file, concatenate_paths, store_result_as_json
 from commons.utils.logger import get_logger
 from extractor.celery import app
 
@@ -36,14 +36,21 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
         feature = extract_features(audio_segment, plugin, request.plugin_output)
         logger.info("Extracted {} feature!".format(feature.__class__.__name__))
         _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger)
-        feature_meta = get_feature_meta(feature)
         analysis_result = AnalysisResult(ResultVersion.V1, task_id, input_file_meta, input_audio_meta, temp_audio_meta,
-                                         id3_tag, feature_meta)
-        return analysis_result.to_serializable()
+                                         id3_tag, get_feature_meta(feature))
+        analysis_result_serializable = _store_results_as_files(analysis_result, feature, task_id)
+        return analysis_result_serializable
     except SoftTimeLimitExceeded as e:
         logger.exception(e)
         _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger)
         raise e
+
+
+def _store_results_as_files(analysis_result, feature, task_id):
+    analysis_result_serializable = analysis_result.to_serializable()
+    store_result_as_json(analysis_result_serializable, task_id, "meta")
+    store_result_as_json(feature.to_serializable(), task_id, "data")
+    return analysis_result_serializable
 
 
 def _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger):

@@ -38,6 +38,7 @@ extractor_host_1:
   volumes:
     - "./resources/vamp:/root/vamp"
     - "./resources/audio:/audio"
+    - "./resources/results:/root/result"
   environment:
     - EXTRACTION_CONCURRENCY=2
     - EXTRACTION_BROKER_CONN_POOL_SIZE=4
