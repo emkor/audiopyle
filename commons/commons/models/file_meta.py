@@ -82,8 +82,7 @@ class WavAudioFileMeta(AudioFileMeta):
 
 class Mp3AudioFileMeta(AudioFileMeta):
     def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, sample_rate: int,
-                 length_sec: float,
-                 bit_rate_kbps: float) -> None:
+                 length_sec: float, bit_rate_kbps: float) -> None:
         super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
         self._length_sec = length_sec
         self._bit_rate_kbps = bit_rate_kbps
