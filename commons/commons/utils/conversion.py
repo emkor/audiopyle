@@ -56,7 +56,8 @@ def normalize(text: Text) -> Text:
     return text.lower().strip()
 
 
-def seconds_between(start_time_point: datetime, end_time_point: datetime = datetime.utcnow(), precision: int = 2):
+def seconds_between(start_time_point: datetime, end_time_point: datetime = None, precision: int = 3):
+    end_time_point = end_time_point or datetime.utcnow()
     return round((end_time_point - start_time_point).total_seconds(), precision)
 
 

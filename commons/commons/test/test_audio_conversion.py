@@ -1,10 +1,12 @@
 import unittest
+from datetime import datetime, timedelta
 
 from assertpy import assert_that
 
 from commons.services.audio_conversion import generate_output_wav_file_path, convert_to_wav
 from commons.services.file_meta_providing import read_file_meta
 from commons.test.utils import TEST_MP3_AUDIO_FILE, get_absolute_path_for_project_file
+from commons.utils.conversion import seconds_between
 from commons.utils.file_system import TMP_DIR, remove_file, file_exists
 
 
@@ -27,3 +29,16 @@ class AudioConversionTest(unittest.TestCase):
         assert_that(wav_file_meta.size_bytes()).is_greater_than(self.mp3_raw_file_meta.size_bytes())
         remove_file(converted_path)
         assert_that(file_exists(converted_path)).is_false()
+
+
+class ConversionUtilsTest(unittest.TestCase):
+    def test_should_measure_seconds_since_event(self):
+        start_point = datetime.utcnow() - timedelta(seconds=1.5)
+        time_that_passed = seconds_between(start_point)
+        assert_that(time_that_passed).is_between(1.5, 2.0)
+
+    def test_should_measure_seconds_between_events(self):
+        end_point = datetime.utcnow()
+        start_point = end_point - timedelta(seconds=2.5)
+        time_that_passed = seconds_between(start_point, end_point)
+        assert_that(time_that_passed).is_between(2.499, 2.501)

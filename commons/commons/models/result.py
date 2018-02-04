@@ -20,7 +20,7 @@ class FeatureType(Enum):
 
 class DataStats(Model):
     def __init__(self, minimum: float, maximum: float, median: float, mean: float, standard_deviation: float,
-                 variance: float):
+                 variance: float) -> None:
         self.minimum = minimum
         self.maximum = maximum
         self.median = median
