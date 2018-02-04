@@ -10,7 +10,7 @@ RESULTS_DIR = "/root/result"
 
 
 def store_result_as_json(serializable_content: Dict[Text, Any], task_id: Text, file_suffix: Text) -> None:
-    target_path = os.path.join(RESULTS_DIR, "{}_{}.json".format(task_id, file_suffix))
+    target_path = os.path.join(RESULTS_DIR, "{}-{}.json".format(task_id, file_suffix))
     if not file_exists(target_path):
         output_file = None
         try:
