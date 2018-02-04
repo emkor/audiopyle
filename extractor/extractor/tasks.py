@@ -6,7 +6,7 @@ from billiard.exceptions import SoftTimeLimitExceeded
 from commons.models.result import AnalysisResult, ResultVersion
 from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.audio_conversion import convert_to_wav, generate_output_wav_file_path
-from commons.services.feature_extraction import extract_features, ExtractionRequest
+from commons.services.feature_extraction import extract_features, ExtractionRequest, get_feature_meta
 from commons.services.file_meta_providing import read_wav_file_meta, read_file_meta, read_mp3_file_meta
 from commons.services.plugin_providing import build_plugin_from_key
 from commons.services.segment_providing import read_wav_segment
@@ -36,8 +36,10 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
         feature = extract_features(audio_segment, plugin, request.plugin_output)
         logger.info("Extracted {} feature!".format(feature.__class__.__name__))
         _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger)
-        analysis_result = AnalysisResult(ResultVersion.V1, task_id, input_file_meta, input_audio_meta, temp_audio_meta, id3_tag, )
-        return feature.to_serializable()
+        feature_meta = get_feature_meta(feature)
+        analysis_result = AnalysisResult(ResultVersion.V1, task_id, input_file_meta, input_audio_meta, temp_audio_meta,
+                                         id3_tag, feature_meta)
+        return analysis_result.to_serializable()
     except SoftTimeLimitExceeded as e:
         logger.exception(e)
         _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger)

@@ -1,4 +1,4 @@
-from typing import Text, Dict, Any, Union
+from typing import Text, Dict, Any
 
 import numpy
 import vamp
@@ -50,7 +50,7 @@ def _map_feature(feature_meta: VampyFeatureAbstraction, extracted_data: Dict[Tex
         raise NotImplementedError("Can not recognize feature type: {}".format(extracted_data.keys()))
 
 
-def get_feature_meta(vampy_feature: Union[VampyVariableStepFeature, VampyConstantStepFeature]) -> FeatureMeta:
+def get_feature_meta(vampy_feature: VampyFeatureAbstraction) -> FeatureMeta:
     if isinstance(vampy_feature, VampyVariableStepFeature):
         data_stats = _extract_data_stats(vampy_feature.values())
         return FeatureMeta(plugin=vampy_feature.vampy_plugin, plugin_output=vampy_feature.plugin_output,
