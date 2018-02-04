@@ -18,7 +18,7 @@ class FeatureType(Enum):
 
 
 class AnalysisResultData(Model):
-    def __init__(self, result_version: ResultVersion, result_id: Text, feature_type: FeatureType):
+    def __init__(self, result_version: ResultVersion, result_id: Text, feature_type: FeatureType) -> None:
         self.result_version = result_version
         self.result_id = result_id
         self.feature_type = feature_type
@@ -37,7 +37,7 @@ class AnalysisResultData(Model):
 
 class AnalysisResult(Model):
     def __init__(self, file_meta: FileMeta, audio_meta: Mp3AudioFileMeta, raw_audio_meta: WavAudioFileMeta,
-                 id3_tag: Id3Tag, data: AnalysisResultData):
+                 id3_tag: Id3Tag, data: AnalysisResultData) -> None:
         self.file_meta = file_meta
         self.audio_meta = audio_meta
         self.raw_audio_meta = raw_audio_meta
