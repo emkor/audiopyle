@@ -18,9 +18,9 @@ script:
   - scripts/build_app_images.sh
   - scripts/build_test_image.sh
   - scripts/run_integration_tests.sh
-  - scripts/run_static_analysis.sh
 
 after_success:
+  - scripts/run_static_analysis.sh
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     scripts/push-base-image.sh;
     fi
