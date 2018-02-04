@@ -77,6 +77,7 @@ class AnalysisResult(Model):
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
+        result_version_enum = ResultVersion(serialized["result_version"])
         file_meta_object = FileMeta.from_serializable(serialized.get("file_meta"))
         audio_meta_object = Mp3AudioFileMeta.from_serializable(serialized.get("audio_meta"))
         raw_audio_meta_object = WavAudioFileMeta.from_serializable(serialized.get("raw_audio_meta"))
@@ -84,5 +85,5 @@ class AnalysisResult(Model):
         result_data_object = FeatureMeta.from_serializable(serialized.get("feature_meta"))
         serialized.update({"file_meta": file_meta_object, "audio_meta": audio_meta_object,
                            "raw_audio_meta": raw_audio_meta_object, "id3_tag": id3_tag_object,
-                           "feature_meta": result_data_object})
+                           "feature_meta": result_data_object, "result_version": result_version_enum})
         return AnalysisResult(**serialized)
