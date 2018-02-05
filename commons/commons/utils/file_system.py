@@ -1,10 +1,27 @@
+import json
 import os
 import shutil
 
-from typing import Text, List
+from typing import Text, List, Any, Dict
 
 AUDIO_FILES_DIR = "/audio"
 TMP_DIR = "/audio_tmp"
+RESULTS_DIR = "/root/result"
+
+
+def store_result_as_json(serializable_content: Dict[Text, Any], task_id: Text, file_suffix: Text) -> None:
+    target_path = os.path.join(RESULTS_DIR, "{}-{}.json".format(task_id, file_suffix))
+    if not file_exists(target_path):
+        output_file = None
+        try:
+            with open(target_path, 'w') as output_file:
+                json.dump(serializable_content, output_file)
+        except Exception as e:
+            if output_file is not None:
+                output_file.close()
+            raise ValueError("Could not store to file at {}: {}".format(target_path, e))
+    else:
+        raise ValueError("File at {} already exists: can not store content there.".format(target_path))
 
 
 def file_exists(absolute_path: Text) -> bool:

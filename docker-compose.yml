@@ -25,8 +25,8 @@ coordinator_host:
   ports:
     - "8080:8080"
   volumes:
-    - "./resources/vamp:/root/vamp"
-    - "./resources/audio:/audio"
+    - "./resources/vamp:/root/vamp:ro"
+    - "./resources/audio:/audio:ro"
   environment:
     - BLACKLISTED_PLUGINS=vamp-example-plugins:zerocrossing,vamp-example-plugins:powerspectrum
 extractor_host_1:
@@ -36,8 +36,9 @@ extractor_host_1:
     - rabbitmq_host
     - mysql_host
   volumes:
-    - "./resources/vamp:/root/vamp"
-    - "./resources/audio:/audio"
+    - "./resources/vamp:/root/vamp:ro"
+    - "./resources/audio:/audio:ro"
+    - "./resources/results:/root/result"
   environment:
     - EXTRACTION_CONCURRENCY=2
     - EXTRACTION_BROKER_CONN_POOL_SIZE=4

@@ -19,15 +19,15 @@ class AudioSegmentMetaTest(unittest.TestCase):
         assert_that(self.audio_segment_meta.length_sec()).is_equal_to(self.audio_file_meta.length_sec)
 
     def test_serializing_and_deserializing(self):
-        segment_meta_serialized = self.audio_segment_meta.serialize()
+        segment_meta_serialized = self.audio_segment_meta.to_serializable()
         assert_that(segment_meta_serialized).is_not_none()
 
-        segment_meta_deserialized = AudioSegmentMeta.deserialize(segment_meta_serialized)
+        segment_meta_deserialized = AudioSegmentMeta.from_serializable(segment_meta_serialized)
         assert_that(segment_meta_deserialized).is_equal_to(self.audio_segment_meta)
 
     def test_serializing_to_json(self):
-        segment_meta_as_json = json.dumps(self.audio_segment_meta.serialize())
+        segment_meta_as_json = json.dumps(self.audio_segment_meta.to_serializable())
         assert_that(segment_meta_as_json).is_not_none()
 
-        segment_meta_deserialized = AudioSegmentMeta.deserialize(json.loads(segment_meta_as_json))
+        segment_meta_deserialized = AudioSegmentMeta.from_serializable(json.loads(segment_meta_as_json))
         assert_that(segment_meta_deserialized).is_equal_to(self.audio_segment_meta)

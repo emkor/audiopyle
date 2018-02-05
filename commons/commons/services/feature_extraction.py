@@ -1,10 +1,13 @@
 from typing import Text, Dict, Any
 
+import numpy
 import vamp
 
 from commons.abstractions.model import Model
-from commons.models.feature import VampyFeatureAbstraction, VampyVariableStepFeature, VampyConstantStepFeature, StepFeature
+from commons.models.feature import VampyFeatureAbstraction, VampyVariableStepFeature, VampyConstantStepFeature, \
+    StepFeature
 from commons.models.plugin import VampyPlugin
+from commons.models.result import FeatureMeta, DataStats, FeatureType
 from commons.models.segment import MonoAudioSegment
 from commons.services.uuid_generation import generate_uuid
 from commons.utils.logger import get_logger
@@ -22,7 +25,8 @@ class ExtractionRequest(Model):
         return generate_uuid("{};{};{}".format(self.audio_file_name, self.plugin_key, self.plugin_output))
 
 
-def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin, output_name: Text) -> VampyFeatureAbstraction:
+def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin,
+                     output_name: Text) -> VampyFeatureAbstraction:
     feature_meta = VampyFeatureAbstraction(vampy_plugin=vampy_plugin, segment_meta=audio_segment.get_meta(),
                                            plugin_output=output_name)
     raw_results = vamp.collect(data=audio_segment.data, sample_rate=audio_segment.source_file_meta.sample_rate,
@@ -44,3 +48,24 @@ def _map_feature(feature_meta: VampyFeatureAbstraction, extracted_data: Dict[Tex
                                         matrix=data[1])
     else:
         raise NotImplementedError("Can not recognize feature type: {}".format(extracted_data.keys()))
+
+
+def get_feature_meta(vampy_feature: VampyFeatureAbstraction) -> FeatureMeta:
+    if isinstance(vampy_feature, VampyVariableStepFeature):
+        data_stats = _extract_data_stats(vampy_feature.values())
+        return FeatureMeta(plugin=vampy_feature.vampy_plugin, plugin_output=vampy_feature.plugin_output,
+                           feature_type=FeatureType.VariableStepFeature, feature_size=vampy_feature.size_bytes(),
+                           data_stats=data_stats)
+    elif isinstance(vampy_feature, VampyConstantStepFeature):
+        data_stats = _extract_data_stats(vampy_feature.values())
+        return FeatureMeta(plugin=vampy_feature.vampy_plugin, plugin_output=vampy_feature.plugin_output,
+                           feature_type=FeatureType.ConstantStepFeature, feature_size=vampy_feature.size_bytes(),
+                           data_stats=data_stats)
+    else:
+        raise ValueError("Can not extract feature meta from: {}".format(vampy_feature))
+
+
+def _extract_data_stats(numpy_array: numpy.ndarray) -> DataStats:
+    return DataStats(minimum=float(numpy.amin(numpy_array)), maximum=float(numpy.amax(numpy_array)),
+                     median=float(numpy.median(numpy_array)), mean=float(numpy.mean(numpy_array)),
+                     standard_deviation=float(numpy.std(numpy_array)), variance=float(numpy.var(numpy_array)))

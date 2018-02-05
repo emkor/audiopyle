@@ -20,7 +20,7 @@ class AutomationApi(AudiopyleRestApi):
 
         if audio_file_names and plugins:
             extraction_requests = self._generate_extraction_requests(audio_file_names, plugins)
-            task_id_to_request = {r.uuid(): r.serialize() for r in extraction_requests}
+            task_id_to_request = {r.uuid(): r.to_serializable() for r in extraction_requests}
             self.logger.info("Sending {} extraction requests...".format(task_id_to_request))
             for task_id, request in task_id_to_request.items():
                 run_task(task=extract_feature, task_id=task_id, extraction_request=request)

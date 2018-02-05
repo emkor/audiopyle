@@ -28,7 +28,7 @@ class CoordinatorApiTest(TestCase):
         task_id = actual_response.get("task_id")
         results_response = requests.get(url=self.extraction_api_url, params={"task_id": task_id})
         assert_that(results_response.status_code).is_equal_to(expected_status_code)
-        extraction_result = ExtractionResult.deserialize(results_response.json())
+        extraction_result = ExtractionResult.from_serializable(results_response.json())
         assert_that(extraction_result.data).is_not_none()
         assert_that(extraction_result.status).is_equal_to("SUCCESS")
 

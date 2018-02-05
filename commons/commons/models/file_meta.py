@@ -1,8 +1,9 @@
 from datetime import datetime
-from typing import Text
+from typing import Text, Dict, Any
 
 from commons.abstractions.model import Model
-from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b, to_mega
+from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b, to_mega, utc_datetime_to_timestamp, \
+    utc_timestamp_to_datetime
 from commons.utils.file_system import extract_extension
 
 
@@ -26,6 +27,22 @@ class FileMeta(Model):
     @property
     def extension(self) -> Text:
         return extract_extension(self.file_name)
+
+    def to_serializable(self):
+        base_serialized = super().to_serializable()
+        base_serialized.update({"created_on": utc_datetime_to_timestamp(self.created_on),
+                                "last_modification": utc_datetime_to_timestamp(self.last_modification),
+                                "last_access": utc_datetime_to_timestamp(self.last_access)})
+        return base_serialized
+
+    @classmethod
+    def from_serializable(cls, serialized: Dict[Text, Any]):
+        serialized.update({
+            "created_on": utc_timestamp_to_datetime(serialized["created_on"]),
+            "last_modification": utc_timestamp_to_datetime(serialized["last_modification"]),
+            "last_access": utc_timestamp_to_datetime(serialized["last_access"])
+        })
+        return FileMeta(**serialized)
 
 
 class AudioFileMeta(Model):
@@ -65,8 +82,7 @@ class WavAudioFileMeta(AudioFileMeta):
 
 class Mp3AudioFileMeta(AudioFileMeta):
     def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, sample_rate: int,
-                 length_sec: float,
-                 bit_rate_kbps: float) -> None:
+                 length_sec: float, bit_rate_kbps: float) -> None:
         super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
         self._length_sec = length_sec
         self._bit_rate_kbps = bit_rate_kbps
@@ -79,8 +95,8 @@ class Mp3AudioFileMeta(AudioFileMeta):
     def length_sec(self) -> float:
         return round(self._length_sec, ndigits=3)
 
-    def serialize(self):
-        base_serialized = super().serialize()
+    def to_serializable(self):
+        base_serialized = super().to_serializable()
         base_serialized.pop("_length_sec")
         base_serialized.pop("_bit_rate_kbps")
         base_serialized.update({"length_sec": self._length_sec,

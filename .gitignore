@@ -21,4 +21,4 @@ eggs/
 # tox files
 *coverage.xml
 *-coverage/
-/**/.mypy_cache/
+.mypy_cache

@@ -16,7 +16,7 @@ class AudioTagApiTest(TestCase):
         expected_status_code = 200
         response = requests.get(url="{}?file={}".format(self.audio_tag_api_url, self.audio_file_name))
         assert_that(response.status_code).is_equal_to(expected_status_code)
-        returned_tag = Id3Tag.deserialize(response.json())
+        returned_tag = Id3Tag.from_serializable(response.json())
         assert_that(returned_tag.artist).is_equal_to("Unknown Artist")
         assert_that(returned_tag.title).is_equal_to("Unknown Title")
         assert_that(returned_tag.album).is_equal_to("Unknown Album")

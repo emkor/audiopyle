@@ -75,6 +75,10 @@ class AudiopyleRestApi(object):
 
     def _log_api_call(self, api_request: ApiRequest, api_response: ApiResponse):
         serving_time = seconds_between(api_request.creation_time)
-        self.logger.debug("{} served {} on {} with {} in {}s.".format(self.__class__.__name__, api_request.method,
-                                                                      api_request.url, api_response.status_code.name,
-                                                                      serving_time))
+        self.logger.info("{} served {} at {} with {} ({} -> {}) in {}s.".format(self.__class__.__name__,
+                                                                                api_request.method,
+                                                                                api_request.url,
+                                                                                api_response.status_code.name,
+                                                                                api_request.size_humanized(),
+                                                                                api_response.size_humanized(),
+                                                                                serving_time))
