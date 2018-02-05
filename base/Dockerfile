@@ -8,7 +8,9 @@ LABEL description="Latest Python Alpine image with numpy and vamp"
 RUN apt-get update
 RUN apt-get install -y build-essential gcc libav-tools
 
-RUN pip install --no-cache-dir numpy vamp
+# vamp requires numpy at setup time, so don't concantenate those lines
+RUN pip install --no-cache-dir numpy
+RUN pip install --no-cache-dir vamp
 
 RUN apt-get purge -y build-essential gcc
 RUN apt-get clean
