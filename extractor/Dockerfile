@@ -21,7 +21,7 @@ EXPOSE 8080
 COPY . .
 
 # INSTALL AUDIOPYLE EXTRACTOR
-RUN pip install .
+RUN pip install --no-cache-dir .
 
 # DEFINE ENTRYPOINT AS EXTRACTOR API
 ENTRYPOINT ["celery", "-A", "extractor", "worker", "--loglevel=info"]
