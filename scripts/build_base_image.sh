@@ -11,5 +11,6 @@ if [ "$pull_by_commit_hash_status" = 1 ]; then
     echo "Could not download image for commit hash ${base_image_commit_hash}, building..."
     docker build -t endlessdrones/audiopyle-base:latest -t endlessdrones/audiopyle-base:${base_image_commit_hash} ./base
 else
-    echo "Downloaded image with commit hash ${base_image_commit_hash}, omitting build"
+    docker tag endlessdrones/audiopyle-base:${base_image_commit_hash} endlessdrones/audiopyle-base:latest
+    echo "Downloaded image with commit hash ${base_image_commit_hash}, omitting build, tagged as latest"
 fi
