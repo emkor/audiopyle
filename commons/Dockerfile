@@ -12,4 +12,4 @@ WORKDIR /audiopyle/commons
 COPY . .
 
 # INSTALL AUDIOPYLE COMMON
-RUN pip install .
+RUN pip install --no-cache-dir .

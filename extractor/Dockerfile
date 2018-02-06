@@ -4,10 +4,6 @@ MAINTAINER mkorzeniowski93@gmail.com
 LABEL version="0.1"
 LABEL description="Image containing extractor module of an audiopyle app"
 
-RUN apt-get install -y libav-tools
-RUN apt-get clean
-RUN apt-get autoclean
-
 # SET WORKDIR
 RUN mkdir -p /audiopyle/extractor
 WORKDIR /audiopyle/extractor
@@ -25,7 +21,7 @@ EXPOSE 8080
 COPY . .
 
 # INSTALL AUDIOPYLE EXTRACTOR
-RUN pip install .
+RUN pip install --no-cache-dir .
 
 # DEFINE ENTRYPOINT AS EXTRACTOR API
 ENTRYPOINT ["celery", "-A", "extractor", "worker", "--loglevel=info"]

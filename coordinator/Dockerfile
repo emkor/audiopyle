@@ -17,7 +17,7 @@ EXPOSE 8080
 COPY . .
 
 # INSTALL AUDIOPYLE COORDINATOR
-RUN pip install .
+RUN pip install --no-cache-dir .
 
 # DEFINE ENTRYPOINT AS COORDINATOR API
 ENTRYPOINT ["python", "./app.py"]
