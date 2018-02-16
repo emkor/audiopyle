@@ -9,8 +9,7 @@ from commons.models.file_meta import WavAudioFileMeta, Mp3AudioFileMeta
 class WavAudioFileMetaTest(unittest.TestCase):
     def setUp(self):
         self.wav_audio_file_meta = WavAudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
-                                                    sample_rate=44100, frames_count=22050, bit_depth=16,
-                                                    file_size_bytes=88200)
+                                                    sample_rate=44100, frames_count=22050, bit_depth=16)
         self.wav_audio_file_meta_avg_kbps = 1410.0
         self.wav_audio_file_meta_length_seconds = 0.5
 
@@ -34,8 +33,7 @@ class WavAudioFileMetaTest(unittest.TestCase):
 class Mp3AudioFileMetaTest(unittest.TestCase):
     def setUp(self):
         self.mp3_audio_file_meta = Mp3AudioFileMeta(absolute_path="/some/file.mp3", channels_count=1,
-                                                    sample_rate=44100, file_size_bytes=3094, length_sec=0.5,
-                                                    bit_rate_kbps=128.)
+                                                    sample_rate=44100, length_sec=0.5, bit_rate_kbps=128.)
 
     def test_should_serialize_and_deserialize_audio_meta_file(self):
         audio_file_meta_serialized = self.mp3_audio_file_meta.to_serializable()
