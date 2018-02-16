@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class VampyPluginConfig(AppConfig):
-    name = 'vampy_plugin'
+    name = 'storage.vampy_plugin'
