@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storage.audio.apps.AudioConfig',
+    'storage.feature.apps.FeatureConfig',
+    'storage.vampy_plugin.apps.VampyPluginConfig'
 ]
 
 MIDDLEWARE = [
