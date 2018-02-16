@@ -43,7 +43,6 @@ class WavAudioFileMetaProvidingTest(unittest.TestCase):
         assert_that(wav_audio_file_meta.channels_count).is_equal_to(1)
         assert_that(wav_audio_file_meta.frames_count).is_equal_to(self.wav_audio_file_frame_count)
         assert_that(wav_audio_file_meta.sample_rate).is_equal_to(self.wav_audio_file_sample_rate)
-        assert_that(wav_audio_file_meta.absolute_path).is_equal_to(self.wav_audio_file_name)
         assert_that(wav_audio_file_meta.bit_rate_kbps).is_equal_to(self.wav_audio_file_bit_rate_kbps)
         assert_that(wav_audio_file_meta.length_sec).is_equal_to(self.wav_audio_file_length_seconds)
 
@@ -65,7 +64,6 @@ class Mp3AudioFileMetaProvidingTest(unittest.TestCase):
         assert_that(mp3_audio_file_meta).is_not_none()
         assert_that(mp3_audio_file_meta.channels_count).is_equal_to(1)
         assert_that(mp3_audio_file_meta.sample_rate).is_equal_to(self.mp3_audio_file_sample_rate)
-        assert_that(mp3_audio_file_meta.absolute_path).is_equal_to(self.mp3_audio_file_name)
         assert_that(mp3_audio_file_meta.bit_rate_kbps).is_between(self.mp3_audio_file_bit_rate_kbps_between[0],
                                                                   self.mp3_audio_file_bit_rate_kbps_between[1])
         assert_that(mp3_audio_file_meta.length_sec).is_equal_to(self.mp3_audio_file_length_seconds)

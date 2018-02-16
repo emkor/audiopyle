@@ -10,10 +10,11 @@ from commons.test.utils import get_absolute_path_for_project_file, TEST_WAV_AUDI
 
 class TestReadingFileSegments(unittest.TestCase):
     def setUp(self):
-        self.file_meta = read_wav_file_meta(get_absolute_path_for_project_file(__file__, TEST_WAV_AUDIO_FILE))
+        self.absolute_path = get_absolute_path_for_project_file(__file__, TEST_WAV_AUDIO_FILE)
+        self.file_meta = read_wav_file_meta(self.absolute_path)
 
     def test_should_read_segment(self):
-        audio_segment = read_wav_segment(self.file_meta)
+        audio_segment = read_wav_segment(self.absolute_path, self.file_meta)
         assert_that(audio_segment).is_not_none()
         assert_that(audio_segment.data.size).is_equal_to(103936)
         assert_that(audio_segment.data).is_instance_of(ndarray)

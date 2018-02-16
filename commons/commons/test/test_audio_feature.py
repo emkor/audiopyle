@@ -13,8 +13,7 @@ from commons.models.segment import AudioSegmentMeta
 
 class ConstantStepAudioFeatureModelTest(unittest.TestCase):
     def setUp(self):
-        self.audio_file_meta = WavAudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
-                                                sample_rate=44100, frames_count=22050, bit_depth=16)
+        self.audio_file_meta = WavAudioFileMeta(channels_count=2, sample_rate=44100, frames_count=22050, bit_depth=16)
         self.audio_segment_meta = AudioSegmentMeta(self.audio_file_meta, frame_from=0, frame_to=22049)
         self.vampy_plugin = VampyPlugin(key="plugin_provider:plugin_name", categories=["category1"],
                                         outputs=["output1"], library_path="/some/path")
@@ -50,8 +49,7 @@ class ConstantStepAudioFeatureModelTest(unittest.TestCase):
 
 class VariableStepAudioFeatureModelTest(unittest.TestCase):
     def setUp(self):
-        self.audio_file_meta = WavAudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
-                                                sample_rate=44100, frames_count=22050, bit_depth=16)
+        self.audio_file_meta = WavAudioFileMeta(channels_count=2, sample_rate=44100, frames_count=22050, bit_depth=16)
         self.audio_segment_meta = AudioSegmentMeta(self.audio_file_meta, frame_from=0, frame_to=22049)
         self.vampy_plugin = VampyPlugin(key="plugin_provider:plugin_name", categories=["category1"],
                                         outputs=["output1"], library_path="/some/path")

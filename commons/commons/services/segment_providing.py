@@ -1,6 +1,6 @@
 import struct
 import wave
-from typing import List
+from typing import List, Text
 
 import numpy
 from numpy import array
@@ -12,8 +12,8 @@ from commons.utils.logger import get_logger
 logger = get_logger()
 
 
-def read_wav_segment(wav_audio_file_meta: WavAudioFileMeta) -> MonoAudioSegment:
-    audio_frames = _read_raw_frames(wav_audio_file_meta)
+def read_wav_segment(file_path: Text, wav_audio_file_meta: WavAudioFileMeta) -> MonoAudioSegment:
+    audio_frames = _read_raw_frames(file_path, wav_audio_file_meta)
     if wav_audio_file_meta.channels_count == 2:
         left, right = array(list(audio_frames[0::2])), array(list(audio_frames[1::2]))
         mono = [(l + r) / 2.0 for l, r in zip(left, right)]
@@ -25,8 +25,8 @@ def read_wav_segment(wav_audio_file_meta: WavAudioFileMeta) -> MonoAudioSegment:
                             frame_to=wav_audio_file_meta.frames_count, data=numpy.asanyarray(mono))
 
 
-def _read_raw_frames(wav_audio_file_meta: WavAudioFileMeta) -> List[float]:
-    wav_file = wave.open(wav_audio_file_meta.absolute_path, "r")
+def _read_raw_frames(file_path: Text, wav_audio_file_meta: WavAudioFileMeta) -> List[float]:
+    wav_file = wave.open(file_path, "r")
     binary_audio = wav_file.readframes(wav_audio_file_meta.frames_count * wav_audio_file_meta.channels_count)
     wav_file.close()
     audio_wave_as_int = list(

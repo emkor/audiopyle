@@ -28,7 +28,7 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     id3_tag = read_id3_tag(audio_file_absolute_path)
     tmp_audio_file_name = convert_to_wav(audio_file_absolute_path, generate_output_wav_file_path(task_id))
     temp_audio_meta = read_wav_file_meta(tmp_audio_file_name)
-    audio_segment = read_wav_segment(temp_audio_meta)
+    audio_segment = read_wav_segment(audio_file_absolute_path, temp_audio_meta)
     plugin = build_plugin_from_key(str(request.plugin_key))
     logger.info("Built extraction context: {} {} {}".format(audio_segment, plugin, request.plugin_output))
     logger.info("Starting feature extraction...")
