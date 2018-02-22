@@ -20,4 +20,4 @@ COPY . .
 RUN pip install --no-cache-dir .
 
 # DEFINE ENTRYPOINT AS COORDINATOR API
-ENTRYPOINT ["python", "./app.py"]
+ENTRYPOINT ["coordinator"]

@@ -11,5 +11,10 @@ setup(
     author_email='emkor93@gmail.com',
     url='https://github.com/emkor/audiopyle',
     packages=find_packages(),
-    install_requires=["numpy", "vamp", "cherrypy"]
+    install_requires=["numpy", "vamp", "cherrypy"],
+    entry_points={
+        'console_scripts': [
+            'coordinator = coordinator.app:main'
+        ]
+    }
 )

@@ -15,7 +15,8 @@ COORDINATOR_API_CONF = {
     }
 }
 
-if __name__ == '__main__':
+
+def main():
     setup_logger()
     logger = get_logger()
     logger.info("Initializing Coordinator app...")
@@ -37,3 +38,7 @@ if __name__ == '__main__':
     logger.info("Starting Coordinator API...")
     cherrypy.engine.start()
     cherrypy.engine.block()
+
+
+if __name__ == '__main__':
+    main()
