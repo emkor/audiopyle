@@ -4,8 +4,8 @@ import shutil
 
 from typing import Text, List, Any, Dict
 
-AUDIO_FILES_DIR = "/audio"
-TMP_DIR = "/audio_tmp"
+AUDIO_FILES_DIR = "/root/audio"
+TMP_DIR = "/root/audio_tmp"
 RESULTS_DIR = "/root/result"
 
 
