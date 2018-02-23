@@ -4,8 +4,10 @@ import shutil
 
 from typing import Text, List, Any, Dict
 
-AUDIO_FILES_DIR = "/audio"
-TMP_DIR = "/audio_tmp"
+RESULT_FILE_PERMISSIONS = 0o666
+
+AUDIO_FILES_DIR = "/root/audio"
+TMP_DIR = "/root/audio_tmp"
 RESULTS_DIR = "/root/result"
 
 
@@ -16,6 +18,7 @@ def store_result_as_json(serializable_content: Dict[Text, Any], task_id: Text, f
         try:
             with open(target_path, 'w') as output_file:
                 json.dump(serializable_content, output_file)
+            os.chmod(target_path, RESULT_FILE_PERMISSIONS)
         except Exception as e:
             if output_file is not None:
                 output_file.close()
