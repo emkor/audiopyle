@@ -18,8 +18,8 @@ logger = getLogger()
 
 
 def store_result_as_json(serializable_content: Dict[Text, Any], task_id: Text, file_suffix: Text) -> None:
-    logger.info("Storing task {} result {} in JSON of size {}...".format(task_id, file_suffix,
-                                                                         object_size_humanized(serializable_content)))
+    logger.debug("Storing task {} result {} in JSON of size {}...".format(task_id, file_suffix,
+                                                                          object_size_humanized(serializable_content)))
     target_path = os.path.join(RESULTS_DIR, "{}-{}.json".format(task_id, file_suffix))
     if not file_exists(target_path):
         output_file = None
