@@ -30,7 +30,7 @@ class DataStats(Model):
 
 
 class AnalysisStats(Model):
-    def __init__(self, total_time: float, conversion_time: float, extraction_time: float):
+    def __init__(self, total_time: float, conversion_time: float, extraction_time: float) -> None:
         self.total_time = total_time
         self.conversion_time = conversion_time
         self.extraction_time = extraction_time
