@@ -33,6 +33,3 @@ def _mutagen_id3_to_internal(easy_id3: EasyID3) -> Id3Tag:
                   date=safe_cast(first_if_collection(easy_id3.get("date")), int, None),
                   track=safe_cast(track_number, int, None),
                   genre=safe_cast(first_if_collection(easy_id3.get("genre")), str, None))
-
-
-print(read_id3_tag("/home/mat/projects/resources_audiopyle/Black Flag - Fix Me.mp3"))
