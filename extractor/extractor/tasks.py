@@ -30,15 +30,18 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     temp_audio_meta = read_wav_file_meta(tmp_audio_file_name)
     audio_segment = read_wav_segment(temp_audio_meta)
     plugin = build_plugin_from_key(str(request.plugin_key))
-    logger.info("Built extraction context: {} {} {}".format(audio_segment, plugin, request.plugin_output))
-    logger.info("Starting feature extraction...")
+    logger.debug("Built extraction context: {} {} {}! Extracting features...".format(audio_segment, plugin,
+                                                                                   request.plugin_output))
     try:
         feature = extract_features(audio_segment, plugin, request.plugin_output)
-        logger.info("Extracted {} feature!".format(feature.__class__.__name__))
+        store_result_as_json(feature.to_serializable(), task_id, "data")
         _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger)
+        logger.debug("Done extracting features; Preparing analysis result...")
         analysis_result = AnalysisResult(ResultVersion.V1, task_id, input_file_meta, input_audio_meta, temp_audio_meta,
                                          id3_tag, get_feature_meta(feature))
-        analysis_result_serializable = _store_results_as_files(analysis_result, feature, task_id)
+        analysis_result_serializable = analysis_result.to_serializable()
+        store_result_as_json(analysis_result_serializable, task_id, "meta")
+        logger.info("Prepared result, ending!")
         return analysis_result_serializable
     except SoftTimeLimitExceeded as e:
         logger.exception(e)
@@ -49,13 +52,12 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
 def _store_results_as_files(analysis_result, feature, task_id):
     analysis_result_serializable = analysis_result.to_serializable()
     store_result_as_json(analysis_result_serializable, task_id, "meta")
-    store_result_as_json(feature.to_serializable(), task_id, "data")
     return analysis_result_serializable
 
 
 def _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger):
     # type: (Text, Text, Logger) -> None
     if tmp_audio_file_name != audio_file_absolute_path:
-        logger.info("Removing temporary file: {}...".format(tmp_audio_file_name))
+        logger.debug("Removing temporary file: {}...".format(tmp_audio_file_name))
         remove_file(tmp_audio_file_name)
-        logger.info("Removed temporary file: {}!".format(tmp_audio_file_name))
+        logger.debug("Removed temporary file: {}!".format(tmp_audio_file_name))
