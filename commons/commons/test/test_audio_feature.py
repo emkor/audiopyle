@@ -17,12 +17,9 @@ class ConstantStepAudioFeatureModelTest(unittest.TestCase):
                                                 sample_rate=44100, frames_count=22050, bit_depth=16,
                                                 file_size_bytes=88200)
         self.audio_segment_meta = AudioSegmentMeta(self.audio_file_meta, frame_from=0, frame_to=22049)
-        self.vampy_plugin = VampyPlugin(key="plugin_provider:plugin_name", categories=["category1"],
-                                        outputs=["output1"], library_path="/some/path")
         self.feature_values = numpy.array([1.0, 2.0, 3.0, 4.0])
-        self.constant_step_feature = VampyConstantStepFeature(vampy_plugin=self.vampy_plugin,
-                                                              segment_meta=self.audio_segment_meta,
-                                                              plugin_output="output1", time_step=0.5,
+        self.constant_step_feature = VampyConstantStepFeature(segment_meta=self.audio_segment_meta,
+                                                              time_step=0.5,
                                                               matrix=self.feature_values)
 
     def test_should_serialize_and_deserialize_feature(self):
@@ -55,14 +52,11 @@ class VariableStepAudioFeatureModelTest(unittest.TestCase):
                                                 sample_rate=44100, frames_count=22050, bit_depth=16,
                                                 file_size_bytes=88200)
         self.audio_segment_meta = AudioSegmentMeta(self.audio_file_meta, frame_from=0, frame_to=22049)
-        self.vampy_plugin = VampyPlugin(key="plugin_provider:plugin_name", categories=["category1"],
-                                        outputs=["output1"], library_path="/some/path")
         self.feature_values = [1.0, 2.0, 3.0, 4.0]
         self.feature_steps = [StepFeature(v, values=numpy.asanyarray(self.feature_values), label="text_{}".format(v))
                               for v in self.feature_values]
-        self.variable_step_feature = VampyVariableStepFeature(vampy_plugin=self.vampy_plugin,
-                                                              segment_meta=self.audio_segment_meta,
-                                                              plugin_output="output1", step_features=self.feature_steps)
+        self.variable_step_feature = VampyVariableStepFeature(segment_meta=self.audio_segment_meta,
+                                                              step_features=self.feature_steps)
 
     def test_should_serialize_and_deserialize_feature(self):
         serialized = self.variable_step_feature.to_serializable()

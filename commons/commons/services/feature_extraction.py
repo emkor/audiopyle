@@ -27,8 +27,7 @@ class ExtractionRequest(Model):
 
 def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin,
                      output_name: Text) -> VampyFeatureAbstraction:
-    feature_meta = VampyFeatureAbstraction(vampy_plugin=vampy_plugin, segment_meta=audio_segment.get_meta(),
-                                           plugin_output=output_name)
+    feature_meta = VampyFeatureAbstraction(segment_meta=audio_segment.get_meta())
     raw_results = vamp.collect(data=audio_segment.data, sample_rate=audio_segment.source_file_meta.sample_rate,
                                plugin_key=vampy_plugin.key, output=output_name)
     return _map_feature(feature_meta=feature_meta, extracted_data=raw_results)
@@ -39,26 +38,25 @@ def _map_feature(feature_meta: VampyFeatureAbstraction, extracted_data: Dict[Tex
     if data_type == "list":
         value_list = [StepFeature(f.get("timestamp").to_float(), f.get("values"), f.get("label") or None)
                       for f in extracted_data.get("list")]
-        return VampyVariableStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,
-                                        plugin_output=feature_meta.plugin_output, step_features=value_list)
+        return VampyVariableStepFeature(segment_meta=feature_meta.segment_meta, step_features=value_list)
     elif data_type in ("vector", "matrix"):
         data = extracted_data.get("vector") or extracted_data.get("matrix")
-        return VampyConstantStepFeature(vampy_plugin=feature_meta.vampy_plugin, segment_meta=feature_meta.segment_meta,
-                                        plugin_output=feature_meta.plugin_output, time_step=data[0].to_float(),
+        return VampyConstantStepFeature(segment_meta=feature_meta.segment_meta, time_step=data[0].to_float(),
                                         matrix=data[1])
     else:
         raise NotImplementedError("Can not recognize feature type: {}".format(extracted_data.keys()))
 
 
-def get_feature_meta(vampy_feature: VampyFeatureAbstraction) -> FeatureMeta:
+def get_feature_meta(vampy_feature: VampyFeatureAbstraction, vampy_plugin: VampyPlugin,
+                     plugin_output: Text) -> FeatureMeta:
     if isinstance(vampy_feature, VampyVariableStepFeature):
         data_stats = _extract_data_stats(vampy_feature.values())
-        return FeatureMeta(plugin=vampy_feature.vampy_plugin, plugin_output=vampy_feature.plugin_output,
+        return FeatureMeta(plugin=vampy_plugin, plugin_output=plugin_output,
                            feature_type=FeatureType.VariableStepFeature, feature_size=vampy_feature.size_bytes(),
                            data_shape=vampy_feature.value_shape(), data_stats=data_stats)
     elif isinstance(vampy_feature, VampyConstantStepFeature):
         data_stats = _extract_data_stats(vampy_feature.values())
-        return FeatureMeta(plugin=vampy_feature.vampy_plugin, plugin_output=vampy_feature.plugin_output,
+        return FeatureMeta(plugin=vampy_plugin, plugin_output=plugin_output,
                            feature_type=FeatureType.ConstantStepFeature, feature_size=vampy_feature.size_bytes(),
                            data_shape=vampy_feature.value_shape(), data_stats=data_stats)
     else:
