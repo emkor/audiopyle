@@ -49,12 +49,6 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
         raise e
 
 
-def _store_results_as_files(analysis_result, feature, task_id):
-    analysis_result_serializable = analysis_result.to_serializable()
-    store_result_as_json(analysis_result_serializable, task_id, "meta")
-    return analysis_result_serializable
-
-
 def _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger):
     # type: (Text, Text, Logger) -> None
     if tmp_audio_file_name != audio_file_absolute_path:

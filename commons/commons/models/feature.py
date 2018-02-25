@@ -72,20 +72,26 @@ class VampyConstantStepFeature(VampyFeatureAbstraction):
 
 
 class StepFeature(Model):
-    def __init__(self, timestamp: float, values: numpy.ndarray, label: Optional[Text] = None) -> None:
+    def __init__(self, timestamp: float, values: Optional[numpy.ndarray], label: Optional[Text] = None) -> None:
         self.timestamp = timestamp
         self.values = values
         self.label = label
 
     def to_serializable(self):
         super_serialized = super(StepFeature, self).to_serializable()
-        super_serialized.update({"values": self.values.tolist()})
+        if self.values is not None:
+            super_serialized.update({"values": self.values.tolist()})
+        else:
+            super_serialized.update({"values": []})
         return super_serialized
-    
+
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
         values = serialized.pop("values")
-        serialized.update({"values": numpy.asanyarray(values)})
+        if values:
+            serialized.update({"values": numpy.asanyarray(values)})
+        else:
+            serialized.update({"values": None})
         return StepFeature(**serialized)
 
 
