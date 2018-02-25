@@ -7,8 +7,6 @@ from assertpy import assert_that
 
 from commons.models.feature import VampyConstantStepFeature, VampyVariableStepFeature, StepFeature
 from commons.models.file_meta import WavAudioFileMeta
-from commons.models.plugin import VampyPlugin
-from commons.models.segment import AudioSegmentMeta
 
 
 class ConstantStepAudioFeatureModelTest(unittest.TestCase):
