@@ -66,9 +66,12 @@ def get_feature_meta(vampy_feature: VampyFeatureAbstraction) -> FeatureMeta:
 
 
 def _extract_data_stats(numpy_array: numpy.ndarray) -> DataStats:
-    return DataStats(minimum=float(numpy.amin(numpy_array)), maximum=float(numpy.amax(numpy_array)),
-                     median=float(numpy.median(numpy_array)), mean=float(numpy.mean(numpy_array)),
-                     standard_deviation=float(numpy.std(numpy_array)), variance=float(numpy.var(numpy_array)))
+    return DataStats(minimum=_try_calculate_data_stat(numpy.amin, numpy_array),
+                     maximum=_try_calculate_data_stat(numpy.amax, numpy_array),
+                     median=_try_calculate_data_stat(numpy.median, numpy_array),
+                     mean=_try_calculate_data_stat(numpy.mean, numpy_array),
+                     standard_deviation=_try_calculate_data_stat(numpy.std, numpy_array),
+                     variance=_try_calculate_data_stat(numpy.var, numpy_array))
 
 
 def _try_calculate_data_stat(calc_callable: Callable[..., float], calc_input: [numpy.ndarray]) -> Optional[float]:
