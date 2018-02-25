@@ -74,7 +74,7 @@ def _extract_data_stats(numpy_array: numpy.ndarray) -> DataStats:
                      variance=_try_calculate_data_stat(numpy.var, numpy_array))
 
 
-def _try_calculate_data_stat(calc_callable: Callable[..., float], calc_input: [numpy.ndarray]) -> Optional[float]:
+def _try_calculate_data_stat(calc_callable: Callable[..., float], calc_input: numpy.ndarray) -> Optional[float]:
     try:
         return float(calc_callable(calc_input))
     except Exception as e:
