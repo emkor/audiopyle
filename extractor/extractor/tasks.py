@@ -41,12 +41,14 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
         extraction_start_time = datetime.utcnow()
         feature = extract_features(audio_segment, plugin, request.plugin_output)
         extraction_time = seconds_between(extraction_start_time)
+        feature_store_start_time = datetime.utcnow()
         store_result_as_json(feature.to_serializable(), task_id, "data")
+        feature_store_time = seconds_between(feature_store_start_time)
         _remove_wav_file(audio_file_absolute_path, tmp_audio_file_name, logger)
         task_time = seconds_between(task_start_time)
         analysis_result = AnalysisResult(ResultVersion.V1, task_id, input_file_meta, input_audio_meta, temp_audio_meta,
                                          id3_tag, get_feature_meta(feature),
-                                         AnalysisStats(task_time, conversion_time, extraction_time))
+                                         AnalysisStats(task_time, conversion_time, extraction_time, feature_store_time))
         analysis_result_serializable = analysis_result.to_serializable()
         store_result_as_json(analysis_result_serializable, task_id, "meta")
         return analysis_result_serializable
