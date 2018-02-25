@@ -6,13 +6,12 @@ import numpy
 from numpy import array
 
 from commons.models.file_meta import WavAudioFileMeta
-from commons.models.segment import MonoAudioSegment
 from commons.utils.logger import get_logger
 
 logger = get_logger()
 
 
-def read_wav_segment(wav_audio_file_meta: WavAudioFileMeta) -> MonoAudioSegment:
+def read_wav_segment(wav_audio_file_meta: WavAudioFileMeta) -> numpy.ndarray:
     audio_frames = _read_raw_frames(wav_audio_file_meta)
     if wav_audio_file_meta.channels_count == 2:
         left, right = array(list(audio_frames[0::2])), array(list(audio_frames[1::2]))
@@ -21,8 +20,7 @@ def read_wav_segment(wav_audio_file_meta: WavAudioFileMeta) -> MonoAudioSegment:
         mono = audio_frames
     else:
         raise NotImplementedError("Can not read segment from such audio file: {}".format(wav_audio_file_meta))
-    return MonoAudioSegment(source_file_meta=wav_audio_file_meta, frame_from=0,
-                            frame_to=wav_audio_file_meta.frames_count, data=numpy.asanyarray(mono))
+    return numpy.asanyarray(mono)
 
 
 def _read_raw_frames(wav_audio_file_meta: WavAudioFileMeta) -> List[float]:

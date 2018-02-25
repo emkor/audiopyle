@@ -6,9 +6,9 @@ import vamp
 from commons.abstractions.model import Model
 from commons.models.feature import VampyFeatureAbstraction, VampyVariableStepFeature, VampyConstantStepFeature, \
     StepFeature
+from commons.models.file_meta import WavAudioFileMeta
 from commons.models.plugin import VampyPlugin
 from commons.models.result import FeatureMeta, DataStats, FeatureType
-from commons.models.segment import MonoAudioSegment
 from commons.services.uuid_generation import generate_uuid
 from commons.utils.logger import get_logger
 
@@ -25,24 +25,22 @@ class ExtractionRequest(Model):
         return generate_uuid("{};{};{}".format(self.audio_file_name, self.plugin_key, self.plugin_output))
 
 
-def extract_features(audio_segment: MonoAudioSegment, vampy_plugin: VampyPlugin,
+def extract_features(wav_data: numpy.ndarray, audio_meta: WavAudioFileMeta, vampy_plugin: VampyPlugin,
                      output_name: Text) -> VampyFeatureAbstraction:
-    feature_meta = VampyFeatureAbstraction(segment_meta=audio_segment.get_meta())
-    raw_results = vamp.collect(data=audio_segment.data, sample_rate=audio_segment.source_file_meta.sample_rate,
-                               plugin_key=vampy_plugin.key, output=output_name)
-    return _map_feature(feature_meta=feature_meta, extracted_data=raw_results)
+    raw_results = vamp.collect(data=wav_data, sample_rate=audio_meta.sample_rate, plugin_key=vampy_plugin.key,
+                               output=output_name)
+    return _map_feature(raw_results)
 
 
-def _map_feature(feature_meta: VampyFeatureAbstraction, extracted_data: Dict[Text, Any]) -> VampyFeatureAbstraction:
+def _map_feature(extracted_data: Dict[Text, Any]) -> VampyFeatureAbstraction:
     data_type = list(extracted_data.keys())[0]
     if data_type == "list":
         value_list = [StepFeature(f.get("timestamp").to_float(), f.get("values"), f.get("label") or None)
                       for f in extracted_data.get("list")]
-        return VampyVariableStepFeature(segment_meta=feature_meta.segment_meta, step_features=value_list)
+        return VampyVariableStepFeature(step_features=value_list)
     elif data_type in ("vector", "matrix"):
         data = extracted_data.get("vector") or extracted_data.get("matrix")
-        return VampyConstantStepFeature(segment_meta=feature_meta.segment_meta, time_step=data[0].to_float(),
-                                        matrix=data[1])
+        return VampyConstantStepFeature(time_step=data[0].to_float(), matrix=data[1])
     else:
         raise NotImplementedError("Can not recognize feature type: {}".format(extracted_data.keys()))
 

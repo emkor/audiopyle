@@ -34,14 +34,13 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     tmp_audio_file_name = convert_to_wav(audio_file_absolute_path, generate_output_wav_file_path(task_id))
     conversion_time = seconds_between(conversion_start_time)
 
-    temp_audio_meta = read_wav_file_meta(tmp_audio_file_name)
-    audio_segment = read_wav_segment(temp_audio_meta)
+    wav_audio_meta = read_wav_file_meta(tmp_audio_file_name)
+    wav_data = read_wav_segment(wav_audio_meta)
     plugin = build_plugin_from_key(str(request.plugin_key))
-    logger.debug("Built extraction context: {} {} {}! Extracting features...".format(audio_segment, plugin,
-                                                                                     request.plugin_output))
+    logger.debug("Built extraction context: {} {}! Extracting features...".format(plugin, request.plugin_output))
     try:
         extraction_start_time = datetime.utcnow()
-        feature = extract_features(audio_segment, plugin, request.plugin_output)
+        feature = extract_features(wav_data, wav_audio_meta, plugin, request.plugin_output)
         extraction_time = seconds_between(extraction_start_time)
 
         feature_store_start_time = datetime.utcnow()
@@ -52,7 +51,7 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
 
         analysis_result_build_start_time = datetime.utcnow()
         feature_meta = get_feature_meta(feature, plugin, request.plugin_output)
-        analysis_result = AnalysisResult(ResultVersion.V1, task_id, input_file_meta, input_audio_meta, temp_audio_meta,
+        analysis_result = AnalysisResult(ResultVersion.V1, task_id, input_file_meta, input_audio_meta, wav_audio_meta,
                                          id3_tag, feature_meta)
         store_result_as_json(analysis_result.to_serializable(), task_id, "meta")
         analysis_result_build_time = seconds_between(analysis_result_build_start_time)
