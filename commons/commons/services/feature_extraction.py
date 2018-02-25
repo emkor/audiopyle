@@ -1,4 +1,4 @@
-from typing import Text, Dict, Any
+from typing import Text, Dict, Any, Callable, Optional
 
 import numpy
 import vamp
@@ -69,3 +69,13 @@ def _extract_data_stats(numpy_array: numpy.ndarray) -> DataStats:
     return DataStats(minimum=float(numpy.amin(numpy_array)), maximum=float(numpy.amax(numpy_array)),
                      median=float(numpy.median(numpy_array)), mean=float(numpy.mean(numpy_array)),
                      standard_deviation=float(numpy.std(numpy_array)), variance=float(numpy.var(numpy_array)))
+
+
+def _try_calculate_data_stat(calc_callable: Callable[numpy.ndarray, float],
+                             calc_input: [numpy.ndarray]) -> Optional[float]:
+    try:
+        return float(calc_callable(calc_input))
+    except Exception as e:
+        logger.warning(
+            "Could not calculate {} from data shaped {}: {}; returning None".format(calc_callable, calc_input.shape, e))
+        return None

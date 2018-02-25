@@ -1,4 +1,4 @@
-from typing import Text, Any, Dict
+from typing import Text, Any, Dict, Optional
 
 from enum import Enum
 
@@ -19,8 +19,8 @@ class FeatureType(Enum):
 
 
 class DataStats(Model):
-    def __init__(self, minimum: float, maximum: float, median: float, mean: float, standard_deviation: float,
-                 variance: float) -> None:
+    def __init__(self, minimum: Optional[float], maximum: Optional[float], median: Optional[float],
+                 mean: Optional[float], standard_deviation: Optional[float], variance: Optional[float]) -> None:
         self.minimum = minimum
         self.maximum = maximum
         self.median = median
