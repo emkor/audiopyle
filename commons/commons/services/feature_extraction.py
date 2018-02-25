@@ -55,12 +55,12 @@ def get_feature_meta(vampy_feature: VampyFeatureAbstraction) -> FeatureMeta:
         data_stats = _extract_data_stats(vampy_feature.values())
         return FeatureMeta(plugin=vampy_feature.vampy_plugin, plugin_output=vampy_feature.plugin_output,
                            feature_type=FeatureType.VariableStepFeature, feature_size=vampy_feature.size_bytes(),
-                           data_stats=data_stats)
+                           data_shape=vampy_feature.value_shape(), data_stats=data_stats)
     elif isinstance(vampy_feature, VampyConstantStepFeature):
         data_stats = _extract_data_stats(vampy_feature.values())
         return FeatureMeta(plugin=vampy_feature.vampy_plugin, plugin_output=vampy_feature.plugin_output,
                            feature_type=FeatureType.ConstantStepFeature, feature_size=vampy_feature.size_bytes(),
-                           data_stats=data_stats)
+                           data_shape=vampy_feature.value_shape(), data_stats=data_stats)
     else:
         raise ValueError("Can not extract feature meta from: {}".format(vampy_feature))
 

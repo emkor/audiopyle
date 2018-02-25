@@ -1,4 +1,4 @@
-from typing import Text, Any, Dict, Optional
+from typing import Text, Any, Dict, Optional, Tuple
 
 from enum import Enum
 
@@ -44,11 +44,12 @@ class AnalysisStats(Model):
 
 class FeatureMeta(Model):
     def __init__(self, plugin: VampyPlugin, plugin_output: Text, feature_type: FeatureType, feature_size: float,
-                 data_stats: DataStats) -> None:
+                 data_shape: Tuple[int, int], data_stats: DataStats) -> None:
         self.plugin = plugin
         self.plugin_output = plugin_output
         self.feature_type = feature_type
         self.feature_size = feature_size
+        self.data_shape = data_shape
         self.data_stats = data_stats
 
     def to_serializable(self):
