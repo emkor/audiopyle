@@ -6,7 +6,7 @@ from typing import Text, Any, List, Dict, Optional
 from enum import Enum
 
 from commons.utils.file_system import file_exists, concatenate_paths, remove_file, list_files, extract_extension, \
-    get_file_name
+    get_file_name, extract_all_extensions
 
 
 class FileMode(Enum):
@@ -53,7 +53,7 @@ class FileStore(object):
 
     def exists(self, file_name: Text) -> bool:
         full_path = self._build_full_path(file_name)
-        return file_exists(full_path) and extract_extension(full_path).lower() == self.extension.lower()
+        return file_exists(full_path) and extract_all_extensions(full_path).lower() == self.extension.lower()
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]) -> None:
         raise NotImplementedError()
@@ -65,7 +65,7 @@ class FileStore(object):
         return file_name_with_extensions.partition('.')[0]
 
     def _has_correct_extension(self, file_path: Text) -> bool:
-        return extract_extension(file_path).lower() == self.extension.lower()
+        return extract_all_extensions(file_path).lower() == self.extension.lower()
 
     def _build_full_path(self, file_name: Text) -> Text:
         return concatenate_paths(self.base_dir, self._build_file_name_with_ext(file_name))
@@ -93,11 +93,11 @@ class GzipJsonFileStore(FileStore):
         super().__init__(base_dir, "json.gzip")
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
-        json_content = json.dumps(content)
+        json_content = json.dumps(content).encode('utf-8')
         with gzip.open(full_path, 'wb') as f:
             f.write(json_content)
 
     def _inherit_read(self, full_path: Text) -> Dict[Text, Any]:
         with gzip.open(full_path, 'rb') as f:
             file_content = f.read()
-        return json.loads(file_content.encode())
+        return json.loads(file_content.decode('utf-8'))
