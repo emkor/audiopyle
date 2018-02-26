@@ -24,4 +24,5 @@ class AudioFileId3TagProvidingTest(unittest.TestCase):
         assert_that(id3_tag_from_wav).is_none()
 
     def test_should_return_none_on_non_existing_file(self):
-        assert_that(read_id3_tag).raises(IOError).when_called_with(self.non_existing_file_path)
+        id3_tag_from_wav = read_id3_tag(self.non_existing_file_path)
+        assert_that(id3_tag_from_wav).is_none()

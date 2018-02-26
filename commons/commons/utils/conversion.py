@@ -64,7 +64,7 @@ def seconds_between(start_time_point: datetime, end_time_point: datetime = None,
 def safe_cast(value: Any, expected_type: Type, default: Any = None) -> Any:
     try:
         return expected_type(value)
-    except ValueError:
+    except (ValueError, TypeError):
         return default
 
 

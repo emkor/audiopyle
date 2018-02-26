@@ -14,14 +14,14 @@ def read_id3_tag(input_audio_file_absolute_path: Text) -> Optional[Id3Tag]:
     try:
         audio_tags = EasyID3(input_audio_file_absolute_path)
         id3_tag = _mutagen_id3_to_internal(audio_tags)
-        logger.info("Tags extracted from {}: {}".format(input_audio_file_absolute_path, id3_tag))
+        logger.debug("Tags extracted from {}: {}".format(input_audio_file_absolute_path, id3_tag))
         return id3_tag
     except ID3NoHeaderError as e:
         logger.warning("File {} does not contain ID3 tag: {}".format(input_audio_file_absolute_path, e))
         return None
     except Exception as e:
         logger.error("Could not read ID3 tags from: {}. Details: {}".format(input_audio_file_absolute_path, e))
-        raise IOError(e)
+        return None
 
 
 def _mutagen_id3_to_internal(easy_id3: EasyID3) -> Id3Tag:

@@ -17,7 +17,7 @@ broker_pool_limit = get_environment_variable("EXTRACTION_BROKER_CONN_POOL_SIZE",
 
 worker_prefetch_multiplier = 1
 worker_max_tasks_per_child = 1
-worker_max_memory_per_child = 128 * 1000  # 128 MB
+worker_max_memory_per_child = get_environment_variable("EXTRACTION_MEMORY_LIMIT_MB", int, default=256) * 1000
 worker_send_task_events = True
 task_send_sent_event = True
 task_track_started = True

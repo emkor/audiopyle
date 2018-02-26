@@ -15,7 +15,7 @@ mysql_host:
     - MYSQL_PASSWORD=celery
     - MYSQL_DATABASE=results
   ports:
-    - "3305:3306"
+    - "3306:3306"
 coordinator_host:
   image: "endlessdrones/audiopyle-coordinator"
   hostname: "coordinator_host"
@@ -28,7 +28,7 @@ coordinator_host:
     - "./resources/vamp:/root/vamp:ro"
     - "./resources/audio:/root/audio:ro"
   environment:
-    - BLACKLISTED_PLUGINS=vamp-example-plugins:zerocrossing,vamp-example-plugins:powerspectrum
+    - BLACKLISTED_PLUGINS=vamp-example-plugins:zerocrossing,vamp-example-plugins:powerspectrum,cqvamp:cqvamp,cqvamp:cqvampmidi,mtg-melodia:melodiaviz,pyin:yin,qm-vamp-plugins:qm-adaptivespectrogram,qm-vamp-plugins:qm-dwt,vamp-libxtract:amdf,vamp-libxtract:asdf,vamp-libxtract:autocorrelation,vamp-libxtract:dct,vamp-libxtract:spectrum,silvet:silvet,pyin:pyin
 extractor_host_1:
   image: "endlessdrones/audiopyle-extractor"
   hostname: "extractor_host_1"
@@ -38,9 +38,10 @@ extractor_host_1:
   volumes:
     - "./resources/vamp:/root/vamp:ro"
     - "./resources/audio:/root/audio:ro"
-    - "./resources/results:/root/result"
+    - "./resources/result:/root/result"
   environment:
-    - EXTRACTION_CONCURRENCY=2
+    - EXTRACTION_CONCURRENCY=4
     - EXTRACTION_BROKER_CONN_POOL_SIZE=4
     - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=300
     - EXTRACTION_HARD_TIME_LIMIT_SECONDS=600
+    - EXTRACTION_MEMORY_LIMIT_MB=1024
