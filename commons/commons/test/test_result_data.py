@@ -6,7 +6,7 @@ from datetime import datetime
 from commons.models.audio_tag import Id3Tag
 from commons.models.file_meta import FileMeta, Mp3AudioFileMeta, WavAudioFileMeta
 from commons.models.plugin import VampyPlugin
-from commons.models.result import FeatureMeta, ResultVersion, FeatureType, AnalysisResult, DataStats, AnalysisStats
+from commons.models.result import FeatureMeta, ResultVersion, FeatureType, AnalysisResult, DataStats
 from commons.utils.serialization import to_json
 
 
@@ -48,11 +48,10 @@ class AnalysisResultModelTest(unittest.TestCase):
         self.data_stats_example = DataStats(0.0, 1.0, 0.6, 0.5, 0.1, 0.2)
         self.result_data_example = FeatureMeta(self.example_vampy_plugin, "amplitude", FeatureType.ConstantStepFeature,
                                                1024, (1, 10), self.data_stats_example)
-        self.analysis_stats = AnalysisStats(3.121, 0.17, 1.079, 0.2)
         self.analysis_result_example = AnalysisResult(ResultVersion.V1, "fa3b5d8c-b760-49e0-b8b5-7ce0737621d8",
                                                       self.file_meta_example, self.audio_meta_example,
                                                       self.raw_audio_meta_example, self.id3_tag_example,
-                                                      self.result_data_example, self.analysis_stats)
+                                                      self.result_data_example)
 
     def test_should_serialize_and_deserialize_analysis_result_data_model(self):
         serialized = self.analysis_result_example.to_serializable()

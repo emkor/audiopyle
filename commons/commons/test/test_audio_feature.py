@@ -7,8 +7,6 @@ from assertpy import assert_that
 
 from commons.models.feature import VampyConstantStepFeature, VampyVariableStepFeature, StepFeature
 from commons.models.file_meta import WavAudioFileMeta
-from commons.models.plugin import VampyPlugin
-from commons.models.segment import AudioSegmentMeta
 
 
 class ConstantStepAudioFeatureModelTest(unittest.TestCase):
@@ -16,14 +14,8 @@ class ConstantStepAudioFeatureModelTest(unittest.TestCase):
         self.audio_file_meta = WavAudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
                                                 sample_rate=44100, frames_count=22050, bit_depth=16,
                                                 file_size_bytes=88200)
-        self.audio_segment_meta = AudioSegmentMeta(self.audio_file_meta, frame_from=0, frame_to=22049)
-        self.vampy_plugin = VampyPlugin(key="plugin_provider:plugin_name", categories=["category1"],
-                                        outputs=["output1"], library_path="/some/path")
         self.feature_values = numpy.array([1.0, 2.0, 3.0, 4.0])
-        self.constant_step_feature = VampyConstantStepFeature(vampy_plugin=self.vampy_plugin,
-                                                              segment_meta=self.audio_segment_meta,
-                                                              plugin_output="output1", time_step=0.5,
-                                                              matrix=self.feature_values)
+        self.constant_step_feature = VampyConstantStepFeature(time_step=0.5, matrix=self.feature_values)
 
     def test_should_serialize_and_deserialize_feature(self):
         serialized = self.constant_step_feature.to_serializable()
@@ -36,7 +28,7 @@ class ConstantStepAudioFeatureModelTest(unittest.TestCase):
 
     def test_should_calculate_frames_properly(self):
         expected_frames = [0, 22050, 44100, 66150]
-        actual_frames = self.constant_step_feature.frames()
+        actual_frames = self.constant_step_feature.frames(self.audio_file_meta)
         assert_that(actual_frames).is_equal_to(expected_frames)
 
     def test_should_list_timestamps_properly(self):
@@ -54,15 +46,10 @@ class VariableStepAudioFeatureModelTest(unittest.TestCase):
         self.audio_file_meta = WavAudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
                                                 sample_rate=44100, frames_count=22050, bit_depth=16,
                                                 file_size_bytes=88200)
-        self.audio_segment_meta = AudioSegmentMeta(self.audio_file_meta, frame_from=0, frame_to=22049)
-        self.vampy_plugin = VampyPlugin(key="plugin_provider:plugin_name", categories=["category1"],
-                                        outputs=["output1"], library_path="/some/path")
         self.feature_values = [1.0, 2.0, 3.0, 4.0]
         self.feature_steps = [StepFeature(v, values=numpy.asanyarray(self.feature_values), label="text_{}".format(v))
                               for v in self.feature_values]
-        self.variable_step_feature = VampyVariableStepFeature(vampy_plugin=self.vampy_plugin,
-                                                              segment_meta=self.audio_segment_meta,
-                                                              plugin_output="output1", step_features=self.feature_steps)
+        self.variable_step_feature = VampyVariableStepFeature(step_features=self.feature_steps)
 
     def test_should_serialize_and_deserialize_feature(self):
         serialized = self.variable_step_feature.to_serializable()
