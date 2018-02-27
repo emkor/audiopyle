@@ -10,7 +10,7 @@ from commons.utils.file_system import list_files, AUDIO_FILES_DIR, extract_exten
 from extractor.service import run_task
 from extractor.tasks import extract_feature
 
-ACCEPTED_EXTENSIONS = ("mp3", "wav", "flac")
+ACCEPTED_EXTENSIONS = ["mp3"]
 
 
 class AutomationApi(AudiopyleRestApi):
