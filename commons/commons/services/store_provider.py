@@ -3,15 +3,9 @@ import json
 from logging import getLogger
 
 from typing import Text, Any, List, Dict
-from enum import Enum
 
 from commons.utils.file_system import file_exists, concatenate_paths, remove_file, list_files, get_file_name, \
     extract_all_extensions
-
-
-class FileMode(Enum):
-    binary = "b"
-    text = "t"
 
 
 class StoreError(Exception):

@@ -15,14 +15,7 @@ from commons.utils.logger import get_logger
 logger = get_logger()
 
 
-class ExtractionRequest(Model):
-    def __init__(self, audio_file_name: Text, plugin_key: Text, plugin_output: Text) -> None:
-        self.audio_file_name = audio_file_name
-        self.plugin_key = plugin_key
-        self.plugin_output = plugin_output
 
-    def uuid(self) -> Text:
-        return generate_uuid("{};{};{}".format(self.audio_file_name, self.plugin_key, self.plugin_output))
 
 
 def extract_features(wav_data: numpy.ndarray, audio_meta: WavAudioFileMeta, vampy_plugin: VampyPlugin,

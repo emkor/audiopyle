@@ -4,10 +4,11 @@ from typing import Any, Text, Dict
 from billiard.exceptions import SoftTimeLimitExceeded
 from datetime import datetime
 
+from commons.models.extraction_request import ExtractionRequest
 from commons.models.result import AnalysisResult, ResultVersion, AnalysisStats
 from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.audio_conversion import convert_to_wav, generate_output_wav_file_path
-from commons.services.feature_extraction import extract_features, ExtractionRequest, get_feature_meta
+from commons.services.feature_extraction import extract_features, get_feature_meta
 from commons.services.file_meta_providing import read_wav_file_meta, read_file_meta, read_mp3_file_meta
 from commons.services.plugin_providing import build_plugin_from_key
 from commons.services.segment_providing import read_wav_segment
