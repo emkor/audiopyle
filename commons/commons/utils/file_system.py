@@ -60,6 +60,10 @@ def extract_extension(file_path: Text) -> Text:
     return os.path.splitext(file_path)[1][1:].strip().lower()
 
 
+def extract_all_extensions(file_path: Text) -> Text:
+    return file_path.partition('.')[2]
+
+
 def remove_file(file_path: Text) -> None:
     os.remove(file_path)
 
