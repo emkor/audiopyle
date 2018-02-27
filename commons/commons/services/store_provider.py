@@ -2,16 +2,20 @@ import gzip
 import json
 from logging import getLogger
 
-from typing import Text, Any, List, Dict, Optional
+from typing import Text, Any, List, Dict
 from enum import Enum
 
-from commons.utils.file_system import file_exists, concatenate_paths, remove_file, list_files, extract_extension, \
-    get_file_name, extract_all_extensions
+from commons.utils.file_system import file_exists, concatenate_paths, remove_file, list_files, get_file_name, \
+    extract_all_extensions
 
 
 class FileMode(Enum):
     binary = "b"
     text = "t"
+
+
+class StoreError(Exception):
+    pass
 
 
 class FileStore(object):
@@ -20,36 +24,37 @@ class FileStore(object):
         self.extension = extension
         self.logger = getLogger()
 
-    def store(self, file_name: Text, content: Dict[Text, Any]) -> bool:
+    def store(self, file_name: Text, content: Dict[Text, Any]) -> None:
         full_path = self._build_full_path(file_name)
         try:
             self._inherit_store(full_path, content)
-            return True
         except Exception as e:
-            self.logger.warning("Could not store in {}: {}".format(full_path, e))
-            return False
+            message = "Could not store in {}: {}".format(full_path, e)
+            self.logger.warning(message)
+            raise StoreError(message)
 
-    def read(self, file_name: Text) -> Optional[Dict[Text, Any]]:
+    def read(self, file_name: Text) -> Dict[Text, Any]:
         full_path = self._build_full_path(file_name)
         try:
             return self._inherit_read(full_path)
         except Exception as e:
-            self.logger.warning("Could not read from {}: {}".format(full_path, e))
-            return None
+            message = "Could not read from {}: {}".format(full_path, e)
+            self.logger.warning(message)
+            raise StoreError(message)
 
     def list(self) -> List[Text]:
         all_files = list_files(self.base_dir)
         file_names = [get_file_name(f) for f in all_files if self._has_correct_extension(f)]
         return [self._strip_just_name(f) for f in file_names]
 
-    def remove(self, file_name: Text) -> bool:
+    def remove(self, file_name: Text) -> None:
         full_path = self._build_full_path(file_name)
         try:
             remove_file(full_path)
-            return True
         except Exception as e:
-            self.logger.warning("Could not remove file {} because: {}".format(full_path, e))
-            return False
+            message = "Could not remove file {} because: {}".format(full_path, e)
+            self.logger.warning(message)
+            raise StoreError(message)
 
     def exists(self, file_name: Text) -> bool:
         full_path = self._build_full_path(file_name)
