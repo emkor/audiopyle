@@ -3,7 +3,7 @@ import unittest
 import numpy
 from assertpy import assert_that
 
-from commons.services.feature_extraction import _extract_data_stats
+from commons.services.feature_meta_extraction import _extract_data_stats
 
 
 class FeatureExtractionTest(unittest.TestCase):
