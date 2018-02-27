@@ -6,7 +6,7 @@ from assertpy import assert_that
 from commons.services.feature_meta_extraction import _extract_data_stats
 
 
-class FeatureExtractionTest(unittest.TestCase):
+class FeatureMetaExtractionTest(unittest.TestCase):
     def setUp(self):
         self.np_vector = numpy.asanyarray([1.0, 2.0, 3.0, 2.0, 1.0, 0.0])
         self.np_square_matrix = numpy.asanyarray([

@@ -1,4 +1,4 @@
-from typing import Text, Dict, Any, Callable, Optional
+from typing import Text, Dict, Any
 
 import numpy
 import vamp
@@ -7,7 +7,6 @@ from commons.models.feature import VampyFeatureAbstraction, VampyVariableStepFea
     StepFeature
 from commons.models.file_meta import WavAudioFileMeta
 from commons.models.plugin import VampyPlugin
-from commons.models.result import FeatureMeta, DataStats, FeatureType
 from commons.utils.logger import get_logger
 
 logger = get_logger()
@@ -31,5 +30,3 @@ def _map_feature(extracted_data: Dict[Text, Any]) -> VampyFeatureAbstraction:
         return VampyConstantStepFeature(time_step=data[0].to_float(), matrix=data[1])
     else:
         raise NotImplementedError("Can not recognize feature type: {}".format(extracted_data.keys()))
-
-
