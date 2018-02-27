@@ -1,12 +1,9 @@
-import json
 import os
 import shutil
 
-from typing import Text, List, Any, Dict
+from typing import Text, List
 
 from logging import getLogger
-
-from commons.utils.conversion import object_size_humanized
 
 RESULT_FILE_PERMISSIONS = 0o666
 
@@ -15,24 +12,6 @@ TMP_DIR = "/root/audio_tmp"
 RESULTS_DIR = "/root/result"
 
 logger = getLogger()
-
-
-def store_result_as_json(serializable_content: Dict[Text, Any], task_id: Text, file_suffix: Text) -> None:
-    logger.debug("Storing task {} result {} in JSON of size {}...".format(task_id, file_suffix,
-                                                                          object_size_humanized(serializable_content)))
-    target_path = os.path.join(RESULTS_DIR, "{}-{}.json".format(task_id, file_suffix))
-    if not file_exists(target_path):
-        output_file = None
-        try:
-            with open(target_path, 'w') as output_file:
-                json.dump(serializable_content, output_file)
-            os.chmod(target_path, RESULT_FILE_PERMISSIONS)
-        except Exception as e:
-            if output_file is not None:
-                output_file.close()
-            raise ValueError("Could not store to file at {}: {}".format(target_path, e))
-    else:
-        raise ValueError("File at {} already exists: can not store content there.".format(target_path))
 
 
 def file_exists(absolute_path: Text) -> bool:
