@@ -26,3 +26,8 @@ def get_audiopyle_root_dir(test_file_object):
     current_test_directory = os.path.dirname(os.path.realpath(test_file_object))
     code_directory, audiopyle_directory, _ = current_test_directory.partition("audiopyle/")
     return concatenate_paths(code_directory, audiopyle_directory)
+
+
+def fake_function_from_method(callable, arg):
+    """assert_that(...).raises() must have a function, not method, in place of ..."""
+    callable(arg)

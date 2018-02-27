@@ -4,6 +4,7 @@ import unittest
 from assertpy import assert_that
 
 from commons.services.store_provider import JsonFileStore, GzipJsonFileStore, StoreError
+from commons.test.utils import fake_function_from_method
 
 
 class JsonFileStoreTest(unittest.TestCase):
@@ -38,11 +39,11 @@ class JsonFileStoreTest(unittest.TestCase):
         assert_that(exists).is_false()
 
     def test_should_return_false_on_removal_of_non_existing_file(self):
-        assert_that(_fake_function_for_method).raises(StoreError).when_called_with(callable=self.json_file_store.remove,
+        assert_that(fake_function_from_method).raises(StoreError).when_called_with(callable=self.json_file_store.remove,
                                                                                    arg=self.non_existing_file_name)
 
     def test_should_none_on_read_of_non_existing_file(self):
-        assert_that(_fake_function_for_method).raises(StoreError).when_called_with(callable=self.json_file_store.read,
+        assert_that(fake_function_from_method).raises(StoreError).when_called_with(callable=self.json_file_store.read,
                                                                                    arg=self.test_file_name)
 
     def test_should_create_file_and_make_sure_it_is_on_the_list(self):
@@ -64,11 +65,6 @@ class JsonFileStoreTest(unittest.TestCase):
         assert_that(stored_content).is_equal_to(self.example_content)
 
         self.json_file_store.remove(self.test_file_name)
-
-
-def _fake_function_for_method(callable, arg):
-    """assert_that(...).raises() must have a function, not method, in place of ..."""
-    callable(arg)
 
 
 class GzippedJsonFileStoreTest(unittest.TestCase):
