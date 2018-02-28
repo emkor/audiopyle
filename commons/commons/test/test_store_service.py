@@ -3,7 +3,8 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.services.store_provider import JsonFileStore, GzipJsonFileStore
+from commons.services.store_provider import JsonFileStore, GzipJsonFileStore, StoreError
+from commons.test.utils import fake_function_from_method
 
 
 class JsonFileStoreTest(unittest.TestCase):
@@ -32,19 +33,18 @@ class JsonFileStoreTest(unittest.TestCase):
         exists = self.json_file_store.exists(self.test_file_name)
         assert_that(exists).is_true()
 
-        removal_success = self.json_file_store.remove(self.test_file_name)
-        assert_that(removal_success).is_true()
+        self.json_file_store.remove(self.test_file_name)
 
         exists = self.json_file_store.exists(self.test_file_name)
         assert_that(exists).is_false()
 
     def test_should_return_false_on_removal_of_non_existing_file(self):
-        removal_failure = self.json_file_store.remove(self.non_existing_file_name)
-        assert_that(removal_failure).is_false()
+        assert_that(fake_function_from_method).raises(StoreError).when_called_with(callable=self.json_file_store.remove,
+                                                                                   arg=self.non_existing_file_name)
 
     def test_should_none_on_read_of_non_existing_file(self):
-        stored_content = self.json_file_store.read(self.test_file_name)
-        assert_that(stored_content).is_none()
+        assert_that(fake_function_from_method).raises(StoreError).when_called_with(callable=self.json_file_store.read,
+                                                                                   arg=self.test_file_name)
 
     def test_should_create_file_and_make_sure_it_is_on_the_list(self):
         file_list = self.json_file_store.list()
@@ -79,46 +79,6 @@ class GzippedJsonFileStoreTest(unittest.TestCase):
         self.tmp_base_dir = "/tmp/audiopyle_gzipped_json_tests"
         self.gzip_json_file_store = GzipJsonFileStore(self.tmp_base_dir)
         os.makedirs(self.tmp_base_dir, exist_ok=True)
-
-    def test_should_report_file_does_not_exist(self):
-        exists = self.gzip_json_file_store.exists(self.non_existing_file_name)
-        assert_that(exists).is_false()
-
-    def test_should_create_file_and_report_it_exists_then_remove_it(self):
-        exists = self.gzip_json_file_store.exists(self.test_file_name)
-        assert_that(exists).is_false()
-
-        self.gzip_json_file_store.store(self.test_file_name, {})
-
-        exists = self.gzip_json_file_store.exists(self.test_file_name)
-        assert_that(exists).is_true()
-
-        removal_success = self.gzip_json_file_store.remove(self.test_file_name)
-        assert_that(removal_success).is_true()
-
-        exists = self.gzip_json_file_store.exists(self.test_file_name)
-        assert_that(exists).is_false()
-
-    def test_should_return_false_on_removal_of_non_existing_file(self):
-        removal_failure = self.gzip_json_file_store.remove(self.non_existing_file_name)
-        assert_that(removal_failure).is_false()
-
-    def test_should_none_on_read_of_non_existing_file(self):
-        stored_content = self.gzip_json_file_store.read(self.test_file_name)
-        assert_that(stored_content).is_none()
-
-    def test_should_create_file_and_make_sure_it_is_on_the_list(self):
-        file_list = self.gzip_json_file_store.list()
-        assert_that(file_list).is_empty()
-
-        self.gzip_json_file_store.store(self.test_file_name, {})
-
-        file_list = self.gzip_json_file_store.list()
-        assert_that(file_list).is_length(1).contains_only(self.test_file_name)
-
-        self.gzip_json_file_store.remove(self.test_file_name)
-        file_list = self.gzip_json_file_store.list()
-        assert_that(file_list).is_empty()
 
     def test_should_create_file_and_read_it(self):
         self.gzip_json_file_store.store(self.test_file_name, self.example_content)

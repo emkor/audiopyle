@@ -1,50 +1,41 @@
-import unittest
+from unittest import TestCase
 
-import numpy
 from assertpy import assert_that
+from numpy import array, float32, ndarray
+from vampyhost import RealTime
 
-from commons.services.feature_extraction import _extract_data_stats
+from commons.models.feature import VampyConstantStepFeature, VampyVariableStepFeature
+from commons.services.feature_extraction import _map_feature
 
 
-class FeatureExtractionTest(unittest.TestCase):
+class ExtractedFeatureMappingTest(TestCase):
     def setUp(self):
-        self.np_vector = numpy.asanyarray([1.0, 2.0, 3.0, 2.0, 1.0, 0.0])
-        self.np_square_matrix = numpy.asanyarray([
-            [1.0, 2.0, 3.0],
-            [2.0, 1.0, 0.0],
-            [1.0, 2.0, 3.0]
-        ])
-        self.np_non_square_matrix = numpy.asanyarray([
-            [1.0, 2.0, 3.0],
-            [2.0, 1.0, 0.0]
-        ])
+        self.wrong_feature_type = {'anything': [1.0]}
+        self.constant_step_array = array([0.38888031, 0.3144314, 0.46564227, 0.31890243, 0.22512659], dtype=float32)
+        self.constant_step_feature = {'vector': (RealTime('milliseconds', 0.023219954 * 1000),
+                                                 self.constant_step_array)}
+        self.variable_step_feature = {'list': [{'timestamp': RealTime('milliseconds', 0.000000000 * 1000),
+                                                'label': 'F# minor',
+                                                'values': array([19.], dtype=float32)},
+                                               {'timestamp': RealTime('milliseconds', 0.743038548 * 1000),
+                                                'label': 'D major',
+                                                'values': array([3.], dtype=float32)}]}
 
-    def test_should_calculate_stats_on_vector(self):
-        data_stats = _extract_data_stats(self.np_vector)
-        assert_that(data_stats).is_not_none()
-        assert_that(data_stats.maximum).is_not_none().is_equal_to(3.0)
-        assert_that(data_stats.minimum).is_not_none().is_equal_to(0.0)
-        assert_that(data_stats.mean).is_not_none().is_equal_to(1.5)
-        assert_that(data_stats.median).is_not_none().is_equal_to(1.5)
-        assert_that(data_stats.standard_deviation).is_not_none().is_between(0.95, 0.96)
-        assert_that(data_stats.variance).is_not_none().is_between(0.91, 0.92)
+    def test_should_build_constant_step_feature(self):
+        feature_object = _map_feature(self.constant_step_feature)
+        assert_that(feature_object).is_type_of(VampyConstantStepFeature)
+        assert_that(feature_object._time_step).is_equal_to(0.023219954)
+        assert_that(feature_object.value_shape()).is_equal_to((5, 1))
+        assert_that(feature_object.values()).is_same_as(self.constant_step_array)
+        assert_that(feature_object.timestamps()).is_length(5).contains_only(0.000000000, 0.023219954, 0.046439908,
+                                                                            0.069659862, 0.092879816)
 
-    def test_should_calculate_stats_on_square_matrix(self):
-        data_stats = _extract_data_stats(self.np_square_matrix)
-        assert_that(data_stats).is_not_none()
-        assert_that(data_stats.maximum).is_not_none().is_equal_to(3.0)
-        assert_that(data_stats.minimum).is_not_none().is_equal_to(0.0)
-        assert_that(data_stats.mean).is_not_none().is_between(1.6, 1.7)
-        assert_that(data_stats.median).is_not_none().is_equal_to(2.0)
-        assert_that(data_stats.standard_deviation).is_not_none().is_between(0.94, 0.95)
-        assert_that(data_stats.variance).is_not_none().is_between(0.88, 0.89)
+    def test_should_build_variable_step_feature(self):
+        feature_object = _map_feature(self.variable_step_feature)
+        assert_that(feature_object).is_type_of(VampyVariableStepFeature)
+        assert_that(feature_object.value_shape()).is_equal_to((2, 1))
+        assert_that(feature_object.values()).is_type_of(ndarray)
+        assert_that(feature_object.timestamps()).is_length(2).contains_only(0.000000000, 0.743038548)
 
-    def test_should_calculate_stats_on_non_square_matrix(self):
-        data_stats = _extract_data_stats(self.np_non_square_matrix)
-        assert_that(data_stats).is_not_none()
-        assert_that(data_stats.maximum).is_not_none().is_equal_to(3.0)
-        assert_that(data_stats.minimum).is_not_none().is_equal_to(0.0)
-        assert_that(data_stats.mean).is_not_none().is_equal_to(1.5)
-        assert_that(data_stats.median).is_not_none().is_equal_to(1.5)
-        assert_that(data_stats.standard_deviation).is_not_none().is_between(0.95, 0.96)
-        assert_that(data_stats.variance).is_not_none().is_between(0.91, 0.92)
+    def test_should_raise_error_on_wrong_feature_type(self):
+        assert_that(_map_feature).raises(NotImplementedError).when_called_with(self.wrong_feature_type)
