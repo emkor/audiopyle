@@ -1,14 +1,12 @@
-import gzip
+import os
 import json
+import gzip
+import lzma
 from logging import getLogger
 
 from typing import Text, Any, List, Dict
 
-import lzma
-
-import os
-
-from commons.utils.file_system import file_exists, concatenate_paths, remove_file, list_files, get_file_name, \
+from commons.utils.file_system import file_exists, concatenate_paths, remove_file, get_file_name, \
     extract_all_extensions, list_full_paths
 
 DEFAULT_PERMISSIONS = 0o666
