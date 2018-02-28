@@ -31,17 +31,21 @@ class DataStats(Model):
 
 class AnalysisStats(Model):
     def __init__(self, total_time: float, conversion_time: float, extraction_time: float,
-                 feature_store_time: float, analysis_result_build_time: float) -> None:
+                 feature_store_time: float, result_build_time: float, result_store_time: float,
+                 read_input_file_time: float, read_raw_audio_time: float) -> None:
         self.total_time = total_time
         self.conversion_time = conversion_time
         self.extraction_time = extraction_time
         self.feature_store_time = feature_store_time
-        self.analysis_result_build_time = analysis_result_build_time
+        self.result_build_time = result_build_time
+        self.result_store_time = result_store_time
+        self.read_input_file_time = read_input_file_time
+        self.read_raw_audio_time = read_raw_audio_time
 
     @property
     def misc_ops_time(self):
         return self.total_time - sum([self.conversion_time, self.extraction_time,
-                                      self.feature_store_time, self.analysis_result_build_time])
+                                      self.feature_store_time, self.result_build_time])
 
 
 class FeatureMeta(Model):
