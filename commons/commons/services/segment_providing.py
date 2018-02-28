@@ -1,14 +1,20 @@
 import struct
 import wave
-from typing import List
+from typing import List, Text
 
 import numpy
 from numpy import array
+from pydub import AudioSegment
 
 from commons.models.file_meta import WavAudioFileMeta
 from commons.utils.logger import get_logger
 
 logger = get_logger()
+
+
+def read_raw_audio_from_mp3(input_audio_file_path: Text) -> numpy.ndarray:
+    int_samples = AudioSegment.from_file(input_audio_file_path, "mp3").set_channels(1).get_array_of_samples()
+    return numpy.true_divide(int_samples, 32767.0)
 
 
 def read_wav_segment(wav_audio_file_meta: WavAudioFileMeta) -> numpy.ndarray:

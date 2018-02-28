@@ -5,17 +5,15 @@ import vamp
 
 from commons.models.feature import VampyFeatureAbstraction, VampyVariableStepFeature, VampyConstantStepFeature, \
     StepFeature
-from commons.models.file_meta import WavAudioFileMeta
-from commons.models.plugin import VampyPlugin
 from commons.utils.logger import get_logger
 
 logger = get_logger()
 
 
-def extract_features(wav_data: numpy.ndarray, audio_meta: WavAudioFileMeta, vampy_plugin: VampyPlugin,
+def extract_features(wav_data: numpy.ndarray, sample_rate: int, vampy_plugin_key: Text,
                      output_name: Text) -> VampyFeatureAbstraction:
-    raw_results = vamp.collect(data=wav_data, sample_rate=audio_meta.sample_rate, plugin_key=vampy_plugin.key,
-                               output=output_name)
+    raw_results = vamp.collect(data=wav_data, sample_rate=sample_rate,
+                               plugin_key=vampy_plugin_key, output=output_name)
     return _map_feature(raw_results)
 
 
