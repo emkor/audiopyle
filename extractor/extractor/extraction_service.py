@@ -5,7 +5,7 @@ from datetime import datetime
 import numpy
 
 from commons.utils.conversion import seconds_between
-from commons.utils.file_system import AUDIO_FILES_DIR, remove_file, concatenate_paths, file_exists
+from commons.utils.file_system import AUDIO_FILES_DIR, concatenate_paths
 from commons.models.audio_tag import Id3Tag
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.feature import VampyFeatureAbstraction
@@ -40,7 +40,6 @@ class FeatureExtractionService(object):
         self.logger.debug("Built context: {} {}! Extracting features...".format(plugin.key, request.plugin_output))
         feature, extraction_time = self._do_extraction(plugin, request.plugin_output, audio_meta, wav_data)
         feature_store_time = self._store_feature_data(feature, task_id)
-        self.clean_up_data()
         analysis_result, result_build_time = self._build_analysis_result(audio_meta, feature, file_meta,
                                                                          id3_tag, plugin, request.plugin_output,
                                                                          task_id)
@@ -48,11 +47,6 @@ class FeatureExtractionService(object):
         task_time = seconds_between(task_start_time)
         self._store_analysis_stats(task_id, extraction_time, feature_store_time, result_build_time,
                                    result_store_time, task_time, read_input_file_time, read_raw_audio_time)
-
-    def clean_up_data(self):
-        if file_exists(self._temporary_wav_file):
-            remove_file(self._temporary_wav_file)
-            self.logger.debug("Removed temporary file: {}!".format(self._temporary_wav_file))
 
     def _store_analysis_stats(self, task_id: Text, extraction_time: float, feature_store_time: float,
                               result_build_time: float, result_store_time: float, task_time: float,

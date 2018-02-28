@@ -23,6 +23,5 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
         extraction_service.extract_feature_and_store(request)
         return extraction_request
     except SoftTimeLimitExceeded as e:
-        extraction_service.clean_up_data()
         logger.exception(e)
         raise e
