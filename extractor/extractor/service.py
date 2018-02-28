@@ -3,7 +3,7 @@ from typing import Text
 from celery import Task
 from celery.result import AsyncResult
 
-from extractor.celery import get_celery
+from extractor.engine.celery import get_celery
 from extractor.result import build_extraction_result, ExtractionResult
 
 

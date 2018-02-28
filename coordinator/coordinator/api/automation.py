@@ -7,8 +7,8 @@ from commons.models.plugin import VampyPlugin
 from commons.services.plugin_providing import list_vampy_plugins
 from commons.utils.env_var import get_environment_variable
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, extract_extension
+from extractor.engine.tasks import extract_feature
 from extractor.service import run_task
-from extractor.tasks import extract_feature
 
 ACCEPTED_EXTENSIONS = ["mp3"]
 

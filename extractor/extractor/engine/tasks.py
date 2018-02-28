@@ -5,7 +5,7 @@ from commons.utils.file_system import RESULTS_DIR
 from commons.utils.logger import get_logger
 from commons.models.extraction_request import ExtractionRequest
 from commons.services.store_provider import JsonFileStore
-from extractor.celery import get_celery
+from extractor.engine.celery import get_celery
 from extractor.extraction_service import FeatureExtractionService
 
 celery_app = get_celery()

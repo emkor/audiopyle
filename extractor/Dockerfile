@@ -24,4 +24,4 @@ COPY . .
 RUN pip install --no-cache-dir .
 
 # DEFINE ENTRYPOINT AS EXTRACTOR API
-ENTRYPOINT ["celery", "-A", "extractor", "worker", "--loglevel=info"]
+ENTRYPOINT ["celery", "-A", "extractor.engine", "worker", "--loglevel=info"]
