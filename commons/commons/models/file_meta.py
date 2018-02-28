@@ -2,8 +2,7 @@ from datetime import datetime
 from typing import Text, Dict, Any
 
 from commons.abstractions.model import Model
-from commons.utils.conversion import to_kilo, to_mega, utc_datetime_to_timestamp, \
-    utc_timestamp_to_datetime
+from commons.utils.conversion import to_kilo, to_mega, utc_datetime_to_iso_format, utc_iso_format_to_datetime
 from commons.utils.file_system import extract_extension
 
 
@@ -30,17 +29,17 @@ class FileMeta(Model):
 
     def to_serializable(self):
         base_serialized = super().to_serializable()
-        base_serialized.update({"created_on": utc_datetime_to_timestamp(self.created_on),
-                                "last_modification": utc_datetime_to_timestamp(self.last_modification),
-                                "last_access": utc_datetime_to_timestamp(self.last_access)})
+        base_serialized.update({"created_on": utc_datetime_to_iso_format(self.created_on),
+                                "last_modification": utc_datetime_to_iso_format(self.last_modification),
+                                "last_access": utc_datetime_to_iso_format(self.last_access)})
         return base_serialized
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
         serialized.update({
-            "created_on": utc_timestamp_to_datetime(serialized["created_on"]),
-            "last_modification": utc_timestamp_to_datetime(serialized["last_modification"]),
-            "last_access": utc_timestamp_to_datetime(serialized["last_access"])
+            "created_on": utc_iso_format_to_datetime(serialized["created_on"]),
+            "last_modification": utc_iso_format_to_datetime(serialized["last_modification"]),
+            "last_access": utc_iso_format_to_datetime(serialized["last_access"])
         })
         return FileMeta(**serialized)
 
