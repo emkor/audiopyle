@@ -23,7 +23,7 @@ from commons.services.store_provider import FileStore
 
 
 class FeatureExtractionService(object):
-    def __init__(self, feature_data_store: FileStore, feature_meta_store: FileStore, logger: Logger):
+    def __init__(self, feature_data_store: FileStore, feature_meta_store: FileStore, logger: Logger) -> None:
         self.feature_meta_store = feature_meta_store
         self.feature_data_store = feature_data_store
         self.logger = logger
