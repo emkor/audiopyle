@@ -10,6 +10,7 @@ from commons.utils.file_system import file_exists, concatenate_paths, remove_fil
     extract_all_extensions, list_full_paths
 
 DEFAULT_PERMISSIONS = 0o666
+ENCODING_UTF_8 = 'utf-8'
 
 
 class StoreError(Exception):
@@ -23,8 +24,8 @@ class FileStore(object):
         self.permissions = permissions
         self.logger = getLogger()
 
-    def store(self, file_name: Text, content: Dict[Text, Any]) -> None:
-        full_path = self._build_full_path(file_name)
+    def store(self, identifier: Text, content: Dict[Text, Any]) -> None:
+        full_path = self._build_full_path(identifier)
         try:
             self._inherit_store(full_path, content)
             os.chmod(full_path, self.permissions)
@@ -33,8 +34,8 @@ class FileStore(object):
             self.logger.warning(message)
             raise StoreError(message)
 
-    def read(self, file_name: Text) -> Dict[Text, Any]:
-        full_path = self._build_full_path(file_name)
+    def read(self, identifier: Text) -> Dict[Text, Any]:
+        full_path = self._build_full_path(identifier)
         try:
             return self._inherit_read(full_path)
         except Exception as e:
@@ -44,7 +45,7 @@ class FileStore(object):
 
     def list(self) -> List[Text]:
         """List file identifiers (file names without extensions)"""
-        return [self._strip_just_name(f) for f in self.list_file_names()]
+        return [self._get_identifier(f) for f in self.list_file_names()]
 
     def list_file_names(self) -> List[Text]:
         """List file names (with extensions)"""
@@ -54,8 +55,8 @@ class FileStore(object):
         """List file absolute paths (with extensions)"""
         return list_full_paths(self.base_dir)
 
-    def remove(self, file_name: Text) -> None:
-        full_path = self._build_full_path(file_name)
+    def remove(self, identifier: Text) -> None:
+        full_path = self._build_full_path(identifier)
         try:
             remove_file(full_path)
         except Exception as e:
@@ -63,8 +64,8 @@ class FileStore(object):
             self.logger.warning(message)
             raise StoreError(message)
 
-    def exists(self, file_name: Text) -> bool:
-        full_path = self._build_full_path(file_name)
+    def exists(self, identifier: Text) -> bool:
+        full_path = self._build_full_path(identifier)
         return file_exists(full_path) and extract_all_extensions(full_path).lower() == self.extension.lower()
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]) -> None:
@@ -73,17 +74,17 @@ class FileStore(object):
     def _inherit_read(self, full_path: Text) -> Dict[Text, Any]:
         raise NotImplementedError()
 
-    def _strip_just_name(self, file_name_with_extensions: Text) -> Text:
-        return file_name_with_extensions.partition('.')[0]
+    def _get_identifier(self, file_name: Text) -> Text:
+        return file_name.partition('.')[0]
 
     def _has_correct_extension(self, file_path: Text) -> bool:
         return extract_all_extensions(file_path).lower() == self.extension.lower()
 
-    def _build_full_path(self, file_name: Text) -> Text:
-        return concatenate_paths(self.base_dir, self._build_file_name_with_ext(file_name))
+    def _build_full_path(self, identifier: Text) -> Text:
+        return concatenate_paths(self.base_dir, self._build_file_name_with_ext(identifier))
 
-    def _build_file_name_with_ext(self, file_name: Text) -> Text:
-        return "{}.{}".format(file_name, self.extension)
+    def _build_file_name_with_ext(self, identifier: Text) -> Text:
+        return "{}.{}".format(identifier, self.extension)
 
 
 class JsonFileStore(FileStore):
@@ -105,14 +106,14 @@ class GzipJsonFileStore(FileStore):
         super().__init__(base_dir, "json.gzip", permissions)
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
-        json_content = json.dumps(content).encode('utf-8')
+        json_content = json.dumps(content).encode(ENCODING_UTF_8)
         with gzip.open(full_path, 'wb') as f:
             f.write(json_content)
 
     def _inherit_read(self, full_path: Text) -> Dict[Text, Any]:
         with gzip.open(full_path, 'rb') as f:
             file_content = f.read()
-        return json.loads(file_content.decode('utf-8'))
+        return json.loads(file_content.decode(ENCODING_UTF_8))
 
 
 class LzmaJsonFileStore(FileStore):
@@ -120,11 +121,11 @@ class LzmaJsonFileStore(FileStore):
         super().__init__(base_dir, "json.lzma")
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
-        json_content = json.dumps(content).encode('utf-8')
+        json_content = json.dumps(content).encode(ENCODING_UTF_8)
         with lzma.open(full_path, 'wb') as f:
             f.write(json_content)
 
     def _inherit_read(self, full_path: Text) -> Dict[Text, Any]:
         with lzma.open(full_path, 'rb') as f:
             file_content = f.read()
-        return json.loads(file_content.decode('utf-8'))
+        return json.loads(file_content.decode(ENCODING_UTF_8))
