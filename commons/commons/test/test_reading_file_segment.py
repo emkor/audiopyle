@@ -2,15 +2,17 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.services.file_meta_providing import read_wav_file_meta
-from commons.services.segment_providing import read_wav_segment
-from commons.test.utils import get_absolute_path_for_project_file, TEST_WAV_AUDIO_FILE
+from commons.services.file_meta_providing import read_mp3_file_meta
+from commons.services.segment_providing import read_raw_audio_from_mp3
+from commons.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDIO_FILE
 
 
-class TestReadingFileSegments(unittest.TestCase):
+class TestReadingRawAudio(unittest.TestCase):
     def setUp(self):
-        self.file_meta = read_wav_file_meta(get_absolute_path_for_project_file(__file__, TEST_WAV_AUDIO_FILE))
+        self.mp3_file_meta = read_mp3_file_meta(get_absolute_path_for_project_file(__file__, TEST_MP3_AUDIO_FILE))
 
-    def test_should_read_segment(self):
-        audio_segment = read_wav_segment(self.file_meta)
-        assert_that(audio_segment).is_not_none()
+    def test_read_mp3_data_should_have_correct_length_and_value_range(self):
+        mp3_raw_data = read_raw_audio_from_mp3(self.mp3_file_meta.absolute_path)
+        assert_that(mp3_raw_data).is_length(104879)
+        assert_that(mp3_raw_data.max()).is_less_than_or_equal_to(1.).is_greater_than(0.5)
+        assert_that(mp3_raw_data.min()).is_greater_than_or_equal_to(-1.).is_less_than(-0.5)
