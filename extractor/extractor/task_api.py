@@ -4,7 +4,7 @@ from celery import Task
 from celery.result import AsyncResult
 
 from extractor.engine.celery import get_celery
-from extractor.result import build_extraction_result, ExtractionResult
+from extractor.result_model import build_extraction_result, ExtractionResult
 
 
 def run_task(task: Task, task_id: Text, **kwargs) -> AsyncResult:
