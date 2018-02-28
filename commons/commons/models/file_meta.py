@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Text, Dict, Any
 
 from commons.abstractions.model import Model
-from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b, to_mega, utc_datetime_to_timestamp, \
+from commons.utils.conversion import to_kilo, to_mega, utc_datetime_to_timestamp, \
     utc_timestamp_to_datetime
 from commons.utils.file_system import extract_extension
 
@@ -60,24 +60,6 @@ class AudioFileMeta(Model):
     @property
     def bit_rate_kbps(self) -> float:
         raise NotImplementedError()
-
-
-class WavAudioFileMeta(AudioFileMeta):
-    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, bit_depth: int,
-                 sample_rate: int, frames_count: int) -> None:
-        super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
-        self.frames_count = frames_count
-        self.bit_depth = bit_depth
-
-    @property
-    def length_sec(self) -> float:
-        return round(frames_to_sec(self.frames_count, self.sample_rate), 3)
-
-    @property
-    def bit_rate_kbps(self) -> float:
-        return round(
-            B_to_b(to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)) / self.length_sec,
-            ndigits=1)
 
 
 class Mp3AudioFileMeta(AudioFileMeta):

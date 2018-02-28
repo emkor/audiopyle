@@ -2,7 +2,6 @@ import os
 
 from commons.utils.file_system import concatenate_paths
 
-TEST_WAV_AUDIO_FILE = "resources/audio/102bpm_drum_loop_mono_44.1k.wav"
 TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop_mono_44.1k.mp3"
 
 
