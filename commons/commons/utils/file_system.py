@@ -5,8 +5,6 @@ from typing import Text, List
 
 from logging import getLogger
 
-RESULT_FILE_PERMISSIONS = 0o666
-
 AUDIO_FILES_DIR = "/root/audio"
 TMP_DIR = "/root/audio_tmp"
 RESULTS_DIR = "/root/result"
@@ -25,6 +23,11 @@ def concatenate_paths(base_path: Text, file_name: Text) -> Text:
 def get_file_name(absolute_path: Text) -> Text:
     """Returns file name from an absolute path"""
     return os.path.basename(absolute_path)
+
+
+def list_full_paths(directory: Text = "/") -> List[Text]:
+    return [os.path.join(directory, f)
+            for f in os.listdir(directory) if os.path.isfile(concatenate_paths(directory, f))]
 
 
 def list_files(path: Text = "/") -> List[Text]:

@@ -1,5 +1,4 @@
 from typing import Text, Optional, Any, Dict
-
 from celery.result import AsyncResult
 
 from commons.abstractions.model import Model

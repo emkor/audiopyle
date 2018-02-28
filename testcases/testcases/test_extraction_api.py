@@ -4,7 +4,7 @@ from assertpy import assert_that
 
 import requests
 
-from extractor.result import ExtractionResult
+from extractor.result_model import ExtractionResult
 from testcases.utils import get_service_host_name
 
 

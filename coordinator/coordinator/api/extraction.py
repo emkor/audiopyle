@@ -2,8 +2,8 @@ from commons.abstractions.api import AudiopyleRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode, ClientError
 from commons.models.extraction_request import ExtractionRequest
 from commons.services.uuid_generation import generate_uuid
-from extractor.service import run_task, retrieve_result, delete_result
-from extractor.tasks import extract_feature
+from extractor.engine.tasks import extract_feature
+from extractor.task_api import run_task, retrieve_result, delete_result
 
 NO_TASK_ID_IN_QUERY_PARAM = ClientError("Bad request: did not found task_id query param")
 

@@ -5,8 +5,8 @@ from commons.utils.logger import setup_logger
 
 pymysql.install_as_MySQLdb()
 
-app = Celery(main='extractor', include=['extractor.tasks'])
-app.config_from_object('extractor.config')
+app = Celery(main='extractor.engine', include=['extractor.engine.tasks'])
+app.config_from_object('extractor.engine.config')
 
 
 def get_celery() -> Celery:
