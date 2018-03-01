@@ -5,6 +5,8 @@ from typing import Text, Any, Type, List, Union
 
 from pympler.asizeof import asizeof
 
+ISO_8601_TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
 
 def b_to_B(b: float) -> int:
     return int(math.ceil(b / 8.0))
@@ -50,6 +52,16 @@ def utc_datetime_to_timestamp(dt: datetime) -> int:
 def utc_timestamp_to_datetime(timestamp: float) -> datetime:
     """Converts timestamp (seconds) to UTC datetime"""
     return datetime.utcfromtimestamp(round(timestamp))
+
+
+def utc_datetime_to_iso_format(dt: datetime) -> Text:
+    """Converts datetime (UTC) to ISO 8601 format"""
+    return dt.strftime(ISO_8601_TIME_FORMAT)
+
+
+def utc_iso_format_to_datetime(iso_dt: Text) -> datetime:
+    """Converts ISO 8601 formatted UTC date string to datetime"""
+    return datetime.strptime(iso_dt, ISO_8601_TIME_FORMAT)
 
 
 def normalize(text: Text) -> Text:

@@ -2,8 +2,7 @@ from datetime import datetime
 from typing import Text, Dict, Any
 
 from commons.abstractions.model import Model
-from commons.utils.conversion import to_kilo, b_to_B, frames_to_sec, B_to_b, to_mega, utc_datetime_to_timestamp, \
-    utc_timestamp_to_datetime
+from commons.utils.conversion import to_kilo, to_mega, utc_datetime_to_iso_format, utc_iso_format_to_datetime
 from commons.utils.file_system import extract_extension
 
 
@@ -30,17 +29,17 @@ class FileMeta(Model):
 
     def to_serializable(self):
         base_serialized = super().to_serializable()
-        base_serialized.update({"created_on": utc_datetime_to_timestamp(self.created_on),
-                                "last_modification": utc_datetime_to_timestamp(self.last_modification),
-                                "last_access": utc_datetime_to_timestamp(self.last_access)})
+        base_serialized.update({"created_on": utc_datetime_to_iso_format(self.created_on),
+                                "last_modification": utc_datetime_to_iso_format(self.last_modification),
+                                "last_access": utc_datetime_to_iso_format(self.last_access)})
         return base_serialized
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
         serialized.update({
-            "created_on": utc_timestamp_to_datetime(serialized["created_on"]),
-            "last_modification": utc_timestamp_to_datetime(serialized["last_modification"]),
-            "last_access": utc_timestamp_to_datetime(serialized["last_access"])
+            "created_on": utc_iso_format_to_datetime(serialized["created_on"]),
+            "last_modification": utc_iso_format_to_datetime(serialized["last_modification"]),
+            "last_access": utc_iso_format_to_datetime(serialized["last_access"])
         })
         return FileMeta(**serialized)
 
@@ -60,24 +59,6 @@ class AudioFileMeta(Model):
     @property
     def bit_rate_kbps(self) -> float:
         raise NotImplementedError()
-
-
-class WavAudioFileMeta(AudioFileMeta):
-    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, bit_depth: int,
-                 sample_rate: int, frames_count: int) -> None:
-        super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
-        self.frames_count = frames_count
-        self.bit_depth = bit_depth
-
-    @property
-    def length_sec(self) -> float:
-        return round(frames_to_sec(self.frames_count, self.sample_rate), 3)
-
-    @property
-    def bit_rate_kbps(self) -> float:
-        return round(
-            B_to_b(to_kilo(b_to_B(self.bit_depth) * self.channels_count * self.frames_count)) / self.length_sec,
-            ndigits=1)
 
 
 class Mp3AudioFileMeta(AudioFileMeta):
