@@ -20,9 +20,6 @@ services:
     ports:
       - "3306:3306"
   coordinator:
-    build:
-      context: ./coordinator
-      dockerfile: Dockerfile
     image: "endlessdrones/audiopyle-coordinator:latest"
     hostname: "coordinator"
     ports:
@@ -39,9 +36,6 @@ services:
     depends_on:
       - rabbitmq
   extractor_1:
-    build:
-      context: ./extractor
-      dockerfile: Dockerfile
     image: "endlessdrones/audiopyle-extractor:latest"
     hostname: "extractor_1"
     volumes:
