@@ -17,8 +17,6 @@ services:
       - MYSQL_USER=celery
       - MYSQL_PASSWORD=celery
       - MYSQL_DATABASE=results
-    ports:
-      - "3305:3306"
   coordinator:
     image: "endlessdrones/audiopyle-coordinator:latest"
     hostname: "coordinator"
@@ -32,7 +30,7 @@ services:
     environment:
       - RABBITMQ_SERIVCE_HOST=rabbitmq
       - MYSQL_SERVICE_HOST=mysql
-      - MYSQL_SERVICE_PORT=3305
+      - MYSQL_SERVICE_PORT=3306
   extractor_1:
     image: "endlessdrones/audiopyle-extractor:latest"
     hostname: "extractor_1"
@@ -46,7 +44,7 @@ services:
     environment:
       - RABBITMQ_SERIVCE_HOST=rabbitmq
       - MYSQL_SERVICE_HOST=mysql
-      - MYSQL_SERVICE_PORT=3305
+      - MYSQL_SERVICE_PORT=3306
       - EXTRACTION_CONCURRENCY=1
       - EXTRACTION_BROKER_CONN_POOL_SIZE=1
       - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=30
@@ -58,5 +56,5 @@ services:
     environment:
       - RABBITMQ_SERIVCE_HOST=rabbitmq
       - MYSQL_SERVICE_HOST=mysql
-      - MYSQL_SERVICE_PORT=3305
+      - MYSQL_SERVICE_PORT=3306
       - AUDIOPYLE_BOOT_TIME=20
