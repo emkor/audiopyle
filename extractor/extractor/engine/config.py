@@ -1,7 +1,8 @@
 from commons.utils.env_var import get_environment_variable
 
-broker_url = 'pyamqp://rabbitmq:rabbitmq@rabbitmq_host//'
-result_backend = 'db+mysql://celery:celery@mysql_host:3306/results'
+broker_url = 'pyamqp://rabbitmq:rabbitmq@{}//'.format(get_environment_variable("RABBITMQ_SERIVCE_HOST", str))
+result_backend = 'db+mysql://celery:celery@{}:{}/results'.format(get_environment_variable("MYSQL_SERVICE_HOST", str),
+                                                                 get_environment_variable("MYSQL_SERVICE_PORT", int))
 
 task_serializer = 'json'
 result_serializer = 'json'
