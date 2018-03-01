@@ -1,16 +1,16 @@
 from time import sleep
 from unittest import TestCase
-from assertpy import assert_that
 
+from assertpy import assert_that
 import requests
 
 from extractor.result_model import ExtractionResult
-from testcases.utils import get_service_host_name
+from testcases.utils import get_api_host
 
 
 class CoordinatorApiTest(TestCase):
     def setUp(self):
-        self.extraction_api_url = "http://{}:8080/extraction".format(get_service_host_name("coordinator"))
+        self.extraction_api_url = "http://{}:8080/extraction".format(get_api_host())
         self.mp3_extraction_request = {
             "audio_file_name": "102bpm_drum_loop_mono_44.1k.mp3",
             "plugin_key": "vamp-example-plugins:amplitudefollower",
