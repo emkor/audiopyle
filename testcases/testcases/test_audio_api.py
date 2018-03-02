@@ -3,12 +3,12 @@ from assertpy import assert_that
 
 import requests
 
-from testcases.utils import get_service_host_name
+from testcases.utils import get_api_host
 
 
 class AudioApiTest(TestCase):
     def setUp(self):
-        self.audio_api_url = "http://{}:8080/audio".format(get_service_host_name("coordinator"))
+        self.audio_api_url = "http://{}:8080/audio".format(get_api_host())
 
     def test_should_list_audio_file(self):
         expected_status_code = 200
@@ -25,7 +25,7 @@ class AudioApiTest(TestCase):
 
 class AudioMetaApiTest(TestCase):
     def setUp(self):
-        self.audio_api_url = "http://{}:8080/audio/meta".format(get_service_host_name("coordinator"))
+        self.audio_api_url = "http://{}:8080/audio/meta".format(get_api_host())
         self.file_name = "102bpm_drum_loop_mono_44.1k.mp3"
 
     def test_should_return_correct_mp3_meta(self):

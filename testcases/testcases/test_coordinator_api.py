@@ -3,12 +3,12 @@ from assertpy import assert_that
 
 import requests
 
-from testcases.utils import get_service_host_name
+from testcases.utils import get_api_host
 
 
 class CoordinatorApiTest(TestCase):
     def setUp(self):
-        self.coordinator_url = "http://{}:8080/".format(get_service_host_name("coordinator"))
+        self.coordinator_url = "http://{}:8080/".format(get_api_host())
 
     def test_should_return_ok_after_boot(self):
         expected_status_code = 200

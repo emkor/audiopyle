@@ -2,12 +2,12 @@ import os
 import json
 import gzip
 import lzma
-from logging import getLogger
 
 from typing import Text, Any, List, Dict
 
 from commons.utils.file_system import file_exists, concatenate_paths, remove_file, get_file_name, \
     extract_all_extensions, list_full_paths
+from commons.utils.logger import get_logger
 
 DEFAULT_PERMISSIONS = 0o666
 ENCODING_UTF_8 = 'utf-8'
@@ -22,7 +22,7 @@ class FileStore(object):
         self.base_dir = base_dir
         self.extension = extension
         self.permissions = permissions
-        self.logger = getLogger()
+        self.logger = get_logger()
 
     def store(self, identifier: Text, content: Dict[Text, Any]) -> None:
         full_path = self._build_full_path(identifier)

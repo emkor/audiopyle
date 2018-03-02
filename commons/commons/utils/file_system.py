@@ -3,13 +3,13 @@ import shutil
 
 from typing import Text, List
 
-from logging import getLogger
+from commons.utils.logger import get_logger
 
 AUDIO_FILES_DIR = "/root/audio"
 TMP_DIR = "/root/audio_tmp"
 RESULTS_DIR = "/root/result"
 
-logger = getLogger()
+logger = get_logger()
 
 
 def file_exists(absolute_path: Text) -> bool:

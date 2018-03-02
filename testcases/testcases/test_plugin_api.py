@@ -4,12 +4,12 @@ import requests
 from assertpy import assert_that
 
 from commons.models.plugin import VampyPlugin
-from testcases.utils import get_service_host_name
+from testcases.utils import get_api_host
 
 
 class PluginApiTest(TestCase):
     def setUp(self):
-        self.plugin_url = "http://{}:8080/plugin".format(get_service_host_name("coordinator"))
+        self.plugin_url = "http://{}:8080/plugin".format(get_api_host())
 
     def test_should_list_plugins(self):
         expected_status_code = 200

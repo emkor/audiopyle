@@ -5,7 +5,7 @@ from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCo
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
 from commons.services.plugin_providing import list_vampy_plugins
-from commons.utils.env_var import get_environment_variable
+from commons.utils.env_var import read_env_var
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, extract_extension
 from extractor.engine.tasks import extract_feature
 from extractor.task_api import run_task
@@ -53,8 +53,8 @@ class AutomationApi(AudiopyleRestApi):
         return audio_file_names
 
     def _whitelisted_plugins(self) -> List[VampyPlugin]:
-        blacklisted_plugins = get_environment_variable(variable_name="BLACKLISTED_PLUGINS", expected_type=str,
-                                                       default="").split(",")
+        blacklisted_plugins = read_env_var(var_name="BLACKLISTED_PLUGINS", expected_type=str,
+                                           default="").split(",")
         if blacklisted_plugins:
             self.logger.warning(
                 "Omitting blacklisted plugins ({}): {}...".format(len(blacklisted_plugins), blacklisted_plugins))

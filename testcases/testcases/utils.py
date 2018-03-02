@@ -8,20 +8,9 @@ DEFAULT_API_TIMEOUT = 10.
 DEFAULT_TICK_TIME = .5
 DEFAULT_EXPECTED_STATUS = 200
 
-SERVICE_HOSTS = {
-    "coordinator": "coordinator_host",
-    "mysql": "mysql_host",
-    "rabbitmq": "rabbitmq_host",
-    "extractor": "extractor_host_1",
-    "testcases": "testcases"
-}
 
-
-def get_service_host_name(service_name):
-    if os.environ.get("CI_BUILD") == "1":
-        return SERVICE_HOSTS.get(service_name)
-    else:
-        return "localhost"
+def get_api_host():
+    return "coordinator"
 
 
 class TimeoutException(Exception):

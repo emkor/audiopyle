@@ -4,12 +4,12 @@ import requests
 from assertpy import assert_that
 
 from commons.models.audio_tag import Id3Tag
-from testcases.utils import get_service_host_name
+from testcases.utils import get_api_host
 
 
 class AudioTagApiTest(TestCase):
     def setUp(self):
-        self.audio_tag_api_url = "http://{}:8080/audio/tag".format(get_service_host_name("coordinator"))
+        self.audio_tag_api_url = "http://{}:8080/audio/tag".format(get_api_host())
         self.audio_file_name = "102bpm_drum_loop_mono_44.1k.mp3"
 
     def test_should_show_audio_tags_of_mp3_file(self):
