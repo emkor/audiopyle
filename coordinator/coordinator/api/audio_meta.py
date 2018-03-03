@@ -1,11 +1,11 @@
-from commons.abstractions.cherrypy_api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from commons.abstractions.flask_api import FlaskRestApi
 from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.file_meta_providing import read_mp3_file_meta
 from commons.utils.file_system import AUDIO_FILES_DIR, concatenate_paths, extract_extension, file_exists
 
 
-class AudioMetaApi(CherryPyRestApi):
+class AudioMetaApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, the_request.query_params.get("file"))
         if file_exists(audio_file_absolute_path):
@@ -16,7 +16,7 @@ class AudioMetaApi(CherryPyRestApi):
                                "Given file: {} does not exist".format(audio_file_absolute_path))
 
 
-class AudioTagApi(CherryPyRestApi):
+class AudioTagApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest):
         audio_file_name = the_request.query_params.get("file")
         self.logger.info("Reading ID3 tags of {}...".format(audio_file_name))

@@ -1,5 +1,5 @@
-from commons.abstractions.cherrypy_api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode, ClientError
+from commons.abstractions.flask_api import FlaskRestApi
 from commons.models.extraction_request import ExtractionRequest
 from commons.services.uuid_generation import generate_uuid
 from extractor.engine.tasks import extract_feature
@@ -8,7 +8,7 @@ from extractor.task_api import run_task, retrieve_result, delete_result
 NO_TASK_ID_IN_QUERY_PARAM = ClientError("Bad request: did not found task_id query param")
 
 
-class ExtractionApi(CherryPyRestApi):
+class ExtractionApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         task_id = the_request.query_params.get("task_id")
         if task_id is not None:

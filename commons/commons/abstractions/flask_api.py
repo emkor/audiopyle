@@ -1,3 +1,5 @@
+from logging import Logger
+
 from flask import jsonify, request, make_response
 from flask.views import MethodView
 
@@ -6,8 +8,8 @@ from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpMethod
 
 
 class FlaskRestApi(AbstractRestApi, MethodView):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, logger: Logger = None):
+        super().__init__(logger)
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
         return super()._delete(the_request)

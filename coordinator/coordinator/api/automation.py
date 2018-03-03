@@ -1,7 +1,7 @@
 from typing import Text, List
 
-from commons.abstractions.cherrypy_api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from commons.abstractions.flask_api import FlaskRestApi
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
 from commons.services.plugin_providing import list_vampy_plugins
@@ -13,7 +13,7 @@ from extractor.task_api import run_task
 ACCEPTED_EXTENSIONS = ["mp3"]
 
 
-class AutomationApi(CherryPyRestApi):
+class AutomationApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         audio_file_names = self._allowed_audio_files()
         plugins = self._whitelisted_plugins()
