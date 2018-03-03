@@ -1,6 +1,6 @@
 from typing import Text, List
 
-from commons.abstractions.api import CherryPyRestApi
+from commons.abstractions.cherrypy_api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin

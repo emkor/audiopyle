@@ -1,4 +1,4 @@
-from commons.abstractions.api import CherryPyRestApi
+from commons.abstractions.cherrypy_api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.services.file_meta_providing import read_file_meta
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, concatenate_paths, TMP_DIR, remove_file, \

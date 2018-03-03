@@ -1,4 +1,4 @@
-from commons.abstractions.api import CherryPyRestApi
+from commons.abstractions.cherrypy_api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.file_meta_providing import read_mp3_file_meta

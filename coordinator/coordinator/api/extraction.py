@@ -1,4 +1,4 @@
-from commons.abstractions.api import CherryPyRestApi
+from commons.abstractions.cherrypy_api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode, ClientError
 from commons.models.extraction_request import ExtractionRequest
 from commons.services.uuid_generation import generate_uuid

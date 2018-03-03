@@ -1,4 +1,4 @@
-from commons.abstractions.api import CherryPyRestApi
+from commons.abstractions.cherrypy_api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.services.plugin_providing import list_vampy_plugins
 
