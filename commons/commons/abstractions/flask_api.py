@@ -8,7 +8,7 @@ from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpMethod
 
 
 class FlaskRestApi(AbstractRestApi, MethodView):
-    def __init__(self, logger: Logger = None):
+    def __init__(self, logger: Logger = None) -> None:
         super().__init__(logger)
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
