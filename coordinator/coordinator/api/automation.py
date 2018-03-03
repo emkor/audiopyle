@@ -4,13 +4,12 @@ from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCo
 from commons.abstractions.flask_api import FlaskRestApi
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
+from commons.services.audio_tag_providing import ACCEPTED_EXTENSIONS
 from commons.services.plugin_providing import list_vampy_plugins
 from commons.utils.env_var import read_env_var
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, extract_extension
 from extractor.engine.tasks import extract_feature
 from extractor.task_api import run_task
-
-ACCEPTED_EXTENSIONS = ["mp3"]
 
 
 class AutomationApi(FlaskRestApi):
