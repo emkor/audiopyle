@@ -1,6 +1,6 @@
 from typing import Text, List
 
-from commons.abstractions.api import AudiopyleRestApi
+from commons.abstractions.api import CherryPyRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
@@ -13,8 +13,8 @@ from extractor.task_api import run_task
 ACCEPTED_EXTENSIONS = ["mp3"]
 
 
-class AutomationApi(AudiopyleRestApi):
-    def get(self, request: ApiRequest) -> ApiResponse:
+class AutomationApi(CherryPyRestApi):
+    def _get(self, request: ApiRequest) -> ApiResponse:
         audio_file_names = self._allowed_audio_files()
         plugins = self._whitelisted_plugins()
 

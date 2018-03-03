@@ -20,7 +20,7 @@ def extract_features(wav_data: numpy.ndarray, sample_rate: int, vampy_plugin_key
 def _map_feature(extracted_data: Dict[Text, Any]) -> VampyFeatureAbstraction:
     data_type = list(extracted_data.keys())[0]
     if data_type == "list":
-        value_list = [StepFeature(f.get("timestamp").to_float(), f.get("values"), f.get("label") or None)
+        value_list = [StepFeature(f._get("timestamp").to_float(), f._get("values"), f._get("label") or None)
                       for f in extracted_data.get("list")]
         return VampyVariableStepFeature(step_features=value_list)
     elif data_type in ("vector", "matrix"):

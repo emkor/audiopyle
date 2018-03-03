@@ -20,7 +20,7 @@ class FileMetaModelTest(unittest.TestCase):
     def test_should_turn_into_serializable_form_and_back(self):
         serializable_form = self.file_meta.to_serializable()
         assert_that(serializable_form).is_not_none()
-        assert_that(serializable_form.get("created_on")).is_equal_to("2018-02-28 14:35:29")
+        assert_that(serializable_form._get("created_on")).is_equal_to("2018-02-28 14:35:29")
 
         deserialized_form = FileMeta.from_serializable(serializable_form)
         assert_that(deserialized_form).is_equal_to(self.file_meta)
