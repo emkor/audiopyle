@@ -10,7 +10,7 @@ NO_TASK_ID_IN_QUERY_PARAM = ClientError("Bad request: did not found task_id quer
 
 class ExtractionApi(CherryPyRestApi):
     def _get(self, request: ApiRequest) -> ApiResponse:
-        task_id = request.query_params._get("task_id")
+        task_id = request.query_params.get("task_id")
         if task_id is not None:
             self.logger.info("Querying result of {}...".format(task_id))
             extraction_result = retrieve_result(task_id)
@@ -31,7 +31,7 @@ class ExtractionApi(CherryPyRestApi):
         return ApiResponse(HttpStatusCode.accepted, {"task_id": async_result.task_id})
 
     def _delete(self, request: ApiRequest) -> ApiResponse:
-        task_id = request.query_params._get("task_id")
+        task_id = request.query_params.get("task_id")
         if task_id is not None:
             was_successful = delete_result(task_id)
             if was_successful:

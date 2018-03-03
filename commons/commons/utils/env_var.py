@@ -8,7 +8,7 @@ logger = get_logger()
 
 
 def read_env_var(var_name: Text, expected_type: Type, default: Optional[Any] = None):
-    env_var = os.environ._get(var_name)
+    env_var = os.environ.get(var_name)
     if env_var is not None:
         try:
             return expected_type(env_var)

@@ -15,7 +15,7 @@ class AudioApi(CherryPyRestApi):
 
 class AudioTagApi(CherryPyRestApi):
     def _get(self, request: ApiRequest):
-        audio_file_name = request.query_params._get("file")
+        audio_file_name = request.query_params.get("file")
         self.logger.info("Reading ID3 tags of {}...".format(audio_file_name))
         if extract_extension(audio_file_name) == "mp3":
             audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, audio_file_name)
