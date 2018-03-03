@@ -30,7 +30,7 @@ class AudioMetaApiTest(TestCase):
 
     def test_should_return_correct_mp3_meta(self):
         expected_status_code = 200
-        response = requests.get(url="{}?file={}".format(self.audio_api_url, self.file_name))
+        response = requests.get(url="{}/{}".format(self.audio_api_url, self.file_name))
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_response = response.json()
         assert_that(actual_response).is_not_empty()
