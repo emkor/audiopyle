@@ -9,16 +9,16 @@ class AbstractRestApi(object):
     def __init__(self, logger: Logger = None) -> None:
         self.logger = logger or get_logger()
 
-    def _get(self, request: ApiRequest) -> ApiResponse:
+    def _get(self, the_request: ApiRequest) -> ApiResponse:
         raise NotImplementedError()
 
-    def _post(self, request: ApiRequest) -> ApiResponse:
+    def _post(self, the_request: ApiRequest) -> ApiResponse:
         raise NotImplementedError()
 
-    def _put(self, request: ApiRequest) -> ApiResponse:
+    def _put(self, the_request: ApiRequest) -> ApiResponse:
         raise NotImplementedError()
 
-    def _delete(self, request: ApiRequest) -> ApiResponse:
+    def _delete(self, the_request: ApiRequest) -> ApiResponse:
         raise NotImplementedError()
 
     def _log_api_call(self, api_request: ApiRequest, api_response: ApiResponse):

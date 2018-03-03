@@ -14,7 +14,7 @@ ACCEPTED_EXTENSIONS = ["mp3"]
 
 
 class AutomationApi(CherryPyRestApi):
-    def _get(self, request: ApiRequest) -> ApiResponse:
+    def _get(self, the_request: ApiRequest) -> ApiResponse:
         audio_file_names = self._allowed_audio_files()
         plugins = self._whitelisted_plugins()
 
@@ -22,9 +22,9 @@ class AutomationApi(CherryPyRestApi):
             extraction_requests = self._generate_extraction_requests(audio_file_names, plugins)
             task_id_to_request = {r.uuid(): r.to_serializable() for r in extraction_requests}
             self.logger.info("Sending {} extraction requests...".format(task_id_to_request))
-            for task_id, request in task_id_to_request.items():
-                run_task(task=extract_feature, task_id=task_id, extraction_request=request)
-                self.logger.info("Sent feature extraction request {} with id {}...".format(request, task_id))
+            for task_id, the_request in task_id_to_request.items():
+                run_task(task=extract_feature, task_id=task_id, extraction_request=the_request)
+                self.logger.info("Sent feature extraction request {} with id {}...".format(the_request, task_id))
             return ApiResponse(HttpStatusCode.accepted, task_id_to_request)
         elif not audio_file_names:
             return ApiResponse(status_code=HttpStatusCode.no_content,

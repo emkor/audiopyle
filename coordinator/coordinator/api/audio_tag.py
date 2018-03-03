@@ -6,7 +6,7 @@ from commons.utils.file_system import list_files, AUDIO_FILES_DIR, concatenate_p
 
 
 class AudioApi(CherryPyRestApi):
-    def _get(self, request: ApiRequest) -> ApiResponse:
+    def _get(self, the_request: ApiRequest) -> ApiResponse:
         absolute_files_paths = [concatenate_paths(AUDIO_FILES_DIR, f) for f in list_files(AUDIO_FILES_DIR)]
         mp3_absolute_file_paths = [f for f in absolute_files_paths if extract_extension(f) == "mp3"]
         audio_files_metas = list(map(lambda p: read_mp3_file_meta(p).to_serializable(), mp3_absolute_file_paths))
@@ -14,8 +14,8 @@ class AudioApi(CherryPyRestApi):
 
 
 class AudioTagApi(CherryPyRestApi):
-    def _get(self, request: ApiRequest):
-        audio_file_name = request.query_params.get("file")
+    def _get(self, the_request: ApiRequest):
+        audio_file_name = the_request.query_params.get("file")
         self.logger.info("Reading ID3 tags of {}...".format(audio_file_name))
         if extract_extension(audio_file_name) == "mp3":
             audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, audio_file_name)

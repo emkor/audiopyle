@@ -4,5 +4,5 @@ from coordinator.utils import COORDINATOR_STATUS_RESPONSE
 
 
 class CoordinatorApi(CherryPyRestApi):
-    def _get(self, request: ApiRequest) -> ApiResponse:
+    def _get(self, the_request: ApiRequest) -> ApiResponse:
         return ApiResponse(status_code=HttpStatusCode.ok, payload={"status": COORDINATOR_STATUS_RESPONSE})

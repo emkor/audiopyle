@@ -18,16 +18,16 @@ class CherryPyRestApi(AbstractRestApi):
         super().__init__(logger)
         self.not_implemented_api_method = cherrypy.HTTPError(405, 'Method Not Allowed')
 
-    def _delete(self, request: ApiRequest) -> ApiResponse:
+    def _delete(self, the_request: ApiRequest) -> ApiResponse:
         raise self.not_implemented_api_method
 
-    def _put(self, request: ApiRequest) -> ApiResponse:
+    def _put(self, the_request: ApiRequest) -> ApiResponse:
         raise self.not_implemented_api_method
 
-    def _post(self, request: ApiRequest) -> ApiResponse:
+    def _post(self, the_request: ApiRequest) -> ApiResponse:
         raise self.not_implemented_api_method
 
-    def _get(self, request: ApiRequest) -> ApiResponse:
+    def _get(self, the_request: ApiRequest) -> ApiResponse:
         raise self.not_implemented_api_method
 
     @cherrypy.tools.accept(media=TEXT_PLAIN_HEADER)

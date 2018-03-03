@@ -9,8 +9,8 @@ NO_TASK_ID_IN_QUERY_PARAM = ClientError("Bad request: did not found task_id quer
 
 
 class ExtractionApi(CherryPyRestApi):
-    def _get(self, request: ApiRequest) -> ApiResponse:
-        task_id = request.query_params.get("task_id")
+    def _get(self, the_request: ApiRequest) -> ApiResponse:
+        task_id = the_request.query_params.get("task_id")
         if task_id is not None:
             self.logger.info("Querying result of {}...".format(task_id))
             extraction_result = retrieve_result(task_id)
@@ -19,8 +19,8 @@ class ExtractionApi(CherryPyRestApi):
         else:
             raise NO_TASK_ID_IN_QUERY_PARAM
 
-    def _post(self, request: ApiRequest) -> ApiResponse:
-        execution_request = ExtractionRequest.from_serializable(request.payload)
+    def _post(self, the_request: ApiRequest) -> ApiResponse:
+        execution_request = ExtractionRequest.from_serializable(the_request.payload)
         self.logger.info("Sending feature extraction task: {}...".format(execution_request))
         serialized_request = execution_request.to_serializable()
         task_id = generate_uuid(serialized_request)
@@ -30,8 +30,8 @@ class ExtractionApi(CherryPyRestApi):
         self.logger.info("Sent feature extraction task! ID: {}.".format(async_result.task_id))
         return ApiResponse(HttpStatusCode.accepted, {"task_id": async_result.task_id})
 
-    def _delete(self, request: ApiRequest) -> ApiResponse:
-        task_id = request.query_params.get("task_id")
+    def _delete(self, the_request: ApiRequest) -> ApiResponse:
+        task_id = the_request.query_params.get("task_id")
         if task_id is not None:
             was_successful = delete_result(task_id)
             if was_successful:
