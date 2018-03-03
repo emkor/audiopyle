@@ -18,7 +18,7 @@ class CoordinatorApiTest(TestCase):
         }
 
     def test_should_accept_mp3_task_and_return_extracted_data(self):
-        expected_status_code = 200
+        expected_status_code = 202
         response = requests.post(url=self.extraction_api_url, json=self.mp3_extraction_request)
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_response = response.json()
