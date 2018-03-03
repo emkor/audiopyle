@@ -27,22 +27,26 @@ class FlaskRestApi(AbstractRestApi, MethodView):
         the_request = ApiRequest(url=request.full_path, method=HttpMethod(request.method), query_params=kwargs,
                                  headers=request.headers, payload={})
         the_response = self._get(the_request)
+        self._log_api_call(the_request, the_response)
         return make_response(jsonify(the_response.payload), the_response.status_code.value, the_response.headers or {})
 
     def post(self, **kwargs):
         the_request = ApiRequest(url=request.full_path, method=HttpMethod(request.method), query_params=kwargs,
                                  headers=request.headers, payload=request.json)
         the_response = self._post(the_request)
+        self._log_api_call(the_request, the_response)
         return make_response(jsonify(the_response.payload), the_response.status_code.value, the_response.headers or {})
 
     def put(self, **kwargs):
         the_request = ApiRequest(url=request.full_path, method=HttpMethod(request.method), query_params=kwargs,
                                  headers=request.headers, payload=request.json)
         the_response = self._put(the_request)
+        self._log_api_call(the_request, the_response)
         return make_response(jsonify(the_response.payload), the_response.status_code.value, the_response.headers or {})
 
     def delete(self, **kwargs):
         the_request = ApiRequest(url=request.full_path, method=HttpMethod(request.method), query_params=kwargs,
                                  headers=request.headers, payload={})
         the_response = self._delete(the_request)
+        self._log_api_call(the_request, the_response)
         return make_response(jsonify(the_response.payload), the_response.status_code.value, the_response.headers or {})
