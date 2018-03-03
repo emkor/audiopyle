@@ -8,7 +8,7 @@ from extractor.task_api import run_task, retrieve_result, delete_result
 NO_TASK_ID_IN_QUERY_PARAM = ClientError("Bad request: did not found task_id query param")
 
 
-class ExtractionApi(FlaskRestApi):
+class ResultApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         task_id = the_request.query_params.get("task_id")
         if task_id is not None:
@@ -18,17 +18,6 @@ class ExtractionApi(FlaskRestApi):
             return ApiResponse(HttpStatusCode.ok, extraction_result.to_serializable())
         else:
             raise NO_TASK_ID_IN_QUERY_PARAM
-
-    def _post(self, the_request: ApiRequest) -> ApiResponse:
-        execution_request = ExtractionRequest.from_serializable(the_request.payload)
-        self.logger.info("Sending feature extraction task: {}...".format(execution_request))
-        serialized_request = execution_request.to_serializable()
-        task_id = generate_uuid(serialized_request)
-        async_result = run_task(task=extract_feature,
-                                task_id=task_id,
-                                extraction_request=serialized_request)
-        self.logger.info("Sent feature extraction task! ID: {}.".format(async_result.task_id))
-        return ApiResponse(HttpStatusCode.accepted, {"task_id": async_result.task_id})
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
         task_id = the_request.query_params.get("task_id")
@@ -41,3 +30,16 @@ class ExtractionApi(FlaskRestApi):
                                   HttpStatusCode.bad_request)
         else:
             raise NO_TASK_ID_IN_QUERY_PARAM
+
+
+class ExtractionApi(FlaskRestApi):
+    def _post(self, the_request: ApiRequest) -> ApiResponse:
+        execution_request = ExtractionRequest.from_serializable(the_request.payload)
+        self.logger.info("Sending feature extraction task: {}...".format(execution_request))
+        serialized_request = execution_request.to_serializable()
+        task_id = generate_uuid(serialized_request)
+        async_result = run_task(task=extract_feature,
+                                task_id=task_id,
+                                extraction_request=serialized_request)
+        self.logger.info("Sent feature extraction task! ID: {}.".format(async_result.task_id))
+        return ApiResponse(HttpStatusCode.accepted, {"task_id": async_result.task_id})
