@@ -12,7 +12,7 @@ class AudioPluginModelTest(unittest.TestCase):
         self.test_plugin_name = "test_plugin_name"
         self.vampy_plugin = VampyPlugin(key=("{}:{}".format(self.test_plugin_provider, self.test_plugin_name)),
                                         categories=["category1", "category2"], outputs=["output1", "output2"],
-                                        library_path="/some/path")
+                                        library_file_name="/some/path")
         self.byte_symbol = "B"
 
     def test_model_properties(self):

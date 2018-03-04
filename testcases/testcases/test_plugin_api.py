@@ -17,7 +17,7 @@ class PluginApiTest(TestCase):
         expected_first_plugin = VampyPlugin(key="vamp-example-plugins:amplitudefollower",
                                             categories=["Low Level Features"],
                                             outputs=["amplitude"],
-                                            library_path="/root/vamp/vamp-example-plugins.so")
+                                            library_file_name="vamp-example-plugins.so")
         response = requests.get(url=self.plugin_url)
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_response = response.json()
