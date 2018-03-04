@@ -10,7 +10,6 @@ WORKDIR /audiopyle/extractor
 
 # CREATE DIRECTORY FOR INPUT FILES
 RUN mkdir /root/audio
-RUN mkdir /root/audio_tmp
 RUN mkdir /root/vamp
 RUN mkdir /root/result
 
