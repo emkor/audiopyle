@@ -5,6 +5,8 @@ import lzma
 
 from typing import Text, Any, List, Dict
 
+from commons.models.file_meta import FileMeta
+from commons.utils.conversion import utc_timestamp_to_datetime
 from commons.utils.file_system import file_exists, concatenate_paths, remove_file, get_file_name, \
     extract_all_extensions, list_full_paths
 from commons.utils.logger import get_logger
@@ -42,6 +44,15 @@ class FileStore(object):
             message = "Could not read from {}: {}".format(full_path, e)
             self.logger.warning(message)
             raise StoreError(message)
+
+    def meta(self, identifier: Text) -> FileMeta:
+        file_name = self._build_full_path(identifier)
+        file_stats = os.stat(file_name)
+        last_access_utc = utc_timestamp_to_datetime(file_stats.st_atime)
+        last_modification_utc = utc_timestamp_to_datetime(file_stats.st_mtime)
+        created_on_utc = utc_timestamp_to_datetime(file_stats.st_ctime)
+        return FileMeta(file_name=get_file_name(file_name), size=file_stats.st_size, last_access=last_access_utc,
+                        last_modification=last_modification_utc, created_on=created_on_utc)
 
     def list(self) -> List[Text]:
         """List file identifiers (file names without extensions)"""
@@ -85,6 +96,19 @@ class FileStore(object):
 
     def _build_file_name_with_ext(self, identifier: Text) -> Text:
         return "{}.{}".format(identifier, self.extension)
+
+
+class Mp3FileStore(FileStore):
+    def __init__(self, base_dir: Text, permissions: int = DEFAULT_PERMISSIONS) -> None:
+        super().__init__(base_dir, "mp3", permissions)
+
+    def _inherit_read(self, full_path: Text) -> Dict[Text, Any]:
+        with open(full_path, "r") as input_file:
+            content = json.load(input_file)
+        return content
+
+    def _inherit_store(self, full_path: Text, content: Dict[Text, Any]) -> None:
+        raise NotImplementedError()
 
 
 class JsonFileStore(FileStore):
