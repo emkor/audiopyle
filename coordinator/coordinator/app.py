@@ -10,7 +10,7 @@ from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from coordinator.api.automation import AutomationApi
 from coordinator.api.plugin import PluginListApi, PluginDetailApi
 from coordinator.api.root import CoordinatorApi
-from coordinator.api.extraction import ExtractionApi, ResultListApi, ResultDetailsApi
+from coordinator.api.result import ExtractionApi, ResultListApi, ResultDetailsApi
 
 app = Flask(__name__)
 
