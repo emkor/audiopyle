@@ -9,6 +9,9 @@ AUDIO_FILES_DIR = "/root/audio"
 RESULTS_DATA_DIR = "/root/result/data"
 RESULTS_META_DIR = "/root/result/meta"
 RESULTS_STATS_DIR = "/root/result/stats"
+DEFAULT_FILE_PERMISSIONS = 0o666
+DEFAULT_DIR_PERMISSIONS = 0o777
+ENCODING_UTF_8 = 'utf-8'
 
 logger = get_logger()
 
@@ -53,3 +56,10 @@ def remove_file(file_path: Text) -> None:
 
 def file_size_bytes(absolute_path: Text) -> int:
     return os.path.getsize(absolute_path)
+
+
+def make_sure_directory_exists(path: Text) -> None:
+    try:
+        os.makedirs(path, mode=DEFAULT_DIR_PERMISSIONS, exist_ok=False)
+    except OSError:
+        pass

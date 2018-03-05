@@ -8,11 +8,8 @@ from typing import Text, Any, List, Dict
 from commons.models.file_meta import FileMeta
 from commons.utils.conversion import utc_timestamp_to_datetime
 from commons.utils.file_system import file_exists, concatenate_paths, remove_file, get_file_name, \
-    extract_all_extensions, list_full_paths
+    extract_all_extensions, list_full_paths, DEFAULT_FILE_PERMISSIONS, ENCODING_UTF_8
 from commons.utils.logger import get_logger
-
-DEFAULT_PERMISSIONS = 0o666
-ENCODING_UTF_8 = 'utf-8'
 
 
 class StoreError(Exception):
@@ -20,7 +17,7 @@ class StoreError(Exception):
 
 
 class FileStore(object):
-    def __init__(self, base_dir: Text, extension: Text, permissions: int = DEFAULT_PERMISSIONS) -> None:
+    def __init__(self, base_dir: Text, extension: Text, permissions: int = DEFAULT_FILE_PERMISSIONS) -> None:
         self.base_dir = base_dir
         self.extension = extension
         self.permissions = permissions
@@ -99,7 +96,7 @@ class FileStore(object):
 
 
 class Mp3FileStore(FileStore):
-    def __init__(self, base_dir: Text, permissions: int = DEFAULT_PERMISSIONS) -> None:
+    def __init__(self, base_dir: Text, permissions: int = DEFAULT_FILE_PERMISSIONS) -> None:
         super().__init__(base_dir, "mp3", permissions)
 
     def _inherit_read(self, full_path: Text) -> Dict[Text, Any]:
@@ -112,7 +109,7 @@ class Mp3FileStore(FileStore):
 
 
 class JsonFileStore(FileStore):
-    def __init__(self, base_dir: Text, permissions: int = DEFAULT_PERMISSIONS) -> None:
+    def __init__(self, base_dir: Text, permissions: int = DEFAULT_FILE_PERMISSIONS) -> None:
         super().__init__(base_dir, "json", permissions)
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
@@ -126,7 +123,7 @@ class JsonFileStore(FileStore):
 
 
 class GzipJsonFileStore(FileStore):
-    def __init__(self, base_dir: Text, permissions: int = DEFAULT_PERMISSIONS) -> None:
+    def __init__(self, base_dir: Text, permissions: int = DEFAULT_FILE_PERMISSIONS) -> None:
         super().__init__(base_dir, "json.gzip", permissions)
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
