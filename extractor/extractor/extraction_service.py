@@ -54,11 +54,11 @@ class FeatureExtractionService(object):
                               read_input_file_time, read_raw_audio_time) -> None:
         analysis_stats = AnalysisStats(task_time, extraction_time, feature_store_time,
                                        result_build_time, result_store_time, read_input_file_time, read_raw_audio_time)
-        self.feature_stats_store.store("{}-stats".format(task_id), analysis_stats.to_serializable())
+        self.feature_stats_store.store(task_id, analysis_stats.to_serializable())
 
     def _store_analysis_result(self, analysis_result: AnalysisResult, task_id: Text) -> float:
         result_store_start_time = datetime.utcnow()
-        self.feature_meta_store.store("{}-meta".format(task_id), analysis_result.to_serializable())
+        self.feature_meta_store.store(task_id, analysis_result.to_serializable())
         result_store_time = seconds_between(result_store_start_time)
         return result_store_time
 
@@ -72,7 +72,7 @@ class FeatureExtractionService(object):
 
     def _store_feature_data(self, feature, task_id):
         feature_store_start_time = datetime.utcnow()
-        self.feature_meta_store.store("{}-data".format(task_id), feature.to_serializable())
+        self.feature_meta_store.store(task_id, feature.to_serializable())
         feature_store_time = seconds_between(feature_store_start_time)
         return feature_store_time
 
