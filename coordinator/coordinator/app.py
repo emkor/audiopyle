@@ -8,9 +8,10 @@ from commons.utils.file_system import AUDIO_FILES_DIR, RESULTS_DATA_DIR, RESULTS
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from coordinator.api.automation import AutomationApi
+from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
 from coordinator.api.plugin import PluginListApi, PluginDetailApi
 from coordinator.api.root import CoordinatorApi
-from coordinator.api.result import ExtractionApi, ResultListApi, ResultDetailsApi
+from coordinator.api.result import ResultListApi, ResultDetailsApi
 
 app = Flask(__name__)
 
@@ -33,7 +34,12 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     result_stats_file_store = LzmaJsonFileStore(RESULTS_STATS_DIR)
 
     app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api', logger=logger))
-    app.add_url_rule("/extraction", view_func=ExtractionApi.as_view('extraction_api', logger=logger))
+    app.add_url_rule("/extraction/<task_id>",
+                     view_func=ExtractionStatusApi.as_view('extraction_status_api',
+                                                           logger=logger))
+    app.add_url_rule("/extraction",
+                     view_func=ExtractionApi.as_view('extraction_api',
+                                                     logger=logger))
     app.add_url_rule("/result/<task_id>/data",
                      view_func=ResultDetailsApi.as_view('result_data_detail_api',
                                                         file_store=result_data_file_store,
