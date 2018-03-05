@@ -22,9 +22,11 @@ from commons.services.store_provider import FileStore
 
 
 class FeatureExtractionService(object):
-    def __init__(self, feature_data_store: FileStore, feature_meta_store: FileStore, logger: Logger) -> None:
+    def __init__(self, feature_data_store: FileStore, feature_meta_store: FileStore, feature_stats_store: FileStore,
+                 logger: Logger) -> None:
         self.feature_meta_store = feature_meta_store
         self.feature_data_store = feature_data_store
+        self.feature_stats_store = feature_stats_store
         self.logger = logger
         self._temporary_wav_file = None  # type: Optional[Text]
 
@@ -52,7 +54,7 @@ class FeatureExtractionService(object):
                               read_input_file_time, read_raw_audio_time) -> None:
         analysis_stats = AnalysisStats(task_time, extraction_time, feature_store_time,
                                        result_build_time, result_store_time, read_input_file_time, read_raw_audio_time)
-        self.feature_meta_store.store("{}-stats".format(task_id), analysis_stats.to_serializable())
+        self.feature_stats_store.store("{}-stats".format(task_id), analysis_stats.to_serializable())
 
     def _store_analysis_result(self, analysis_result: AnalysisResult, task_id: Text) -> float:
         result_store_start_time = datetime.utcnow()

@@ -6,7 +6,9 @@ from typing import Text, List
 from commons.utils.logger import get_logger
 
 AUDIO_FILES_DIR = "/root/audio"
-RESULTS_DIR = "/root/result"
+RESULTS_DATA_DIR = "/root/result/data"
+RESULTS_META_DIR = "/root/result/meta"
+RESULTS_STATS_DIR = "/root/result/stats"
 
 logger = get_logger()
 

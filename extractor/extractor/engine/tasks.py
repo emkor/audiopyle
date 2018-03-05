@@ -1,7 +1,7 @@
 from typing import Any, Text, Dict
 from billiard.exceptions import SoftTimeLimitExceeded
 
-from commons.utils.file_system import RESULTS_DIR
+from commons.utils.file_system import RESULTS_DATA_DIR, RESULTS_STATS_DIR, RESULTS_META_DIR
 from commons.utils.logger import get_logger
 from commons.models.extraction_request import ExtractionRequest
 from commons.services.store_provider import JsonFileStore
@@ -15,9 +15,12 @@ celery_app = get_celery()
 def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     logger = get_logger()
     request = ExtractionRequest.from_serializable(extraction_request)
-    single_file_store = JsonFileStore(RESULTS_DIR)
-    extraction_service = FeatureExtractionService(feature_data_store=single_file_store,
-                                                  feature_meta_store=single_file_store,
+    data_store = JsonFileStore(RESULTS_DATA_DIR)
+    meta_store = JsonFileStore(RESULTS_META_DIR)
+    stats_store = JsonFileStore(RESULTS_STATS_DIR)
+    extraction_service = FeatureExtractionService(feature_data_store=data_store,
+                                                  feature_meta_store=meta_store,
+                                                  feature_stats_store=stats_store,
                                                   logger=logger)
     try:
         extraction_service.extract_feature_and_store(request)
