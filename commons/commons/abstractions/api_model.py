@@ -14,6 +14,7 @@ class HttpStatusCode(Enum):
     not_found = 404
     method_not_allowed = 405
     request_timeout = 408
+    precondition_failed = 412
     internal_server_error = 500
 
 
