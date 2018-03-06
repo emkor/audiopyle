@@ -58,8 +58,9 @@ def file_size_bytes(absolute_path: Text) -> int:
     return os.path.getsize(absolute_path)
 
 
-def make_sure_directory_exists(path: Text) -> None:
+def make_sure_directory_exists(path: Text, permissions=DEFAULT_DIR_PERMISSIONS) -> None:
     try:
-        os.makedirs(path, mode=DEFAULT_DIR_PERMISSIONS, exist_ok=False)
+        os.makedirs(path, mode=permissions, exist_ok=False)
+        os.chmod(path, mode=permissions)
     except OSError:
         pass
