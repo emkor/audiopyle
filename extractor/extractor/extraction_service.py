@@ -72,7 +72,7 @@ class FeatureExtractionService(object):
 
     def _store_feature_data(self, feature, task_id):
         feature_store_start_time = datetime.utcnow()
-        self.feature_meta_store.store(task_id, feature.to_serializable())
+        self.feature_data_store.store(task_id, feature.to_serializable())
         feature_store_time = seconds_between(feature_store_start_time)
         return feature_store_time
 
