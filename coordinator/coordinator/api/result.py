@@ -6,7 +6,7 @@ from commons.services.store_provider import FileStore
 
 
 class ResultListApi(FlaskRestApi):
-    def __init__(self, file_store: FileStore, logger: Logger):
+    def __init__(self, file_store: FileStore, logger: Logger) -> None:
         super().__init__(logger)
         self.file_store = file_store
         self.logger = logger
@@ -16,7 +16,7 @@ class ResultListApi(FlaskRestApi):
 
 
 class ResultDetailsApi(FlaskRestApi):
-    def __init__(self, file_store: FileStore, logger: Logger):
+    def __init__(self, file_store: FileStore, logger: Logger) -> None:
         super().__init__(logger)
         self.file_store = file_store
         self.logger = logger
