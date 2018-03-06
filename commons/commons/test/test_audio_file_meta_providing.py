@@ -16,7 +16,7 @@ class FileMetaProvidingTest(unittest.TestCase):
         file_meta = read_file_meta(self.wav_audio_file_name)
         assert_that(file_meta).is_not_none()
         assert_that(file_meta.extension).is_equal_to("mp3")
-        assert_that(file_meta.file_name).is_equal_to("102bpm_drum_loop_mono_44.1k.mp3")
+        assert_that(file_meta.file_name).is_equal_to("102bpm_drum_loop.mp3")
         assert_that(file_meta.created_on).is_not_none().is_after(datetime(year=2017, month=1, day=1))
         assert_that(file_meta.last_access).is_not_none().is_after(datetime(year=2017, month=10, day=1))
         assert_that(file_meta.last_modification).is_not_none().is_after(datetime(year=2017, month=3, day=1))

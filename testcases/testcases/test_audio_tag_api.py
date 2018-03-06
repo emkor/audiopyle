@@ -10,7 +10,7 @@ from testcases.utils import get_api_host
 class AudioTagApiTest(TestCase):
     def setUp(self):
         self.audio_tag_api_url = "http://{}:8080/audio/tag".format(get_api_host())
-        self.audio_file_name = "102bpm_drum_loop_mono_44.1k.mp3"
+        self.audio_file_name = "102bpm_drum_loop_mono_44.mp3"
 
     def test_should_show_audio_tags_of_mp3_file(self):
         expected_status_code = 200

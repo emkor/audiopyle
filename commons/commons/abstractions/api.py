@@ -26,7 +26,7 @@ class AbstractRestApi(object):
         self.logger.info("{} served {} at {} with {} ({} -> {}) in {}s.".format(self.__class__.__name__,
                                                                                 api_request.method,
                                                                                 api_request.url,
-                                                                                api_response.status_code.name,
+                                                                                api_response.status_code,
                                                                                 api_request.size_humanized(),
                                                                                 api_response.size_humanized(),
                                                                                 serving_time))
