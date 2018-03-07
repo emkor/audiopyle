@@ -138,8 +138,8 @@ class GzipJsonFileStore(FileStore):
 
 
 class LzmaJsonFileStore(FileStore):
-    def __init__(self, base_dir: Text) -> None:
-        super().__init__(base_dir, "json.lzma")
+    def __init__(self, base_dir: Text, extension: Text = "json.lzma") -> None:
+        super().__init__(base_dir, extension)
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
         json_content = json.dumps(content).encode(ENCODING_UTF_8)

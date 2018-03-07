@@ -6,9 +6,7 @@ from typing import Text, List
 from commons.utils.logger import get_logger
 
 AUDIO_FILES_DIR = "/root/audio"
-RESULTS_DATA_DIR = "/root/result/data"
-RESULTS_META_DIR = "/root/result/meta"
-RESULTS_STATS_DIR = "/root/result/stats"
+RESULTS_DIR = "/root/result"
 DEFAULT_FILE_PERMISSIONS = 0o666
 DEFAULT_DIR_PERMISSIONS = 0o777
 ENCODING_UTF_8 = 'utf-8'
@@ -56,11 +54,3 @@ def remove_file(file_path: Text) -> None:
 
 def file_size_bytes(absolute_path: Text) -> int:
     return os.path.getsize(absolute_path)
-
-
-def make_sure_directory_exists(path: Text, permissions=DEFAULT_DIR_PERMISSIONS) -> None:
-    try:
-        os.makedirs(path, mode=permissions, exist_ok=False)
-        os.chmod(path, mode=permissions)
-    except OSError:
-        pass

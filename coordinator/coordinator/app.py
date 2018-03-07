@@ -3,8 +3,7 @@ from logging import Logger
 from flask import Flask
 
 from commons.services.store_provider import Mp3FileStore, LzmaJsonFileStore
-from commons.utils.file_system import AUDIO_FILES_DIR, RESULTS_DATA_DIR, RESULTS_STATS_DIR, \
-    RESULTS_META_DIR, make_sure_directory_exists
+from commons.utils.file_system import AUDIO_FILES_DIR, RESULTS_DIR
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from coordinator.api.automation import AutomationApi
@@ -26,12 +25,9 @@ def main():
 def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     audio_file_store = Mp3FileStore(AUDIO_FILES_DIR)
 
-    make_sure_directory_exists(RESULTS_DATA_DIR)
-    result_data_file_store = LzmaJsonFileStore(RESULTS_DATA_DIR)
-    make_sure_directory_exists(RESULTS_META_DIR)
-    result_meta_file_store = LzmaJsonFileStore(RESULTS_META_DIR)
-    make_sure_directory_exists(RESULTS_STATS_DIR)
-    result_stats_file_store = LzmaJsonFileStore(RESULTS_STATS_DIR)
+    result_data_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="data.json.lzma")
+    result_meta_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="meta.json.lzma")
+    result_stats_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="stats.json.lzma")
 
     app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api', logger=logger))
     app.add_url_rule("/extraction/<task_id>",
