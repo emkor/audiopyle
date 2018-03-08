@@ -21,6 +21,15 @@ class ResultDetailsApi(FlaskRestApi):
         self.file_store = file_store
         self.logger = logger
 
+    def _post(self, the_request: ApiRequest) -> ApiResponse:
+        task_id = the_request.query_params.get("task_id")
+        if self.file_store.exists(task_id):
+            return ApiResponse(HttpStatusCode.precondition_failed,
+                               {"error": "Result with {} identifier already exists"})
+        else:
+            self.file_store.store(task_id, the_request.payload)
+            return ApiResponse(HttpStatusCode.ok, {"task_id": task_id})
+
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         task_id = the_request.query_params.get("task_id")
         if self.file_store.exists(task_id):

@@ -1,7 +1,8 @@
 from typing import Any, Text, Dict
 from billiard.exceptions import SoftTimeLimitExceeded
 
-from commons.utils.file_system import RESULTS_DIR, AUDIO_FILES_DIR
+from commons.services.result_store_client import ResultApiClient
+from commons.utils.file_system import AUDIO_FILES_DIR
 from commons.utils.logger import get_logger
 from commons.models.extraction_request import ExtractionRequest
 from commons.services.store_provider import LzmaJsonFileStore
@@ -16,12 +17,8 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     logger = get_logger()
     request = ExtractionRequest.from_serializable(extraction_request)
     mp3_file_store = LzmaJsonFileStore(AUDIO_FILES_DIR, extension="mp3")
-    data_store = LzmaJsonFileStore(RESULTS_DIR, extension="data.json.lzma")
-    meta_store = LzmaJsonFileStore(RESULTS_DIR, extension="meta.json.lzma")
-    stats_store = LzmaJsonFileStore(RESULTS_DIR, extension="stats.json.lzma")
-    extraction_service = FeatureExtractionService(feature_data_store=data_store,
-                                                  feature_meta_store=meta_store,
-                                                  feature_stats_store=stats_store,
+    result_api_client = ResultApiClient("coordinator", 8080, logger)
+    extraction_service = FeatureExtractionService(result_store_client=result_api_client,
                                                   audio_file_store=mp3_file_store,
                                                   logger=logger)
     try:
