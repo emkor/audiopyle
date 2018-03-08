@@ -14,9 +14,9 @@ services:
     hostname: "mysql"
     environment:
       - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_USER=celery
-      - MYSQL_PASSWORD=celery
-      - MYSQL_DATABASE=results
+      - MYSQL_USER=audiopyle
+      - MYSQL_PASSWORD=audiopyle
+      - MYSQL_DATABASE=audiopyle
   coordinator:
     image: "endlessdrones/audiopyle-coordinator:latest"
     hostname: "coordinator"
@@ -25,6 +25,7 @@ services:
     volumes:
       - "../resources/vamp:/root/vamp:ro"
       - "../resources/audio:/root/audio:ro"
+      - "../resources/result:/root/result"
     depends_on:
       - rabbitmq
     environment:
@@ -37,7 +38,6 @@ services:
     volumes:
       - "../resources/vamp:/root/vamp:ro"
       - "../resources/audio:/root/audio:ro"
-      - "../resources/result:/root/result"
     depends_on:
       - rabbitmq
       - mysql

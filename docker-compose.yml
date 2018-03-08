@@ -41,7 +41,6 @@ services:
     volumes:
       - "./resources/vamp:/root/vamp:ro"
       - "./resources/audio:/root/audio:ro"
-      - "./resources/result:/root/result"
     environment:
       - EXTRACTION_CONCURRENCY=4
       - EXTRACTION_BROKER_CONN_POOL_SIZE=4

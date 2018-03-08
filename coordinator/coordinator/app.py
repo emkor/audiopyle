@@ -32,7 +32,9 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     result_meta_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="meta.json.lzma")
     result_stats_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="stats.json.lzma")
 
-    app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api', logger=logger))
+    app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api',
+                                                                    audio_file_store=audio_file_store,
+                                                                    logger=logger))
     app.add_url_rule("/extraction/<task_id>",
                      view_func=ExtractionStatusApi.as_view('extraction_status_api',
                                                            logger=logger))
