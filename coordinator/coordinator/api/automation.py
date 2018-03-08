@@ -1,6 +1,6 @@
 from logging import Logger
 
-from typing import Text, List
+from typing import List
 
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.abstractions.flask_api import FlaskRestApi
@@ -15,7 +15,7 @@ from extractor.task_api import run_task
 
 
 class AutomationApi(FlaskRestApi):
-    def __init__(self, audio_file_store: FileStore, logger: Logger):
+    def __init__(self, audio_file_store: FileStore, logger: Logger) -> None:
         super().__init__(logger)
         self.audio_file_store = audio_file_store
 
@@ -37,10 +37,10 @@ class AutomationApi(FlaskRestApi):
         elif not plugins:
             return ApiResponse(status_code=HttpStatusCode.no_content, payload="No whitelisted plugins found!")
 
-    def _generate_extraction_requests(self, audio_file_identifier: List[Text],
+    def _generate_extraction_requests(self, audio_file_identifiers: List[str],
                                       plugins: List[VampyPlugin]) -> List[ExtractionRequest]:
         extraction_requests = []
-        for audio_file_identifier in audio_file_identifier:
+        for audio_file_identifier in audio_file_identifiers:
             for plugin in plugins:
                 for plugin_output in plugin.outputs:
                     extraction_requests.append(
@@ -50,8 +50,7 @@ class AutomationApi(FlaskRestApi):
         return extraction_requests
 
     def _whitelisted_plugins(self) -> List[VampyPlugin]:
-        blacklisted_plugins = read_env_var(var_name="BLACKLISTED_PLUGINS", expected_type=str,
-                                           default="").split(",")
+        blacklisted_plugins = read_env_var(var_name="BLACKLISTED_PLUGINS", expected_type=str, default="").split(",")
         if blacklisted_plugins:
             self.logger.warning(
                 "Omitting blacklisted plugins ({}): {}...".format(len(blacklisted_plugins), blacklisted_plugins))
