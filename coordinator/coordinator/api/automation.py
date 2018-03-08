@@ -1,3 +1,5 @@
+from logging import Logger
+
 from typing import Text, List
 
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
@@ -6,26 +8,30 @@ from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
 from commons.services.audio_tag_providing import ACCEPTED_EXTENSIONS
 from commons.services.plugin_providing import list_vampy_plugins
+from commons.services.store_provider import FileStore
 from commons.utils.env_var import read_env_var
-from commons.utils.file_system import list_files, AUDIO_FILES_DIR, extract_extension
 from extractor.engine.tasks import extract_feature
 from extractor.task_api import run_task
 
 
 class AutomationApi(FlaskRestApi):
-    def _get(self, the_request: ApiRequest) -> ApiResponse:
-        audio_file_names = self._allowed_audio_files()
+    def __init__(self, audio_file_store: FileStore, logger: Logger):
+        super().__init__(logger)
+        self.audio_file_store = audio_file_store
+
+    def _post(self, the_request: ApiRequest) -> ApiResponse:
+        audio_file_identifiers = self.audio_file_store.list()
         plugins = self._whitelisted_plugins()
 
-        if audio_file_names and plugins:
-            extraction_requests = self._generate_extraction_requests(audio_file_names, plugins)
+        if audio_file_identifiers and plugins:
+            extraction_requests = self._generate_extraction_requests(audio_file_identifiers, plugins)
             task_id_to_request = {r.uuid(): r.to_serializable() for r in extraction_requests}
             self.logger.info("Sending {} extraction requests...".format(task_id_to_request))
             for task_id, the_request in task_id_to_request.items():
                 run_task(task=extract_feature, task_id=task_id, extraction_request=the_request)
                 self.logger.info("Sent feature extraction request {} with id {}...".format(the_request, task_id))
             return ApiResponse(HttpStatusCode.accepted, task_id_to_request)
-        elif not audio_file_names:
+        elif not audio_file_identifiers:
             return ApiResponse(status_code=HttpStatusCode.no_content,
                                payload="No audio files matching {} extensions found!".format(ACCEPTED_EXTENSIONS))
         elif not plugins:
@@ -41,15 +47,6 @@ class AutomationApi(FlaskRestApi):
                         ExtractionRequest(audio_file_identifier=audio_file_name, plugin_key=plugin.key,
                                           plugin_output=plugin_output))
         return extraction_requests
-
-    def _allowed_audio_files(self):
-        all_file_names = list_files(AUDIO_FILES_DIR)
-        audio_file_names = [f for f in all_file_names if extract_extension(f).lower() in ACCEPTED_EXTENSIONS]
-        if len(audio_file_names) != len(all_file_names):
-            self.logger.warning("Omitted {} audio files because invalid extensions (accepted ones: {})".format(
-                len(all_file_names) - len(audio_file_names), ACCEPTED_EXTENSIONS))
-        self.logger.info("Found audio file names: {}".format(audio_file_names))
-        return audio_file_names
 
     def _whitelisted_plugins(self) -> List[VampyPlugin]:
         blacklisted_plugins = read_env_var(var_name="BLACKLISTED_PLUGINS", expected_type=str,
