@@ -37,14 +37,15 @@ class AutomationApi(FlaskRestApi):
         elif not plugins:
             return ApiResponse(status_code=HttpStatusCode.no_content, payload="No whitelisted plugins found!")
 
-    def _generate_extraction_requests(self, audio_file_names: List[Text],
+    def _generate_extraction_requests(self, audio_file_identifier: List[Text],
                                       plugins: List[VampyPlugin]) -> List[ExtractionRequest]:
         extraction_requests = []
-        for audio_file_name in audio_file_names:
+        for audio_file_identifier in audio_file_identifier:
             for plugin in plugins:
                 for plugin_output in plugin.outputs:
                     extraction_requests.append(
-                        ExtractionRequest(audio_file_identifier=audio_file_name, plugin_key=plugin.key,
+                        ExtractionRequest(audio_file_identifier=audio_file_identifier,
+                                          plugin_key=plugin.key,
                                           plugin_output=plugin_output))
         return extraction_requests
 
