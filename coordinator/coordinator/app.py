@@ -1,3 +1,4 @@
+import logging
 from logging import Logger
 
 from flask import Flask
@@ -19,6 +20,8 @@ def main():
     setup_logger()
     logger = get_logger()
     logger.info("Initializing Coordinator app...")
+    flask_logger = logging.getLogger('werkzeug')
+    flask_logger.setLevel(logging.WARNING)
     start_app(logger, "0.0.0.0", 8080, debug=False)
 
 

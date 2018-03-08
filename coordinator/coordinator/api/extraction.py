@@ -13,7 +13,7 @@ class ExtractionStatusApi(FlaskRestApi):
         if task_result.status in [TaskStatus.in_progress, TaskStatus.not_known, TaskStatus.ignored]:
             return ApiResponse(HttpStatusCode.no_content, task_result.to_serializable())
         else:
-            return ApiResponse(HttpStatusCode.no_content, task_result.to_serializable())
+            return ApiResponse(HttpStatusCode.ok, task_result.to_serializable())
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
         task_id = the_request.query_params.get("task_id")

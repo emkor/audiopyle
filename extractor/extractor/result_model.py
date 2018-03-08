@@ -4,6 +4,9 @@ import celery.states as celery_state
 from enum import Enum
 
 from commons.abstractions.model import Model
+from commons.utils.logger import get_logger
+
+logger = get_logger()
 
 
 class TaskStatus(Enum):
@@ -26,8 +29,7 @@ CELERY_TO_AUDIOPYLE_STATUS_MAP = {celery_state.PENDING: TaskStatus.not_known,
 
 
 def map_celery_status(celery_status: Text) -> TaskStatus:
-    status_map = CELERY_TO_AUDIOPYLE_STATUS_MAP
-    return status_map.get(celery_status)
+    return CELERY_TO_AUDIOPYLE_STATUS_MAP[celery_status]
 
 
 class ExtractionResult(Model):
@@ -48,5 +50,7 @@ class ExtractionResult(Model):
 
 
 def build_extraction_result(celery_async_result: AsyncResult) -> ExtractionResult:
-    return ExtractionResult(task_id=str(celery_async_result.id),
-                            status=map_celery_status(str(celery_async_result.status)))
+    celery_task_id = str(celery_async_result.id)
+    celery_task_status = str(celery_async_result.status)
+    logger.debug("Building result from task id {} and status {}...".format(celery_task_id, celery_task_status))
+    return ExtractionResult(task_id=celery_task_id, status=map_celery_status(celery_task_status))
