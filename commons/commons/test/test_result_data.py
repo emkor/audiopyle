@@ -15,7 +15,7 @@ class AnalysisResultDataModelTest(unittest.TestCase):
         self.example_vampy_plugin = VampyPlugin(key="vamp-example-plugins:amplitudefollower",
                                                 categories=["Low Level Features"],
                                                 outputs=["amplitude"],
-                                                library_path="/root/vamp/vamp-example-plugins.so")
+                                                library_file_name="/root/vamp/vamp-example-plugins.so")
         self.data_stats_example = DataStats(0.0, 1.0, 0.6, 0.5, 0.1, 0.2)
         self.result_data_example = FeatureMeta(self.example_vampy_plugin, "amplitude", FeatureType.ConstantStepFeature,
                                                1024, (1, 10), self.data_stats_example)
@@ -42,7 +42,7 @@ class AnalysisResultModelTest(unittest.TestCase):
         self.example_vampy_plugin = VampyPlugin(key="vamp-example-plugins:amplitudefollower",
                                                 categories=["Low Level Features"],
                                                 outputs=["amplitude"],
-                                                library_path="/root/vamp/vamp-example-plugins.so")
+                                                library_file_name="/root/vamp/vamp-example-plugins.so")
         self.data_stats_example = DataStats(0.0, 1.0, 0.6, 0.5, 0.1, 0.2)
         self.result_data_example = FeatureMeta(self.example_vampy_plugin, "amplitude", FeatureType.ConstantStepFeature,
                                                1024, (1, 10), self.data_stats_example)

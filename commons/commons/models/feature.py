@@ -92,7 +92,7 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
 
     def value_shape(self) -> Tuple[int, int]:
         first_value = self.step_features[0].values or []
-        return len(self.step_features), len(first_value)
+        return len(self.step_features), min(len(first_value), 1)
 
     def to_serializable(self):
         return {"value_list": [s.to_serializable() for s in self.step_features]}

@@ -5,12 +5,11 @@ import lzma
 
 from typing import Text, Any, List, Dict
 
+from commons.models.file_meta import FileMeta
+from commons.utils.conversion import utc_timestamp_to_datetime
 from commons.utils.file_system import file_exists, concatenate_paths, remove_file, get_file_name, \
-    extract_all_extensions, list_full_paths
+    extract_all_extensions, list_full_paths, DEFAULT_FILE_PERMISSIONS, ENCODING_UTF_8
 from commons.utils.logger import get_logger
-
-DEFAULT_PERMISSIONS = 0o666
-ENCODING_UTF_8 = 'utf-8'
 
 
 class StoreError(Exception):
@@ -18,7 +17,7 @@ class StoreError(Exception):
 
 
 class FileStore(object):
-    def __init__(self, base_dir: Text, extension: Text, permissions: int = DEFAULT_PERMISSIONS) -> None:
+    def __init__(self, base_dir: Text, extension: Text, permissions: int = DEFAULT_FILE_PERMISSIONS) -> None:
         self.base_dir = base_dir
         self.extension = extension
         self.permissions = permissions
@@ -43,6 +42,15 @@ class FileStore(object):
             self.logger.warning(message)
             raise StoreError(message)
 
+    def meta(self, identifier: Text) -> FileMeta:
+        file_name = self._build_full_path(identifier)
+        file_stats = os.stat(file_name)
+        last_access_utc = utc_timestamp_to_datetime(file_stats.st_atime)
+        last_modification_utc = utc_timestamp_to_datetime(file_stats.st_mtime)
+        created_on_utc = utc_timestamp_to_datetime(file_stats.st_ctime)
+        return FileMeta(file_name=get_file_name(file_name), size=file_stats.st_size, last_access=last_access_utc,
+                        last_modification=last_modification_utc, created_on=created_on_utc)
+
     def list(self) -> List[Text]:
         """List file identifiers (file names without extensions)"""
         return [self._get_identifier(f) for f in self.list_file_names()]
@@ -54,6 +62,9 @@ class FileStore(object):
     def list_full_paths(self) -> List[Text]:
         """List file absolute paths (with extensions)"""
         return list_full_paths(self.base_dir)
+
+    def get_full_path(self, identifier: Text) -> Text:
+        return self._build_full_path(identifier)
 
     def remove(self, identifier: Text) -> None:
         full_path = self._build_full_path(identifier)
@@ -87,8 +98,21 @@ class FileStore(object):
         return "{}.{}".format(identifier, self.extension)
 
 
+class Mp3FileStore(FileStore):
+    def __init__(self, base_dir: Text, permissions: int = DEFAULT_FILE_PERMISSIONS) -> None:
+        super().__init__(base_dir, "mp3", permissions)
+
+    def _inherit_read(self, full_path: Text) -> Dict[Text, Any]:
+        with open(full_path, "r") as input_file:
+            content = json.load(input_file)
+        return content
+
+    def _inherit_store(self, full_path: Text, content: Dict[Text, Any]) -> None:
+        raise NotImplementedError()
+
+
 class JsonFileStore(FileStore):
-    def __init__(self, base_dir: Text, permissions: int = DEFAULT_PERMISSIONS) -> None:
+    def __init__(self, base_dir: Text, permissions: int = DEFAULT_FILE_PERMISSIONS) -> None:
         super().__init__(base_dir, "json", permissions)
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
@@ -102,7 +126,7 @@ class JsonFileStore(FileStore):
 
 
 class GzipJsonFileStore(FileStore):
-    def __init__(self, base_dir: Text, permissions: int = DEFAULT_PERMISSIONS) -> None:
+    def __init__(self, base_dir: Text, permissions: int = DEFAULT_FILE_PERMISSIONS) -> None:
         super().__init__(base_dir, "json.gzip", permissions)
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
@@ -117,8 +141,8 @@ class GzipJsonFileStore(FileStore):
 
 
 class LzmaJsonFileStore(FileStore):
-    def __init__(self, base_dir: Text) -> None:
-        super().__init__(base_dir, "json.lzma")
+    def __init__(self, base_dir: Text, extension: Text = "json.lzma") -> None:
+        super().__init__(base_dir, extension)
 
     def _inherit_store(self, full_path: Text, content: Dict[Text, Any]):
         json_content = json.dumps(content).encode(ENCODING_UTF_8)

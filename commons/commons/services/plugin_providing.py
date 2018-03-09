@@ -4,18 +4,25 @@ from vampyhost import get_library_for
 import vamp
 
 from commons.models.plugin import VampyPlugin
+from commons.utils.file_system import get_file_name
 
 
 def build_plugin_from_key(key: Text) -> VampyPlugin:
     plugin_categories = vamp.get_category_of(key)
     plugin_outputs = vamp.get_outputs_of(key)
-    library_file = get_library_for(key)
-    return VampyPlugin(key=key, categories=plugin_categories, outputs=plugin_outputs, library_path=library_file)
+    library_file_name = get_file_name(get_library_for(key))
+    return VampyPlugin(key=key, categories=plugin_categories, outputs=plugin_outputs,
+                       library_file_name=library_file_name)
 
 
 def list_vampy_plugins(blacklisted_plugin_keys: Optional[List[Text]] = None) -> List[VampyPlugin]:
     """Returns list of VAMPy plugins available in OS"""
-    return [build_plugin_from_key(key=k) for k in vamp.list_plugins() if k not in (blacklisted_plugin_keys or [])]
+    return [build_plugin_from_key(key=k) for k in list_plugin_keys(blacklisted_plugin_keys)]
+
+
+def list_plugin_keys(blacklisted_plugin_keys: Optional[List[Text]] = None) -> List[Text]:
+    """Returns list of VAMPy plugin keys available under OS"""
+    return [k for k in vamp.list_plugins() if k not in (blacklisted_plugin_keys or [])]
 
 
 def list_categories(plugins: List[VampyPlugin]) -> List[Text]:

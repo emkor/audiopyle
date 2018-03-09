@@ -2,7 +2,7 @@ import os
 
 from commons.utils.file_system import concatenate_paths
 
-TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop_mono_44.1k.mp3"
+TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop.mp3"
 
 
 def get_absolute_path_for_project_file(caller_file_object, project_file_path):

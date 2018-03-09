@@ -4,8 +4,8 @@ from datetime import datetime
 
 import numpy
 
+from commons.services.result_store_client import ResultApiClient
 from commons.utils.conversion import seconds_between
-from commons.utils.file_system import AUDIO_FILES_DIR, concatenate_paths
 from commons.models.audio_tag import Id3Tag
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.feature import VampyFeatureAbstraction
@@ -22,9 +22,9 @@ from commons.services.store_provider import FileStore
 
 
 class FeatureExtractionService(object):
-    def __init__(self, feature_data_store: FileStore, feature_meta_store: FileStore, logger: Logger) -> None:
-        self.feature_meta_store = feature_meta_store
-        self.feature_data_store = feature_data_store
+    def __init__(self, result_store_client: ResultApiClient, audio_file_store: FileStore, logger: Logger) -> None:
+        self.result_store_client = result_store_client
+        self.audio_file_store = audio_file_store
         self.logger = logger
         self._temporary_wav_file = None  # type: Optional[Text]
 
@@ -32,7 +32,7 @@ class FeatureExtractionService(object):
         task_start_time = datetime.utcnow()
         task_id = request.uuid()
         self.logger.info("Building context for extraction {}: {}...".format(task_id, request))
-        input_audio_file_path = concatenate_paths(AUDIO_FILES_DIR, request.audio_file_name)
+        input_audio_file_path = self.audio_file_store.get_full_path(request.audio_file_identifier)
         plugin = build_plugin_from_key(str(request.plugin_key))
         file_meta, audio_meta, id3_tag, read_input_file_time = self._read_file_meta(input_audio_file_path)
         wav_data, read_raw_audio_time = self._read_raw_audio_data_from_mp3(input_audio_file_path)
@@ -52,11 +52,11 @@ class FeatureExtractionService(object):
                               read_input_file_time, read_raw_audio_time) -> None:
         analysis_stats = AnalysisStats(task_time, extraction_time, feature_store_time,
                                        result_build_time, result_store_time, read_input_file_time, read_raw_audio_time)
-        self.feature_meta_store.store("{}-stats".format(task_id), analysis_stats.to_serializable())
+        self.result_store_client.store_stats(task_id, analysis_stats.to_serializable())
 
     def _store_analysis_result(self, analysis_result: AnalysisResult, task_id: Text) -> float:
         result_store_start_time = datetime.utcnow()
-        self.feature_meta_store.store("{}-meta".format(task_id), analysis_result.to_serializable())
+        self.result_store_client.store_meta(task_id, analysis_result.to_serializable())
         result_store_time = seconds_between(result_store_start_time)
         return result_store_time
 
@@ -70,7 +70,7 @@ class FeatureExtractionService(object):
 
     def _store_feature_data(self, feature, task_id):
         feature_store_start_time = datetime.utcnow()
-        self.feature_meta_store.store("{}-data".format(task_id), feature.to_serializable())
+        self.result_store_client.store_data(task_id, feature.to_serializable())
         feature_store_time = seconds_between(feature_store_start_time)
         return feature_store_time
 
