@@ -54,7 +54,9 @@ class ApiRequest(Model):
 
 
 class ApiResponse(Model):
-    def __init__(self, status_code: HttpStatusCode, payload: Optional[Any]) -> None:
+    def __init__(self, status_code: HttpStatusCode, payload: Optional[Any],
+                 headers: Optional[Dict[Text, Any]] = None) -> None:
         self.status_code = status_code
         self.payload = payload
+        self.headers = headers
         self.creation_time = datetime.utcnow()

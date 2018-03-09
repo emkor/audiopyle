@@ -13,7 +13,6 @@ from commons.models.file_meta import FileMeta, Mp3AudioFileMeta, AudioFileMeta
 from commons.models.plugin import VampyPlugin
 from commons.models.result import AnalysisResult, ResultVersion, AnalysisStats
 from commons.services.audio_tag_providing import read_id3_tag
-from commons.services.audio_conversion import convert_to_wav, generate_output_wav_file_path
 from commons.services.feature_extraction import extract_features
 from commons.services.feature_meta_extraction import get_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
@@ -87,13 +86,6 @@ class FeatureExtractionService(object):
         raw_data = read_raw_audio_from_mp3(input_file_path)
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
-
-    def _convert_to_raw_audio(self, audio_file_absolute_path: Text, task_id: Text) -> Tuple[Text, float]:
-        conversion_start_time = datetime.utcnow()
-        self._temporary_wav_file = generate_output_wav_file_path(task_id)
-        tmp_audio_file_name = convert_to_wav(audio_file_absolute_path, self._temporary_wav_file)
-        conversion_time = seconds_between(conversion_start_time)
-        return tmp_audio_file_name, conversion_time
 
     def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, Mp3AudioFileMeta, Id3Tag, float]:
         read_input_file_start_time = datetime.utcnow()

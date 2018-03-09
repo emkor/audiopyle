@@ -1,20 +1,19 @@
 from typing import Text, List
 
-from commons.abstractions.api import AudiopyleRestApi
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from commons.abstractions.flask_api import FlaskRestApi
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
+from commons.services.audio_tag_providing import ACCEPTED_EXTENSIONS
 from commons.services.plugin_providing import list_vampy_plugins
 from commons.utils.env_var import read_env_var
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, extract_extension
 from extractor.engine.tasks import extract_feature
 from extractor.task_api import run_task
 
-ACCEPTED_EXTENSIONS = ["mp3"]
 
-
-class AutomationApi(AudiopyleRestApi):
-    def get(self, request: ApiRequest) -> ApiResponse:
+class AutomationApi(FlaskRestApi):
+    def _get(self, the_request: ApiRequest) -> ApiResponse:
         audio_file_names = self._allowed_audio_files()
         plugins = self._whitelisted_plugins()
 
@@ -22,9 +21,9 @@ class AutomationApi(AudiopyleRestApi):
             extraction_requests = self._generate_extraction_requests(audio_file_names, plugins)
             task_id_to_request = {r.uuid(): r.to_serializable() for r in extraction_requests}
             self.logger.info("Sending {} extraction requests...".format(task_id_to_request))
-            for task_id, request in task_id_to_request.items():
-                run_task(task=extract_feature, task_id=task_id, extraction_request=request)
-                self.logger.info("Sent feature extraction request {} with id {}...".format(request, task_id))
+            for task_id, the_request in task_id_to_request.items():
+                run_task(task=extract_feature, task_id=task_id, extraction_request=the_request)
+                self.logger.info("Sent feature extraction request {} with id {}...".format(the_request, task_id))
             return ApiResponse(HttpStatusCode.accepted, task_id_to_request)
         elif not audio_file_names:
             return ApiResponse(status_code=HttpStatusCode.no_content,

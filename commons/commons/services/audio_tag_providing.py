@@ -9,6 +9,8 @@ from commons.utils.logger import get_logger
 
 logger = get_logger()
 
+ACCEPTED_EXTENSIONS = ["mp3"]
+
 
 def read_id3_tag(input_audio_file_absolute_path: Text) -> Optional[Id3Tag]:
     try:
