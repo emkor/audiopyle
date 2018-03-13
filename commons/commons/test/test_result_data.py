@@ -36,7 +36,7 @@ class AnalysisResultModelTest(unittest.TestCase):
                                           datetime(2017, 3, 23, 12, 0, 0),
                                           datetime(2017, 3, 23, 11, 0, 0),
                                           datetime(2017, 3, 23, 10, 0, 0))
-        self.audio_meta_example = Mp3AudioFileMeta("/audio/some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
+        self.audio_meta_example = Mp3AudioFileMeta("some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
         self.id3_tag_example = Id3Tag(artist="Unknown Artist", title="Unknown Title", album="Unknown Album",
                                       date=2017, track=1, genre="Unknown Genre")
         self.example_vampy_plugin = VampyPlugin(key="vamp-example-plugins:amplitudefollower",

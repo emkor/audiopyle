@@ -5,6 +5,7 @@ from assertpy import assert_that
 
 from commons.services.file_meta_providing import read_mp3_file_meta, read_file_meta
 from commons.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDIO_FILE
+from commons.utils.file_system import get_file_name
 
 
 class FileMetaProvidingTest(unittest.TestCase):
@@ -39,7 +40,7 @@ class Mp3AudioFileMetaProvidingTest(unittest.TestCase):
         assert_that(mp3_audio_file_meta).is_not_none()
         assert_that(mp3_audio_file_meta.channels_count).is_equal_to(1)
         assert_that(mp3_audio_file_meta.sample_rate).is_equal_to(self.mp3_audio_file_sample_rate)
-        assert_that(mp3_audio_file_meta.absolute_path).is_equal_to(self.mp3_audio_file_name)
+        assert_that(mp3_audio_file_meta.file_name).is_equal_to(get_file_name(TEST_MP3_AUDIO_FILE))
         assert_that(mp3_audio_file_meta.bit_rate_kbps).is_between(self.mp3_audio_file_bit_rate_kbps_between[0],
                                                                   self.mp3_audio_file_bit_rate_kbps_between[1])
         assert_that(mp3_audio_file_meta.length_sec).is_equal_to(self.mp3_audio_file_length_seconds)

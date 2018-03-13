@@ -30,7 +30,7 @@ def read_mp3_file_meta(absolute_path: Text) -> Optional[Mp3AudioFileMeta]:
         audio_file_size = file_size_bytes(absolute_path)
         try:
             mp3 = MP3(filename=absolute_path)
-            return Mp3AudioFileMeta(absolute_path=absolute_path, file_size_bytes=audio_file_size,
+            return Mp3AudioFileMeta(file_name=get_file_name(absolute_path), file_size_bytes=audio_file_size,
                                     channels_count=mp3.info.channels, sample_rate=mp3.info.sample_rate,
                                     bit_rate_kbps=to_kilo(mp3.info.bitrate), length_sec=mp3.info.length)
         except Exception as e:

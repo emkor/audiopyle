@@ -10,7 +10,7 @@ from commons.models.file_meta import AudioFileMeta
 
 class ConstantStepAudioFeatureModelTest(unittest.TestCase):
     def setUp(self):
-        self.audio_file_meta = AudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
+        self.audio_file_meta = AudioFileMeta(file_name="file.wav", channels_count=2,
                                              sample_rate=44100, file_size_bytes=88200)
         self.feature_values = numpy.array([1.0, 2.0, 3.0, 4.0])
         self.constant_step_feature = VampyConstantStepFeature(time_step=0.5, matrix=self.feature_values)
@@ -41,7 +41,7 @@ class ConstantStepAudioFeatureModelTest(unittest.TestCase):
 
 class VariableStepAudioFeatureModelTest(unittest.TestCase):
     def setUp(self):
-        self.audio_file_meta = AudioFileMeta(absolute_path="/some/file.wav", channels_count=2,
+        self.audio_file_meta = AudioFileMeta(file_name="file.wav", channels_count=2,
                                              sample_rate=44100, file_size_bytes=88200)
         self.feature_values = [1.0, 2.0, 3.0, 4.0]
         self.feature_steps = [StepFeature(v, values=numpy.asanyarray(self.feature_values), label="text_{}".format(v))

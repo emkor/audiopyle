@@ -45,9 +45,9 @@ class FileMeta(Model):
 
 
 class AudioFileMeta(Model):
-    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, sample_rate: int) -> None:
+    def __init__(self, file_name: Text, file_size_bytes: int, channels_count: int, sample_rate: int) -> None:
         """Represents metadata of a raw audio file"""
-        self.absolute_path = absolute_path
+        self.file_name = file_name
         self.channels_count = channels_count
         self.sample_rate = sample_rate
         self.file_size_bytes = file_size_bytes
@@ -62,9 +62,9 @@ class AudioFileMeta(Model):
 
 
 class Mp3AudioFileMeta(AudioFileMeta):
-    def __init__(self, absolute_path: Text, file_size_bytes: int, channels_count: int, sample_rate: int,
+    def __init__(self, file_name: Text, file_size_bytes: int, channels_count: int, sample_rate: int,
                  length_sec: float, bit_rate_kbps: float) -> None:
-        super().__init__(absolute_path, file_size_bytes, channels_count, sample_rate)
+        super().__init__(file_name, file_size_bytes, channels_count, sample_rate)
         self._length_sec = length_sec
         self._bit_rate_kbps = bit_rate_kbps
 
