@@ -19,8 +19,5 @@ COPY . .
 # INSTALL AUDIOPYLE COORDINATOR
 RUN pip install --no-cache-dir .
 
-
-RUN chmod u+x ./wait-for-it.sh
-
 # DEFINE ENTRYPOINT AS COORDINATOR API
-ENTRYPOINT ["./wait-for-it.sh", "-t", "30", "mysql:3306", "--", "coordinator"]
+ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "30", "mysql:3306", "--", "coordinator"]
