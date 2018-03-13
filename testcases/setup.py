@@ -8,5 +8,5 @@ setup(name='audiopyle-testcases',
       author='Mateusz Korzeniowski',
       author_email='mkorzeniowski93@gmail.com',
       url='',
-      packages=find_packages()
-      )
+      packages=find_packages(),
+      install_requires=["requests", "assertpy", "pytest"])

@@ -11,9 +11,6 @@ WORKDIR /audiopyle/testcases
 # COPY SOURCE CODE FOR TESTCASES
 COPY . .
 
-# INSTALL MODULE DEPENDENCIES
-RUN pip install -r ./requirements.txt
-
 # INSTALL AUDIOPYLE TESTCASES
 RUN pip install .
 
