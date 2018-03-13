@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, String, Integer, Float, UniqueConstraint, LargeBinary
+from sqlalchemy import Column, DateTime, String, Integer, Float, UniqueConstraint, LargeBinary, ForeignKey
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import relationship, backref
 
@@ -39,13 +39,8 @@ class VampyPlugin(ENTITY_BASE):
 class Result(ENTITY_BASE):
     __tablename__ = 'result'
     task_id = Column(String(32), unique=True, index=True, nullable=False, primary_key=True, autoincrement=False)
-    vampy_plugin = relationship(VampyPlugin, backref=backref('results',
-                                                             uselist=True,
-                                                             cascade='delete,all'))
-    audio_file = relationship(AudioFile, backref=backref('results',
-                                                         uselist=True,
-                                                         cascade='delete,all'))
-    UniqueConstraint('vampy_plugin', 'audio_file', name='unique_result')
+    vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"), nullable=False, index=True)
+    audio_file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"), nullable=False, index=True)
 
     done_at = Column(DateTime, default=datetime.utcnow)
     feature_type = Column(String(255), index=True, nullable=False)
