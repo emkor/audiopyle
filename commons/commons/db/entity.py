@@ -1,13 +1,14 @@
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import Column, DateTime, String, Integer, Float, UniqueConstraint, LargeBinary
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+ENTITY_BASE = declarative_base()  # type: Optional[DeclarativeMeta]
 
 
-class AudioFile(Base):
+class AudioFile(ENTITY_BASE):
     __tablename__ = 'audio_file'
     id = Column(Integer, primary_key=True)
     file_name = Column(String(255), unique=True, index=True, nullable=False)
@@ -26,7 +27,7 @@ class AudioFile(Base):
     track = Column(Integer, nullable=True)
 
 
-class VampyPlugin(Base):
+class VampyPlugin(ENTITY_BASE):
     __tablename__ = 'vampy_plugin'
     id = Column(Integer, primary_key=True)
     vendor = Column(String(255), index=True, nullable=False)
@@ -35,7 +36,7 @@ class VampyPlugin(Base):
     UniqueConstraint('vendor', 'name', 'output', name='unique_plugin')
 
 
-class Result(Base):
+class Result(ENTITY_BASE):
     __tablename__ = 'result'
     task_id = Column(String(32), unique=True, index=True, nullable=False, primary_key=True, autoincrement=False)
     vampy_plugin = relationship(VampyPlugin, backref=backref('results',

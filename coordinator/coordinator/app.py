@@ -3,6 +3,7 @@ from logging import Logger
 
 from flask import Flask
 
+from commons.db.engine import create_db_tables
 from commons.services.store_provider import Mp3FileStore, LzmaJsonFileStore
 from commons.utils.file_system import AUDIO_FILES_DIR, RESULTS_DIR
 from commons.utils.logger import setup_logger, get_logger
@@ -22,6 +23,7 @@ def main():
     logger.info("Initializing Coordinator app...")
     flask_logger = logging.getLogger('werkzeug')
     flask_logger.setLevel(logging.WARNING)
+    create_db_tables()
     start_app(logger, "0.0.0.0", 8080, debug=False)
 
 
