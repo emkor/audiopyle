@@ -23,4 +23,4 @@ COPY . .
 RUN pip install --no-cache-dir .
 
 # DEFINE ENTRYPOINT AS EXTRACTOR API
-ENTRYPOINT ["celery", "-A", "extractor.engine", "worker", "--loglevel=info"]
+ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "celery", "-A", "extractor.engine", "worker", "--loglevel=info"]
