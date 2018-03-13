@@ -17,4 +17,4 @@ RUN pip install -r ./requirements.txt
 # INSTALL AUDIOPYLE TESTCASES
 RUN pip install .
 
-ENTRYPOINT sleep $AUDIOPYLE_BOOT_TIME && pytest -v
+ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "30", "coordinator:8080", "--", "python", "-m", "pytest", "-v"]
