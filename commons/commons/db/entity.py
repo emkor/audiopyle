@@ -3,7 +3,6 @@ from typing import Optional
 
 from sqlalchemy import Column, DateTime, String, Integer, Float, UniqueConstraint, LargeBinary, ForeignKey
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
-from sqlalchemy.orm import relationship, backref
 
 ENTITY_BASE = declarative_base()  # type: Optional[DeclarativeMeta]
 
