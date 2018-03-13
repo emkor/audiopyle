@@ -20,4 +20,4 @@ COPY . .
 RUN pip install --no-cache-dir .
 
 # DEFINE ENTRYPOINT AS COORDINATOR API
-ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "30", "mysql:3306", "--", "coordinator"]
+ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "mysql:3306", "--", "/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "coordinator"]
