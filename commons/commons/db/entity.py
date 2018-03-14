@@ -9,6 +9,7 @@ ENTITY_BASE = declarative_base()  # type: Optional[DeclarativeMeta]
 
 class AudioFile(ENTITY_BASE):  # type: ignore
     __tablename__ = 'audio_file'
+
     id = Column(Integer, primary_key=True, autoincrement=True)
 
     file_name = Column(String(255), unique=True, index=True, nullable=False)
@@ -21,8 +22,9 @@ class AudioFile(ENTITY_BASE):  # type: ignore
 
 class AudioTag(ENTITY_BASE):  # type: ignore
     __tablename__ = 'audio_tag'
-    file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"), nullable=False, index=True,
-                     primary_key=True)
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+
     artist = Column(String(255), index=True, nullable=True)
     album = Column(String(255), index=True, nullable=True)
     title = Column(String(255), index=True, nullable=True)
@@ -30,10 +32,14 @@ class AudioTag(ENTITY_BASE):  # type: ignore
     genre = Column(String(255), index=True, nullable=True)
     track = Column(Integer, nullable=True)
 
+    UniqueConstraint('artist', 'album', 'title', name='unique_plugin')
+
 
 class VampyPlugin(ENTITY_BASE):  # type: ignore
     __tablename__ = 'vampy_plugin'
+
     id = Column(Integer, primary_key=True)
+
     vendor = Column(String(255), index=True, nullable=False)
     name = Column(String(255), index=True, nullable=False)
     output = Column(String(255), index=True, nullable=False)
@@ -43,8 +49,12 @@ class VampyPlugin(ENTITY_BASE):  # type: ignore
 class Result(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result'
     task_id = Column(String(32), unique=True, index=True, nullable=False, primary_key=True, autoincrement=False)
-    vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"), nullable=False, index=True)
-    audio_file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"), nullable=False, index=True)
+    vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
+                             nullable=False, index=True)
+    audio_file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"),
+                           nullable=False, index=True)
+    audio_tag_id = Column(Integer, ForeignKey("audio_tag.id", ondelete="CASCADE"),
+                          nullable=False, index=True, primary_key=True)
 
     done_at = Column(DateTime, default=datetime.utcnow)
     feature_type = Column(String(255), index=True, nullable=False)
