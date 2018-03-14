@@ -32,7 +32,7 @@ class AudioTag(ENTITY_BASE):  # type: ignore
     genre = Column(String(255), index=True, nullable=True)
     track = Column(Integer, nullable=True)
 
-    UniqueConstraint('artist', 'album', 'title', name='unique_plugin')
+    __table_args__ = (UniqueConstraint('artist', 'album', 'title', name='unique_plugin'),)
 
 
 class VampyPlugin(ENTITY_BASE):  # type: ignore
@@ -43,7 +43,7 @@ class VampyPlugin(ENTITY_BASE):  # type: ignore
     vendor = Column(String(255), index=True, nullable=False)
     name = Column(String(255), index=True, nullable=False)
 
-    UniqueConstraint('vendor', 'name', name='unique_plugin')
+    __table_args__ = (UniqueConstraint('vendor', 'name', name='unique_plugin'),)
 
 
 class FeatureMeta(ENTITY_BASE):  # type: ignore
