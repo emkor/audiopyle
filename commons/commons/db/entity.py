@@ -9,15 +9,20 @@ ENTITY_BASE = declarative_base()  # type: Optional[DeclarativeMeta]
 
 class AudioFile(ENTITY_BASE):  # type: ignore
     __tablename__ = 'audio_file'
-    id = Column(Integer, primary_key=True)
-    file_name = Column(String(255), unique=True, index=True, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
 
+    file_name = Column(String(255), unique=True, index=True, nullable=False)
     channels_count = Column(Integer, nullable=False)
     sample_rate = Column(Integer, nullable=False)
     size_bytes = Column(Integer, nullable=False)
     length_sec = Column(Float, nullable=False)
     bit_rate = Column(Float, nullable=False)
 
+
+class AudioTag(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'audio_tag'
+    file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"), nullable=False, index=True,
+                     primary_key=True)
     artist = Column(String(255), index=True, nullable=True)
     album = Column(String(255), index=True, nullable=True)
     title = Column(String(255), index=True, nullable=True)
