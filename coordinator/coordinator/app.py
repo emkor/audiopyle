@@ -74,6 +74,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                                                         file_store=audio_file_store,
                                                         logger=logger))
     app.add_url_rule("/", view_func=CoordinatorApi.as_view('coordinator_api', logger=logger))
+    logger.info("Starting Coordinator API on {} port!".format(port))
     app.run(host=host, port=port, debug=debug)
 
 
