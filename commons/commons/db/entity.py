@@ -42,9 +42,8 @@ class VampyPlugin(ENTITY_BASE):  # type: ignore
 
     vendor = Column(String(255), index=True, nullable=False)
     name = Column(String(255), index=True, nullable=False)
-    output = Column(String(255), index=True, nullable=False)
 
-    UniqueConstraint('vendor', 'name', 'output', name='unique_plugin')
+    UniqueConstraint('vendor', 'name', name='unique_plugin')
 
 
 class FeatureMeta(ENTITY_BASE):  # type: ignore
@@ -53,6 +52,7 @@ class FeatureMeta(ENTITY_BASE):  # type: ignore
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     task_id = Column(String(32), unique=True, index=True, nullable=False)
 
+    plugin_output = Column(String(255), index=True, nullable=False)
     feature_type = Column(String(255), index=True, nullable=False)
     feature_shape_x = Column(Integer, index=False, nullable=False)
     feature_shape_y = Column(Integer, index=False, nullable=False)
