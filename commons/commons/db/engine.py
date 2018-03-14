@@ -25,7 +25,7 @@ def get_db_engine(host: str = None, port: int = None) -> Engine:
     return _ENGINE
 
 
-def get_db_session_maker(db_engine: Engine = None) -> sessionmaker:
+def get_db_session_maker(db_engine: Optional[Engine] = None) -> sessionmaker:
     global _SESSION_MAKER
     if _SESSION_MAKER is None:
         logger.info("Creating SQL Alchemy sessions maker...")
