@@ -11,8 +11,8 @@ class AudioFile(ENTITY_BASE):  # type: ignore
     __tablename__ = 'audio_file'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-
     file_name = Column(String(255), unique=True, index=True, nullable=False)
+
     channels_count = Column(Integer, nullable=False)
     sample_rate = Column(Integer, nullable=False)
     size_bytes = Column(Integer, nullable=False)
@@ -38,25 +38,21 @@ class AudioTag(ENTITY_BASE):  # type: ignore
 class VampyPlugin(ENTITY_BASE):  # type: ignore
     __tablename__ = 'vampy_plugin'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
 
     vendor = Column(String(255), index=True, nullable=False)
     name = Column(String(255), index=True, nullable=False)
     output = Column(String(255), index=True, nullable=False)
+
     UniqueConstraint('vendor', 'name', 'output', name='unique_plugin')
 
 
-class Result(ENTITY_BASE):  # type: ignore
-    __tablename__ = 'result'
-    task_id = Column(String(32), unique=True, index=True, nullable=False, primary_key=True, autoincrement=False)
-    vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
-                             nullable=False, index=True)
-    audio_file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"),
-                           nullable=False, index=True)
-    audio_tag_id = Column(Integer, ForeignKey("audio_tag.id", ondelete="CASCADE"),
-                          nullable=False, index=True, primary_key=True)
+class FeatureMeta(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'feature_meta'
 
-    done_at = Column(DateTime, default=datetime.utcnow)
+    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    task_id = Column(String(32), unique=True, index=True, nullable=False)
+
     feature_type = Column(String(255), index=True, nullable=False)
     feature_shape_x = Column(Integer, index=False, nullable=False)
     feature_shape_y = Column(Integer, index=False, nullable=False)
@@ -68,6 +64,33 @@ class Result(ENTITY_BASE):  # type: ignore
     feature_mean = Column(Float, index=False, nullable=True)
     feature_standard_deviation = Column(Float, index=False, nullable=True)
     feature_variance = Column(Float, index=False, nullable=True)
+
+
+class FeatureData(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'feature_data'
+
+    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    task_id = Column(String(32), unique=True, index=True, nullable=False)
+
     feature_data = Column(LargeBinary, index=False, nullable=False)
 
+
+class Result(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'result'
+
+    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    task_id = Column(String(32), unique=True, index=True, nullable=False)
+
+    vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
+                             nullable=False, index=True)
+    audio_file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"),
+                           nullable=False, index=True)
+    audio_tag_id = Column(Integer, ForeignKey("audio_tag.id", ondelete="CASCADE"),
+                          nullable=False, index=True, primary_key=True)
+    feature_meta_id = Column(Integer, ForeignKey("feature_meta.id", ondelete="CASCADE"),
+                             nullable=False, index=True, primary_key=True)
+    feature_data_id = Column(Integer, ForeignKey("feature_data.id", ondelete="CASCADE"),
+                             nullable=False, index=True, primary_key=True)
+
+    done_at = Column(DateTime, default=datetime.utcnow)
     analysis_time = Column(Float, index=False, nullable=False)
