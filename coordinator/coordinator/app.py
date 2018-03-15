@@ -48,7 +48,6 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                                                            logger=logger))
     app.add_url_rule("/extraction",
                      view_func=ExtractionApi.as_view('extraction_api',
-                                                     plugin_provider=plugin_provider,
                                                      logger=logger))
     app.add_url_rule("/result/<task_id>/data",
                      view_func=ResultDetailsApi.as_view('result_data_detail_api',
