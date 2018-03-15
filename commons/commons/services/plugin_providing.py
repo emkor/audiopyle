@@ -11,7 +11,7 @@ from commons.utils.logger import get_logger
 
 class VampyPluginProvider(object):
     def __init__(self, vamp_interface: Any = vamp, plugin_black_list: Optional[List[str]] = None,
-                 logger: Optional[Logger] = None):
+                 logger: Optional[Logger] = None) -> None:
         self.vamp_interface = vamp_interface
         self.black_list_plugin_key = plugin_black_list or []
         self.logger = logger or get_logger()

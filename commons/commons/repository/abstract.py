@@ -1,7 +1,6 @@
 from logging import Logger
 from typing import Optional, Type, List, Any
 
-from commons.abstractions.model import Model
 from commons.db.session import SessionProvider
 from commons.utils.logger import get_logger
 
@@ -23,6 +22,10 @@ class DbRepository(object):
             entity = session.query(self.entity_class).filter_by(id=identifier).first()
             if entity is not None:
                 session.delete(entity)
+
+    def delete_all(self) -> None:
+        with self.session_provider() as session:
+            session.query(self.entity_class).delete()
 
     def insert(self, model_object: Any) -> None:
         try:
@@ -51,8 +54,8 @@ class DbRepository(object):
                 entities = session.query(self.entity_class).all()
             return [self._map_to_object(e) for e in entities] if entities else []
 
-    def _map_to_entity(self, obj: Model) -> Any:
+    def _map_to_entity(self, obj: Any) -> Any:
         raise NotImplementedError()
 
-    def _map_to_object(self, entity: Any) -> Model:
+    def _map_to_object(self, entity: Any) -> Any:
         raise NotImplementedError()

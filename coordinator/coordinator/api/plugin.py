@@ -4,7 +4,7 @@ from commons.services.plugin_providing import VampyPluginProvider
 
 
 class PluginListApi(FlaskRestApi):
-    def __init__(self, plugin_provider: VampyPluginProvider):
+    def __init__(self, plugin_provider: VampyPluginProvider) -> None:
         super().__init__()
         self.plugin_provider = plugin_provider
 
@@ -13,7 +13,7 @@ class PluginListApi(FlaskRestApi):
 
 
 class PluginDetailApi(FlaskRestApi):
-    def __init__(self, plugin_provider: VampyPluginProvider):
+    def __init__(self, plugin_provider: VampyPluginProvider) -> None:
         super().__init__()
         self.plugin_provider = plugin_provider
 
