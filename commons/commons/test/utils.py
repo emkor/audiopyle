@@ -12,9 +12,8 @@ TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop.mp3"
 
 def setup_db_repository_test_class(cls: Type[TestCase]) -> None:
     cls.db_file_name = "{}_sqlite.db".format(cls.__name__)  # type: ignore
-    remove_file(cls.db_file_name, ignore_errors=True)  # type: ignore
     cls.engine = get_test_db_engine(debug=True)  # type: ignore
-    create_db_tables(engine=cls.engine, check_first=False)  # type: ignore
+    create_db_tables(engine=cls.engine, only_if_absent=False)  # type: ignore
     cls.session_provider = SessionProvider(db_engine=cls.engine)  # type: ignore
 
 

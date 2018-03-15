@@ -44,8 +44,8 @@ def get_db_session_maker(db_engine: Optional[Engine] = None) -> sessionmaker:
     return _SESSION_MAKER
 
 
-def create_db_tables(engine: Optional[Engine] = None, check_first: bool = True) -> None:
-    ENTITY_BASE.metadata.create_all(engine or get_db_engine(), checkfirst=check_first)
+def create_db_tables(engine: Optional[Engine] = None, only_if_absent: bool = True) -> None:
+    ENTITY_BASE.metadata.create_all(engine or get_db_engine(), checkfirst=only_if_absent)
 
 
 def drop_db_tables(engine: Optional[Engine] = None) -> None:
