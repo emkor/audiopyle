@@ -13,7 +13,8 @@ class ConstantStepAudioFeatureModelTest(unittest.TestCase):
         self.audio_file_meta = AudioFileMeta(file_name="file.wav", channels_count=2,
                                              sample_rate=44100, file_size_bytes=88200)
         self.feature_values = numpy.array([1.0, 2.0, 3.0, 4.0])
-        self.constant_step_feature = VampyConstantStepFeature(time_step=0.5, matrix=self.feature_values)
+        self.constant_step_feature = VampyConstantStepFeature(task_id="0f961f20-b036-5740-b526-013523dd88c7",
+                                                              time_step=0.5, matrix=self.feature_values)
 
     def test_should_serialize_and_deserialize_feature(self):
         serialized = self.constant_step_feature.to_serializable()
@@ -46,7 +47,8 @@ class VariableStepAudioFeatureModelTest(unittest.TestCase):
         self.feature_values = [1.0, 2.0, 3.0, 4.0]
         self.feature_steps = [StepFeature(v, values=numpy.asanyarray(self.feature_values), label="text_{}".format(v))
                               for v in self.feature_values]
-        self.variable_step_feature = VampyVariableStepFeature(step_features=self.feature_steps)
+        self.variable_step_feature = VampyVariableStepFeature(task_id="0f961f20-b036-5740-b526-013523dd88c7",
+                                                              step_features=self.feature_steps)
 
     def test_should_serialize_and_deserialize_feature(self):
         serialized = self.variable_step_feature.to_serializable()
