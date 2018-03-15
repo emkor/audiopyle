@@ -11,9 +11,9 @@ from commons.models.extraction_request import ExtractionRequest
 from commons.models.feature import VampyFeatureAbstraction
 from commons.models.file_meta import FileMeta, Mp3AudioFileMeta, AudioFileMeta
 from commons.models.plugin import VampyPlugin
-from commons.models.result import AnalysisResult, ResultVersion, AnalysisStats
+from commons.models.result import AnalysisResult, AnalysisStats
 from commons.services.audio_tag_providing import read_id3_tag
-from commons.services.feature_extraction import extract_features
+from commons.services.feature_extraction import extract_raw_feature, build_feature_object
 from commons.services.feature_meta_extraction import get_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
 from commons.services.plugin_providing import build_plugin_from_key
@@ -37,9 +37,10 @@ class FeatureExtractionService(object):
         file_meta, audio_meta, id3_tag, read_input_file_time = self._read_file_meta(input_audio_file_path)
         wav_data, read_raw_audio_time = self._read_raw_audio_data_from_mp3(input_audio_file_path)
         self.logger.debug("Built context: {} {}! Extracting features...".format(plugin.key, request.plugin_output))
-        feature, extraction_time = self._do_extraction(plugin, request.plugin_output, audio_meta, wav_data)
-        feature_store_time = self._store_feature_data(feature, task_id)
-        analysis_result, result_build_time = self._build_analysis_result(audio_meta, feature, file_meta,
+        feature_object, extraction_time = self._do_extraction(task_id, plugin, request.plugin_output,
+                                                              audio_meta, wav_data)
+        feature_store_time = self._store_feature_data(feature_object, task_id)
+        analysis_result, result_build_time = self._build_analysis_result(audio_meta, feature_object, file_meta,
                                                                          id3_tag, plugin, request.plugin_output,
                                                                          task_id)
         result_store_time = self._store_analysis_result(analysis_result, task_id)
@@ -65,7 +66,7 @@ class FeatureExtractionService(object):
                                task_id: Text) -> Tuple[AnalysisResult, float]:
         analysis_result_build_start_time = datetime.utcnow()
         feature_meta = get_feature_meta(feature, plugin, plugin_output)
-        analysis_result = AnalysisResult(ResultVersion.V1, task_id, file_meta, audio_meta, id3_tag, feature_meta)
+        analysis_result = AnalysisResult(task_id, file_meta, audio_meta, id3_tag, feature_meta)
         return analysis_result, seconds_between(analysis_result_build_start_time)
 
     def _store_feature_data(self, feature, task_id):
@@ -74,12 +75,13 @@ class FeatureExtractionService(object):
         feature_store_time = seconds_between(feature_store_start_time)
         return feature_store_time
 
-    def _do_extraction(self, plugin: VampyPlugin, plugin_output: Text, input_audio_meta: AudioFileMeta,
+    def _do_extraction(self, task_id: str, plugin: VampyPlugin, plugin_output: Text, input_audio_meta: AudioFileMeta,
                        wav_data: numpy.ndarray) -> Tuple[VampyFeatureAbstraction, float]:
         extraction_start_time = datetime.utcnow()
-        feature = extract_features(wav_data, input_audio_meta.sample_rate, plugin.key, plugin_output)
+        raw_feature = extract_raw_feature(wav_data, input_audio_meta.sample_rate, plugin.key, plugin_output)
+        feature_object = build_feature_object(task_id=task_id, extracted_data=raw_feature)
         extraction_time = seconds_between(extraction_start_time)
-        return feature, extraction_time
+        return feature_object, extraction_time
 
     def _read_raw_audio_data_from_mp3(self, input_file_path: Text) -> Tuple[numpy.ndarray, float]:
         read_raw_audio_start_time = datetime.utcnow()

@@ -5,12 +5,6 @@ from enum import Enum
 from commons.abstractions.model import Model
 from commons.models.audio_tag import Id3Tag
 from commons.models.file_meta import FileMeta, Mp3AudioFileMeta
-from commons.models.plugin import VampyPlugin
-
-
-class ResultVersion(Enum):
-    """For future changes in result structure"""
-    V1 = "1"
 
 
 class FeatureType(Enum):
@@ -47,9 +41,9 @@ class AnalysisStats(Model):
 
 
 class FeatureMeta(Model):
-    def __init__(self, plugin: VampyPlugin, plugin_output: Text, feature_type: FeatureType, feature_size: float,
+    def __init__(self, task_id: Text, plugin_output: Text, feature_type: FeatureType, feature_size: int,
                  data_shape: Tuple[int, int], data_stats: DataStats) -> None:
-        self.plugin = plugin
+        self.task_id = task_id
         self.plugin_output = plugin_output
         self.feature_type = feature_type
         self.feature_size = feature_size
@@ -58,8 +52,7 @@ class FeatureMeta(Model):
 
     def to_serializable(self):
         base_serialized = super().to_serializable()
-        base_serialized.update({"plugin": self.plugin.to_serializable(),
-                                "feature_type": self.feature_type.value,
+        base_serialized.update({"feature_type": self.feature_type.value,
                                 "data_stats": self.data_stats.to_serializable()})
         return base_serialized
 
@@ -67,15 +60,13 @@ class FeatureMeta(Model):
     def from_serializable(cls, serialized: Dict[Text, Any]):
         type_enum_object = FeatureType(serialized["feature_type"])
         data_stats = DataStats.from_serializable(serialized["data_stats"])
-        plugin = VampyPlugin.from_serializable(serialized["plugin"])
-        serialized.update({"plugin": plugin, "feature_type": type_enum_object, "data_stats": data_stats})
+        serialized.update({"feature_type": type_enum_object, "data_stats": data_stats})
         return FeatureMeta(**serialized)
 
 
 class AnalysisResult(Model):
-    def __init__(self, result_version: ResultVersion, task_id: Text, file_meta: FileMeta,
-                 audio_meta: Mp3AudioFileMeta, id3_tag: Id3Tag, feature_meta: FeatureMeta) -> None:
-        self.result_version = result_version
+    def __init__(self, task_id: Text, file_meta: FileMeta, audio_meta: Mp3AudioFileMeta, id3_tag: Id3Tag,
+                 feature_meta: FeatureMeta) -> None:
         self.task_id = task_id
         self.file_meta = file_meta
         self.audio_meta = audio_meta
@@ -84,8 +75,7 @@ class AnalysisResult(Model):
 
     def to_serializable(self):
         base_serialized = super().to_serializable()
-        base_serialized.update({"result_version": self.result_version.value,
-                                "file_meta": self.file_meta.to_serializable(),
+        base_serialized.update({"file_meta": self.file_meta.to_serializable(),
                                 "audio_meta": self.audio_meta.to_serializable(),
                                 "id3_tag": self.id3_tag.to_serializable(),
                                 "feature_meta": self.feature_meta.to_serializable()})
@@ -93,12 +83,10 @@ class AnalysisResult(Model):
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
-        result_version_enum = ResultVersion(serialized["result_version"])
         file_meta_object = FileMeta.from_serializable(serialized.get("file_meta"))
         audio_meta_object = Mp3AudioFileMeta.from_serializable(serialized.get("audio_meta"))
         id3_tag_object = Id3Tag.from_serializable(serialized.get("id3_tag"))
         result_data_object = FeatureMeta.from_serializable(serialized.get("feature_meta"))
         serialized.update({"file_meta": file_meta_object, "audio_meta": audio_meta_object,
-                           "id3_tag": id3_tag_object, "feature_meta": result_data_object,
-                           "result_version": result_version_enum})
+                           "id3_tag": id3_tag_object, "feature_meta": result_data_object})
         return AnalysisResult(**serialized)
