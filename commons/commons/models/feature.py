@@ -1,7 +1,6 @@
 from typing import Text, List, Tuple, Optional, Dict, Any
 
 import numpy
-from enum import Enum
 
 from commons.abstractions.model import Model
 from commons.models.file_meta import AudioFileMeta
@@ -111,16 +110,3 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
         step_features = [StepFeature.from_serializable(sf) for sf in step_features_serialized]
         serialized.update({"step_features": step_features, "task_id": _task_id})
         return VampyVariableStepFeature(**serialized)
-
-
-class CompressionType(Enum):
-    none = "none"
-    gzip = "gzip"
-    lzma = "lzma"
-
-
-class CompressedFeatureDTO(Model):
-    def __init__(self, task_id: str, compression: CompressionType, data: bytes):
-        self.task_id = task_id
-        self.compression = compression
-        self.data = data

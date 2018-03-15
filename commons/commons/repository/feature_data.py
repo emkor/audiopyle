@@ -2,7 +2,7 @@ from typing import List
 
 from commons.db.entity import FeatureData
 from commons.db.session import SessionProvider
-from commons.models.feature import CompressedFeatureDTO, CompressionType
+from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
 from commons.repository.abstract import DbRepository
 
 
