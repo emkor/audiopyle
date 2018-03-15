@@ -21,7 +21,6 @@ script:
   - scripts/run_integration_tests.sh
 
 after_success:
-  - scripts/run_static_analysis.sh
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     scripts/push-base-image.sh;
     fi
