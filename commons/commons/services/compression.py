@@ -3,7 +3,7 @@ import gzip
 import lzma
 from typing import Dict, Any
 
-from commons.models.feature import CompressionType
+from commons.models.compressed_feature import CompressionType
 from commons.utils.file_system import ENCODING_UTF_8
 
 COMPRESSION_FUNCTIONS = {

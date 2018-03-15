@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.models.feature import CompressionType
+from commons.models.compressed_feature import CompressionType
 from commons.services.compression import compress, decompress
 
 
