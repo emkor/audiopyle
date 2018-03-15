@@ -39,4 +39,5 @@ class ExtractedFeatureMappingTest(TestCase):
         assert_that(feature_object.timestamps()).is_length(2).contains_only(0.000000000, 0.743038548)
 
     def test_should_raise_error_on_wrong_feature_type(self):
-        assert_that(build_feature_object).raises(NotImplementedError).when_called_with(self.task_id, self.wrong_feature_type)
+        assert_that(build_feature_object).raises(NotImplementedError).when_called_with(self.task_id,
+                                                                                       self.wrong_feature_type)

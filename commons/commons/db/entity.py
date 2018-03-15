@@ -53,7 +53,7 @@ class FeatureMeta(ENTITY_BASE):  # type: ignore
     task_id = Column(String(32), unique=True, index=True, nullable=False)
 
     plugin_output = Column(String(255), index=True, nullable=False)
-    feature_type = Column(String(255), index=True, nullable=False)
+    feature_type = Column(String(63), index=True, nullable=False)
     feature_shape_x = Column(Integer, index=False, nullable=False)
     feature_shape_y = Column(Integer, index=False, nullable=False)
     feature_size_bytes = Column(Integer, index=False, nullable=False)
