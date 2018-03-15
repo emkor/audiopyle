@@ -63,6 +63,7 @@ class DbRepository(object):
             if entity is None:
                 raise EntityNotFound(
                     "Could not found entity {} that satisfy filters {}".format(self.entity_class.__name__, kwargs))
+        return None
 
     def _query_multiple_with_filters(self, **kwargs) -> List[Any]:
         with self.session_provider() as session:
