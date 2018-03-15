@@ -5,7 +5,7 @@ import os
 
 from commons.db.engine import get_test_db_engine, create_db_tables, drop_db_tables
 from commons.db.session import SessionProvider
-from commons.utils.file_system import concatenate_paths, remove_file
+from commons.utils.file_system import concatenate_paths
 
 TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop.mp3"
 

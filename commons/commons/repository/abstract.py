@@ -34,6 +34,7 @@ class DbRepository(object):
                 session.add(new_entity)
         except Exception as e:
             self.logger.error("Could not store audio entity: {}".format(e))
+            raise e
 
     def _get_id(self, **kwargs) -> int:
         with self.session_provider() as session:

@@ -1,4 +1,5 @@
 import unittest
+from sqlite3 import IntegrityError
 from unittest.mock import Mock
 
 from assertpy import assert_that
@@ -6,7 +7,8 @@ from assertpy import assert_that
 from commons.models.plugin import VampyPlugin
 from commons.repository.vampy_plugin import VampyPluginRepository
 from commons.services.plugin_providing import VampyPluginProvider
-from commons.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
+from commons.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class, \
+    fake_function_from_method
 
 
 class VampyPluginDbRepositoryTest(unittest.TestCase):
@@ -96,3 +98,8 @@ class VampyPluginDbRepositoryTest(unittest.TestCase):
         self.plugin_provider_mock.build_plugin_from_key.return_value = self.plugin_example_3
         filtered_by_vendor = self.plugin_repository.filter_by_vendor(vendor=self.plugin_example_3.provider)
         assert_that(filtered_by_vendor).is_length(1).contains(self.plugin_example_3)
+
+    def test_should_raise_on_duplicate_insert(self):
+        self.plugin_repository.insert(self.plugin_example_1)
+        assert_that(fake_function_from_method).raises(Exception).when_called_with(self.plugin_repository.insert,
+                                                                                  self.plugin_example_1)
