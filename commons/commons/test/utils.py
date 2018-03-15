@@ -18,7 +18,7 @@ def setup_db_repository_test_class(cls: Type[TestCase]) -> None:
 
 
 def tear_down_db_repository_test_class(cls: Type[TestCase]) -> None:
-    drop_db_tables(cls.engine)
+    drop_db_tables(cls.engine)  # type: ignore
 
 
 def get_absolute_path_for_project_file(caller_file_object, project_file_path):
