@@ -87,11 +87,11 @@ class Result(ENTITY_BASE):  # type: ignore
     audio_file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"),
                            nullable=False, index=True)
     audio_tag_id = Column(Integer, ForeignKey("audio_tag.id", ondelete="CASCADE"),
-                          nullable=False, index=True, primary_key=True)
+                          nullable=False, index=True)
     feature_meta_id = Column(Integer, ForeignKey("feature_meta.id", ondelete="CASCADE"),
-                             nullable=False, index=True, primary_key=True)
+                             nullable=False, index=True)
     feature_data_id = Column(Integer, ForeignKey("feature_data.id", ondelete="CASCADE"),
-                             nullable=False, index=True, primary_key=True)
+                             nullable=False, index=True)
 
     done_at = Column(DateTime, default=datetime.utcnow)
     analysis_time = Column(Float, index=False, nullable=False)

@@ -48,8 +48,14 @@ def extract_all_extensions(file_path: Text) -> Text:
     return file_path.partition('.')[2]
 
 
-def remove_file(file_path: Text) -> None:
-    os.remove(file_path)
+def remove_file(file_path: Text, omit_errors: bool = False) -> None:
+    if omit_errors:
+        try:
+            os.remove(file_path)
+        except:
+            pass
+    else:
+        os.remove(file_path)
 
 
 def file_size_bytes(absolute_path: Text) -> int:

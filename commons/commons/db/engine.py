@@ -26,6 +26,15 @@ def get_db_engine(host: str = None, port: int = None) -> Engine:
     return _ENGINE
 
 
+def get_test_db_engine(file_name: str, debug: bool = False) -> Engine:
+    global _ENGINE
+    if _ENGINE is None:
+        db_connection_string = 'sqlite:///{}'.format(file_name)
+        logger.info("Creating sqlite DB engine with {} connection string...".format(db_connection_string))
+        _ENGINE = create_engine(db_connection_string, echo=debug, poolclass=NullPool)
+    return _ENGINE
+
+
 def get_db_session_maker(db_engine: Optional[Engine] = None) -> sessionmaker:
     global _SESSION_MAKER
     if _SESSION_MAKER is None:
@@ -34,8 +43,8 @@ def get_db_session_maker(db_engine: Optional[Engine] = None) -> sessionmaker:
     return _SESSION_MAKER
 
 
-def create_db_tables() -> None:
-    ENTITY_BASE.metadata.create_all(get_db_engine(), checkfirst=True)
+def create_db_tables(engine: Optional[Engine] = None, check_first: bool = True) -> None:
+    ENTITY_BASE.metadata.create_all(engine or get_db_engine(), checkfirst=check_first)
 
 
 def _build_mysql_conn_string(host: str = None, port: int = None) -> str:
