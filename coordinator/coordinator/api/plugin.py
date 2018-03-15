@@ -1,11 +1,13 @@
+from logging import Logger
+
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.abstractions.flask_api import FlaskRestApi
 from commons.services.plugin_providing import VampyPluginProvider
 
 
 class PluginListApi(FlaskRestApi):
-    def __init__(self, plugin_provider: VampyPluginProvider) -> None:
-        super().__init__()
+    def __init__(self, plugin_provider: VampyPluginProvider, logger: Logger) -> None:
+        super().__init__(logger)
         self.plugin_provider = plugin_provider
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
@@ -13,8 +15,8 @@ class PluginListApi(FlaskRestApi):
 
 
 class PluginDetailApi(FlaskRestApi):
-    def __init__(self, plugin_provider: VampyPluginProvider) -> None:
-        super().__init__()
+    def __init__(self, plugin_provider: VampyPluginProvider, logger: Logger) -> None:
+        super().__init__(logger)
         self.plugin_provider = plugin_provider
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
