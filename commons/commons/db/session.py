@@ -3,8 +3,10 @@ from logging import Logger
 from typing import Optional
 
 from sqlalchemy.engine import Engine
+from sqlalchemy.orm.exc import NoResultFound
 
 from commons.db.engine import get_db_session_maker
+from commons.db.exception import EntityNotFound
 from commons.utils.logger import get_logger
 
 
@@ -26,6 +28,8 @@ class SessionProvider(object):
             if commit_on_exit:
                 try:
                     session.commit()
+                except NoResultFound as e:
+                    raise EntityNotFound(e)
                 except Exception as e:
                     self._logger.warning("Could not accomplish commit: {}".format(e))
                     session.rollback()

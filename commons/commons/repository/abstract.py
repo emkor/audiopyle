@@ -22,6 +22,12 @@ class DbRepository(object):
     def get_by_id(self, identifier: int) -> Optional[Any]:
         return self._query_single_with_filters(id=identifier)
 
+    def get_or_create(self, model_object: Any) -> int:
+        try:
+            self.insert(model_object)
+        except DuplicateEntity:
+            return self._get_id_by_model(model_object)
+
     def delete_by_id(self, identifier: int) -> None:
         with self.session_provider() as session:
             entity = session.query(self.entity_class).filter_by(id=identifier).first()
@@ -72,6 +78,9 @@ class DbRepository(object):
             else:
                 entities = session.query(self.entity_class).all()
             return [self._map_to_object(e) for e in entities] if entities else []
+
+    def _get_id_by_model(self, model_object: Any) -> int:
+        raise NotImplementedError()
 
     def _map_to_entity(self, obj: Any) -> Any:
         raise NotImplementedError()
