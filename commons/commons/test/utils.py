@@ -3,7 +3,7 @@ from unittest import TestCase
 
 import os
 
-from commons.db.engine import get_test_db_engine, create_db_tables
+from commons.db.engine import get_test_db_engine, create_db_tables, drop_db_tables
 from commons.db.session import SessionProvider
 from commons.utils.file_system import concatenate_paths, remove_file
 
@@ -13,13 +13,13 @@ TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop.mp3"
 def setup_db_repository_test_class(cls: Type[TestCase]) -> None:
     cls.db_file_name = "{}_sqlite.db".format(cls.__name__)  # type: ignore
     remove_file(cls.db_file_name, ignore_errors=True)  # type: ignore
-    cls.engine = get_test_db_engine(cls.db_file_name, debug=True)  # type: ignore
+    cls.engine = get_test_db_engine(debug=True)  # type: ignore
     create_db_tables(engine=cls.engine, check_first=False)  # type: ignore
     cls.session_provider = SessionProvider(db_engine=cls.engine)  # type: ignore
 
 
 def tear_down_db_repository_test_class(cls: Type[TestCase]) -> None:
-    remove_file(cls.db_file_name, ignore_errors=True)  # type: ignore
+    drop_db_tables(cls.engine)
 
 
 def get_absolute_path_for_project_file(caller_file_object, project_file_path):
