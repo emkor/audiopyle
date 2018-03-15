@@ -118,3 +118,12 @@ class VampyPluginDbRepositoryTest(unittest.TestCase):
         non_existing_identifier = 112233
         assert_that(fake_function_from_method).raises(EntityNotFound).when_called_with(
             self.plugin_repository.delete_by_id, non_existing_identifier)
+
+    def test_should_create_non_existing_entity_using_get_or_create(self):
+        retrieved_id = self.plugin_repository.get_or_create(self.plugin_example_1)
+        assert_that(retrieved_id).is_greater_than_or_equal_to(0)
+
+    def test_should_get_existing_entity_using_get_or_create(self):
+        self.plugin_repository.insert(self.plugin_example_1)
+        retrieved_id = self.plugin_repository.get_or_create(self.plugin_example_1)
+        assert_that(retrieved_id).is_greater_than_or_equal_to(0)

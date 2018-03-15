@@ -26,7 +26,8 @@ class DbRepository(object):
         try:
             self.insert(model_object)
         except DuplicateEntity:
-            return self._get_id_by_model(model_object)
+            pass
+        return self._get_id_by_model(model_object)
 
     def delete_by_id(self, identifier: int) -> None:
         with self.session_provider() as session:
