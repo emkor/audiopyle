@@ -1,8 +1,9 @@
-from typing import Text, Any
+from typing import Text, Any, Dict
 
 from enum import Enum
 
 from commons.abstractions.model import Model
+from commons.utils.file_system import ENCODING_UTF_8
 
 
 class CompressionType(Enum):
@@ -16,6 +17,20 @@ class CompressedFeatureDTO(Model):
         self.task_id = task_id
         self.compression = compression
         self.data = data
+
+    @classmethod
+    def from_serializable(cls, serialized: Dict[Text, Any]) -> Any:
+        compression_object = CompressionType(serialized["compression"])
+        data_bytes = serialized["data"].encode(ENCODING_UTF_8)
+        serialized.update({"compression": compression_object,
+                           "data": data_bytes})
+        return CompressedFeatureDTO(**serialized)
+
+    def to_serializable(self) -> Dict[Text, Any]:
+        super_serialized = super(CompressedFeatureDTO, self).to_serializable()
+        super_serialized.update({"compression": self.compression.value})
+        super_serialized.update({"data": self.data.decode(ENCODING_UTF_8)})
+        return super_serialized
 
     def __str__(self) -> Text:
         return "<{}: {} {}>".format(self.__class__.__name__,
