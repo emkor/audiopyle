@@ -39,12 +39,12 @@ class JsonFileStoreTest(unittest.TestCase):
         assert_that(exists).is_false()
 
     def test_should_raise_exception_on_removal_of_non_existing_file(self):
-        assert_that(fake_function_from_method).raises(StoreError).when_called_with(callable=self.json_file_store.remove,
-                                                                                   arg=self.non_existing_file_name)
+        assert_that(fake_function_from_method).raises(StoreError).when_called_with(self.json_file_store.remove,
+                                                                                   self.non_existing_file_name)
 
     def test_should_none_on_read_of_non_existing_file(self):
-        assert_that(fake_function_from_method).raises(StoreError).when_called_with(callable=self.json_file_store.read,
-                                                                                   arg=self.test_file_name)
+        assert_that(fake_function_from_method).raises(StoreError).when_called_with(self.json_file_store.read,
+                                                                                   self.test_file_name)
 
     def test_created_file_should_be_on_the_list(self):
         file_list = self.json_file_store.list()

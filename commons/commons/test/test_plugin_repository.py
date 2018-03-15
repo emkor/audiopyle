@@ -4,6 +4,7 @@ from unittest.mock import Mock
 
 from assertpy import assert_that
 
+from commons.db.exception import DuplicateEntity, EntityNotFound
 from commons.models.plugin import VampyPlugin
 from commons.repository.vampy_plugin import VampyPluginRepository
 from commons.services.plugin_providing import VampyPluginProvider
@@ -101,5 +102,19 @@ class VampyPluginDbRepositoryTest(unittest.TestCase):
 
     def test_should_raise_on_duplicate_insert(self):
         self.plugin_repository.insert(self.plugin_example_1)
-        assert_that(fake_function_from_method).raises(Exception).when_called_with(self.plugin_repository.insert,
-                                                                                  self.plugin_example_1)
+        assert_that(fake_function_from_method).raises(DuplicateEntity).when_called_with(self.plugin_repository.insert,
+                                                                                        self.plugin_example_1)
+
+    def test_should_raise_when_querying_by_absent_identifier(self):
+        non_existing_identifier = 112233
+        assert_that(fake_function_from_method).raises(EntityNotFound).when_called_with(
+            self.plugin_repository.get_by_id, non_existing_identifier)
+
+    def test_should_raise_when_querying_by_absent_model(self):
+        assert_that(fake_function_from_method).raises(EntityNotFound).when_called_with(
+            self.plugin_repository.get_id_by_vendor_and_name, "non_existing_vendor", "non_existing_name")
+
+    def test_should_raise_when_deleting_by_absent_identifier(self):
+        non_existing_identifier = 112233
+        assert_that(fake_function_from_method).raises(EntityNotFound).when_called_with(
+            self.plugin_repository.delete_by_id, non_existing_identifier)
