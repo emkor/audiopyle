@@ -72,6 +72,7 @@ class FeatureData(ENTITY_BASE):  # type: ignore
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     task_id = Column(String(32), unique=True, index=True, nullable=False)
 
+    compression = Column(String(32), index=True, nullable=False)
     feature_data = Column(LargeBinary, index=False, nullable=False)
 
 
