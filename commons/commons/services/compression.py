@@ -21,9 +21,9 @@ DECOMPRESSION_FUNCTIONS = {
 
 def compress(compression_type: CompressionType, data: Dict[str, Any]) -> bytes:
     binary_serialized = json.dumps(data).encode(ENCODING_UTF_8)
-    return COMPRESSION_FUNCTIONS[compression_type](binary_serialized)
+    return COMPRESSION_FUNCTIONS[compression_type](binary_serialized)  # type: ignore
 
 
 def decompress(compression_type: CompressionType, data: bytes) -> Dict[str, Any]:
-    binary_serialized = DECOMPRESSION_FUNCTIONS[compression_type](data)
+    binary_serialized = DECOMPRESSION_FUNCTIONS[compression_type](data)  # type: ignore
     return json.loads(binary_serialized.decode(ENCODING_UTF_8))
