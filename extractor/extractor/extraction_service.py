@@ -4,6 +4,7 @@ from datetime import datetime
 
 import numpy
 
+from commons.services.plugin_providing import VampyPluginProvider
 from commons.services.result_store_client import ResultApiClient
 from commons.utils.conversion import seconds_between
 from commons.models.audio_tag import Id3Tag
@@ -16,13 +17,14 @@ from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.feature_extraction import extract_raw_feature, build_feature_object
 from commons.services.feature_meta_extraction import build_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
-from commons.services.plugin_providing import build_plugin_from_key
 from commons.services.segment_providing import read_raw_audio_from_mp3
 from commons.services.store_provider import FileStore
 
 
 class FeatureExtractionService(object):
-    def __init__(self, result_store_client: ResultApiClient, audio_file_store: FileStore, logger: Logger) -> None:
+    def __init__(self, plugin_provider: VampyPluginProvider, result_store_client: ResultApiClient,
+                 audio_file_store: FileStore, logger: Logger) -> None:
+        self.plugin_provider = plugin_provider
         self.result_store_client = result_store_client
         self.audio_file_store = audio_file_store
         self.logger = logger
@@ -33,7 +35,7 @@ class FeatureExtractionService(object):
         task_id = request.uuid()
         self.logger.info("Building context for extraction {}: {}...".format(task_id, request))
         input_audio_file_path = self.audio_file_store.get_full_path(request.audio_file_identifier)
-        plugin = build_plugin_from_key(str(request.plugin_key))
+        plugin = self.plugin_provider.build_plugin_from_key(str(request.plugin_key))
         file_meta, audio_meta, id3_tag, read_input_file_time = self._read_file_meta(input_audio_file_path)
         wav_data, read_raw_audio_time = self._read_raw_audio_data_from_mp3(input_audio_file_path)
         self.logger.debug("Built context: {} {}! Extracting features...".format(plugin.key, request.plugin_output))

@@ -4,7 +4,9 @@ from logging import Logger
 from flask import Flask
 
 from commons.db.engine import create_db_tables
+from commons.services.plugin_providing import VampyPluginProvider
 from commons.services.store_provider import Mp3FileStore, LzmaJsonFileStore
+from commons.utils.env_var import read_env_var
 from commons.utils.file_system import AUDIO_FILES_DIR, RESULTS_DIR
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
@@ -30,11 +32,15 @@ def main():
 def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     audio_file_store = Mp3FileStore(AUDIO_FILES_DIR)
 
+    blacklisted_plugins = read_env_var(var_name="BLACKLISTED_PLUGINS", expected_type=str, default="").split(",")
+    plugin_provider = VampyPluginProvider(plugin_black_list=blacklisted_plugins, logger=logger)
+
     result_data_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="data.json.lzma")
     result_meta_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="meta.json.lzma")
     result_stats_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="stats.json.lzma")
 
     app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api',
+                                                                    plugin_provider=plugin_provider,
                                                                     audio_file_store=audio_file_store,
                                                                     logger=logger))
     app.add_url_rule("/extraction/<task_id>",
@@ -42,6 +48,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                                                            logger=logger))
     app.add_url_rule("/extraction",
                      view_func=ExtractionApi.as_view('extraction_api',
+                                                     plugin_provider=plugin_provider,
                                                      logger=logger))
     app.add_url_rule("/result/<task_id>/data",
                      view_func=ResultDetailsApi.as_view('result_data_detail_api',
@@ -61,9 +68,11 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                                                      logger=logger))
     app.add_url_rule("/plugin/<vendor>/<name>",
                      view_func=PluginDetailApi.as_view('plugin_detail_api',
+                                                       plugin_provider=plugin_provider,
                                                        logger=logger))
     app.add_url_rule("/plugin",
                      view_func=PluginListApi.as_view('plugin_list_api',
+                                                     plugin_provider=plugin_provider,
                                                      logger=logger))
     app.add_url_rule("/audio/<identifier>",
                      view_func=AudioFileDetailApi.as_view('audio_detail_api',

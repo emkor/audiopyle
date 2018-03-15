@@ -8,8 +8,7 @@ from commons.repository.abstract import DbRepository
 
 class FeatureDataRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider) -> None:
-        super().__init__(session_provider, FeatureData, map_feature_data_entity_to_object,
-                         map_feature_data_object_to_entity)
+        super().__init__(session_provider, FeatureData)
 
     def get_by_task_id(self, task_id: str) -> CompressedFeatureDTO:
         return self._query_single_with_filters(task_id=task_id)
@@ -17,12 +16,9 @@ class FeatureDataRepository(DbRepository):
     def filter_by_compression(self, compression_type: CompressionType) -> List[CompressedFeatureDTO]:
         return self._query_multiple_with_filters(compression=compression_type.value)
 
+    def _map_to_object(self, entity: FeatureData) -> CompressedFeatureDTO:
+        return CompressedFeatureDTO(task_id=entity.task_id, compression=CompressionType(entity.compression),
+                                    data=entity.feature_data)
 
-def map_feature_data_entity_to_object(entity: FeatureData) -> CompressedFeatureDTO:
-    return CompressedFeatureDTO(task_id=entity.task_id, compression=CompressionType(entity.compression),
-                                data=entity.feature_data)
-
-
-def map_feature_data_object_to_entity(feature_object: CompressedFeatureDTO) -> FeatureData:
-    return FeatureData(task_id=feature_object.task_id, compression=feature_object.compression.value,
-                       feature_data=feature_object.data)
+    def _map_to_entity(self, obj: CompressedFeatureDTO) -> FeatureData:
+        return FeatureData(task_id=obj.task_id, compression=obj.compression.value, feature_data=obj.data)

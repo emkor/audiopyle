@@ -6,18 +6,16 @@ from commons.repository.abstract import DbRepository
 
 class AudioFileRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider) -> None:
-        super().__init__(session_provider, AudioFile, map_audio_entity_to_object, map_audio_object_to_entity)
+        super().__init__(session_provider, AudioFile)
 
     def get_id_by_file_name(self, file_name: str) -> int:
         return super()._get_id(file_name=file_name)
 
+    def _map_to_object(self, entity: AudioFile) -> Mp3AudioFileMeta:
+        return Mp3AudioFileMeta(entity.file_name, entity.size_bytes, entity.channels_count,
+                                entity.sample_rate, entity.length_sec, entity.bit_rate)
 
-def map_audio_object_to_entity(audio_meta: Mp3AudioFileMeta) -> AudioFile:
-    return AudioFile(file_name=audio_meta.file_name, size_bytes=audio_meta.file_size_bytes,
-                     channels_count=audio_meta.channels_count, sample_rate=audio_meta.sample_rate,
-                     length_sec=audio_meta.length_sec, bit_rate=audio_meta.bit_rate_kbps)
-
-
-def map_audio_entity_to_object(audio_file: AudioFile) -> Mp3AudioFileMeta:
-    return Mp3AudioFileMeta(audio_file.file_name, audio_file.size_bytes, audio_file.channels_count,
-                            audio_file.sample_rate, audio_file.length_sec, audio_file.bit_rate)
+    def _map_to_entity(self, obj: Mp3AudioFileMeta) -> AudioFile:
+        return AudioFile(file_name=obj.file_name, size_bytes=obj.file_size_bytes,
+                         channels_count=obj.channels_count, sample_rate=obj.sample_rate,
+                         length_sec=obj.length_sec, bit_rate=obj.bit_rate_kbps)

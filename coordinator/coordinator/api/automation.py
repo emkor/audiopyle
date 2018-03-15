@@ -7,7 +7,7 @@ from commons.abstractions.flask_api import FlaskRestApi
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
 from commons.services.audio_tag_providing import ACCEPTED_EXTENSIONS
-from commons.services.plugin_providing import list_vampy_plugins
+from commons.services.plugin_providing import VampyPluginProvider
 from commons.services.store_provider import FileStore
 from commons.utils.env_var import read_env_var
 from extractor.engine.tasks import extract_feature
@@ -15,8 +15,9 @@ from extractor.task_api import run_task
 
 
 class AutomationApi(FlaskRestApi):
-    def __init__(self, audio_file_store: FileStore, logger: Logger) -> None:
+    def __init__(self, plugin_provider: VampyPluginProvider, audio_file_store: FileStore, logger: Logger) -> None:
         super().__init__(logger)
+        self.plugin_provider = plugin_provider
         self.audio_file_store = audio_file_store
 
     def _post(self, the_request: ApiRequest) -> ApiResponse:
@@ -54,5 +55,5 @@ class AutomationApi(FlaskRestApi):
         if blacklisted_plugins:
             self.logger.warning(
                 "Omitting blacklisted plugins ({}): {}...".format(len(blacklisted_plugins), blacklisted_plugins))
-        plugins = list_vampy_plugins(blacklisted_plugins)
+        plugins = self.plugin_provider.list_vampy_plugins(blacklisted_plugins)
         return plugins
