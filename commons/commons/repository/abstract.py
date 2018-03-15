@@ -38,7 +38,7 @@ class DbRepository(object):
     def _get_id(self, **kwargs) -> int:
         with self.session_provider() as session:
             entity = session.query(self.entity_class).filter_by(**kwargs).first()
-        the_id = entity.id
+            the_id = entity.id
         return the_id
 
     def _query_single_with_filters(self, **kwargs) -> Optional[Any]:
