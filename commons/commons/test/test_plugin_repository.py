@@ -3,26 +3,20 @@ from unittest.mock import Mock
 
 from assertpy import assert_that
 
-from commons.db.engine import get_test_db_engine, create_db_tables
-from commons.db.session import SessionProvider
 from commons.models.plugin import VampyPlugin
 from commons.repository.vampy_plugin import VampyPluginRepository
 from commons.services.plugin_providing import VampyPluginProvider
-from commons.utils.file_system import remove_file
+from commons.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
 
 class VampyPluginDbRepositoryTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.db_file_name = "{}_sqlite.db".format(cls.__name__)
-        remove_file(cls.db_file_name, ignore_errors=True)
-        cls.engine = get_test_db_engine(cls.db_file_name, debug=True)
-        create_db_tables(engine=cls.engine, check_first=False)
-        cls.session_provider = SessionProvider(db_engine=cls.engine)
+        setup_db_repository_test_class(cls)
 
     @classmethod
     def tearDownClass(cls):
-        remove_file(cls.db_file_name, ignore_errors=True)
+        tear_down_db_repository_test_class(cls)
 
     def setUp(self):
         self.plugin_provider_mock = Mock(VampyPluginProvider)
