@@ -88,7 +88,7 @@ def object_size_humanized(any_object: Any) -> Text:
     return _sizeof_fmt(object_size(any_object))
 
 
-def object_size(any_object: Any) -> float:
+def object_size(any_object: Any) -> int:
     return asizeof(any_object)
 
 

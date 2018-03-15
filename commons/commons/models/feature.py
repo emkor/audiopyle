@@ -8,7 +8,7 @@ from commons.utils.conversion import sec_to_frames
 
 
 class VampyFeatureAbstraction(Model):
-    def __init__(self, task_id: str):
+    def __init__(self, task_id: str) -> None:
         self.task_id = task_id
 
     def frames(self, audio_meta: AudioFileMeta) -> List[int]:

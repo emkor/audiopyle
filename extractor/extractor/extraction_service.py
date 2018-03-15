@@ -14,7 +14,7 @@ from commons.models.plugin import VampyPlugin
 from commons.models.result import AnalysisResult, AnalysisStats
 from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.feature_extraction import extract_raw_feature, build_feature_object
-from commons.services.feature_meta_extraction import get_feature_meta
+from commons.services.feature_meta_extraction import build_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
 from commons.services.plugin_providing import build_plugin_from_key
 from commons.services.segment_providing import read_raw_audio_from_mp3
@@ -41,8 +41,7 @@ class FeatureExtractionService(object):
                                                               audio_meta, wav_data)
         feature_store_time = self._store_feature_data(feature_object, task_id)
         analysis_result, result_build_time = self._build_analysis_result(audio_meta, feature_object, file_meta,
-                                                                         id3_tag, plugin, request.plugin_output,
-                                                                         task_id)
+                                                                         id3_tag, request.plugin_output, task_id)
         result_store_time = self._store_analysis_result(analysis_result, task_id)
         task_time = seconds_between(task_start_time)
         self._store_analysis_stats(task_id, extraction_time, feature_store_time, result_build_time,
@@ -62,10 +61,10 @@ class FeatureExtractionService(object):
         return result_store_time
 
     def _build_analysis_result(self, audio_meta: Mp3AudioFileMeta, feature: VampyFeatureAbstraction,
-                               file_meta: FileMeta, id3_tag: Id3Tag, plugin: VampyPlugin, plugin_output: Text,
+                               file_meta: FileMeta, id3_tag: Id3Tag, plugin_output: Text,
                                task_id: Text) -> Tuple[AnalysisResult, float]:
         analysis_result_build_start_time = datetime.utcnow()
-        feature_meta = get_feature_meta(feature, plugin, plugin_output)
+        feature_meta = build_feature_meta(task_id, feature, plugin_output)
         analysis_result = AnalysisResult(task_id, file_meta, audio_meta, id3_tag, feature_meta)
         return analysis_result, seconds_between(analysis_result_build_start_time)
 

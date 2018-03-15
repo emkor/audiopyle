@@ -24,7 +24,7 @@ class Model(object):
     def __hash__(self) -> int:
         return hash(self.__dict__)
 
-    def size_bytes(self) -> float:
+    def size_bytes(self) -> int:
         return object_size(self)
 
     def size_humanized(self) -> Text:

@@ -13,7 +13,7 @@ class CompressionType(Enum):
 
 
 class CompressedFeatureDTO(Model):
-    def __init__(self, task_id: str, compression: CompressionType, data: bytes):
+    def __init__(self, task_id: str, compression: CompressionType, data: bytes) -> None:
         self.task_id = task_id
         self.compression = compression
         self.data = data
