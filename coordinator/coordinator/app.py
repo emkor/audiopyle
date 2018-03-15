@@ -23,9 +23,7 @@ def main():
     setup_logger()
     logger = get_logger()
     logger.info("Initializing Coordinator app...")
-    flask_logger = logging.getLogger('werkzeug')
-    flask_logger.setLevel(logging.WARNING)
-    create_db_tables()
+    create_db_tables(only_if_absent=True)
     start_app(logger, "0.0.0.0", 8080, debug=False)
 
 
@@ -39,6 +37,8 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     result_meta_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="meta.json.lzma")
     result_stats_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="stats.json.lzma")
 
+    flask_logger = logging.getLogger('werkzeug')
+    flask_logger.setLevel(logging.WARNING)
     app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api',
                                                                     plugin_provider=plugin_provider,
                                                                     audio_file_store=audio_file_store,
