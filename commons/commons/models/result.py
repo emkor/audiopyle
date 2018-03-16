@@ -24,20 +24,14 @@ class DataStats(Model):
 
 
 class AnalysisStats(Model):
-    def __init__(self, total_time: float, extraction_time: float, feature_store_time: float, result_build_time: float,
-                 result_store_time: float, read_input_file_time: float, read_raw_audio_time: float) -> None:
+    def __init__(self, task_id: str, total_time: float, extraction_time: float, compression_time: float,
+                 data_stats_build_time: float, encode_audio_time: float) -> None:
+        self.task_id = task_id
         self.total_time = total_time
         self.extraction_time = extraction_time
-        self.feature_store_time = feature_store_time
-        self.result_build_time = result_build_time
-        self.result_store_time = result_store_time
-        self.read_input_file_time = read_input_file_time
-        self.read_raw_audio_time = read_raw_audio_time
-
-    @property
-    def misc_ops_time(self):
-        return self.total_time - sum([self.extraction_time, self.feature_store_time, self.result_build_time,
-                                      self.result_store_time, self.read_input_file_time, self.read_raw_audio_time])
+        self.compression_time = compression_time
+        self.data_stats_build_time = data_stats_build_time
+        self.encode_audio_time = encode_audio_time
 
 
 class FeatureMeta(Model):
@@ -65,20 +59,17 @@ class FeatureMeta(Model):
 
 
 class AnalysisResult(Model):
-    def __init__(self, task_id: Text, file_meta: FileMeta, audio_meta: Mp3AudioFileMeta, id3_tag: Id3Tag,
-                 feature_meta: FeatureMeta) -> None:
+    def __init__(self, task_id: Text, file_meta: FileMeta, audio_meta: Mp3AudioFileMeta, id3_tag: Id3Tag) -> None:
         self.task_id = task_id
         self.file_meta = file_meta
         self.audio_meta = audio_meta
         self.id3_tag = id3_tag
-        self.feature_meta = feature_meta
 
     def to_serializable(self):
         base_serialized = super().to_serializable()
         base_serialized.update({"file_meta": self.file_meta.to_serializable(),
                                 "audio_meta": self.audio_meta.to_serializable(),
-                                "id3_tag": self.id3_tag.to_serializable(),
-                                "feature_meta": self.feature_meta.to_serializable()})
+                                "id3_tag": self.id3_tag.to_serializable()})
         return base_serialized
 
     @classmethod
@@ -86,7 +77,6 @@ class AnalysisResult(Model):
         file_meta_object = FileMeta.from_serializable(serialized.get("file_meta"))
         audio_meta_object = Mp3AudioFileMeta.from_serializable(serialized.get("audio_meta"))
         id3_tag_object = Id3Tag.from_serializable(serialized.get("id3_tag"))
-        result_data_object = FeatureMeta.from_serializable(serialized.get("feature_meta"))
         serialized.update({"file_meta": file_meta_object, "audio_meta": audio_meta_object,
-                           "id3_tag": id3_tag_object, "feature_meta": result_data_object})
+                           "id3_tag": id3_tag_object})
         return AnalysisResult(**serialized)

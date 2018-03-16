@@ -76,6 +76,19 @@ class FeatureData(ENTITY_BASE):  # type: ignore
     feature_data = Column(LargeBinary, index=False, nullable=False)
 
 
+class ResultStats(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'result_stats'
+
+    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    task_id = Column(String(32), unique=True, index=True, nullable=False)
+
+    total_time = Column(Float, index=False, nullable=True)
+    extraction_time = Column(Float, index=False, nullable=True)
+    compression_time = Column(Float, index=False, nullable=True)
+    data_stats_build_time = Column(Float, index=False, nullable=True)
+    encode_audio_time = Column(Float, index=False, nullable=True)
+
+
 class Result(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result'
 
@@ -92,6 +105,7 @@ class Result(ENTITY_BASE):  # type: ignore
                              nullable=False, index=True)
     feature_data_id = Column(Integer, ForeignKey("feature_data.id", ondelete="CASCADE"),
                              nullable=False, index=True)
+    stats_id = Column(Integer, ForeignKey("result_stats.id", ondelete="CASCADE"),
+                      nullable=False, index=True)
 
     done_at = Column(DateTime, default=datetime.utcnow)
-    analysis_time = Column(Float, index=False, nullable=False)
