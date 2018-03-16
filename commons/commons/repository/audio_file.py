@@ -11,7 +11,7 @@ class AudioFileRepository(DbRepository):
     def get_id_by_file_name(self, file_name: str) -> int:
         return super()._get_id(file_name=file_name)
 
-    def _get_id_by_model(self, model_object: Mp3AudioFileMeta) -> int:
+    def get_id_by_model(self, model_object: Mp3AudioFileMeta) -> int:
         return self.get_id_by_file_name(model_object.file_name)
 
     def _map_to_object(self, entity: AudioFile) -> Mp3AudioFileMeta:

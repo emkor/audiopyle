@@ -101,11 +101,5 @@ class Result(ENTITY_BASE):  # type: ignore
                            nullable=False, index=True)
     audio_tag_id = Column(Integer, ForeignKey("audio_tag.id", ondelete="CASCADE"),
                           nullable=False, index=True)
-    feature_meta_id = Column(Integer, ForeignKey("feature_meta.id", ondelete="CASCADE"),
-                             nullable=False, index=True)
-    feature_data_id = Column(Integer, ForeignKey("feature_data.id", ondelete="CASCADE"),
-                             nullable=False, index=True)
-    stats_id = Column(Integer, ForeignKey("result_stats.id", ondelete="CASCADE"),
-                      nullable=False, index=True)
 
     done_at = Column(DateTime, default=datetime.utcnow)

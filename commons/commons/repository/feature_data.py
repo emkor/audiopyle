@@ -16,7 +16,7 @@ class FeatureDataRepository(DbRepository):
     def filter_by_compression(self, compression_type: CompressionType) -> List[CompressedFeatureDTO]:
         return self._query_multiple_with_filters(compression=compression_type.value)
 
-    def _get_id_by_model(self, model_object: CompressedFeatureDTO) -> int:
+    def get_id_by_model(self, model_object: CompressedFeatureDTO) -> int:
         return self._get_id(task_id=model_object.task_id)
 
     def _map_to_object(self, entity: FeatureData) -> CompressedFeatureDTO:

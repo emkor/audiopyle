@@ -28,7 +28,7 @@ class FeatureMetaRepositoryTest(unittest.TestCase):
 
     def test_should_insert_and_retrieve_id_by_task_id(self):
         self.feature_repository.insert(self.feature_meta_example)
-        identifier = self.feature_repository._get_id_by_model(self.feature_meta_example)
+        identifier = self.feature_repository.get_id_by_model(self.feature_meta_example)
         assert_that(identifier).is_greater_than_or_equal_to(0)
 
     def test_should_insert_and_retrieve_model_by_task_id(self):

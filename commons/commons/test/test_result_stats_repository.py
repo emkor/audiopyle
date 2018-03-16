@@ -27,7 +27,7 @@ class ResultStatsRepositoryTest(unittest.TestCase):
     def test_should_insert_example_stats_and_retrieve_by_model(self):
         self.repository.insert(self.example_stats)
 
-        identifier = self.repository._get_id_by_model(self.example_stats)
+        identifier = self.repository.get_id_by_model(self.example_stats)
         assert_that(identifier).is_greater_than_or_equal_to(0)
 
         retrieved_model = self.repository.get_by_id(identifier)

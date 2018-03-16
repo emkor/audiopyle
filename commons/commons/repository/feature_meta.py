@@ -14,7 +14,7 @@ class FeatureMetaRepository(DbRepository):
     def filter_by_type(self, feature_type: FeatureType):
         return self._query_multiple_with_filters(feature_type=feature_type.value)
 
-    def _get_id_by_model(self, model_object: FeatureMeta) -> int:
+    def get_id_by_model(self, model_object: FeatureMeta) -> int:
         return self._get_id(task_id=model_object.task_id)
 
     def _map_to_object(self, entity: FeatureMetaEntity) -> FeatureMeta:

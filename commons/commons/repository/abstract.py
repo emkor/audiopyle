@@ -27,7 +27,7 @@ class DbRepository(object):
             self.insert(model_object)
         except DuplicateEntity:
             pass
-        return self._get_id_by_model(model_object)
+        return self.get_id_by_model(model_object)
 
     def delete_by_id(self, identifier: int) -> None:
         with self.session_provider() as session:
@@ -80,7 +80,7 @@ class DbRepository(object):
                 entities = session.query(self.entity_class).all()
             return [self._map_to_object(e) for e in entities] if entities else []
 
-    def _get_id_by_model(self, model_object: Any) -> int:
+    def get_id_by_model(self, model_object: Any) -> int:
         raise NotImplementedError()
 
     def _map_to_entity(self, obj: Any) -> Any:

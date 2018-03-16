@@ -25,7 +25,7 @@ class AudioTagRepository(DbRepository):
     def filter_by_genre(self, genre_name: str) -> List[Id3Tag]:
         return self._query_multiple_with_filters(genre=genre_name)
 
-    def _get_id_by_model(self, model_object: Id3Tag) -> int:
+    def get_id_by_model(self, model_object: Id3Tag) -> int:
         return self.get_id_by_name(model_object.artist, model_object.album, model_object.title)
 
     def _map_to_object(self, audio_tag: AudioTag) -> Id3Tag:
