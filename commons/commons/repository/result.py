@@ -23,4 +23,4 @@ class ResultStatsRepository(DbRepository):
         return AnalysisStats(task_id=entity.task_id, total_time=entity.total_time,
                              extraction_time=entity.extraction_time, compression_time=entity.compression_time,
                              data_stats_build_time=entity.data_stats_build_time,
-                             encode_audio_time=entity.data_stats_build_time)
+                             encode_audio_time=entity.encode_audio_time)
