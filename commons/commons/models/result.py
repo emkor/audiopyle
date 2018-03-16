@@ -75,8 +75,8 @@ class AnalysisResult(Model):
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
-        audio_meta_object = Mp3AudioFileMeta.from_serializable(serialized.get("audio_meta"))
-        id3_tag_object = Id3Tag.from_serializable(serialized.get("id3_tag"))
-        plugin_object = VampyPlugin.from_serializable(serialized.get("plugin"))
+        audio_meta_object = Mp3AudioFileMeta.from_serializable(serialized["audio_meta"])
+        id3_tag_object = Id3Tag.from_serializable(serialized["id3_tag"])
+        plugin_object = VampyPlugin.from_serializable(serialized["plugin"])
         serialized.update({"audio_meta": audio_meta_object, "id3_tag": id3_tag_object, "plugin": plugin_object})
         return AnalysisResult(**serialized)

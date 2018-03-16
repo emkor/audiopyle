@@ -39,8 +39,8 @@ class AnalysisResultModelTest(unittest.TestCase):
                                                 categories=["Low Level Features"],
                                                 outputs=["amplitude"],
                                                 library_file_name="/root/vamp/vamp-example-plugins.so")
-        self.analysis_result_example = AnalysisResult("fa3b5d8c-b760-49e0-b8b5-7ce0737621d8",
-                                                      self.audio_meta_example, self.id3_tag_example,
+        self.task_id = "fa3b5d8c-b760-49e0-b8b5-7ce0737621d8"
+        self.analysis_result_example = AnalysisResult(self.task_id, self.audio_meta_example, self.id3_tag_example,
                                                       self.example_vampy_plugin)
 
     def test_should_serialize_and_deserialize_analysis_result_data_model(self):
