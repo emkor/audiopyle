@@ -123,7 +123,17 @@ class VampyPluginDbRepositoryTest(unittest.TestCase):
         retrieved_id = self.plugin_repository.get_or_create(self.plugin_example_1)
         assert_that(retrieved_id).is_greater_than_or_equal_to(0)
 
+        self.plugin_provider_mock.build_plugin_from_key.return_value = self.plugin_example_1
+        retrieved_object = self.plugin_repository.get_by_id(retrieved_id)
+        assert_that(retrieved_object).is_equal_to(self.plugin_example_1)
+        self.plugin_provider_mock.build_plugin_from_key.assert_called_with(self.plugin_example_1.key)
+
     def test_should_get_existing_entity_using_get_or_create(self):
         self.plugin_repository.insert(self.plugin_example_1)
         retrieved_id = self.plugin_repository.get_or_create(self.plugin_example_1)
         assert_that(retrieved_id).is_greater_than_or_equal_to(0)
+
+        self.plugin_provider_mock.build_plugin_from_key.return_value = self.plugin_example_1
+        retrieved_object = self.plugin_repository.get_by_id(retrieved_id)
+        assert_that(retrieved_object).is_equal_to(self.plugin_example_1)
+        self.plugin_provider_mock.build_plugin_from_key.assert_called_with(self.plugin_example_1.key)

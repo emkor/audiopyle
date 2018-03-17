@@ -46,7 +46,8 @@ class ResultRepositoryTest(unittest.TestCase):
     def tearDown(self):
         self.repository.delete_all()
 
-    def test_should_insert_result_and_list_it(self):
+    def test_should_insert_descendants_of_result_and_then_result_and_list_it(self):
+        self.plugin_provider_mock.build_plugin_from_key.return_value = self.plugin_example_1
         self.plugin_repository.insert(self.plugin_example_1)
         self.audio_repository.insert(self.audio_meta_example_1)
         self.audio_tag_repository.insert(self.tag_example_1)
@@ -58,3 +59,4 @@ class ResultRepositoryTest(unittest.TestCase):
 
         result_list = self.repository.get_all()
         assert_that(result_list).is_length(1)
+        assert_that(result_list[0]).is_equal_to(self.result)
