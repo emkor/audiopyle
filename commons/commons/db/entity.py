@@ -25,14 +25,14 @@ class AudioTag(ENTITY_BASE):  # type: ignore
 
     id = Column(Integer, primary_key=True, autoincrement=True)
 
-    artist = Column(String(255), index=True, nullable=True)
+    artist = Column(String(255), index=True, nullable=False)
+    title = Column(String(255), index=True, nullable=False)
     album = Column(String(255), index=True, nullable=True)
-    title = Column(String(255), index=True, nullable=True)
     date = Column(Integer, index=True, nullable=True)
-    genre = Column(String(255), index=True, nullable=True)
-    track = Column(Integer, nullable=True)
+    genre = Column(String(63), index=True, nullable=True)
+    track = Column(Integer, index=False, nullable=True)
 
-    __table_args__ = (UniqueConstraint('artist', 'album', 'title', name='unique_plugin'),)
+    __table_args__ = (UniqueConstraint('artist', 'title', name='unique_id3_tag'),)
 
 
 class VampyPlugin(ENTITY_BASE):  # type: ignore
@@ -72,8 +72,8 @@ class FeatureData(ENTITY_BASE):  # type: ignore
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     task_id = Column(String(36), unique=True, index=True, nullable=False)
 
-    compression = Column(String(32), index=True, nullable=False)
-    feature_data = Column(LargeBinary, index=False, nullable=False)
+    compression = Column(String(31), index=True, nullable=False)
+    feature_data = Column(LargeBinary(16777215), index=False, nullable=False)
 
 
 class ResultStats(ENTITY_BASE):  # type: ignore
