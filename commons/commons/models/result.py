@@ -26,13 +26,14 @@ class DataStats(Model):
 
 class AnalysisStats(Model):
     def __init__(self, task_id: str, total_time: float, extraction_time: float, compression_time: float,
-                 data_stats_build_time: float, encode_audio_time: float) -> None:
+                 data_stats_build_time: float, encode_audio_time: float, result_store_time: float) -> None:
         self.task_id = task_id
         self.total_time = total_time
         self.extraction_time = extraction_time
         self.compression_time = compression_time
         self.data_stats_build_time = data_stats_build_time
         self.encode_audio_time = encode_audio_time
+        self.result_store_time = result_store_time
 
 
 class FeatureMeta(Model):

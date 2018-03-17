@@ -3,7 +3,7 @@ import unittest
 from assertpy import assert_that
 
 from commons.models.compressed_feature import CompressionType
-from commons.services.compression import compress, decompress
+from commons.services.compression import compress_model, decompress_model
 
 
 class CompressionTest(unittest.TestCase):
@@ -15,22 +15,22 @@ class CompressionTest(unittest.TestCase):
                              "key_6": None}
 
     def test_should_compress_and_decompress_with_none_compression(self):
-        compressed = compress(CompressionType.none, self.example_data)
+        compressed = compress_model(CompressionType.none, self.example_data)
         assert_that(compressed).is_instance_of(bytes)
 
-        decompressed = decompress(CompressionType.none, compressed)
+        decompressed = decompress_model(CompressionType.none, compressed)
         assert_that(decompressed).is_equal_to(self.example_data)
 
     def test_should_compress_and_decompress_with_gzip(self):
-        compressed = compress(CompressionType.gzip, self.example_data)
+        compressed = compress_model(CompressionType.gzip, self.example_data)
         assert_that(compressed).is_instance_of(bytes)
 
-        decompressed = decompress(CompressionType.gzip, compressed)
+        decompressed = decompress_model(CompressionType.gzip, compressed)
         assert_that(decompressed).is_equal_to(self.example_data)
 
     def test_should_compress_and_decompress_with_lzma(self):
-        compressed = compress(CompressionType.lzma, self.example_data)
+        compressed = compress_model(CompressionType.lzma, self.example_data)
         assert_that(compressed).is_instance_of(bytes)
 
-        decompressed = decompress(CompressionType.lzma, compressed)
+        decompressed = decompress_model(CompressionType.lzma, compressed)
         assert_that(decompressed).is_equal_to(self.example_data)

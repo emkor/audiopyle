@@ -20,13 +20,13 @@ class ResultStatsRepository(DbRepository):
     def _map_to_entity(self, obj: AnalysisStats) -> ResultStats:
         return ResultStats(task_id=obj.task_id, total_time=obj.total_time, extraction_time=obj.extraction_time,
                            compression_time=obj.compression_time, data_stats_build_time=obj.data_stats_build_time,
-                           encode_audio_time=obj.encode_audio_time)
+                           encode_audio_time=obj.encode_audio_time, result_store_time=obj.result_store_time)
 
     def _map_to_object(self, entity: ResultStats) -> AnalysisStats:
         return AnalysisStats(task_id=entity.task_id, total_time=entity.total_time,
                              extraction_time=entity.extraction_time, compression_time=entity.compression_time,
                              data_stats_build_time=entity.data_stats_build_time,
-                             encode_audio_time=entity.encode_audio_time)
+                             encode_audio_time=entity.encode_audio_time, result_store_time=entity.result_store_time)
 
 
 class ResultRepository(DbRepository):

@@ -18,7 +18,7 @@ class ResultStatsRepositoryTest(unittest.TestCase):
 
     def setUp(self):
         self.task_id = "0f961f20-b036-5740-b526-013523dd88c7"
-        self.example_stats = AnalysisStats(self.task_id, 12., 4., 1.5, 0.5, 1.)
+        self.example_stats = AnalysisStats(self.task_id, 12., 4., 1.3, 0.5, 1., 0.2)
         self.repository = ResultStatsRepository(self.session_provider)
 
     def tearDown(self):

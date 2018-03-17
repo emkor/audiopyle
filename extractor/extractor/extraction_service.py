@@ -1,11 +1,18 @@
 from logging import Logger
-from typing import Text, Tuple, Optional
+from typing import Text, Tuple
 from datetime import datetime
 
 import numpy
 
+from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
+from commons.repository.audio_file import AudioFileRepository
+from commons.repository.audio_tag import AudioTagRepository
+from commons.repository.feature_data import FeatureDataRepository
+from commons.repository.feature_meta import FeatureMetaRepository
+from commons.repository.result import ResultRepository, ResultStatsRepository
+from commons.repository.vampy_plugin import VampyPluginRepository
+from commons.services.compression import compress_model
 from commons.services.plugin_providing import VampyPluginProvider
-from commons.services.result_store_client import ResultApiClient
 from commons.utils.conversion import seconds_between
 from commons.models.audio_tag import Id3Tag
 from commons.models.extraction_request import ExtractionRequest
@@ -22,59 +29,71 @@ from commons.services.store_provider import FileStore
 
 
 class FeatureExtractionService(object):
-    def __init__(self, plugin_provider: VampyPluginProvider, result_store_client: ResultApiClient,
-                 audio_file_store: FileStore, logger: Logger) -> None:
+    def __init__(self, plugin_provider: VampyPluginProvider, audio_file_store: FileStore,
+                 audio_tag_repo: AudioTagRepository, audio_meta_repo: AudioFileRepository,
+                 plugin_repo: VampyPluginRepository, feature_data_repo: FeatureDataRepository,
+                 feature_meta_repo: FeatureMetaRepository, result_repo: ResultRepository,
+                 result_stats_repo: ResultStatsRepository,
+                 logger: Logger) -> None:
         self.plugin_provider = plugin_provider
-        self.result_store_client = result_store_client
         self.audio_file_store = audio_file_store
+        self.plugin_repo = plugin_repo
+        self.audio_tag_repo = audio_tag_repo
+        self.audio_meta_repo = audio_meta_repo
+        self.feature_data_repo = feature_data_repo
+        self.feature_meta_repo = feature_meta_repo
+        self.result_repo = result_repo
+        self.result_stats_repo = result_stats_repo
         self.logger = logger
-        self._temporary_wav_file = None  # type: Optional[Text]
 
     def extract_feature_and_store(self, request: ExtractionRequest):
         task_start_time = datetime.utcnow()
         task_id = request.uuid()
+
         self.logger.info("Building context for extraction {}: {}...".format(task_id, request))
         input_audio_file_path = self.audio_file_store.get_full_path(request.audio_file_identifier)
         plugin = self.plugin_provider.build_plugin_from_key(str(request.plugin_key))
-        file_meta, audio_meta, id3_tag, read_input_file_time = self._read_file_meta(input_audio_file_path)
+        file_meta, audio_meta, id3_tag = self._read_file_meta(input_audio_file_path)
         wav_data, read_raw_audio_time = self._read_raw_audio_data_from_mp3(input_audio_file_path)
-        self.logger.debug("Built context: {} {}! Extracting features...".format(plugin.key, request.plugin_output))
+
+        self.logger.debug("Built context: {}! Extracting features...".format(request))
         feature_object, extraction_time = self._do_extraction(task_id, plugin, request.plugin_output,
                                                               audio_meta, wav_data)
-        feature_store_time = self._store_feature_data(feature_object, task_id)
-        analysis_result, result_build_time = self._build_analysis_result(audio_meta, feature_object, file_meta,
-                                                                         id3_tag, request.plugin_output, task_id)
-        result_store_time = self._store_analysis_result(analysis_result, task_id)
+        feature_dto, compression_time = self._compress_feature(feature_object, task_id)
+        feature_meta, feature_meta_build_time = self._build_feature_meta(feature_object, request, task_id)
+        analysis_result = AnalysisResult(task_id, audio_meta, id3_tag, plugin)
+
+        self.logger.debug("Extracted features for {}; storing...".format(request))
+        storage_time = self._store_results_in_db(analysis_result, audio_meta, feature_dto, feature_meta, id3_tag,
+                                                 plugin)
+
         task_time = seconds_between(task_start_time)
-        self._store_analysis_stats(task_id, extraction_time, feature_store_time, result_build_time,
-                                   result_store_time, task_time, read_input_file_time, read_raw_audio_time)
+        results_stats = AnalysisStats(task_id, task_time, extraction_time, compression_time, feature_meta_build_time,
+                                      read_raw_audio_time, storage_time)
+        self.result_stats_repo.insert(results_stats)
+        self.logger.debug("Done {}!".format(request))
 
-    def _store_analysis_stats(self, task_id: Text, extraction_time: float, feature_store_time: float,
-                              result_build_time: float, result_store_time: float, task_time: float,
-                              read_input_file_time, read_raw_audio_time) -> None:
-        analysis_stats = AnalysisStats(task_time, extraction_time, feature_store_time,
-                                       result_build_time, result_store_time, read_input_file_time, read_raw_audio_time)
-        self.result_store_client.store_stats(task_id, analysis_stats.to_serializable())
+    def _store_results_in_db(self, analysis_result, audio_meta, feature_dto, feature_meta, id3_tag, plugin):
+        start_time = datetime.utcnow()
+        self.plugin_repo.get_or_create(plugin)
+        self.audio_tag_repo.get_or_create(id3_tag)
+        self.audio_meta_repo.get_or_create(audio_meta)
+        self.feature_data_repo.insert(feature_dto)
+        self.feature_meta_repo.insert(feature_meta)
+        self.result_repo.insert(analysis_result)
+        return seconds_between(start_time)
 
-    def _store_analysis_result(self, analysis_result: AnalysisResult, task_id: Text) -> float:
-        result_store_start_time = datetime.utcnow()
-        self.result_store_client.store_meta(task_id, analysis_result.to_serializable())
-        result_store_time = seconds_between(result_store_start_time)
-        return result_store_time
+    def _build_feature_meta(self, feature_object, request, task_id):
+        start_time = datetime.utcnow()
+        feature_meta = build_feature_meta(task_id, feature_object, request.plugin_output)
+        return feature_meta, seconds_between(start_time)
 
-    def _build_analysis_result(self, audio_meta: Mp3AudioFileMeta, feature: VampyFeatureAbstraction,
-                               file_meta: FileMeta, id3_tag: Id3Tag, plugin_output: Text,
-                               task_id: Text) -> Tuple[AnalysisResult, float]:
-        analysis_result_build_start_time = datetime.utcnow()
-        feature_meta = build_feature_meta(task_id, feature, plugin_output)
-        analysis_result = AnalysisResult(task_id, file_meta, audio_meta, id3_tag, feature_meta)
-        return analysis_result, seconds_between(analysis_result_build_start_time)
-
-    def _store_feature_data(self, feature, task_id):
-        feature_store_start_time = datetime.utcnow()
-        self.result_store_client.store_data(task_id, feature.to_serializable())
-        feature_store_time = seconds_between(feature_store_start_time)
-        return feature_store_time
+    def _compress_feature(self, feature_object: VampyFeatureAbstraction,
+                          task_id: str) -> Tuple[CompressedFeatureDTO, float]:
+        start_time = datetime.utcnow()
+        compressed_feature_bytes = compress_model(CompressionType.lzma, feature_object.to_serializable())
+        feature_dto = CompressedFeatureDTO(task_id, CompressionType.lzma, compressed_feature_bytes)
+        return feature_dto, seconds_between(start_time)
 
     def _do_extraction(self, task_id: str, plugin: VampyPlugin, plugin_output: Text, input_audio_meta: AudioFileMeta,
                        wav_data: numpy.ndarray) -> Tuple[VampyFeatureAbstraction, float]:
@@ -90,10 +109,8 @@ class FeatureExtractionService(object):
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
 
-    def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, Mp3AudioFileMeta, Id3Tag, float]:
-        read_input_file_start_time = datetime.utcnow()
+    def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, Mp3AudioFileMeta, Id3Tag]:
         input_file_meta = read_file_meta(audio_file_absolute_path)
         input_audio_meta = read_mp3_file_meta(audio_file_absolute_path)
         id3_tag = read_id3_tag(audio_file_absolute_path)
-        read_input_file_time = seconds_between(read_input_file_start_time)
-        return input_file_meta, input_audio_meta, id3_tag, read_input_file_time
+        return input_file_meta, input_audio_meta, id3_tag
