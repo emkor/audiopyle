@@ -38,7 +38,10 @@ class ResultRepository(DbRepository):
         self.plugin_repository = plugin_repository
 
     def get_id_by_model(self, model_object: AnalysisResult) -> int:
-        return self._query_single_with_filters(task_id=model_object.task_id)
+        return self.get_by_task_id(model_object.task_id)
+
+    def get_by_task_id(self, task_id: str) -> int:
+        return self._query_single_with_filters(task_id=task_id)
 
     def _map_to_entity(self, obj: AnalysisResult) -> Result:
         plugin_id = self.plugin_repository.get_id_by_model(obj.plugin)

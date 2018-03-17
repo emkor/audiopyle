@@ -4,6 +4,13 @@ from logging import Logger
 from flask import Flask
 
 from commons.db.engine import create_db_tables
+from commons.db.session import SessionProvider
+from commons.repository.audio_file import AudioFileRepository
+from commons.repository.audio_tag import AudioTagRepository
+from commons.repository.feature_data import FeatureDataRepository
+from commons.repository.feature_meta import FeatureMetaRepository
+from commons.repository.result import ResultRepository, ResultStatsRepository
+from commons.repository.vampy_plugin import VampyPluginRepository
 from commons.services.plugin_providing import VampyPluginProvider
 from commons.services.store_provider import Mp3FileStore, LzmaJsonFileStore
 from commons.utils.env_var import read_env_var
@@ -33,15 +40,21 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     blacklisted_plugins = read_env_var(var_name="BLACKLISTED_PLUGINS", expected_type=str, default="").split(",")
     plugin_provider = VampyPluginProvider(plugin_black_list=blacklisted_plugins, logger=logger)
 
-    result_data_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="data.json.lzma")
-    result_meta_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="meta.json.lzma")
-    result_stats_file_store = LzmaJsonFileStore(RESULTS_DIR, extension="stats.json.lzma")
+    db_session_provider = SessionProvider()
+    audio_tag_repo = AudioTagRepository(db_session_provider)
+    audio_meta_repo = AudioFileRepository(db_session_provider)
+    plugin_repo = VampyPluginRepository(db_session_provider, plugin_provider)
+    feature_data_repo = FeatureDataRepository(db_session_provider)
+    feature_meta_repo = FeatureMetaRepository(db_session_provider)
+    result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo)
+    result_stats_repo = ResultStatsRepository(db_session_provider)
 
     flask_logger = logging.getLogger('werkzeug')
     flask_logger.setLevel(logging.WARNING)
     app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api',
                                                                     plugin_provider=plugin_provider,
                                                                     audio_file_store=audio_file_store,
+                                                                    result_repo=result_repo,
                                                                     logger=logger))
     app.add_url_rule("/extraction/<task_id>",
                      view_func=ExtractionStatusApi.as_view('extraction_status_api',
