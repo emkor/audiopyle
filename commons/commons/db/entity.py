@@ -50,7 +50,7 @@ class FeatureMeta(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_meta'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    task_id = Column(String(32), unique=True, index=True, nullable=False)
+    task_id = Column(String(36), unique=True, index=True, nullable=False)
 
     plugin_output = Column(String(255), index=True, nullable=False)
     feature_type = Column(String(63), index=True, nullable=False)
@@ -70,7 +70,7 @@ class FeatureData(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_data'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    task_id = Column(String(32), unique=True, index=True, nullable=False)
+    task_id = Column(String(36), unique=True, index=True, nullable=False)
 
     compression = Column(String(32), index=True, nullable=False)
     feature_data = Column(LargeBinary, index=False, nullable=False)
@@ -80,7 +80,7 @@ class ResultStats(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result_stats'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    task_id = Column(String(32), unique=True, index=True, nullable=False)
+    task_id = Column(String(36), unique=True, index=True, nullable=False)
 
     total_time = Column(Float, index=False, nullable=True)
     extraction_time = Column(Float, index=False, nullable=True)
@@ -94,7 +94,7 @@ class Result(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    task_id = Column(String(32), unique=True, index=True, nullable=False)
+    task_id = Column(String(36), unique=True, index=True, nullable=False)
 
     vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
                              nullable=False, index=True)
