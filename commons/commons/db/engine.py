@@ -16,13 +16,13 @@ _ENGINE = None  # type: Optional[Engine]
 _SESSION_MAKER = None  # type: Optional[sessionmaker]
 
 
-def get_db_engine(host: str = None, port: int = None) -> Engine:
+def get_db_engine(host: str = None, port: int = None, debug: bool = False) -> Engine:
     pymysql.install_as_MySQLdb()
     global _ENGINE
     if _ENGINE is None:
         db_connection_string = _build_mysql_conn_string(host, port)
         logger.info("Creating SQL Alchemy DB engine with {} connection string...".format(db_connection_string))
-        _ENGINE = create_engine(db_connection_string, echo=True, poolclass=NullPool)
+        _ENGINE = create_engine(db_connection_string, echo=debug, poolclass=NullPool)
     return _ENGINE
 
 
