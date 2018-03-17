@@ -27,7 +27,6 @@ services:
     volumes:
       - "./resources/vamp:/root/vamp:ro"
       - "./resources/audio:/root/audio:ro"
-      - "./resources/result:/root/result"
     environment:
       - BLACKLISTED_PLUGINS=vamp-example-plugins:zerocrossing,vamp-example-plugins:powerspectrum,cqvamp:cqvamp,cqvamp:cqvampmidi,mtg-melodia:melodiaviz,pyin:yin,qm-vamp-plugins:qm-adaptivespectrogram,qm-vamp-plugins:qm-dwt,vamp-libxtract:amdf,vamp-libxtract:asdf,vamp-libxtract:autocorrelation,vamp-libxtract:dct,vamp-libxtract:spectrum,silvet:silvet,pyin:pyin,qm-vamp-plugins:qm-tonalchange,match-vamp-plugin:match,cqvamp:cqchromavamp
       - RABBITMQ_SERIVCE_HOST=rabbitmq
