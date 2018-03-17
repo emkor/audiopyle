@@ -15,7 +15,10 @@ class ResultStatsRepository(DbRepository):
         return self._query_single_with_filters(task_id=task_id)
 
     def get_id_by_model(self, model_object: AnalysisStats) -> int:
-        return self._get_id(task_id=model_object.task_id)
+        return self.get_id_by_task_id(model_object.task_id)
+
+    def get_id_by_task_id(self, task_id: str) -> int:
+        return self._get_id(task_id=task_id)
 
     def _map_to_entity(self, obj: AnalysisStats) -> ResultStats:
         return ResultStats(task_id=obj.task_id, total_time=obj.total_time, extraction_time=obj.extraction_time,
