@@ -35,7 +35,8 @@ def _extract_data_stats(numpy_array: numpy.ndarray) -> DataStats:
 
 def _try_calculate_data_stat(calc_callable: Callable[..., float], calc_input: numpy.ndarray) -> Optional[float]:
     try:
-        return float(calc_callable(calc_input))
+        numpy_result = calc_callable(calc_input)
+        return None if numpy.isnan(numpy_result) else float(numpy_result)
     except Exception as e:
         logger.warning(
             "Could not calculate {} from data shaped {}: {}; returning None".format(calc_callable, calc_input.shape, e))
