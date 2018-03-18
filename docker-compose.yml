@@ -28,7 +28,7 @@ services:
       - "./resources/vamp:/root/vamp:ro"
       - "./resources/audio:/root/audio:ro"
     environment:
-      - BLACKLISTED_PLUGINS=vamp-example-plugins:zerocrossing,vamp-example-plugins:powerspectrum,cqvamp:cqvamp,cqvamp:cqvampmidi,mtg-melodia:melodiaviz,pyin:yin,qm-vamp-plugins:qm-adaptivespectrogram,qm-vamp-plugins:qm-dwt,vamp-libxtract:amdf,vamp-libxtract:asdf,vamp-libxtract:autocorrelation,vamp-libxtract:dct,vamp-libxtract:spectrum,silvet:silvet,pyin:pyin,qm-vamp-plugins:qm-tonalchange,match-vamp-plugin:match,cqvamp:cqchromavamp
+      - BLACKLISTED_PLUGINS=qm-dwt:qm-vamp-plugins:wcoeff,silvet:silvet:templates,melodiaviz:mtg-melodia:contoursall,melodiaviz:mtg-melodia:saliencefunction,melodiaviz:mtg-melodia:contoursmelody,qm-adaptivespectrogram:qm-vamp-plugins:output,pyin:pyin:candidatesalience,yin:pyin:salience,dct:vamp-libxtract:dct,amdf:vamp-libxtract:amdf,asdf:vamp-libxtract:asdf,autocorrelation:vamp-libxtract:autocorrelation,powerspectrum:vamp-example-plugins:powerspectrum,silvet:silvet:timefreq,cqvampmidi:cqvamp:constantq,bbc-rhythm:bbc-vamp-plugins:autocor,spectrum:vamp-libxtract:amplitudes,pyin:pyin:f0candidates,pyin:pyin:f0probs,bbc-rhythm:bbc-vamp-plugins:average,bbc-rhythm:bbc-vamp-plugins:onset_curve,bbc-rhythm:bbc-vamp-plugins:diff,cqchromavamp:cqvamp:chromagram,harmonic_spectrum:vamp-libxtract:amplitudes,peak_spectrum:vamp-libxtract:amplitudes
       - RABBITMQ_SERIVCE_HOST=rabbitmq
       - MYSQL_SERVICE_HOST=mysql
       - MYSQL_SERVICE_PORT=3306
