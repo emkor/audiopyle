@@ -1,3 +1,5 @@
+from typing import Optional
+
 from commons.db.entity import ResultStats, Result
 from commons.db.session import SessionProvider
 from commons.models.result import AnalysisStats, AnalysisResult
@@ -5,14 +7,15 @@ from commons.repository.abstract import DbRepository
 from commons.repository.audio_file import AudioFileRepository
 from commons.repository.audio_tag import AudioTagRepository
 from commons.repository.vampy_plugin import VampyPluginRepository
+from commons.utils.conversion import safe_cast
 
 
 class ResultStatsRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider) -> None:
         super().__init__(session_provider, ResultStats)
 
-    def get_id_by_model(self, model_object: AnalysisStats) -> int:
-        return self._get_id(id=model_object.task_id)
+    def get_id_by_model(self, model_object: AnalysisStats) -> Optional[str]:
+        return safe_cast(self._get_id(id=model_object.task_id), str, None)
 
     def _map_to_entity(self, obj: AnalysisStats) -> ResultStats:
         return ResultStats(id=obj.task_id, total_time=obj.total_time, extraction_time=obj.extraction_time,
@@ -34,8 +37,8 @@ class ResultRepository(DbRepository):
         self.audio_tag_repository = audio_tag_repository
         self.plugin_repository = plugin_repository
 
-    def get_id_by_model(self, model_object: AnalysisResult) -> int:
-        return self._query_single(id=model_object.task_id)
+    def get_id_by_model(self, model_object: AnalysisResult) -> Optional[str]:
+        return safe_cast(self._query_single(id=model_object.task_id), str, None)
 
     def _map_to_entity(self, obj: AnalysisResult) -> Result:
         plugin_id = self.plugin_repository.get_id_by_model(obj.plugin)

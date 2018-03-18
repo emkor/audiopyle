@@ -1,7 +1,10 @@
+from typing import Optional
+
 from commons.db.entity import FeatureMeta as FeatureMetaEntity
 from commons.db.session import SessionProvider
 from commons.models.result import FeatureMeta, DataStats, FeatureType
 from commons.repository.abstract import DbRepository
+from commons.utils.conversion import safe_cast
 
 
 class FeatureMetaRepository(DbRepository):
@@ -11,8 +14,8 @@ class FeatureMetaRepository(DbRepository):
     def filter_by_type(self, feature_type: FeatureType):
         return self._query_multiple(feature_type=feature_type.value)
 
-    def get_id_by_model(self, model_object: FeatureMeta) -> int:
-        return self._get_id(id=model_object.task_id)
+    def get_id_by_model(self, model_object: FeatureMeta) -> Optional[int]:
+        return safe_cast(self._get_id(id=model_object.task_id), int, None)
 
     def _map_to_object(self, entity: FeatureMetaEntity) -> FeatureMeta:
         data_stats = DataStats(minimum=entity.feature_minimum, maximum=entity.feature_maximum,

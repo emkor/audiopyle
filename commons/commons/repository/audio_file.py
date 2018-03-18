@@ -1,17 +1,20 @@
+from typing import Optional
+
 from commons.db.entity import AudioFile
 from commons.db.session import SessionProvider
 from commons.models.file_meta import Mp3AudioFileMeta
 from commons.repository.abstract import DbRepository
+from commons.utils.conversion import safe_cast
 
 
 class AudioFileRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider) -> None:
         super().__init__(session_provider, AudioFile)
 
-    def get_id_by_file_name(self, file_name: str) -> int:
-        return super()._get_id(file_name=file_name)
+    def get_id_by_file_name(self, file_name: str) -> Optional[int]:
+        return safe_cast(super()._get_id(file_name=file_name), int, None)
 
-    def get_id_by_model(self, model_object: Mp3AudioFileMeta) -> int:
+    def get_id_by_model(self, model_object: Mp3AudioFileMeta) -> Optional[int]:
         return self.get_id_by_file_name(model_object.file_name)
 
     def _map_to_object(self, entity: AudioFile) -> Mp3AudioFileMeta:

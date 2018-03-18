@@ -1,17 +1,18 @@
-from typing import List
+from typing import List, Optional
 
 from commons.db.entity import AudioTag
 from commons.db.session import SessionProvider
 from commons.models.audio_tag import Id3Tag
 from commons.repository.abstract import DbRepository
+from commons.utils.conversion import safe_cast
 
 
 class AudioTagRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider) -> None:
         super().__init__(session_provider, AudioTag)
 
-    def get_id_by_name(self, artist_name: str, album_name: str, title_name: str) -> int:
-        return super()._get_id(artist=artist_name, album=album_name, title=title_name)
+    def get_id_by_name(self, artist_name: str, album_name: str, title_name: str) -> Optional[int]:
+        return safe_cast(super()._get_id(artist=artist_name, album=album_name, title=title_name), int, None)
 
     def filter_by_artist(self, artist_name: str) -> List[Id3Tag]:
         return self._query_multiple(artist=artist_name)
@@ -25,7 +26,7 @@ class AudioTagRepository(DbRepository):
     def filter_by_genre(self, genre_name: str) -> List[Id3Tag]:
         return self._query_multiple(genre=genre_name)
 
-    def get_id_by_model(self, model_object: Id3Tag) -> int:
+    def get_id_by_model(self, model_object: Id3Tag) -> Optional[int]:
         return self.get_id_by_name(model_object.artist, model_object.album, model_object.title)
 
     def _map_to_object(self, audio_tag: AudioTag) -> Id3Tag:
