@@ -97,7 +97,7 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
         return numpy.asanyarray([step_feature.values for step_feature in self.step_features])
 
     def value_shape(self) -> Tuple[int, int]:
-        first_value = self.step_features[0].values or []
+        first_value = self.step_features[0].values.tolist() or []
         return len(self.step_features), min(len(first_value), 1)
 
     def to_serializable(self):

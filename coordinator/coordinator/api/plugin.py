@@ -11,7 +11,7 @@ class PluginListApi(FlaskRestApi):
         self.plugin_provider = plugin_provider
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        return ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_provider.list_plugin_keys())
+        return ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_provider.list_vampy_plugins())
 
 
 class PluginDetailApi(FlaskRestApi):
@@ -22,5 +22,6 @@ class PluginDetailApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         plugin_vendor = the_request.query_params.get("vendor")
         plugin_name = the_request.query_params.get("name")
-        vampy_plugin = self.plugin_provider.build_plugin_from_key("{}:{}".format(plugin_vendor, plugin_name))
-        return ApiResponse(status_code=HttpStatusCode.ok, payload=vampy_plugin.to_serializable())
+        plugin_output = the_request.query_params.get("output")
+        vampy_plugins = self.plugin_provider.build_plugin_from_params(plugin_vendor, plugin_name, plugin_output)
+        return ApiResponse(status_code=HttpStatusCode.ok, payload=vampy_plugins.to_serializable())

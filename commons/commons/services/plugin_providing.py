@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Text, List, Optional, Any
+from typing import Text, List, Optional, Any, Tuple
 from vampyhost import get_library_for
 
 import vamp
@@ -16,24 +16,37 @@ class VampyPluginProvider(object):
         self.black_list_plugin_key = plugin_black_list or []
         self.logger = logger or get_logger()
 
-    def build_plugin_from_key(self, key: Text) -> VampyPlugin:
-        plugin_categories = self.vamp_interface.get_category_of(key)
-        plugin_outputs = self.vamp_interface.get_outputs_of(key)
-        library_file_name = get_file_name(get_library_for(key))
-        return VampyPlugin(key=key, categories=plugin_categories, outputs=plugin_outputs,
-                           library_file_name=library_file_name)
+    def build_plugins_from_key(self, vampy_key: Text) -> List[VampyPlugin]:
+        vendor, name = self._split_vampy_key_into_vendor_and_name(vampy_key)
+        plugin_outputs = self.vamp_interface.get_outputs_of(vampy_key)
+        library_file_name = get_file_name(get_library_for(vampy_key))
+        all_plugins = [VampyPlugin(vendor, name, o, library_file_name) for o in plugin_outputs]
+        return [p for p in all_plugins if p.full_key not in self.black_list_plugin_key]
+
+    def build_plugin_from_params(self, vendor: str, name: str, output: str) -> VampyPlugin:
+        library_file_name = get_file_name(get_library_for("{}:{}".format(vendor, name)))
+        return VampyPlugin(vendor, name, output, library_file_name)
+
+    def build_plugin_from_full_key(self, full_plugin_key: str) -> VampyPlugin:
+        vendor, name, output = self._split_full_key_into_params(full_plugin_key)
+        return self.build_plugin_from_params(vendor, name, output)
 
     def list_vampy_plugins(self) -> List[VampyPlugin]:
         """Returns list of VAMPy plugins available in OS"""
-        return [self.build_plugin_from_key(key=k) for k in self.list_plugin_keys()]
+        all_plugin = []
+        for k in self._list_plugin_keys():
+            new_plugins = self.build_plugins_from_key(k)
+            all_plugin.extend(new_plugins)
+        return all_plugin
 
-    def list_plugin_keys(self) -> List[Text]:
+    def _list_plugin_keys(self) -> List[Text]:
         """Returns list of VAMPy plugin keys available under OS"""
-        return [k for k in self.vamp_interface.list_plugins() if k not in self.black_list_plugin_key]
+        return self.vamp_interface.list_plugins()
 
-    def list_categories(self) -> List[Text]:
-        """Returns list of categories from installed plugins"""
-        all_categories = []
-        for plugin in self.list_vampy_plugins():
-            all_categories.extend(plugin.categories)
-        return list(set(all_categories))
+    def _split_vampy_key_into_vendor_and_name(self, vampy_key: str) -> Tuple[str, str]:
+        vendor, _, name = vampy_key.partition(":")
+        return vendor, name
+
+    def _split_full_key_into_params(self, full_key: str) -> Tuple[str, str, str]:
+        parts = full_key.split(":")
+        return parts[0], parts[1], parts[2]

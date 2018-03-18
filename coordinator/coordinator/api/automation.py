@@ -53,6 +53,6 @@ class AutomationApi(FlaskRestApi):
                 for plugin_output in plugin.outputs:
                     extraction_requests.append(
                         ExtractionRequest(audio_file_identifier=audio_file_identifier,
-                                          plugin_key=plugin.key,
+                                          plugin_full_key=plugin.key,
                                           plugin_output=plugin_output))
         return extraction_requests

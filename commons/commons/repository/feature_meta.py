@@ -23,14 +23,12 @@ class FeatureMetaRepository(DbRepository):
                                standard_deviation=entity.feature_standard_deviation,
                                variance=entity.feature_variance)
         feature_type = FeatureType(entity.feature_type)
-        return FeatureMeta(task_id=entity.task_id, plugin_output=entity.plugin_output,
-                           feature_type=feature_type, feature_size=entity.feature_size_bytes,
+        return FeatureMeta(task_id=entity.task_id, feature_type=feature_type, feature_size=entity.feature_size_bytes,
                            data_shape=(entity.feature_shape_x, entity.feature_shape_y),
                            data_stats=data_stats)
 
     def _map_to_entity(self, obj: FeatureMeta) -> FeatureMetaEntity:
-        return FeatureMetaEntity(task_id=obj.task_id, plugin_output=obj.plugin_output,
-                                 feature_type=obj.feature_type.value,
+        return FeatureMetaEntity(task_id=obj.task_id, feature_type=obj.feature_type.value,
                                  feature_shape_x=obj.data_shape[0],
                                  feature_shape_y=obj.data_shape[1],
                                  feature_size_bytes=obj.feature_size,
