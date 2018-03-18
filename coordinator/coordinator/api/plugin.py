@@ -11,8 +11,7 @@ class PluginListApi(FlaskRestApi):
         self.plugin_provider = plugin_provider
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        vampy_plugins = self.plugin_provider.list_vampy_plugins()
-        return ApiResponse(status_code=HttpStatusCode.ok, payload=[vp.to_serializable() for vp in vampy_plugins])
+        return ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_provider.list_full_plugin_keys())
 
 
 class PluginDetailApi(FlaskRestApi):

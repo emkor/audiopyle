@@ -31,15 +31,24 @@ class VampyPluginProvider(object):
         vendor, name, output = self._split_full_key_into_params(full_plugin_key)
         return self.build_plugin_from_params(vendor, name, output)
 
+    def list_full_plugin_keys(self) -> List[str]:
+        full_key_list = []
+        for k in self._list_vampy_plugin_keys():
+            for o in self.vamp_interface.get_outputs_of(k):
+                full_plugin_key = "{}:{}".format(k, o)
+                if full_plugin_key not in self.black_list_plugin_key:
+                    full_key_list.append(full_plugin_key)
+        return full_key_list
+
     def list_vampy_plugins(self) -> List[VampyPlugin]:
         """Returns list of VAMPy plugins available in OS"""
         all_plugin = []
-        for k in self._list_plugin_keys():
+        for k in self._list_vampy_plugin_keys():
             new_plugins = self.build_plugins_from_key(k)
             all_plugin.extend(new_plugins)
         return all_plugin
 
-    def _list_plugin_keys(self) -> List[Text]:
+    def _list_vampy_plugin_keys(self) -> List[Text]:
         """Returns list of VAMPy plugin keys available under OS"""
         return self.vamp_interface.list_plugins()
 
