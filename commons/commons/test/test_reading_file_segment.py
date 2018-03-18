@@ -2,7 +2,6 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.services.file_meta_providing import read_mp3_file_meta
 from commons.services.segment_providing import read_raw_audio_from_mp3
 from commons.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDIO_FILE
 

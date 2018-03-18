@@ -11,5 +11,6 @@ setup(
     author_email='emkor93@gmail.com',
     url='https://github.com/emkor/audiopyle',
     packages=find_packages(exclude=["commons.test", "commons.test.*"]),
-    install_requires=["numpy", "vamp", "flask", "mutagen", "pympler", "pydub", "pymysql", "requests", "sqlalchemy"]
+    install_requires=["numpy", "vamp", "flask", "mutagen", "pympler", "pydub", "pymysql", "requests", "sqlalchemy"],
+    tests_require=["pytest", "assertpy"]
 )

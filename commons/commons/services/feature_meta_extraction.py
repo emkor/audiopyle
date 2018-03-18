@@ -1,4 +1,4 @@
-from typing import Text, Callable, Optional
+from typing import Callable, Optional
 
 import numpy
 
@@ -9,16 +9,16 @@ from commons.utils.logger import get_logger
 logger = get_logger()
 
 
-def build_feature_meta(task_id: str, vampy_feature: VampyFeatureAbstraction, plugin_output: Text) -> FeatureMeta:
+def build_feature_meta(task_id: str, vampy_feature: VampyFeatureAbstraction) -> FeatureMeta:
     if isinstance(vampy_feature, VampyVariableStepFeature):
         data_stats = _extract_data_stats(vampy_feature.values())
-        return FeatureMeta(task_id=task_id, plugin_output=plugin_output,
-                           feature_type=FeatureType.VariableStepFeature, feature_size=vampy_feature.size_bytes(),
+        return FeatureMeta(task_id=task_id, feature_type=FeatureType.VariableStepFeature,
+                           feature_size=vampy_feature.size_bytes(),
                            data_shape=vampy_feature.value_shape(), data_stats=data_stats)
     elif isinstance(vampy_feature, VampyConstantStepFeature):
         data_stats = _extract_data_stats(vampy_feature.values())
-        return FeatureMeta(task_id=task_id, plugin_output=plugin_output,
-                           feature_type=FeatureType.ConstantStepFeature, feature_size=vampy_feature.size_bytes(),
+        return FeatureMeta(task_id=task_id, feature_type=FeatureType.ConstantStepFeature,
+                           feature_size=vampy_feature.size_bytes(),
                            data_shape=vampy_feature.value_shape(), data_stats=data_stats)
     else:
         raise ValueError("Can not extract feature meta from: {}".format(vampy_feature))
