@@ -99,14 +99,15 @@ class VampyPluginDbRepositoryTest(unittest.TestCase):
         assert_that(fake_function_from_method).raises(DuplicateEntity).when_called_with(self.plugin_repository.insert,
                                                                                         self.plugin_example_1)
 
-    def test_should_raise_when_querying_by_absent_identifier(self):
+    def test_should_return_none_when_querying_by_non_existing_identifier(self):
         non_existing_identifier = 112233
-        assert_that(fake_function_from_method).raises(EntityNotFound).when_called_with(
-            self.plugin_repository.get_by_id, non_existing_identifier)
+        result = self.plugin_repository.get_by_id(non_existing_identifier)
+        assert_that(result).is_none()
 
     def test_should_raise_when_querying_by_absent_model(self):
-        assert_that(fake_function_from_method).raises(EntityNotFound).when_called_with(
-            self.plugin_repository.get_id_by_params, "non_existing_vendor", "non_existing_name", "non_existing_output")
+        result = self.plugin_repository.get_id_by_params("non_existing_vendor", "non_existing_name",
+                                                         "non_existing_output")
+        assert_that(result).is_none()
 
     def test_should_raise_when_deleting_by_absent_identifier(self):
         non_existing_identifier = 112233
