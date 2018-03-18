@@ -30,7 +30,7 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     db_session_provider = SessionProvider()
     audio_tag_repo = AudioTagRepository(db_session_provider)
     audio_meta_repo = AudioFileRepository(db_session_provider)
-    plugin_repo = VampyPluginRepository(db_session_provider, plugin_provider)
+    plugin_repo = VampyPluginRepository(db_session_provider)
     feature_data_repo = FeatureDataRepository(db_session_provider)
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
     result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo)
