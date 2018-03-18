@@ -59,7 +59,7 @@ class FeatureExtractionService(object):
         self.logger.debug("Built context: {}! Extracting features...".format(request))
         feature_object, extraction_time = self._do_extraction(task_id, plugin, audio_meta, wav_data)
         feature_dto, compression_time = self._compress_feature(feature_object, task_id)
-        feature_meta, feature_meta_build_time = self._build_feature_meta(feature_object, request, task_id)
+        feature_meta, feature_meta_build_time = self._build_feature_meta(feature_object, task_id)
         analysis_result = AnalysisResult(task_id, audio_meta, id3_tag, plugin)
 
         self.logger.debug("Extracted features for {}; storing...".format(request))
@@ -82,9 +82,9 @@ class FeatureExtractionService(object):
         self.result_repo.insert(analysis_result)
         return seconds_between(start_time)
 
-    def _build_feature_meta(self, feature_object, request, task_id):
+    def _build_feature_meta(self, feature_object, task_id):
         start_time = datetime.utcnow()
-        feature_meta = build_feature_meta(task_id, feature_object, request.plugin_output)
+        feature_meta = build_feature_meta(task_id, feature_object)
         return feature_meta, seconds_between(start_time)
 
     def _compress_feature(self, feature_object: VampyFeatureAbstraction,
