@@ -33,7 +33,7 @@ class AutomationApi(FlaskRestApi):
             self.logger.debug("Sending {} extraction requests...".format(task_id_to_request))
             for task_id, the_request in task_id_to_request.items():
                 try:
-                    self.result_repo.get_by_task_id(task_id=task_id)
+                    self.result_repo.get_by_id(task_id)
                     self.logger.warning("Request {} #{} already exist in DB! Omitting...")
                 except EntityNotFound:
                     run_task(task=extract_feature, task_id=task_id, extraction_request=the_request)
@@ -50,9 +50,7 @@ class AutomationApi(FlaskRestApi):
         extraction_requests = []
         for audio_file_identifier in audio_file_identifiers:
             for plugin in plugins:
-                for plugin_output in plugin.outputs:
-                    extraction_requests.append(
-                        ExtractionRequest(audio_file_identifier=audio_file_identifier,
-                                          plugin_full_key=plugin.key,
-                                          plugin_output=plugin_output))
+                extraction_requests.append(
+                    ExtractionRequest(audio_file_identifier=audio_file_identifier,
+                                      plugin_full_key=plugin.full_key))
         return extraction_requests
