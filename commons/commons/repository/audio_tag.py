@@ -14,16 +14,16 @@ class AudioTagRepository(DbRepository):
         return super()._get_id(artist=artist_name, album=album_name, title=title_name)
 
     def filter_by_artist(self, artist_name: str) -> List[Id3Tag]:
-        return self._query_multiple_with_filters(artist=artist_name)
+        return self._query_multiple(artist=artist_name)
 
     def filter_by_album(self, album_name: str) -> List[Id3Tag]:
-        return self._query_multiple_with_filters(album=album_name)
+        return self._query_multiple(album=album_name)
 
     def filter_by_title(self, title_name: str) -> List[Id3Tag]:
-        return self._query_multiple_with_filters(title=title_name)
+        return self._query_multiple(title=title_name)
 
     def filter_by_genre(self, genre_name: str) -> List[Id3Tag]:
-        return self._query_multiple_with_filters(genre=genre_name)
+        return self._query_multiple(genre=genre_name)
 
     def get_id_by_model(self, model_object: Id3Tag) -> int:
         return self.get_id_by_name(model_object.artist, model_object.album, model_object.title)

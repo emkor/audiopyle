@@ -14,7 +14,7 @@ class VampyPluginRepository(DbRepository):
         return super()._get_id(vendor=vendor, name=name, output=output)
 
     def filter_by_vendor(self, vendor: str) -> List[VampyPlugin]:
-        return self._query_multiple_with_filters(vendor=vendor)
+        return self._query_multiple(vendor=vendor)
 
     def get_id_by_model(self, model_object: VampyPlugin) -> int:
         return self.get_id_by_params(vendor=model_object.vendor, name=model_object.name, output=model_object.output)
