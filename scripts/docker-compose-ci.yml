@@ -53,8 +53,3 @@ services:
   testcases:
     image: "endlessdrones/audiopyle-testcases:latest"
     hostname: "testcases"
-    environment:
-      - RABBITMQ_SERIVCE_HOST=rabbitmq
-      - MYSQL_SERVICE_HOST=mysql
-      - MYSQL_SERVICE_PORT=3306
-      - AUDIOPYLE_BOOT_TIME=20

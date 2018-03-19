@@ -8,6 +8,9 @@ from commons.utils.conversion import sec_to_frames
 
 
 class VampyFeatureAbstraction(Model):
+    def __init__(self, task_id: str) -> None:
+        self.task_id = task_id
+
     def frames(self, audio_meta: AudioFileMeta) -> List[int]:
         raise NotImplementedError()
 
@@ -22,7 +25,8 @@ class VampyFeatureAbstraction(Model):
 
 
 class VampyConstantStepFeature(VampyFeatureAbstraction):
-    def __init__(self, time_step: float, matrix: numpy.ndarray) -> None:
+    def __init__(self, task_id: str, time_step: float, matrix: numpy.ndarray) -> None:
+        super().__init__(task_id)
         self._time_step = time_step
         self._matrix = matrix
 
@@ -42,13 +46,14 @@ class VampyConstantStepFeature(VampyFeatureAbstraction):
         return sec_to_frames(self._time_step, audio_meta.sample_rate)
 
     def to_serializable(self):
-        return {"matrix": self._matrix.tolist(), "time_step": self._time_step}
+        return {"task_id": self.task_id, "matrix": self._matrix.tolist(), "time_step": self._time_step}
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
         _matrix = numpy.asanyarray(serialized.pop("matrix"))
         _time_step = serialized.pop("time_step")
-        serialized.update({"matrix": _matrix, "time_step": _time_step})
+        _task_id = serialized.pop("task_id")
+        serialized.update({"matrix": _matrix, "time_step": _time_step, "task_id": _task_id})
         return VampyConstantStepFeature(**serialized)
 
 
@@ -77,7 +82,8 @@ class StepFeature(Model):
 
 
 class VampyVariableStepFeature(VampyFeatureAbstraction):
-    def __init__(self, step_features: List[StepFeature]) -> None:
+    def __init__(self, task_id: str, step_features: List[StepFeature]) -> None:
+        super().__init__(task_id)
         self.step_features = step_features
 
     def frames(self, audio_meta: AudioFileMeta) -> List[int]:
@@ -95,11 +101,12 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
         return len(self.step_features), min(len(first_value), 1)
 
     def to_serializable(self):
-        return {"value_list": [s.to_serializable() for s in self.step_features]}
+        return {"task_id": self.task_id, "value_list": [s.to_serializable() for s in self.step_features]}
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
+        _task_id = serialized.pop("task_id")
         step_features_serialized = numpy.asanyarray(serialized.pop("value_list"))
         step_features = [StepFeature.from_serializable(sf) for sf in step_features_serialized]
-        serialized.update({"step_features": step_features})
+        serialized.update({"step_features": step_features, "task_id": _task_id})
         return VampyVariableStepFeature(**serialized)

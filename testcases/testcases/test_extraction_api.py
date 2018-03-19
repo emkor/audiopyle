@@ -42,11 +42,3 @@ class CoordinatorApiTest(TestCase):
         assert_that(result_meta_response.status_code).is_equal_to(retrieval_expected_status_code)
         result_stats_response = requests.get(url="{}/{}/stats".format(self.result_api_url, extraction_task_id))
         assert_that(result_stats_response.status_code).is_equal_to(retrieval_expected_status_code)
-
-        # delete data, meta and stats
-        clean_up_data_response = requests.delete(url="{}/{}/data".format(self.result_api_url, extraction_task_id))
-        assert_that(clean_up_data_response.status_code).is_equal_to(retrieval_expected_status_code)
-        clean_up_meta_response = requests.delete(url="{}/{}/meta".format(self.result_api_url, extraction_task_id))
-        assert_that(clean_up_meta_response.status_code).is_equal_to(retrieval_expected_status_code)
-        clean_up_stats_response = requests.delete(url="{}/{}/stats".format(self.result_api_url, extraction_task_id))
-        assert_that(clean_up_stats_response.status_code).is_equal_to(retrieval_expected_status_code)

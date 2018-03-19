@@ -8,6 +8,10 @@ LABEL description="Image containing common functionalities of an audiopyle app"
 RUN mkdir -p /audiopyle/commons
 WORKDIR /audiopyle/commons
 
+# INCLUDE SCRIPT (https://github.com/vishnubob/wait-for-it) FOR WAITING FOR OTHER SERVICE UNDER /audiopyle
+COPY ./wait-for-it.sh /audiopyle/wait-for-it.sh
+RUN chmod u+x /audiopyle/wait-for-it.sh
+
 # COPY SOURCE CODE FOR AUDIOPYLE
 COPY . .
 

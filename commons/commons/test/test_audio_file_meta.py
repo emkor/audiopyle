@@ -8,7 +8,7 @@ from commons.models.file_meta import Mp3AudioFileMeta
 
 class Mp3AudioFileMetaTest(unittest.TestCase):
     def setUp(self):
-        self.mp3_audio_file_meta = Mp3AudioFileMeta(absolute_path="/some/file.mp3", channels_count=1,
+        self.mp3_audio_file_meta = Mp3AudioFileMeta(file_name="file.mp3", channels_count=1,
                                                     sample_rate=44100, file_size_bytes=3094, length_sec=0.5,
                                                     bit_rate_kbps=128.)
 

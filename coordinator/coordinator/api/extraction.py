@@ -27,7 +27,8 @@ class ExtractionApi(FlaskRestApi):
         task_id = execution_request.uuid()
         task_result = retrieve_result(task_id)
         if task_result.status in [TaskStatus.ignored, TaskStatus.in_progress, TaskStatus.done]:
-            message = "Could not send task because task is already in state: {}".format(task_result.status)
+            message = "Could not send task #{}: is already in state {}".format(task_id, task_result.status)
+            self.logger.warning(message)
             return ApiResponse(HttpStatusCode.precondition_failed, {"error": message})
         else:
             async_result = run_task(task=extract_feature,

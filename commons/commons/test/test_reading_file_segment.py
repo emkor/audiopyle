@@ -9,10 +9,10 @@ from commons.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDI
 
 class TestReadingRawAudio(unittest.TestCase):
     def setUp(self):
-        self.mp3_file_meta = read_mp3_file_meta(get_absolute_path_for_project_file(__file__, TEST_MP3_AUDIO_FILE))
+        self.absolute_path_to_mp3 = get_absolute_path_for_project_file(__file__, TEST_MP3_AUDIO_FILE)
 
     def test_read_mp3_data_should_have_correct_length_and_value_range(self):
-        mp3_raw_data = read_raw_audio_from_mp3(self.mp3_file_meta.absolute_path)
+        mp3_raw_data = read_raw_audio_from_mp3(self.absolute_path_to_mp3)
         assert_that(len(mp3_raw_data))\
             .is_less_than_or_equal_to(105984)\
             .is_greater_than_or_equal_to(104879)  # on CI PyDub is returning higher number of frames - dunno why
