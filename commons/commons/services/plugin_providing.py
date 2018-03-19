@@ -1,8 +1,8 @@
 from logging import Logger
 from typing import Text, List, Optional, Any, Tuple
-from vampyhost import get_library_for
 
 import vamp
+import vampyhost
 
 from commons.models.plugin import VampyPlugin
 from commons.utils.file_system import get_file_name
@@ -10,21 +10,22 @@ from commons.utils.logger import get_logger
 
 
 class VampyPluginProvider(object):
-    def __init__(self, vamp_interface: Any = vamp, plugin_black_list: Optional[List[str]] = None,
-                 logger: Optional[Logger] = None) -> None:
+    def __init__(self, vamp_interface: Any = vamp, vamp_host_interface: Any = vampyhost,
+                 plugin_black_list: Optional[List[str]] = None, logger: Optional[Logger] = None) -> None:
         self.vamp_interface = vamp_interface
+        self.vamp_host_interface = vamp_host_interface
         self.black_list_plugin_key = plugin_black_list or []
         self.logger = logger or get_logger()
 
     def build_plugins_from_key(self, vampy_key: Text) -> List[VampyPlugin]:
         vendor, name = self._split_vampy_key_into_vendor_and_name(vampy_key)
         plugin_outputs = self.vamp_interface.get_outputs_of(vampy_key)
-        library_file_name = get_file_name(get_library_for(vampy_key))
+        library_file_name = get_file_name(self.vamp_host_interface.get_library_for(vampy_key))
         all_plugins = [VampyPlugin(vendor, name, o, library_file_name) for o in plugin_outputs]
         return [p for p in all_plugins if p.full_key not in self.black_list_plugin_key]
 
     def build_plugin_from_params(self, vendor: str, name: str, output: str) -> VampyPlugin:
-        library_file_name = get_file_name(get_library_for("{}:{}".format(vendor, name)))
+        library_file_name = get_file_name(self.vamp_host_interface.get_library_for("{}:{}".format(vendor, name)))
         return VampyPlugin(vendor, name, output, library_file_name)
 
     def build_plugin_from_full_key(self, full_plugin_key: str) -> VampyPlugin:
