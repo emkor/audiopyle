@@ -21,7 +21,7 @@ from coordinator.api.automation import AutomationApi
 from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
 from coordinator.api.plugin import PluginListApi, PluginDetailApi
 from coordinator.api.root import CoordinatorApi
-from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi
+from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
 
 app = Flask(__name__)
 
@@ -51,6 +51,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     app.add_url_rule("/extraction",
                      view_func=ExtractionApi.as_view('extraction_api',
                                                      logger=logger))
+
     app.add_url_rule("/result/<task_id>/data",
                      view_func=ResultDataApi.as_view('result_data_detail_api',
                                                      feature_data_repo=feature_data_repo,
@@ -63,6 +64,10 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                      view_func=ResultStatsApi.as_view('result_stats_detail_api',
                                                       stats_repo=result_stats_repo,
                                                       logger=logger))
+    app.add_url_rule("/result/<task_id>",
+                     view_func=ResultDetailsApi.as_view('result_detail_api',
+                                                        result_repo=result_repo,
+                                                        logger=logger))
     app.add_url_rule("/result",
                      view_func=ResultListApi.as_view('result_list_api',
                                                      result_repo=result_repo,
