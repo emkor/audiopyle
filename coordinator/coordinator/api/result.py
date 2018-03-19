@@ -1,8 +1,10 @@
 from logging import Logger
+from typing import List
 
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.abstractions.flask_api import FlaskRestApi
 from commons.db.exception import EntityNotFound
+from commons.models.result import AnalysisResult
 from commons.repository.feature_data import FeatureDataRepository
 from commons.repository.result import ResultRepository, ResultStatsRepository
 from commons.services.compression import from_compressed_feature
@@ -15,8 +17,8 @@ class ResultListApi(FlaskRestApi):
         self.logger = logger
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        all_results = self.result_repo.get_all()
-        return ApiResponse(HttpStatusCode.ok, all_results)
+        all_results = self.result_repo.get_all()  # type: List[AnalysisResult]
+        return ApiResponse(HttpStatusCode.ok, [r.to_serializable() for r in all_results])
 
 
 class ResultDataApi(FlaskRestApi):
