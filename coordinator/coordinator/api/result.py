@@ -28,20 +28,27 @@ class ResultDataApi(FlaskRestApi):
         self.logger = logger
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        task_id = the_request.query_params.get("task_id")
         try:
-            data_entity = self.feature_data_repo.get_by_id(task_id)
+            task_id = the_request.query_params["task_id"]
+        except Exception:
+            return ApiResponse(HttpStatusCode.bad_request,
+                               payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
+        data_entity = self.feature_data_repo.get_by_id(task_id)
+        if data_entity is not None:
             vampy_feature = from_compressed_feature(data_entity)
             return ApiResponse(HttpStatusCode.ok, vampy_feature.to_serializable())
-        except EntityNotFound:
+        else:
             return ApiResponse(HttpStatusCode.not_found,
                                payload={"error": "Could not find result with id: {}".format(task_id)})
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
-        task_id = the_request.query_params.get("task_id")
         try:
-            entity_id = self.feature_data_repo.get_by_id(task_id)
-            self.feature_data_repo.delete_by_id(entity_id)
+            task_id = the_request.query_params["task_id"]
+        except Exception:
+            return ApiResponse(HttpStatusCode.bad_request,
+                               payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
+        try:
+            self.feature_data_repo.delete_by_id(task_id)
             return ApiResponse(HttpStatusCode.ok, None)
         except EntityNotFound:
             return ApiResponse(HttpStatusCode.not_found,
@@ -55,19 +62,26 @@ class ResultMetaApi(FlaskRestApi):
         self.logger = logger
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        task_id = the_request.query_params.get("task_id")
         try:
-            data_entity = self.feature_meta_repo.get_by_id(task_id)
+            task_id = the_request.query_params["task_id"]
+        except Exception:
+            return ApiResponse(HttpStatusCode.bad_request,
+                               payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
+        data_entity = self.feature_meta_repo.get_by_id(task_id)
+        if data_entity is not None:
             return ApiResponse(HttpStatusCode.ok, data_entity.to_serializable())
-        except EntityNotFound:
+        else:
             return ApiResponse(HttpStatusCode.not_found,
                                payload={"error": "Could not find result with id: {}".format(task_id)})
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
-        task_id = the_request.query_params.get("task_id")
         try:
-            entity_id = self.feature_meta_repo.get_by_id(task_id)
-            self.feature_meta_repo.delete_by_id(entity_id)
+            task_id = the_request.query_params["task_id"]
+        except Exception:
+            return ApiResponse(HttpStatusCode.bad_request,
+                               payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
+        try:
+            self.feature_meta_repo.delete_by_id(task_id)
             return ApiResponse(HttpStatusCode.ok, None)
         except EntityNotFound:
             return ApiResponse(HttpStatusCode.not_found,
@@ -81,7 +95,11 @@ class ResultStatsApi(FlaskRestApi):
         self.logger = logger
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        task_id = the_request.query_params.get("task_id")
+        try:
+            task_id = the_request.query_params["task_id"]
+        except Exception:
+            return ApiResponse(HttpStatusCode.bad_request,
+                               payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
         try:
             data_entity = self.stats_repo.get_by_id(task_id)
             return ApiResponse(HttpStatusCode.ok, data_entity.to_serializable())
@@ -90,10 +108,13 @@ class ResultStatsApi(FlaskRestApi):
                                payload={"error": "Could not find result with id: {}".format(task_id)})
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
-        task_id = the_request.query_params.get("task_id")
         try:
-            entity_id = self.stats_repo.get_by_id(task_id)
-            self.stats_repo.delete_by_id(entity_id)
+            task_id = the_request.query_params["task_id"]
+        except Exception:
+            return ApiResponse(HttpStatusCode.bad_request,
+                               payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
+        try:
+            self.stats_repo.delete_by_id(task_id)
             return ApiResponse(HttpStatusCode.ok, None)
         except EntityNotFound:
             return ApiResponse(HttpStatusCode.not_found,
