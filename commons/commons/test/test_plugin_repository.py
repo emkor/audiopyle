@@ -128,3 +128,11 @@ class VampyPluginDbRepositoryTest(unittest.TestCase):
 
         retrieved_object = self.plugin_repository.get_by_id(retrieved_id)
         assert_that(retrieved_object).is_equal_to(self.plugin_example_1)
+
+    def test_should_list_just_keys(self):
+        self.plugin_repository.insert(self.plugin_example_1)
+        self.plugin_repository.insert(self.plugin_example_2)
+        keys = self.plugin_repository.get_all_keys()
+        assert_that(keys).is_length(2)
+        assert_that(keys[0]).is_greater_than_or_equal_to(0)
+        assert_that(keys[1]).is_greater_than_or_equal_to(0)

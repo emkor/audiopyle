@@ -17,8 +17,8 @@ class ResultListApi(FlaskRestApi):
         self.logger = logger
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        all_results = self.result_repo.get_all()  # type: List[AnalysisResult]
-        return ApiResponse(HttpStatusCode.ok, [r.to_serializable() for r in all_results])
+        all_results = self.result_repo.get_all_keys()  # type: List[str]
+        return ApiResponse(HttpStatusCode.ok, all_results)
 
 
 class ResultDataApi(FlaskRestApi):

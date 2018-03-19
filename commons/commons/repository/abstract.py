@@ -20,6 +20,9 @@ class DbRepository(object):
     def get_all(self) -> List[Any]:
         return self._query_multiple()
 
+    def get_all_keys(self) -> List[IDENTIFIER_TYPE]:
+        return self._query_multiple_keys()
+
     def get_by_id(self, identifier: IDENTIFIER_TYPE) -> Optional[Any]:
         return self._query_single(id=identifier)
 
@@ -79,6 +82,14 @@ class DbRepository(object):
             else:
                 entities = session.query(self.entity_class).all()
             return [self._map_to_object(e) for e in entities] if entities else []
+
+    def _query_multiple_keys(self, **filters):
+        with self.session_provider() as session:
+            if filters:
+                entities = session.query(self.entity_class.id).filter_by(**filters).all()
+            else:
+                entities = session.query(self.entity_class.id).all()
+            return [r[0] for r in entities]
 
     def _map_to_entity(self, obj: Any) -> Any:
         raise NotImplementedError()
