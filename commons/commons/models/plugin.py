@@ -26,7 +26,13 @@ class VampyPluginParams(Model):
         self.block_size = block_size
         self.params = params
 
-    def to_vampy_dict(self) -> Dict[str, Any]:
+    @classmethod
+    def from_serializable(cls, serialized: Dict[str, Any]):
+        step_size = serialized.pop("step_size", None)
+        block_size = serialized.pop("block_size", None)
+        return VampyPluginParams(block_size, step_size, **serialized)
+
+    def to_serializable(self):
         parameters = self.params or {}
         if self.step_size is not None:
             parameters.update({"step_size": self.step_size})

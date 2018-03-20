@@ -12,7 +12,7 @@ class AudioPluginModelTest(unittest.TestCase):
         self.test_plugin_name = "test_plugin_name"
         self.test_plugin_output = "output1"
         self.vampy_plugin = VampyPlugin(vendor=self.test_plugin_provider, name=self.test_plugin_name,
-                                        output=self.test_plugin_output, library_file_name="/some/path")
+                                        output=self.test_plugin_output, library_file_name="some_lib.so")
         self.byte_symbol = "B"
 
     def test_model_properties(self):
@@ -45,7 +45,16 @@ class VampyPluginConfigTest(unittest.TestCase):
         self.extended_config = VampyPluginParams(2048, 2048, sub_bands=9)
 
     def test_should_create_parameters_from_config(self):
-        assert_that(self.empty_config.to_vampy_dict()).is_equal_to({})
-        assert_that(self.basic_config.to_vampy_dict()).is_equal_to({"step_size": 4096, "block_size": 2048})
-        assert_that(self.extended_config.to_vampy_dict()).is_equal_to(
+        assert_that(self.empty_config.to_serializable()).is_equal_to({})
+        assert_that(self.basic_config.to_serializable()).is_equal_to({"step_size": 4096, "block_size": 2048})
+        assert_that(self.extended_config.to_serializable()).is_equal_to(
             {"step_size": 2048, "block_size": 2048, "sub_bands": 9})
+
+    def test_should_serialize_and_deserialize(self):
+        serialized = self.extended_config.to_serializable()
+        json_serialized = json.dumps(serialized)
+        assert_that(json_serialized).is_not_empty()
+
+        deserialized = json.loads(json_serialized)
+        back_to_object = VampyPluginParams.from_serializable(deserialized)
+        assert_that(back_to_object).is_equal_to(self.extended_config)
