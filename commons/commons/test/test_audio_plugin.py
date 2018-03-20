@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from commons.models.plugin import VampyPlugin
+from commons.models.plugin import VampyPlugin, VampyPluginParams
 
 
 class AudioPluginModelTest(unittest.TestCase):
@@ -36,3 +36,16 @@ class AudioPluginModelTest(unittest.TestCase):
 
         size_bytes_humanized = self.vampy_plugin.size_humanized()
         assert_that(size_bytes_humanized).is_not_none().is_not_empty().contains(self.byte_symbol)
+
+
+class VampyPluginConfigTest(unittest.TestCase):
+    def setUp(self):
+        self.empty_config = VampyPluginParams(None, None)
+        self.basic_config = VampyPluginParams(2048, 4096)
+        self.extended_config = VampyPluginParams(2048, 2048, sub_bands=9)
+
+    def test_should_create_parameters_from_config(self):
+        assert_that(self.empty_config.to_vampy_dict()).is_equal_to({})
+        assert_that(self.basic_config.to_vampy_dict()).is_equal_to({"step_size": 4096, "block_size": 2048})
+        assert_that(self.extended_config.to_vampy_dict()).is_equal_to(
+            {"step_size": 2048, "block_size": 2048, "sub_bands": 9})
