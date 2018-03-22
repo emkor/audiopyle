@@ -11,9 +11,9 @@ logger = get_logger()
 
 
 def extract_raw_feature(wav_data: numpy.ndarray, sample_rate: int, vampy_plugin_key: Text,
-                        output_name: Text) -> Dict[Text, Any]:
+                        output_name: Text, plugin_config: Dict[str, Any]) -> Dict[Text, Any]:
     return vamp.collect(data=wav_data, sample_rate=sample_rate,
-                        plugin_key=vampy_plugin_key, output=output_name)
+                        plugin_key=vampy_plugin_key, output=output_name, parameters=plugin_config)
 
 
 def build_feature_object(task_id: str, extracted_data: Dict[Text, Any]) -> VampyFeatureAbstraction:

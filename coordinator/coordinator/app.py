@@ -11,15 +11,16 @@ from commons.repository.feature_data import FeatureDataRepository
 from commons.repository.feature_meta import FeatureMetaRepository
 from commons.repository.result import ResultRepository, ResultStatsRepository
 from commons.repository.vampy_plugin import VampyPluginRepository
+from commons.services.plugin_config_provider import PluginConfigProvider
 from commons.services.plugin_providing import VampyPluginProvider
-from commons.services.store_provider import Mp3FileStore
+from commons.services.store_provider import Mp3FileStore, JsonFileStore
 from commons.utils.env_var import read_env_var
-from commons.utils.file_system import AUDIO_FILES_DIR
+from commons.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from coordinator.api.automation import AutomationApi
 from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
-from coordinator.api.plugin import PluginListApi, PluginDetailApi
+from coordinator.api.plugin import PluginListApi, PluginDetailApi, PluginActiveConfigApi
 from coordinator.api.root import CoordinatorApi
 from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
 
@@ -36,12 +37,14 @@ def main():
 
 def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     audio_file_store = Mp3FileStore(AUDIO_FILES_DIR)
+    plugin_config_provider = PluginConfigProvider(JsonFileStore(CONFIG_DIR), logger)
 
     plugin_provider = _initialize_plugin_provider(logger)
     feature_data_repo, feature_meta_repo, result_repo, result_stats_repo = _initialize_db_repositories()
 
     app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api',
                                                                     plugin_provider=plugin_provider,
+                                                                    plugin_config_provider=plugin_config_provider,
                                                                     audio_file_store=audio_file_store,
                                                                     result_repo=result_repo,
                                                                     logger=logger))
@@ -50,6 +53,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                                                            logger=logger))
     app.add_url_rule("/extraction",
                      view_func=ExtractionApi.as_view('extraction_api',
+                                                     plugin_config_provider=plugin_config_provider,
                                                      logger=logger))
 
     app.add_url_rule("/result/<task_id>/data",
@@ -80,6 +84,10 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                      view_func=PluginListApi.as_view('plugin_list_api',
                                                      plugin_provider=plugin_provider,
                                                      logger=logger))
+    app.add_url_rule("/config/plugin",
+                     view_func=PluginActiveConfigApi.as_view('plugin_config_api',
+                                                             plugin_config_provider=plugin_config_provider,
+                                                             logger=logger))
     app.add_url_rule("/audio/<identifier>",
                      view_func=AudioFileDetailApi.as_view('audio_detail_api',
                                                           file_store=audio_file_store,

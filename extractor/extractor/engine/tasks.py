@@ -7,7 +7,7 @@ from commons.repository.audio_tag import AudioTagRepository
 from commons.repository.feature_data import FeatureDataRepository
 from commons.repository.feature_meta import FeatureMetaRepository
 from commons.repository.result import ResultRepository, ResultStatsRepository
-from commons.repository.vampy_plugin import VampyPluginRepository
+from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from commons.services.plugin_providing import VampyPluginProvider
 from commons.utils.file_system import AUDIO_FILES_DIR
 from commons.utils.logger import get_logger
@@ -31,6 +31,7 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     audio_tag_repo = AudioTagRepository(db_session_provider)
     audio_meta_repo = AudioFileRepository(db_session_provider)
     plugin_repo = VampyPluginRepository(db_session_provider)
+    plugin_config_repo = PluginConfigRepository(db_session_provider)
     feature_data_repo = FeatureDataRepository(db_session_provider)
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
     result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo)
@@ -41,6 +42,7 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
                                                   audio_tag_repo=audio_tag_repo,
                                                   audio_meta_repo=audio_meta_repo,
                                                   plugin_repo=plugin_repo,
+                                                  plugin_config_repo=plugin_config_repo,
                                                   feature_data_repo=feature_data_repo,
                                                   feature_meta_repo=feature_meta_repo,
                                                   result_repo=result_repo,
