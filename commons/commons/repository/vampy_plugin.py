@@ -52,4 +52,4 @@ class PluginConfigRepository(DbRepository):
         return VampyPluginParamsDto(task_id=entity.id, block_size=block_size, step_size=step_size, params=params)
 
     def get_id_by_model(self, model_object: VampyPluginParamsDto) -> Optional[str]:
-        return self._get_id(id=model_object.task_id)
+        return safe_cast(self._get_id(id=model_object.task_id), str, None)

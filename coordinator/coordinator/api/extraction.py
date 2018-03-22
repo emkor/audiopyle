@@ -25,7 +25,7 @@ class ExtractionStatusApi(FlaskRestApi):
 
 
 class ExtractionApi(FlaskRestApi):
-    def __init__(self, plugin_config_provider: PluginConfigProvider, logger: Logger):
+    def __init__(self, plugin_config_provider: PluginConfigProvider, logger: Logger) -> None:
         super().__init__(logger)
         self.plugin_config_provider = plugin_config_provider
 

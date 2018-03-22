@@ -14,7 +14,7 @@ class PluginConfigProvider(object):
         try:
             return self.file_store.read(PLUGIN_CONFIG_IDENTIFIER)
         except StoreError as e:
-            self.logger.warning(e)
+            self.logger.warning(str(e))
             return None
 
     def get_for_plugin(self, plugin_full_key: str) -> Dict[str, Any]:
