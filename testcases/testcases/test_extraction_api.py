@@ -13,7 +13,8 @@ class CoordinatorApiTest(TestCase):
         self.result_api_url = "http://{}:8080/result".format(get_api_host())
         self.mp3_extraction_request = {
             "audio_file_identifier": "102bpm_drum_loop",
-            "plugin_full_key": "vamp-example-plugins:amplitudefollower:amplitude"
+            "plugin_full_key": "vamp-example-plugins:amplitudefollower:amplitude",
+            "plugin_config": {}
         }
 
     def test_should_accept_mp3_task_and_return_extracted_data(self):
