@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from commons.models.plugin import VampyPlugin, VampyPluginParams
+from commons.models.plugin import VampyPlugin, VampyPluginParamsDto
 
 
 class AudioPluginModelTest(unittest.TestCase):
@@ -40,14 +40,15 @@ class AudioPluginModelTest(unittest.TestCase):
 
 class VampyPluginConfigTest(unittest.TestCase):
     def setUp(self):
-        self.empty_config = VampyPluginParams(None, None)
-        self.basic_config = VampyPluginParams(2048, 4096)
-        self.extended_config = VampyPluginParams(2048, 2048, sub_bands=9)
+        self.task_id = "fa3b5d8c-b760-49e0-b8b5-7ce0737621d8"
+        self.empty_config = VampyPluginParamsDto(self.task_id, None, None)
+        self.basic_config = VampyPluginParamsDto(self.task_id, 2048, 4096)
+        self.extended_config = VampyPluginParamsDto(self.task_id, 2048, 2048, sub_bands=9)
 
     def test_should_create_parameters_from_config(self):
-        assert_that(self.empty_config.to_serializable()).is_equal_to({})
-        assert_that(self.basic_config.to_serializable()).is_equal_to({"step_size": 4096, "block_size": 2048})
-        assert_that(self.extended_config.to_serializable()).is_equal_to(
+        assert_that(self.empty_config.extraction_params()).is_equal_to({})
+        assert_that(self.basic_config.extraction_params()).is_equal_to({"step_size": 4096, "block_size": 2048})
+        assert_that(self.extended_config.extraction_params()).is_equal_to(
             {"step_size": 2048, "block_size": 2048, "sub_bands": 9})
 
     def test_should_serialize_and_deserialize(self):
@@ -56,5 +57,5 @@ class VampyPluginConfigTest(unittest.TestCase):
         assert_that(json_serialized).is_not_empty()
 
         deserialized = json.loads(json_serialized)
-        back_to_object = VampyPluginParams.from_serializable(deserialized)
+        back_to_object = VampyPluginParamsDto.from_serializable(deserialized)
         assert_that(back_to_object).is_equal_to(self.extended_config)

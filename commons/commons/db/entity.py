@@ -88,6 +88,16 @@ class ResultStats(ENTITY_BASE):  # type: ignore
     result_store_time = Column(Float, index=False, nullable=True)
 
 
+class PluginConfig(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'plugin_config'
+
+    id = Column(String(36), primary_key=True, unique=True, index=True, nullable=False)
+
+    block_size = Column(Integer, index=False, nullable=False)
+    step_size = Column(Integer, index=False, nullable=False)
+    additional_params = Column(String(1023), index=False, nullable=True)
+
+
 class Result(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result'
 
