@@ -21,7 +21,7 @@ def get_db_engine(host: str = None, port: int = None, debug: bool = False) -> En
     global _ENGINE
     if _ENGINE is None:
         db_connection_string = _build_mysql_conn_string(host, port)
-        logger.info("Creating SQL Alchemy DB engine with {} connection string...".format(db_connection_string))
+        logger.debug("Creating SQL Alchemy DB engine with {} connection string...".format(db_connection_string))
         _ENGINE = create_engine(db_connection_string, echo=debug, poolclass=NullPool)
     return _ENGINE
 
@@ -31,7 +31,7 @@ def get_test_db_engine(debug: bool = False) -> Engine:
     global _ENGINE
     if _ENGINE is None:
         db_connection_string = 'sqlite:///'
-        logger.info("Creating sqlite DB engine with {} connection string...".format(db_connection_string))
+        logger.debug("Creating sqlite DB engine with {} connection string...".format(db_connection_string))
         _ENGINE = create_engine(db_connection_string, echo=debug, poolclass=StaticPool)
     return _ENGINE
 
@@ -39,7 +39,7 @@ def get_test_db_engine(debug: bool = False) -> Engine:
 def get_db_session_maker(db_engine: Optional[Engine] = None) -> sessionmaker:
     global _SESSION_MAKER
     if _SESSION_MAKER is None:
-        logger.info("Creating SQL Alchemy sessions maker...")
+        logger.debug("Creating SQL Alchemy sessions maker...")
         _SESSION_MAKER = sessionmaker(bind=db_engine or get_db_engine())
     return _SESSION_MAKER
 
