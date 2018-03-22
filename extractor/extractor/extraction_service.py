@@ -106,7 +106,7 @@ class FeatureExtractionService(object):
                        wav_data: numpy.ndarray, plugin_config: VampyPluginParamsDto) -> Tuple[VampyFeatureAbstraction, float]:
         extraction_start_time = datetime.utcnow()
         raw_feature = extract_raw_feature(wav_data, input_audio_meta.sample_rate, plugin.vampy_key,
-                                          plugin.output, plugin_config.extraction_params())
+                                          plugin.output, plugin_config)
         feature_object = build_feature_object(task_id=task_id, extracted_data=raw_feature)
         extraction_time = seconds_between(extraction_start_time)
         return feature_object, extraction_time

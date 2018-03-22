@@ -1,13 +1,5 @@
 {
-  "bbc-vamp-plugins:bbc-rhythm:average": {
-    "block_size": 4096,
-    "step_size": 4096
-  },
-  "bbc-vamp-plugins:bbc-rhythm:diff": {
-    "block_size": 4096,
-    "step_size": 4096
-  },
-  "bbc-vamp-plugins:bbc-rhythm:onset_curve": {
+  "vamp-example-plugins:amplitudefollower:amplitude": {
     "block_size": 4096,
     "step_size": 4096
   }
