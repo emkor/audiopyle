@@ -111,7 +111,9 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
 
     def value_shape(self) -> Tuple[int, int, int]:
         x_size = len(self.step_features)
-        if len(self.step_features[0].values) == 0:
+        if x_size == 0:
+            return 0, 0, 0
+        if self.step_features[0].values is None or not len(self.step_features[0].values):
             return x_size, 0, 0
         first_value_shape = self.step_features[0].values.shape
         if len(first_value_shape) == 1:
