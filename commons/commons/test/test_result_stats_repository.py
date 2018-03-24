@@ -28,7 +28,7 @@ class ResultStatsRepositoryTest(unittest.TestCase):
         self.repository.insert(self.example_stats)
 
         identifier = self.repository.get_id_by_model(self.example_stats)
-        assert_that(identifier).is_greater_than_or_equal_to(0)
+        assert_that(identifier).is_not_none().is_equal_to(self.task_id)
 
         retrieved_model = self.repository.get_by_id(identifier)
         assert_that(retrieved_model).is_equal_to(self.example_stats)
@@ -36,5 +36,5 @@ class ResultStatsRepositoryTest(unittest.TestCase):
     def test_should_insert_and_retrieve_by_task_id(self):
         self.repository.insert(self.example_stats)
 
-        retrieved_model = self.repository.get_by_task_id(self.example_stats.task_id)
+        retrieved_model = self.repository.get_by_id(self.example_stats.task_id)
         assert_that(retrieved_model).is_equal_to(self.example_stats)

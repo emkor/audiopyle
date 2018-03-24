@@ -43,6 +43,6 @@ def get_audiopyle_root_dir(test_file_object):
     return concatenate_paths(code_directory, audiopyle_directory)
 
 
-def fake_function_from_method(callable, *arg):
+def fake_function_from_method(method, *arg):
     """assert_that(...).raises() must have a function, not method, in place of ..."""
-    callable(*arg)
+    method(*arg)

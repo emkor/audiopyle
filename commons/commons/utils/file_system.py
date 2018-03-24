@@ -51,7 +51,7 @@ def extract_all_extensions(file_path: Text) -> Text:
 def remove_file(file_path: Text, ignore_errors: bool = False) -> None:
     try:
         os.remove(file_path)
-    except:
+    except Exception:
         if ignore_errors:
             pass
         else:

@@ -9,10 +9,10 @@ from commons.models.extraction_request import ExtractionRequest
 
 class ExtractionRequestModelTest(unittest.TestCase):
     def setUp(self):
-        self.extraction_request_1 = ExtractionRequest("some_file_1.mp3", "some_vendor:some_plugin", "some_output")
-        self.extraction_request_2 = ExtractionRequest("some_file_2.mp3", "some_vendor:some_plugin", "some_output")
-        self.extraction_request_3 = ExtractionRequest("some_file_1.mp3", "some_vendor:some_plugin2", "some_output")
-        self.extraction_request_4 = ExtractionRequest("some_file_1.mp3", "some_vendor:some_plugin", "some_output2")
+        self.extraction_request_1 = ExtractionRequest("some_file_1.mp3", "some_vendor:some_plugin:some_output")
+        self.extraction_request_2 = ExtractionRequest("some_file_2.mp3", "some_vendor:some_plugin:some_output")
+        self.extraction_request_3 = ExtractionRequest("some_file_1.mp3", "some_vendor:some_plugin2:some_output")
+        self.extraction_request_4 = ExtractionRequest("some_file_1.mp3", "some_vendor:some_plugin:some_output2")
 
     def test_should_serialize_and_deserialize_model(self):
         serializable_form = self.extraction_request_1.to_serializable()

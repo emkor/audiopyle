@@ -10,14 +10,14 @@ class AudioPluginModelTest(unittest.TestCase):
     def setUp(self):
         self.test_plugin_provider = "test_plugin_provider"
         self.test_plugin_name = "test_plugin_name"
-        self.vampy_plugin = VampyPlugin(key=("{}:{}".format(self.test_plugin_provider, self.test_plugin_name)),
-                                        categories=["category1", "category2"], outputs=["output1", "output2"],
-                                        library_file_name="/some/path")
+        self.test_plugin_output = "output1"
+        self.vampy_plugin = VampyPlugin(vendor=self.test_plugin_provider, name=self.test_plugin_name,
+                                        output=self.test_plugin_output, library_file_name="/some/path")
         self.byte_symbol = "B"
 
     def test_model_properties(self):
         assert_that(self.vampy_plugin.name).is_equal_to(self.test_plugin_name)
-        assert_that(self.vampy_plugin.provider).is_equal_to(self.test_plugin_provider)
+        assert_that(self.vampy_plugin.vendor).is_equal_to(self.test_plugin_provider)
 
     def test_should_serialize_and_deserialize_plugin(self):
         serialized = self.vampy_plugin.to_serializable()

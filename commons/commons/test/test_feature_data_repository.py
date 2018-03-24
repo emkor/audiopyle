@@ -28,9 +28,9 @@ class FeatureDataRepositoryTest(unittest.TestCase):
     def test_should_insert_and_retrieve_id_by_task_id(self):
         self.feature_repository.insert(self.feature_data_example)
         identifier = self.feature_repository.get_id_by_model(self.feature_data_example)
-        assert_that(identifier).is_greater_than_or_equal_to(0)
+        assert_that(identifier).is_not_none().is_equal_to(self.task_id)
 
     def test_should_insert_and_retrieve_model_by_task_id(self):
         self.feature_repository.insert(self.feature_data_example)
-        retrieved_object = self.feature_repository.get_by_task_id(self.task_id)
+        retrieved_object = self.feature_repository.get_by_id(self.task_id)
         assert_that(retrieved_object).is_equal_to(self.feature_data_example)

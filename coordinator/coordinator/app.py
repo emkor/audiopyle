@@ -21,7 +21,7 @@ from coordinator.api.automation import AutomationApi
 from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
 from coordinator.api.plugin import PluginListApi, PluginDetailApi
 from coordinator.api.root import CoordinatorApi
-from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi
+from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
 
 app = Flask(__name__)
 
@@ -38,8 +38,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     audio_file_store = Mp3FileStore(AUDIO_FILES_DIR)
 
     plugin_provider = _initialize_plugin_provider(logger)
-
-    feature_data_repo, feature_meta_repo, result_repo, result_stats_repo = _initialize_db_repositories(plugin_provider)
+    feature_data_repo, feature_meta_repo, result_repo, result_stats_repo = _initialize_db_repositories()
 
     app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api',
                                                                     plugin_provider=plugin_provider,
@@ -52,6 +51,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     app.add_url_rule("/extraction",
                      view_func=ExtractionApi.as_view('extraction_api',
                                                      logger=logger))
+
     app.add_url_rule("/result/<task_id>/data",
                      view_func=ResultDataApi.as_view('result_data_detail_api',
                                                      feature_data_repo=feature_data_repo,
@@ -64,11 +64,15 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                      view_func=ResultStatsApi.as_view('result_stats_detail_api',
                                                       stats_repo=result_stats_repo,
                                                       logger=logger))
+    app.add_url_rule("/result/<task_id>",
+                     view_func=ResultDetailsApi.as_view('result_detail_api',
+                                                        result_repo=result_repo,
+                                                        logger=logger))
     app.add_url_rule("/result",
                      view_func=ResultListApi.as_view('result_list_api',
                                                      result_repo=result_repo,
                                                      logger=logger))
-    app.add_url_rule("/plugin/<vendor>/<name>",
+    app.add_url_rule("/plugin/<vendor>/<name>/<output>",
                      view_func=PluginDetailApi.as_view('plugin_detail_api',
                                                        plugin_provider=plugin_provider,
                                                        logger=logger))
@@ -91,11 +95,11 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     app.run(host=host, port=port, debug=debug)
 
 
-def _initialize_db_repositories(plugin_provider):
+def _initialize_db_repositories():
     db_session_provider = SessionProvider()
     audio_tag_repo = AudioTagRepository(db_session_provider)
     audio_meta_repo = AudioFileRepository(db_session_provider)
-    plugin_repo = VampyPluginRepository(db_session_provider, plugin_provider)
+    plugin_repo = VampyPluginRepository(db_session_provider)
     feature_data_repo = FeatureDataRepository(db_session_provider)
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
     result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo)

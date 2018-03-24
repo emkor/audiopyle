@@ -11,7 +11,7 @@ class PluginListApi(FlaskRestApi):
         self.plugin_provider = plugin_provider
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        return ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_provider.list_plugin_keys())
+        return ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_provider.list_full_plugin_keys())
 
 
 class PluginDetailApi(FlaskRestApi):
@@ -20,7 +20,12 @@ class PluginDetailApi(FlaskRestApi):
         self.plugin_provider = plugin_provider
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        plugin_vendor = the_request.query_params.get("vendor")
-        plugin_name = the_request.query_params.get("name")
-        vampy_plugin = self.plugin_provider.build_plugin_from_key("{}:{}".format(plugin_vendor, plugin_name))
-        return ApiResponse(status_code=HttpStatusCode.ok, payload=vampy_plugin.to_serializable())
+        try:
+            plugin_vendor = the_request.query_params["vendor"]
+            plugin_name = the_request.query_params["name"]
+            plugin_output = the_request.query_params["output"]
+        except Exception:
+            return ApiResponse(HttpStatusCode.bad_request, {
+                "error": "Could not find vendor, name or output in request URL: {}".format(the_request.url)})
+        vampy_plugins = self.plugin_provider.build_plugin_from_params(plugin_vendor, plugin_name, plugin_output)
+        return ApiResponse(status_code=HttpStatusCode.ok, payload=vampy_plugins.to_serializable())

@@ -42,17 +42,17 @@ class VampyPlugin(ENTITY_BASE):  # type: ignore
 
     vendor = Column(String(255), index=True, nullable=False)
     name = Column(String(255), index=True, nullable=False)
+    output = Column(String(255), index=True, nullable=False)
+    library_file_name = Column(String(255), index=True, nullable=False)
 
-    __table_args__ = (UniqueConstraint('vendor', 'name', name='unique_plugin'),)
+    __table_args__ = (UniqueConstraint('vendor', 'name', 'output', name='unique_plugin'),)
 
 
 class FeatureMeta(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_meta'
 
-    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    task_id = Column(String(36), unique=True, index=True, nullable=False)
+    id = Column(String(36), primary_key=True, unique=True, index=True, nullable=False)
 
-    plugin_output = Column(String(255), index=True, nullable=False)
     feature_type = Column(String(63), index=True, nullable=False)
     feature_shape_x = Column(Integer, index=False, nullable=False)
     feature_shape_y = Column(Integer, index=False, nullable=False)
@@ -69,8 +69,7 @@ class FeatureMeta(ENTITY_BASE):  # type: ignore
 class FeatureData(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_data'
 
-    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    task_id = Column(String(36), unique=True, index=True, nullable=False)
+    id = Column(String(36), primary_key=True, unique=True, index=True, nullable=False)
 
     compression = Column(String(31), index=True, nullable=False)
     feature_data = Column(LargeBinary(16777215), index=False, nullable=False)
@@ -79,8 +78,7 @@ class FeatureData(ENTITY_BASE):  # type: ignore
 class ResultStats(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result_stats'
 
-    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    task_id = Column(String(36), unique=True, index=True, nullable=False)
+    id = Column(String(36), primary_key=True, unique=True, index=True, nullable=False)
 
     total_time = Column(Float, index=False, nullable=True)
     extraction_time = Column(Float, index=False, nullable=True)
@@ -93,8 +91,7 @@ class ResultStats(ENTITY_BASE):  # type: ignore
 class Result(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result'
 
-    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    task_id = Column(String(36), unique=True, index=True, nullable=False)
+    id = Column(String(36), primary_key=True, unique=True, index=True, nullable=False)
 
     vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
                              nullable=False, index=True)

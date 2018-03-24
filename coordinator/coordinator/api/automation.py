@@ -4,7 +4,6 @@ from typing import List
 
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.abstractions.flask_api import FlaskRestApi
-from commons.db.exception import EntityNotFound
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
 from commons.repository.result import ResultRepository
@@ -32,10 +31,9 @@ class AutomationApi(FlaskRestApi):
             task_id_to_request = {r.uuid(): r.to_serializable() for r in extraction_requests}
             self.logger.debug("Sending {} extraction requests...".format(task_id_to_request))
             for task_id, the_request in task_id_to_request.items():
-                try:
-                    self.result_repo.get_by_task_id(task_id=task_id)
-                    self.logger.warning("Request {} #{} already exist in DB! Omitting...")
-                except EntityNotFound:
+                if self.result_repo.exists_by_id(task_id):
+                    self.logger.warning("Request {} #{} already exist in DB! Omitting...".format(the_request, task_id))
+                else:
                     run_task(task=extract_feature, task_id=task_id, extraction_request=the_request)
                     self.logger.info("Sent feature extraction request {} with id {}...".format(the_request, task_id))
             return ApiResponse(HttpStatusCode.accepted, task_id_to_request)
@@ -50,9 +48,7 @@ class AutomationApi(FlaskRestApi):
         extraction_requests = []
         for audio_file_identifier in audio_file_identifiers:
             for plugin in plugins:
-                for plugin_output in plugin.outputs:
-                    extraction_requests.append(
-                        ExtractionRequest(audio_file_identifier=audio_file_identifier,
-                                          plugin_key=plugin.key,
-                                          plugin_output=plugin_output))
+                extraction_requests.append(
+                    ExtractionRequest(audio_file_identifier=audio_file_identifier,
+                                      plugin_full_key=plugin.full_key))
         return extraction_requests
