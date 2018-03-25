@@ -56,6 +56,7 @@ class FeatureMeta(ENTITY_BASE):  # type: ignore
     feature_type = Column(String(63), index=True, nullable=False)
     feature_shape_x = Column(Integer, index=False, nullable=False)
     feature_shape_y = Column(Integer, index=False, nullable=False)
+    feature_shape_z = Column(Integer, index=False, nullable=False)
     feature_size_bytes = Column(Integer, index=False, nullable=False)
 
     feature_minimum = Column(Float, index=False, nullable=True)
@@ -86,6 +87,16 @@ class ResultStats(ENTITY_BASE):  # type: ignore
     data_stats_build_time = Column(Float, index=False, nullable=True)
     encode_audio_time = Column(Float, index=False, nullable=True)
     result_store_time = Column(Float, index=False, nullable=True)
+
+
+class PluginConfig(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'plugin_config'
+
+    id = Column(String(36), primary_key=True, unique=True, index=True, nullable=False)
+
+    block_size = Column(Integer, index=False, nullable=False)
+    step_size = Column(Integer, index=False, nullable=False)
+    additional_params = Column(String(1023), index=False, nullable=True)
 
 
 class Result(ENTITY_BASE):  # type: ignore

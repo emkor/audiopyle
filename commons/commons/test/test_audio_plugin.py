@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from commons.models.plugin import VampyPlugin
+from commons.models.plugin import VampyPlugin, VampyPluginParamsDto
 
 
 class AudioPluginModelTest(unittest.TestCase):
@@ -12,7 +12,7 @@ class AudioPluginModelTest(unittest.TestCase):
         self.test_plugin_name = "test_plugin_name"
         self.test_plugin_output = "output1"
         self.vampy_plugin = VampyPlugin(vendor=self.test_plugin_provider, name=self.test_plugin_name,
-                                        output=self.test_plugin_output, library_file_name="/some/path")
+                                        output=self.test_plugin_output, library_file_name="some_lib.so")
         self.byte_symbol = "B"
 
     def test_model_properties(self):
@@ -36,3 +36,26 @@ class AudioPluginModelTest(unittest.TestCase):
 
         size_bytes_humanized = self.vampy_plugin.size_humanized()
         assert_that(size_bytes_humanized).is_not_none().is_not_empty().contains(self.byte_symbol)
+
+
+class VampyPluginConfigTest(unittest.TestCase):
+    def setUp(self):
+        self.task_id = "fa3b5d8c-b760-49e0-b8b5-7ce0737621d8"
+        self.empty_config = VampyPluginParamsDto(self.task_id, None, None)
+        self.basic_config = VampyPluginParamsDto(self.task_id, 2048, 4096)
+        self.extended_config = VampyPluginParamsDto(self.task_id, 2048, 2048, sub_bands=9)
+
+    def test_should_create_parameters_from_config(self):
+        assert_that(self.empty_config.extraction_params()).is_equal_to({})
+        assert_that(self.basic_config.extraction_params()).is_equal_to({"step_size": 4096, "block_size": 2048})
+        assert_that(self.extended_config.extraction_params()).is_equal_to(
+            {"step_size": 2048, "block_size": 2048, "sub_bands": 9})
+
+    def test_should_serialize_and_deserialize(self):
+        serialized = self.extended_config.to_serializable()
+        json_serialized = json.dumps(serialized)
+        assert_that(json_serialized).is_not_empty()
+
+        deserialized = json.loads(json_serialized)
+        back_to_object = VampyPluginParamsDto.from_serializable(deserialized)
+        assert_that(back_to_object).is_equal_to(self.extended_config)

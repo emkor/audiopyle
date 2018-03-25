@@ -38,7 +38,7 @@ class AnalysisStats(Model):
 
 class FeatureMeta(Model):
     def __init__(self, task_id: Text, feature_type: FeatureType, feature_size: int,
-                 data_shape: Tuple[int, int], data_stats: DataStats) -> None:
+                 data_shape: Tuple[int, int, int], data_stats: DataStats) -> None:
         self.task_id = task_id
         self.feature_type = feature_type
         self.feature_size = feature_size

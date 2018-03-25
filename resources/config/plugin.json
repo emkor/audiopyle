@@ -1,0 +1,6 @@
+{
+  "vamp-example-plugins:amplitudefollower:amplitude": {
+    "block_size": 4096,
+    "step_size": 4096
+  }
+}

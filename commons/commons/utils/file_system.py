@@ -6,10 +6,13 @@ from typing import Text, List
 from commons.utils.logger import get_logger
 
 AUDIO_FILES_DIR = "/root/audio"
+CONFIG_DIR = "/root/config"
 RESULTS_DIR = "/root/result"
+PLUGIN_CONFIG_IDENTIFIER = "plugin"
 DEFAULT_FILE_PERMISSIONS = 0o666
 DEFAULT_DIR_PERMISSIONS = 0o777
 ENCODING_UTF_8 = 'utf-8'
+
 
 logger = get_logger()
 

@@ -20,7 +20,7 @@ class VampyFeatureAbstraction(Model):
     def values(self) -> numpy.ndarray:
         raise NotImplementedError()
 
-    def value_shape(self) -> Tuple[int, int]:
+    def value_shape(self) -> Tuple[int, int, int]:
         raise NotImplementedError()
 
 
@@ -39,8 +39,18 @@ class VampyConstantStepFeature(VampyFeatureAbstraction):
     def values(self) -> numpy.ndarray:
         return self._matrix
 
-    def value_shape(self) -> Tuple[int, int]:
-        return (self._matrix.shape[0], 1) if len(self._matrix.shape) < 2 else self._matrix.shape
+    def value_shape(self) -> Tuple[int, int, int]:
+        if len(self._matrix) == 0:
+            return 0, 0, 0
+        numpy_shape = self._matrix.shape
+        if len(numpy_shape) == 1:
+            return numpy_shape[0], 1, 0
+        elif len(numpy_shape) == 2:
+            return numpy_shape[0], numpy_shape[1], 1
+        elif len(numpy_shape) == 3:
+            return numpy_shape[0], numpy_shape[1], numpy_shape[2]
+        else:
+            raise ValueError("Got error on value shape {}".format(numpy_shape))
 
     def _step_as_frames(self, audio_meta: AudioFileMeta) -> int:
         return sec_to_frames(self._time_step, audio_meta.sample_rate)
@@ -96,9 +106,22 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
     def values(self) -> numpy.ndarray:
         return numpy.asanyarray([step_feature.values for step_feature in self.step_features])
 
-    def value_shape(self) -> Tuple[int, int]:
-        first_value = self.step_features[0].values or numpy.asanyarray([])
-        return len(self.step_features), min(len(first_value), 1)
+    def labels(self) -> List[str]:
+        return [step_feature.label for step_feature in self.step_features]
+
+    def value_shape(self) -> Tuple[int, int, int]:
+        x_size = len(self.step_features)
+        if x_size == 0:
+            return 0, 0, 0
+        if self.step_features[0].values is None or not len(self.step_features[0].values):
+            return x_size, 0, 0
+        first_value_shape = self.step_features[0].values.shape
+        if len(first_value_shape) == 1:
+            return x_size, first_value_shape[0], 0
+        elif len(first_value_shape) == 2:
+            return x_size, first_value_shape[0], first_value_shape[1]
+        else:
+            raise ValueError("Got error on first value shape {}".format(first_value_shape))
 
     def to_serializable(self):
         return {"task_id": self.task_id, "value_list": [s.to_serializable() for s in self.step_features]}

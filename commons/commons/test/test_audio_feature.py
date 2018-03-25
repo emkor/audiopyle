@@ -37,7 +37,7 @@ class ConstantStepAudioFeatureModelTest(unittest.TestCase):
 
     def test_values_should_have_correct_shape(self):
         assert_that(self.constant_step_feature.values().all()).is_equal_to(self.feature_values.all())
-        assert_that(self.constant_step_feature.value_shape()).is_equal_to((4, 1))
+        assert_that(self.constant_step_feature.value_shape()).is_equal_to((4, 1, 0))
 
 
 class VariableStepAudioFeatureModelTest(unittest.TestCase):
