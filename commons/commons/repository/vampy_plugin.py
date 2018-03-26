@@ -8,7 +8,7 @@ from commons.models.plugin import VampyPlugin, VampyPluginParamsDto
 from commons.repository.abstract import DbRepository
 from commons.utils.conversion import safe_cast
 
-PLUGIN_CONFIG_DEFAULT = -1
+PLUGIN_CONFIG_DEFAULT = 0
 
 
 class VampyPluginRepository(DbRepository):
