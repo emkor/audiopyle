@@ -34,7 +34,8 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     plugin_config_repo = PluginConfigRepository(db_session_provider)
     feature_data_repo = FeatureDataRepository(db_session_provider)
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
-    result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo)
+    result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
+                                   plugin_config_repo)
     result_stats_repo = ResultStatsRepository(db_session_provider)
 
     extraction_service = FeatureExtractionService(plugin_provider=plugin_provider,

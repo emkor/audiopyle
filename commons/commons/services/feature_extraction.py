@@ -5,14 +5,14 @@ import vamp
 
 from commons.models.feature import VampyFeatureAbstraction, VampyVariableStepFeature, VampyConstantStepFeature, \
     StepFeature
-from commons.models.plugin import VampyPluginParamsDto
+from commons.models.plugin import VampyPluginParams
 from commons.utils.logger import get_logger
 
 logger = get_logger()
 
 
 def extract_raw_feature(wav_data: numpy.ndarray, sample_rate: int, vampy_plugin_key: Text,
-                        output_name: Text, plugin_config: VampyPluginParamsDto) -> Dict[Text, Any]:
+                        output_name: Text, plugin_config: VampyPluginParams) -> Dict[Text, Any]:
     return vamp.collect(data=wav_data, sample_rate=sample_rate,
                         plugin_key=vampy_plugin_key, output=output_name, parameters=plugin_config.params,
                         block_size=plugin_config.block_size or 0, step_size=plugin_config.step_size or 0)
