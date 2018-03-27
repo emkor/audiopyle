@@ -40,17 +40,3 @@ class VampyPluginParams(Model):
         if self.block_size is not None:
             parameters.update({"block_size": self.block_size})
         return parameters
-
-
-class VampyPluginParamsDto(VampyPluginParams):
-    def __init__(self, task_id: str, block_size: Optional[int], step_size: Optional[int], **params) -> None:
-        super().__init__(block_size, step_size, **params)
-        self.task_id = task_id
-
-    @classmethod
-    def from_serializable(cls, serialized: Dict[str, Any]) -> Any:
-        task_id = serialized.pop("task_id")
-        block_size = serialized.pop("block_size")
-        step_size = serialized.pop("step_size")
-        params = serialized.pop("params")
-        return VampyPluginParamsDto(task_id=task_id, block_size=block_size, step_size=step_size, **params)
