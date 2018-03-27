@@ -53,5 +53,6 @@ def drop_db_tables(engine: Optional[Engine] = None) -> None:
 
 
 def _build_mysql_conn_string(host: str = None, port: int = None) -> str:
-    return "mysql://audiopyle:audiopyle@{}:{}/audiopyle".format(host or read_env_var("MYSQL_SERVICE_HOST", str),
-                                                                port or read_env_var("MYSQL_SERVICE_PORT", int))
+    return "mysql://audiopyle:audiopyle@{}:{}/audiopyle".format(
+        host or read_env_var("MYSQL_SERVICE_HOST", str, "localhost"),
+        port or read_env_var("MYSQL_SERVICE_PORT", int, 3306))
