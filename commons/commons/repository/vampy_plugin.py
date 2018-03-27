@@ -4,7 +4,7 @@ import json
 
 from commons.db.entity import VampyPlugin as VampyPluginEntity, PluginConfig
 from commons.db.session import SessionProvider
-from commons.models.plugin import VampyPlugin, VampyPluginParamsDto
+from commons.models.plugin import VampyPlugin, VampyPluginParams
 from commons.repository.abstract import DbRepository
 from commons.utils.conversion import safe_cast
 
@@ -39,17 +39,21 @@ class PluginConfigRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider) -> None:
         super().__init__(session_provider, PluginConfig)
 
-    def _map_to_entity(self, obj: VampyPluginParamsDto) -> PluginConfig:
-        additional_params = json.dumps(obj.params) if obj.params else None
-        return PluginConfig(id=obj.task_id, block_size=safe_cast(obj.block_size, int, PLUGIN_CONFIG_DEFAULT),
+    def _map_to_entity(self, obj: VampyPluginParams) -> PluginConfig:
+        additional_params = json.dumps(obj.params, sort_keys=True)
+        return PluginConfig(block_size=safe_cast(obj.block_size, int, PLUGIN_CONFIG_DEFAULT),
                             step_size=safe_cast(obj.step_size, int, PLUGIN_CONFIG_DEFAULT),
                             additional_params=additional_params)
 
-    def _map_to_object(self, entity: PluginConfig) -> VampyPluginParamsDto:
+    def _map_to_object(self, entity: PluginConfig) -> VampyPluginParams:
         block_size = entity.block_size if entity.block_size != PLUGIN_CONFIG_DEFAULT else None
-        step_size = entity.block_size if entity.step_size != PLUGIN_CONFIG_DEFAULT else None
-        params = json.loads(entity.additional_params) if entity.additional_params is not None else {}
-        return VampyPluginParamsDto(task_id=entity.id, block_size=block_size, step_size=step_size, params=params)
+        step_size = entity.step_size if entity.step_size != PLUGIN_CONFIG_DEFAULT else None
+        return VampyPluginParams(block_size=block_size, step_size=step_size,
+                                 **json.loads(entity.additional_params))
 
-    def get_id_by_model(self, model_object: VampyPluginParamsDto) -> Optional[str]:
-        return safe_cast(self._get_id(id=model_object.task_id), str, None)
+    def get_id_by_model(self, model_object: VampyPluginParams) -> Optional[int]:
+        additional_params = json.dumps(model_object.params, sort_keys=True)
+        return safe_cast(self._get_id(block_size=safe_cast(model_object.block_size, int, PLUGIN_CONFIG_DEFAULT),
+                                      step_size=safe_cast(model_object.step_size, int, PLUGIN_CONFIG_DEFAULT),
+                                      additional_params=additional_params),
+                         int, None)
