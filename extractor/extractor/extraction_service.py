@@ -2,7 +2,7 @@ from logging import Logger
 from typing import Text, Tuple
 from datetime import datetime
 
-import numpy
+import numpy as np
 
 from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
 from commons.repository.audio_file import AudioFileRepository
@@ -25,11 +25,11 @@ from commons.services.feature_extraction import extract_raw_feature, build_featu
 from commons.services.feature_meta_extraction import build_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
 from commons.services.segment_providing import read_raw_audio_from_mp3
-from commons.services.store_provider import FileStore
+from commons.services.store_provider import Mp3FileStore
 
 
 class FeatureExtractionService(object):
-    def __init__(self, plugin_provider: VampyPluginProvider, audio_file_store: FileStore,
+    def __init__(self, plugin_provider: VampyPluginProvider, audio_file_store: Mp3FileStore,
                  audio_tag_repo: AudioTagRepository, audio_meta_repo: AudioFileRepository,
                  plugin_repo: VampyPluginRepository, plugin_config_repo: PluginConfigRepository,
                  feature_data_repo: FeatureDataRepository,
@@ -103,7 +103,7 @@ class FeatureExtractionService(object):
         return feature_dto, seconds_between(start_time)
 
     def _do_extraction(self, task_id: str, plugin: VampyPlugin, input_audio_meta: AudioFileMeta,
-                       wav_data: numpy.ndarray, plugin_config: VampyPluginParamsDto) -> Tuple[VampyFeatureAbstraction, float]:
+                       wav_data: np.ndarray, plugin_config: VampyPluginParamsDto) -> Tuple[VampyFeatureAbstraction, float]:
         extraction_start_time = datetime.utcnow()
         raw_feature = extract_raw_feature(wav_data, input_audio_meta.sample_rate, plugin.vampy_key,
                                           plugin.output, plugin_config)
@@ -111,7 +111,7 @@ class FeatureExtractionService(object):
         extraction_time = seconds_between(extraction_start_time)
         return feature_object, extraction_time
 
-    def _read_raw_audio_data_from_mp3(self, input_file_path: Text) -> Tuple[numpy.ndarray, float]:
+    def _read_raw_audio_data_from_mp3(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
         read_raw_audio_start_time = datetime.utcnow()
         raw_data = read_raw_audio_from_mp3(input_file_path)
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
