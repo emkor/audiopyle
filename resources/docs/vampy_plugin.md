@@ -144,3 +144,38 @@
     - Yin threshold distribution (Beta)
     - Output estimates classified as unvoiced? (No)
     - Use non-standard precise YIN timing (slow) (False)
+
+### pyin:pyin
+- URL: https://code.soundsoftware.ac.uk/projects/pyin
+- Block size: 2048
+- Step size:  256
+- Parameter (default):
+    - Yin threshold distribution (Beta)
+    - Output estimates classified as unvoiced? (No)
+    - Use non-standard precise YIN timing (slow) (False)
+    - Suppress low amplitude pitch estimates (0.1)
+    - Onset sensitivity (0.7)
+    - Duration pruning threshold (0.1)
+
+### pyin:yin
+
+### qm-vamp-plugins:qm-adaptivespectrogram
+- URL: https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 1024
+- Step size:  1024
+- Parameter (default):
+    - Number of resolutions (3)
+    - Smallest resolution (512)
+    - Decimation factor (No decimation)
+    - Omit alternate solutions (False)
+    - Multi-threaded processing (True)
+
+### qm-vamp-plugins:qm-barbeattracker
+- URL: https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 1024
+- Step size:  512
+- Parameter (default):
+    - Beats per bar (4)
+    - Alpha (0.9)
+    - Tempo hint (120 BPM)
+    - Constrain Tempo (False)
