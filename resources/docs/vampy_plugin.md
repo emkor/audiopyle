@@ -301,3 +301,103 @@
     - bars
     - beatcounts
     - beatsd
+
+### qm-vamp-plugins:qm-chromagram
+- Outputs:
+    - chromagram
+    - chromameans
+
+### qm-vamp-plugins:qm-constantq
+- Outputs:
+    - constantq
+
+### qm-vamp-plugins:qm-dwt
+- Outputs:
+    - wcoeff
+
+### qm-vamp-plugins:qm-keydetector
+- Outputs:
+    - tonic
+    - mode
+    - key
+    - keystrength
+
+### qm-vamp-plugins:qm-mfcc
+- Outputs:
+    - coefficients
+    - means
+
+### qm-vamp-plugins:qm-onsetdetector
+- Outputs:
+    - onsets
+    - detection_fn
+    - smoothed_df
+
+### qm-vamp-plugins:qm-segmenter
+- Outputs:
+    - segmentation
+
+### qm-vamp-plugins:qm-similarity
+- Outputs:
+    - distancematrix
+    - distancevector
+    - sorteddistancevector
+    - means
+    - variances
+    - beatspectrum
+
+### qm-vamp-plugins:qm-tempotracker
+- Outputs:
+    - beats
+    - detection_fn
+    - tempo
+
+
+### qm-vamp-plugins:qm-tonalchange
+- Outputs:
+    - tcstransform
+    - tcfunction
+    - changepositions
+
+### qm-vamp-plugins:qm-transcription
+- Outputs:
+    - transcription
+
+### segmentino:segmentino
+- Outputs:
+    - segmentation
+
+### silvet:silvet
+- Outputs:
+    - notes
+    - onsets
+    - onoffsets
+    - timefreq
+    - pitchactivation
+    - chroma
+    - templates
+
+### tempogram:tempogram
+- Outputs:
+    - cyclicTempogram
+    - tempogramDFT
+    - tempogramACT
+    - nc
+
+### ua-vamp-plugins
+- Outputs:
+    - mf0ua
+    - onsetsua
+    - onsetsua
+
+### vamp-example-plugins:amplitudefollower
+- Outputs:
+    - amplitude
+
+### vamp-example-plugins:fixedtempo
+- Outputs:
+    - tempo
+    - candidates
+    - detectionfunction
+    - acf
+    - filtered_acf
