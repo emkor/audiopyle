@@ -6,7 +6,7 @@ from commons.models.result import AnalysisStats, AnalysisResult
 from commons.repository.abstract import DbRepository
 from commons.repository.audio_file import AudioFileRepository
 from commons.repository.audio_tag import AudioTagRepository
-from commons.repository.vampy_plugin import VampyPluginRepository
+from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from commons.utils.conversion import safe_cast
 
 
@@ -31,11 +31,13 @@ class ResultStatsRepository(DbRepository):
 
 class ResultRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider, audio_file_repository: AudioFileRepository,
-                 audio_tag_repository: AudioTagRepository, plugin_repository: VampyPluginRepository) -> None:
+                 audio_tag_repository: AudioTagRepository, plugin_repository: VampyPluginRepository,
+                 plugin_config_repo: PluginConfigRepository) -> None:
         super().__init__(session_provider, Result)
         self.audio_file_repository = audio_file_repository
         self.audio_tag_repository = audio_tag_repository
         self.plugin_repository = plugin_repository
+        self.plugin_config_repo = plugin_config_repo
 
     def get_id_by_model(self, model_object: AnalysisResult) -> Optional[str]:
         return safe_cast(self._query_single(id=model_object.task_id), str, None)
@@ -44,11 +46,14 @@ class ResultRepository(DbRepository):
         plugin_id = self.plugin_repository.get_id_by_model(obj.plugin)
         audio_meta_id = self.audio_file_repository.get_id_by_model(obj.audio_meta)
         audio_tag_id = self.audio_tag_repository.get_id_by_model(obj.id3_tag)
+        plugin_config_id = self.plugin_config_repo.get_id_by_model(obj.plugin_config)
         return Result(id=obj.task_id, vampy_plugin_id=plugin_id, audio_file_id=audio_meta_id,
-                      audio_tag_id=audio_tag_id)
+                      audio_tag_id=audio_tag_id, plugin_config_id=plugin_config_id)
 
     def _map_to_object(self, entity: Result) -> AnalysisResult:
         audio_meta = self.audio_file_repository.get_by_id(entity.audio_file_id)
         audio_tag = self.audio_tag_repository.get_by_id(entity.audio_tag_id)
         plugin = self.plugin_repository.get_by_id(entity.vampy_plugin_id)
-        return AnalysisResult(task_id=entity.id, audio_meta=audio_meta, id3_tag=audio_tag, plugin=plugin)
+        plugin_config = self.plugin_config_repo.get_by_id(entity.plugin_config_id)
+        return AnalysisResult(task_id=entity.id, audio_meta=audio_meta, id3_tag=audio_tag,
+                              plugin=plugin, plugin_config=plugin_config)

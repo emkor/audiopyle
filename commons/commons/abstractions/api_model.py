@@ -27,8 +27,14 @@ class HttpMethod(Enum):
 
 class _ApiError(Exception):
     def __init__(self, message: Text, status_code: HttpStatusCode) -> None:
+        super().__init__(message)
         self.status_code = status_code
         self.message = message
+
+
+class MethodNotSupportedError(_ApiError):
+    def __init__(self, message: Text) -> None:
+        super().__init__(message, HttpStatusCode.method_not_allowed)
 
 
 class ClientError(_ApiError):

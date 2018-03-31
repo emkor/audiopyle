@@ -4,7 +4,6 @@ from typing import List
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.abstractions.flask_api import FlaskRestApi
 from commons.db.exception import EntityNotFound
-from commons.models.result import AnalysisResult
 from commons.repository.feature_data import FeatureDataRepository
 from commons.repository.result import ResultRepository, ResultStatsRepository
 from commons.services.compression import from_compressed_feature

@@ -48,6 +48,18 @@ class VampyPlugin(ENTITY_BASE):  # type: ignore
     __table_args__ = (UniqueConstraint('vendor', 'name', 'output', name='unique_plugin'),)
 
 
+class PluginConfig(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'plugin_config'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+
+    block_size = Column(Integer, index=False, nullable=False)
+    step_size = Column(Integer, index=False, nullable=False)
+    additional_params = Column(String(1023), index=False, nullable=False)
+
+    __table_args__ = (UniqueConstraint('block_size', 'step_size', 'additional_params', name='unique_plugin_config'),)
+
+
 class FeatureMeta(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_meta'
 
@@ -89,16 +101,6 @@ class ResultStats(ENTITY_BASE):  # type: ignore
     result_store_time = Column(Float, index=False, nullable=True)
 
 
-class PluginConfig(ENTITY_BASE):  # type: ignore
-    __tablename__ = 'plugin_config'
-
-    id = Column(String(36), primary_key=True, unique=True, index=True, nullable=False)
-
-    block_size = Column(Integer, index=False, nullable=False)
-    step_size = Column(Integer, index=False, nullable=False)
-    additional_params = Column(String(1023), index=False, nullable=True)
-
-
 class Result(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result'
 
@@ -106,6 +108,8 @@ class Result(ENTITY_BASE):  # type: ignore
 
     vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
                              nullable=False, index=True)
+    plugin_config_id = Column(Integer, ForeignKey("plugin_config.id", ondelete="CASCADE"),
+                              nullable=False, index=True)
     audio_file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"),
                            nullable=False, index=True)
     audio_tag_id = Column(Integer, ForeignKey("audio_tag.id", ondelete="CASCADE"),

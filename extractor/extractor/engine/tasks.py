@@ -12,7 +12,7 @@ from commons.services.plugin_providing import VampyPluginProvider
 from commons.utils.file_system import AUDIO_FILES_DIR
 from commons.utils.logger import get_logger
 from commons.models.extraction_request import ExtractionRequest
-from commons.services.store_provider import LzmaJsonFileStore
+from commons.services.store_provider import Mp3FileStore
 from extractor.engine.celery import get_celery
 from extractor.extraction_service import FeatureExtractionService
 
@@ -25,7 +25,7 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     request = ExtractionRequest.from_serializable(extraction_request)
 
     plugin_provider = VampyPluginProvider(plugin_black_list=[], logger=logger)
-    mp3_file_store = LzmaJsonFileStore(AUDIO_FILES_DIR, extension="mp3")
+    mp3_file_store = Mp3FileStore(AUDIO_FILES_DIR)
 
     db_session_provider = SessionProvider()
     audio_tag_repo = AudioTagRepository(db_session_provider)
@@ -34,7 +34,8 @@ def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
     plugin_config_repo = PluginConfigRepository(db_session_provider)
     feature_data_repo = FeatureDataRepository(db_session_provider)
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
-    result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo)
+    result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
+                                   plugin_config_repo)
     result_stats_repo = ResultStatsRepository(db_session_provider)
 
     extraction_service = FeatureExtractionService(plugin_provider=plugin_provider,

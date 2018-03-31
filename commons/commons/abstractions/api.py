@@ -1,6 +1,6 @@
 from logging import Logger
 
-from commons.abstractions.api_model import ApiRequest, ApiResponse
+from commons.abstractions.api_model import ApiRequest, ApiResponse, MethodNotSupportedError
 from commons.utils.conversion import seconds_between
 from commons.utils.logger import get_logger
 
@@ -10,16 +10,17 @@ class AbstractRestApi(object):
         self.logger = logger or get_logger()
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        raise NotImplementedError()
+        raise MethodNotSupportedError("{} does not support GET at {}".format(self.__class__.__name__, the_request.url))
 
     def _post(self, the_request: ApiRequest) -> ApiResponse:
-        raise NotImplementedError()
+        raise MethodNotSupportedError("{} does not support POST at {}".format(self.__class__.__name__, the_request.url))
 
     def _put(self, the_request: ApiRequest) -> ApiResponse:
-        raise NotImplementedError()
+        raise MethodNotSupportedError("{} does not support PUT at {}".format(self.__class__.__name__, the_request.url))
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
-        raise NotImplementedError()
+        raise MethodNotSupportedError(
+            "{} does not support DELETE at {}".format(self.__class__.__name__, the_request.url))
 
     def _log_api_call(self, api_request: ApiRequest, api_response: ApiResponse):
         serving_time = seconds_between(api_request.creation_time)
