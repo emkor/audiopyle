@@ -216,7 +216,7 @@
 - Outputs:
     - constantq
         - Description: Extract spectrogram with constant ratio of centre frequency to resolution from the input audio, specifying the frequency range in MIDI pitch units
-        - Comment: Intensity of a sound on particular note (180 zakresów; 0 - C#2, 1 - D2, …, 180 - C7)
+        - Comment: Intensity of a sound on particular note (180 notes; 0 - C#2, 1 - D2, …, 180 - C7)
         - Usefulness: 3
 
 ### match-vamp-plugin-2:match
@@ -259,6 +259,9 @@
     - Monophonic Noise Filter: 0
 - Outputs:
     - melody
+        - Description: Estimates the melody pitch in polyphonic music; segments without melody are indicated by zero or negative values
+        - Comment: ? Very weird chart
+        - Usefulness: 1
     
 ### mtg-melodia:melodiaviz
 - URL:    https://www.upf.edu/web/mtg/melodia
@@ -280,9 +283,21 @@
     - Boost N (0.1)
 - Outputs:
     - simplechord
+        - Description: Chord Estimate: Estimated chord times and labels
+        - Comment: Segments of chords (just labels without values)
+        - Usefulness: 2
     - chordnotes
+        - Description: Note representation of Chord Estimate
+        - Comment: Estimates of notes in the chord
+        - Usefulness: 2
     - harmonicchange
+        - Description: An indication of the likelihood of harmonic change
+        - Comment: Probability of chord change
+        - Usefulness: 2
     - loglikelihood
+        - Description: Logarithm of the likelihood value of the simple chord estimate
+        - Comment: As harmonicchange, but less reasonable
+        - Usefulness: 1
 
 ### nnls-chroma:nnls-chroma
 - URL: http://www.isophonics.net/nnls-chroma
@@ -297,11 +312,29 @@
     - Chroma normalization (None)
 - Outputs:
     - logfreqspec
+        - Description: Log-Frequency Spectrum (constant Q) that is obtained by cosine filter mapping
+        - Comment: As tunedlogfreqspec, but more blurry
+        - Usefulness: 0
     - tunedlogfreqspec
+        - Description: Log-Frequency Spectrum (constant Q) that is obtained by cosine filter mapping, then its tuned using the estimated tuning frequency
+        - Comment: Very precise map of sound intensity with lot of gaps between single notes; no labels; values range: 0-256(?)
+        - Usefulness: 1
     - semitonespectrum
+        - Description: A semitone-spaced log-frequency spectrum derived from the third-of-a-semitone-spaced tuned log-frequency spectrum
+        - Comment: Semitone estimate (values 0-84, no labels)
+        - Usefulness: 1
     - chroma
+        - Description: Tuning-adjusted chromagram from NNLS approximate transcription, with an emphasis on the medium note range
+        - Comment: Estimate of note intensity (values 0-12; 0 - A, 1 - Bb, …, 12 - Ab) with emphasis on mid-band
+        - Usefulness: 3
     - basschroma
+        - Description: Tuning-adjusted bass chromagram from NNLS approximate transcription, with an emphasis on the bass note range
+        - Comment: Estimate of note intensity (values 0-12; 0 - A, 1 - Bb, …, 12 - Ab) with emphasis on bass-band
+        - Usefulness: 3
     - bothchroma
+        - Description: Tuning-adjusted chromagram from NNLS approximate transcription, with an emphasis on the medium note range
+        - Comment: Estimate of note intensity (values 0-24;  0 - A bass, 1 - Bb bass, …, 13 - A, …, 24 - Ab)
+        - Usefulness: 2
 
 ### nnls-chroma:tuning
 - URL: http://www.isophonics.net/nnls-chroma
@@ -311,7 +344,13 @@
     - Bass noise threshold (0.0%)
 - Outputs:
     - tuning
+        - Description: Returns singe-label containing estimated concert pitch tuning in Hz
+        - Comment: ?
+        - Usefulness: 0
     - localtuning
+        - Description: Returns per-analysis-frame tuning estimate
+        - Comment: Tuning estimate in each point (would be nice for large block size?)
+        - Usefulness: 2
     
 ### pyin:localcandidatepyin
 - URL: https://code.soundsoftware.ac.uk/projects/pyin
