@@ -169,6 +169,9 @@
     - Expiry Time (10.0)
 - Outputs:
     - beats
+        - Description: Identify beat locations in music
+        - Comment: Binary points for beat locations
+        - Usefulness: 2
 
 ### cqvamp:cqchromavamp
 - URL:        https://github.com/cannam/constant-q-cpp
@@ -181,6 +184,9 @@
     - Bins per Octave (36)
 - Outputs:
     - chromagram
+        - Description: Extract Constant-Q spectrogram with a constant ratio of centre frequency to resolution from the audio, then wrap it around into a single-octave chromagram
+        - Comment: Intensity of a sound on particular note (notes range: 0-35; 1 - C, 4 - C#, 7 - D, …, 34 - B)
+        - Usefulness: 3
 
 ### cqvamp:cqvamp
 - URL:        https://github.com/cannam/constant-q-cpp
@@ -193,6 +199,9 @@
     - Interpolation (Linear)
 - Outputs:
     - constantq
+        - Description: Extract a spectrogram with constant ratio of centre frequency to resolution from the input audio, specifying the frequency range in Hz
+        - Comment: Intensity of a sound in particular frequency range (288 separate ranges)
+        - Usefulness: 1
 
 ### cqvamp:cqvampmidi
 - URL:        https://github.com/cannam/constant-q-cpp
@@ -206,6 +215,9 @@
     - Interpolation (Linear)
 - Outputs:
     - constantq
+        - Description: Extract spectrogram with constant ratio of centre frequency to resolution from the input audio, specifying the frequency range in MIDI pitch units
+        - Comment: Intensity of a sound on particular note (180 zakresów; 0 - C#2, 1 - D2, …, 180 - C7)
+        - Usefulness: 3
 
 ### match-vamp-plugin-2:match
 - URL: https://code.soundsoftware.ac.uk/projects/match-vamp
