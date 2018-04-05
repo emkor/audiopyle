@@ -73,14 +73,37 @@
         - Comment: accent strengths of an rhythm section
         - Usefulness: 3
     - average
+        - Description: ?
+        - Comment: Moving average of an rhythm accent strengths
+        - Usefulness: 3
     - diff
+        - Description: Difference between onset and average
+        - Comment: Similar to onset_curve, but only highest points are available
+        - Usefulness: 1
     - onset
+        - Description: ?
+        - Comment: Similar to onset_curve, but binary (just points in time)
+        - Usefulness: 1
     - avg-onset-freq
+        - Description: Rate of onsets per minute
+        - Usefulness: 2
     - rhythm-strength
+        - Description: Average value of peaks in onset curve
+        - Usefulness: 2
     - autocor
+        - Description: Autocorrelation of onset detection curve
+        - Comment: Does not work?
+        - Usefulness: 1
     - mean-correlation-peak
+        - Description: Mean of the peak autocorrelation values
+        - Comment: Same as above but averaged
+        - Usefulness: 1
     - peak-valley-ratio
+        - Description: Ratio of the mean correlation peak to the mean correlation valley
+        - Usefulness: 1
     - tempo
+        - Description: Overall tempo of the track in BPM
+        - Usefulness: 2
     
 ### bbc-vamp-plugins:bbc-spectral-contrast
 - URL:        https://github.com/bbc/bbc-vamp-plugins
