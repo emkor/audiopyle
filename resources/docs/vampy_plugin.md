@@ -401,3 +401,200 @@
     - detectionfunction
     - acf
     - filtered_acf
+
+### vamp-example-plugins:percussiononsets
+- Outputs:
+    - onsets
+    - detectionfunction
+
+### vamp-example-plugins:powerspectrum
+- Outputs:
+    - powerspectrum
+
+### vamp-example-plugins:spectralcentroid
+- Outputs:
+    - logcentroid
+    - linearcentroid
+
+### vamp-example-plugins:zerocrossing
+- Outputs:
+    - counts
+    - zerocrossings
+
+### vamp-libxtract:amdf
+- Outputs:
+    - amdf
+    - asdf
+
+### vamp-libxtract:autocorrelation
+- Outputs:
+    - autocorrelation
+
+### vamp-libxtract:average_deviation
+- Outputs:
+    - average_deviation
+
+### vamp-libxtract:bark_coefficients
+- Outputs:
+    - bark_coefficients
+
+### vamp-libxtract:crest
+- Outputs:
+    - crest
+
+### vamp-libxtract:dct
+- Outputs:
+    - dct
+
+### vamp-libxtract:f0
+- Outputs:
+    - f0
+
+### vamp-libxtract:failsafe_f0
+- Outputs:
+    - failsafe_f0
+
+### vamp-libxtract:flatness
+- Outputs:
+    - flatness
+
+### vamp-libxtract:harmonic_spectrum
+- Outputs:
+    - amplitudes
+
+### vamp-libxtract:highest_value
+- Outputs:
+    - highest_value
+
+### vamp-libxtract:irregularity_j
+- Outputs:
+    - irregularity_j
+
+### vamp-libxtract:irregularity_k
+- Outputs:
+    - irregularity_k
+
+### vamp-libxtract:kurtosis
+- Outputs:
+    - kurtosis
+
+### vamp-libxtract:loudness
+- Outputs:
+    - loudness
+
+### vamp-libxtract:lowest_value
+- Outputs:
+    - lowest_value
+
+### vamp-libxtract:mean
+- Outputs:
+    - mean
+
+### vamp-libxtract:mfcc
+- Outputs:
+    - mfcc
+
+### vamp-libxtract:noisiness
+- Outputs:
+    - noisiness
+
+### vamp-libxtract:nonzero_count
+- Outputs:
+    - nonzero_count
+
+### vamp-libxtract:odd_even_ratio
+- Outputs:
+    - odd_even_ratio
+
+### vamp-libxtract:peak_spectrum
+- Outputs:
+    - amplitudes
+
+### vamp-libxtract:rms_amplitude
+- Outputs:
+    - rms_amplitude
+
+### vamp-libxtract:rolloff
+- Outputs:
+    - rolloff
+
+### vamp-libxtract:sharpness
+- Outputs:
+    - sharpness
+
+### vamp-libxtract:skewness
+- Outputs:
+    - skewness
+
+### vamp-libxtract:smoothness
+- Outputs:
+    - smoothness
+
+### vamp-libxtract:spectral_centroid
+- Outputs:
+    - spectral_centroid
+
+### vamp-libxtract:spectral_inharmonicity
+- Outputs:
+    - spectral_inharmonicity
+
+### vamp-libxtract:spectral_kurtosis
+- Outputs:
+    - spectral_kurtosis
+
+### vamp-libxtract:spectral_skewness
+- Outputs:
+    - spectral_skewness
+
+### vamp-libxtract:spectral_slope
+- Outputs:
+    - spectral_slope
+
+### vamp-libxtract:spectral_standard_deviation
+- Outputs:
+    - spectral_standard_deviation
+
+### vamp-libxtract:spectral_variance
+- Outputs:
+    - spectral_variance
+
+### vamp-libxtract:spectrum
+- Outputs:
+    - amplitudes
+
+### vamp-libxtract:spread
+- Outputs:
+    - spread
+
+### vamp-libxtract:standard_deviation
+- Outputs:
+    - standard_deviation
+
+### vamp-libxtract:sum
+- Outputs:
+    - sum
+
+### vamp-libxtract:tonality
+- Outputs:
+    - tonality
+
+### vamp-libxtract:tristimulus_1
+- Outputs:
+    - tristimulus_1
+
+### vamp-libxtract:tristimulus_2
+- Outputs:
+    - tristimulus_2
+
+### vamp-libxtract:tristimulus_3
+- Outputs:
+    - tristimulus_3
+
+### vamp-libxtract:variance
+- Outputs:
+    - variance
+
+### vamp-libxtract:zcr
+- Outputs:
+    - zcr
+
