@@ -362,6 +362,9 @@
     - Use non-standard precise YIN timing (slow) (False)
 - Outputs:
     - pitchtrackcandidates
+        - Description: Monophonic pitch and note tracking based on probabilistic Yin extension
+        - Comment: ? Did not finish
+        - Usefulness: 0
 
 ### pyin:pyin
 - URL: https://code.soundsoftware.ac.uk/projects/pyin
@@ -376,11 +379,29 @@
     - Duration pruning threshold (0.1)
 - Outputs:
     - f0candidates
+        - Description: Estimated fundamental frequency candidates
+        - Comment: Estimated frequency at point (Hz)
+        - Usefulness: 1
     - f0probs
+        - Description: Probability of estimated fundamental frequency candidates
+        - Comment: Probability of f0candidates
+        - Usefulness: 0
     - voicedprob
+        - Description: Probability that signal is voiced according to Probabilistic Yin
+        - Comment: ? Seems unreasonable
+        - Usefulness: 1
     - candidatesalience
+        - Description: Candidate salience
+        - Comment: ? Seems unreasonable
+        - Usefulness: 1
     - smoothedpitchtrack
+        - Description: ?
+        - Comment: ?
+        - Usefulness: 1
     - notes
+        - Description: Derived fixed-pitch note frequencies
+        - Comment: Notes estimate; pointless
+        - Usefulness: 0
 
 ### pyin:yin
 - Outputs:
@@ -401,6 +422,9 @@
     - Multi-threaded processing (True)
 - Outputs:
     - output
+        - Description: Adaptive Spectrogram produces a composite spectrogram from a set of series of short-time Fourier transforms at differing resolutions. Values are selected from these spectrograms by repeated subdivision by time and frequency in order to maximise an entropy function across each column
+        - Comment: Notes mixed with percussion?
+        - Usefulness: 1
 
 ### qm-vamp-plugins:qm-barbeattracker
 - URL: https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
@@ -413,9 +437,21 @@
     - Constrain Tempo (False)
 - Outputs:
     - beats
+        - Description: The estimated beat locations, returned as a single feature, with timestamp but no value, for each beat, labelled with the number of that beat within the bar (e.g. consecutively 1, 2, 3, 4 for 4 beats to the bar)
+        - Comment: Detects beats in bars, labels are beat count in a bar
+        - Usefulness: 3
     - bars
+        - Description: The estimated bar line locations, returned as a single feature, with timestamp but no value, for each bar
+        - Comment: Detects bars
+        - Usefulness: 2
     - beatcounts
+        - Description: The estimated beat locations, returned as a single feature, with timestamp and a value corresponding to the number of that beat within the bar. This is similar to the Beats output except that it returns a counting function rather than a series of instants
+        - Comment: Counts beats in bar
+        - Usefulness: 0
     - beatsd
+        - Description: The new-bar likelihood function used in bar line estimation
+        - Comment: Likelihood of new bar 
+        - Usefulness: 1
 
 ### qm-vamp-plugins:qm-chromagram
 - Outputs:
