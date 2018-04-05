@@ -11,10 +11,32 @@
     - Low Energy threshold (1.0)
 - Outputs:
     - rmsenergy
+        - Description: As described above, the term average power refers to the average value of the instantaneous power waveform over time. As this is typically derived from the root mean square (RMS) of the sine wave voltage
+        - Summary: Sound energy of all the frequencies at given timestamp
+        - Shape: 
+        - Example:
+        - Usefulness: 3
     - rmsdelta
+        - Description: Difference between RMS of previous and current blocks
+        - Summary: Change of sound energy
+        - Shape: 
+        - Example: ```code```
+        - Usefulness: 2
     - lowenergy
+        - Description: Percentage of track which is below the low energy threshold
+        - Shape: 
+        - Example: ```code```
+        - Usefulness: 1
     - average
+        - Description: Mean of RMS values over moving average window
+        - Shape: 
+        - Example: ```code```
+        - Usefulness: 2
     - pdip
+        - Description: Probability of the RMS energy dipping below threshold
+        - Shape: 
+        - Example: ```code```
+        - Usefulness: 1
 
 ### bbc-vamp-plugins:bbc-intensity
 - URL:        https://github.com/bbc/bbc-vamp-plugins
@@ -597,4 +619,3 @@
 ### vamp-libxtract:zcr
 - Outputs:
     - zcr
-
