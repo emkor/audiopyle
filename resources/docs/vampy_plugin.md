@@ -13,29 +13,19 @@
     - rmsenergy
         - Description: As described above, the term average power refers to the average value of the instantaneous power waveform over time. As this is typically derived from the root mean square (RMS) of the sine wave voltage
         - Summary: Sound energy of all the frequencies at given timestamp
-        - Shape: 
-        - Example:
         - Usefulness: 3
     - rmsdelta
         - Description: Difference between RMS of previous and current blocks
-        - Summary: Change of sound energy
-        - Shape: 
-        - Example: ```code```
+        - Comment: Change of sound energy
         - Usefulness: 2
     - lowenergy
         - Description: Percentage of track which is below the low energy threshold
-        - Shape: 
-        - Example: ```code```
         - Usefulness: 1
     - average
         - Description: Mean of RMS values over moving average window
-        - Shape: 
-        - Example: ```code```
         - Usefulness: 2
     - pdip
         - Description: Probability of the RMS energy dipping below threshold
-        - Shape: 
-        - Example: ```code```
         - Usefulness: 1
 
 ### bbc-vamp-plugins:bbc-intensity
@@ -47,7 +37,13 @@
     - Window shape (Hann)
 - Outputs:
     - intensity
+        - Description: Sum of the FFT bin absolute values
+        - Comment: Similar to RMS
+        - Usefulness: 2
     - intensity-ratio
+        - Description: Sum of each sub-bands absolute values
+        - Comment: Intensity of each of sub-bands
+        - Usefulness: 3
 
 ### bbc-vamp-plugins:bbc-peaks
 - URL:        https://github.com/bbc/bbc-vamp-plugins
@@ -56,6 +52,9 @@
 - Parameter (default): None
 - Outputs:
     - peaks
+        - Description: ?
+        - Comment: Wave peaks; almost like original wave
+        - Usefulness: 1
 
 ### bbc-vamp-plugins:bbc-rhythm
 - URL:        https://github.com/bbc/bbc-vamp-plugins
@@ -70,6 +69,9 @@
     - Max BPM 300
 - Outputs:
     - onset_curve
+        - Description: Onset detection curve
+        - Comment: accent strengths of an rhythm section
+        - Usefulness: 3
     - average
     - diff
     - onset
@@ -78,7 +80,6 @@
     - autocor
     - mean-correlation-peak
     - peak-valley-ratio
-    - autocor
     - tempo
     
 ### bbc-vamp-plugins:bbc-spectral-contrast
