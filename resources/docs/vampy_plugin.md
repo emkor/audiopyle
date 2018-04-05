@@ -114,8 +114,17 @@
     - Sub-bands (7)
 - Outputs:
     - valleys
+        - Description: Valley of the spectrum
+        - Comment: Values per sub-band, similar to intensity but less reasonable
+        - Usefulness: 2
     - peaks
+        - Description: Peak of the spectrum
+        - Comment: Spectrum peaks per sub-band, more reasonable than valleys
+        - Usefulness: 3
     - mean
+        - Description: Mean of the spectrum
+        - Comment: Average spectrum per sub-band (bass bands have higher values)
+        - Usefulness: 2
 
 ### bbc-vamp-plugins:bbc-spectral-flux
 - URL:        https://github.com/bbc/bbc-vamp-plugins
@@ -125,6 +134,9 @@
     - Use L2 norm over L1 (False)
 - Outputs:
     - spectral-flux
+        - Description: ?
+        - Comment: Similar to RMS / Intensity but averaged(?)
+        - Usefulness: 2
     
 ### bbc-vamp-plugins:bbc-speechmusic-segmenter
 - URL:        https://github.com/bbc/bbc-vamp-plugins
@@ -138,7 +150,13 @@
     - Margin (14.0)
 - Outputs:
     - segmentation
+        - Description: Segmentation
+        - Comment: Splits music and spoken word (binary segments)
+        - Usefulness: 1
     - skewness
+        - Description: Detection function
+        - Comment: Probability of spoken word
+        - Usefulness: 2
 
 ### beatroot-vamp:beatroot
 - URL:        https://code.soundsoftware.ac.uk/projects/beatroot-vamp
