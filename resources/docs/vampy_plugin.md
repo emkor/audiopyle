@@ -454,65 +454,193 @@
         - Usefulness: 1
 
 ### qm-vamp-plugins:qm-chromagram
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 16384
+- Step size:  2048
+- Parameter (default):
+    - Minimum Pitch (36 MIDI units)
+    - Maximum Pitch (96 MIDI units)
+    - Tuning Frequency (440 Hz)
+    - Bins per Octave (12 bins)
+    - Normalization (None)
 - Outputs:
     - chromagram
+        - Description: Output of a chromagram, as a single vector per process block
+        - Comment: Note detection in given point (0-12 values; 0-C, 12-B)
+        - Usefulness: 3
     - chromameans
+        - Description: Mean values of chromagram bins across duration of the input audio
+        - Comment: Some kind of averaged notes from overall track?
+        - Usefulness: 3
 
 ### qm-vamp-plugins:qm-constantq
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 16384
+- Step size:  2048
+- Parameter (default):
+    - Minimum Pitch (36 MIDI units)
+    - Maximum Pitch (84 MIDI units)
+    - Tuning Frequency (440 Hz)
+    - Bins per Octave (12 bins)
+    - Normalization (False)
 - Outputs:
     - constantq
+        - Description: Extract a spectrogram with constant ratio of centre frequency to resolution from the input audio
+        - Comment: Sound energy on given note (across octaves)
+        - Usefulness: 2
 
 ### qm-vamp-plugins:qm-dwt
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 1024
+- Step size:  1024
+- Parameter (default):
+    - Scales (10)
+    - Wavelet (Haar)
+    - Threshold (0.0)
+    - Absolute values (False)
 - Outputs:
     - wcoeff
+        - Description: (Discrete Wavelet Transform) Visualization by scalogram
+        - Comment: ?
+        - Usefulness: 1? 
 
 ### qm-vamp-plugins:qm-keydetector
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 32768
+- Step size:  32768
+- Parameter (default):
+    - Tuning Frequency (440 Hz)
+    - Window Length (10 chroma frames)
 - Outputs:
     - tonic
+        - Description: Tonic of the estimated key (from C=1 to B=12)
+        - Comment: Segments of keys (F#, Ab etc)
+        - Usefulness: 2
     - mode
+        - Description: Estimates the key of music; major or minor mode of the estimated key (major = 0, minor = 1)
+        - Comment: Binary segments; either minor or major; can be combined with notes! 
+        - Usefulness: 2
     - key
+        - Description: Estimated key (from C major = 1 to B major = 12 and C minor = 13 to B minor = 24)
+        - Comment: Combination of mode and tonic; seems very useful!
+        - Usefulness: 3
     - keystrength
+        - Description: Correlation of the chroma vector with stored key profile for each major and minor key
+        - Comment: value of 13 is empty; 1-12 is major, 14-25 is minor; seems weird but may be useful
+        - Usefulness: 2
 
 ### qm-vamp-plugins:qm-mfcc
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 2048
+- Step size:  1024
+- Parameter (default):
+    - Number of Coefficients (20)
+    - Power of Mel Amplitude Logs (1)
+    - Include C0 (True)
 - Outputs:
     - coefficients
+        - Description: MFCC Values
+        - Comment: ?
+        - Usefulness: 1 
     - means
+        - Description: Mean values of MFCCs across duration of audio input
+        - Comment: ?
+        - Usefulness: Same as above but single values for each MFCC
 
 ### qm-vamp-plugins:qm-onsetdetector
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 1024
+- Step size:  512
+- Parameter (default):
+    - Program (None, General purpose, Soft onsets, Percussive onsets)
+    - Onset Detection Function Type (Complex Domain)
+    - Onset Detector Sensitivity (50%)
+    - Adaptive Whitening (False)
 - Outputs:
     - onsets
+        - Description: Perceived note onset positions
+        - Comment: Binary points indicating note/percussion etc.
+        - Usefulness: 0
     - detection_fn
+        - Description: Probability function of note onset likelihood
+        - Comment: As onsets but with probability per point
+        - Usefulness: 1
     - smoothed_df
+        - Description: Smoothed probability function used for peak-picking
+        - Comment: As detection_fn but smoothed
+        - Usefulness: 2
 
 ### qm-vamp-plugins:qm-segmenter
 - Outputs:
     - segmentation
+        - Description: 
+        - Comment: 
+        - Usefulness: 
 
 ### qm-vamp-plugins:qm-similarity
 - Outputs:
     - distancematrix
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - distancevector
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - sorteddistancevector
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - means
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - variances
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - beatspectrum
+        - Description: 
+        - Comment: 
+        - Usefulness: 
 
 ### qm-vamp-plugins:qm-tempotracker
 - Outputs:
     - beats
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - detection_fn
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - tempo
+        - Description: 
+        - Comment: 
+        - Usefulness: 
 
 
 ### qm-vamp-plugins:qm-tonalchange
 - Outputs:
     - tcstransform
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - tcfunction
+        - Description: 
+        - Comment: 
+        - Usefulness: 
     - changepositions
+        - Description: 
+        - Comment: 
+        - Usefulness: 
 
 ### qm-vamp-plugins:qm-transcription
 - Outputs:
     - transcription
+        - Description: 
+        - Comment: 
+        - Usefulness: 
 
 ### segmentino:segmentino
 - Outputs:
