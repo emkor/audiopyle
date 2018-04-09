@@ -787,35 +787,92 @@
         - Usefulness: 1
 
 ### vamp-example-plugins:amplitudefollower
+- URL:        https://www.vamp-plugins.org/plugin-doc/vamp-example-plugins.html
+- Block size: 1024
+- Step size:  1024
+- Parameter (default):
+    - Attack time (0.01 s)
+    - Release time (0.01 s)
 - Outputs:
     - amplitude
+        - Description: Track the amplitude of the audio signal
+        - Comment: Amplitude function
+        - Usefulness: 2
 
 ### vamp-example-plugins:fixedtempo
+- URL:        https://www.vamp-plugins.org/plugin-doc/vamp-example-plugins.html
+- Block size: 256
+- Step size:  64
+- Parameter (default):
+    - Minimum estimated tempo (50 BPM)
+    - Maximum estimated tempo (190 BPM)
+    - Input duration to study (10 s)
 - Outputs:
     - tempo
+        - Description: Study a short section of audio and estimate its tempo, assuming the tempo is constant
+        - Comment: Single-line function of first few seconds of track
+        - Usefulness: 1
     - candidates
+        - Usefulness: 0
     - detectionfunction
+        - Usefulness: 0
     - acf
+        - Usefulness: 0
     - filtered_acf
+        - Usefulness: 0
 
 ### vamp-example-plugins:percussiononsets
+- URL:        https://www.vamp-plugins.org/plugin-doc/vamp-example-plugins.html
+- Block size: 1024
+- Step size:  512
+- Parameter (default):
+    - Energy rise threshold (3 dB)
+    - Sensitivity (40%)
 - Outputs:
     - onsets
+        - Description: Percussive note onset locations
+        - Comment: Binary markings of percussion onsets
+        - Usefulness: 2
     - detectionfunction
+        - Description: Detect percussive note onsets by identifying broadband energy rises
+        - Comment: Probability of percussion onset at given time
+        - Usefulness: 2
 
 ### vamp-example-plugins:powerspectrum
+- URL:        https://www.vamp-plugins.org/plugin-doc/vamp-example-plugins.html
+- Block size: 1024
+- Step size:  512
+- Parameter (default):
+    - (None)
 - Outputs:
     - powerspectrum
+        - Description: Power spectrum of a signal
+        - Comment: Energy spectrum (3D chart)
+        - Usefulness: 2
 
 ### vamp-example-plugins:spectralcentroid
+- URL:        https://www.vamp-plugins.org/plugin-doc/vamp-example-plugins.html
+- Block size: 1024
+- Step size:  512
+- Parameter (default):
+    - (None)
 - Outputs:
     - logcentroid
+        - Description: Centroid of the log weighted frequency spectrum
+        - Comment: Center of frequency?
+        - Usefulness: 2
     - linearcentroid
+        - Description: Centroid of the linear frequency spectrum
+        - Comment: As logcentroid, but more diversed
+        - Usefulness: 2
 
 ### vamp-example-plugins:zerocrossing
 - Outputs:
     - counts
+        - Usefulness: 0
     - zerocrossings
+        - Description: Location of zero-crossing points
+        - Usefulness: 0
 
 ### vamp-libxtract:amdf
 - Outputs:
