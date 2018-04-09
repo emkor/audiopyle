@@ -3,7 +3,7 @@ import json
 import gzip
 import lzma
 
-from typing import Text, Any, List, Dict
+from typing import Text, Any, List, Dict, Union
 
 from commons.models.file_meta import FileMeta
 from commons.utils.conversion import utc_timestamp_to_datetime
@@ -23,7 +23,7 @@ class FileStore(object):
         self.permissions = permissions
         self.logger = get_logger()
 
-    def store(self, identifier: Text, content: Dict[Text, Any]) -> None:
+    def store(self, identifier: Text, content: Union[Dict[Text, Any], List[Any]]) -> None:
         full_path = self._build_full_path(identifier)
         try:
             self._inherit_store(full_path, content)
@@ -33,7 +33,7 @@ class FileStore(object):
             self.logger.warning(message)
             raise StoreError(message)
 
-    def read(self, identifier: Text) -> Dict[Text, Any]:
+    def read(self, identifier: Text) -> Union[Dict[Text, Any], List[Any]]:
         full_path = self._build_full_path(identifier)
         try:
             return self._inherit_read(full_path)
@@ -79,10 +79,10 @@ class FileStore(object):
         full_path = self._build_full_path(identifier)
         return file_exists(full_path) and extract_all_extensions(full_path).lower() == self.extension.lower()
 
-    def _inherit_store(self, full_path: Text, content: Dict[Text, Any]) -> None:
+    def _inherit_store(self, full_path: Text, content: Union[Dict[Text, Any], List[Any]]) -> None:
         raise NotImplementedError()
 
-    def _inherit_read(self, full_path: Text) -> Dict[Text, Any]:
+    def _inherit_read(self, full_path: Text) -> Union[Dict[Text, Any], List[Any]]:
         raise NotImplementedError()
 
     def _get_identifier(self, file_name: Text) -> Text:
