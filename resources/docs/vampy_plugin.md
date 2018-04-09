@@ -614,49 +614,80 @@
     - beatspectrum
         - Description: Rhythmic self-similarity vectors (beat spectra) for the input channels. Feature time (sec) corresponds to input channel. Not returned if rhythm weighting is zero.
         - Comment: ?
-        - Usefulness: ? 
+        - Usefulness: ?
 
 ### qm-vamp-plugins:qm-tempotracker
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 1114
+- Step size:  557
+- Parameter (default):
+    - Beat Tracking Method (New)
+    - Onset detection function type (Complex Domain)
+    - Adaptive Whitening (False)
+    - Alpha (0.9)
+    - Tempo Hint (120 BPM)
+    - Constrain Tempo (False)
 - Outputs:
     - beats
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Description: Estimated metrical beat locations
+        - Comment: HANGS
+        - Usefulness: ?
     - detection_fn
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Description: Probability function of note onset likelihood
+        - Comment: HANGS
+        - Usefulness: ?
     - tempo
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Description: Locked tempo estimates
+        - Comment: HANGS
+        - Usefulness: ?
 
 
 ### qm-vamp-plugins:qm-tonalchange
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 16384
+- Step size:  2048
+- Parameter (default):
+    - Gaussian smoothing (5 frames)
+    - Chromagram minimum pitch (32 MIDI units)
+    - Chromagram maximum pitch (108 MIDI units)
+    - Chromagram tuning frequency 440 Hz)
 - Outputs:
-    - tcstransform
-        - Description: 
-        - Comment: 
-        - Usefulness: 
-    - tcfunction
-        - Description: 
-        - Comment: 
-        - Usefulness: 
-    - changepositions
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+    - tcstransform (Transform to 6D Tonal Content Space)
+        - Description: Representation of content in a six-dimensional tonal space
+        - Comment: ?
+        - Usefulness: 1? 
+    - tcfunction (Tonal Change Detection Function)
+        - Description: Estimate of the likelihood of a tonal change occurring within each spectral frame
+        - Comment: ? Flat line
+        - Usefulness: 2?
+    - changepositions (Tonal Change Positions)
+        - Description: Estimated locations of tonal changes
+        - Comment: ?
+        - Usefulness: 1? 
 
 ### qm-vamp-plugins:qm-transcription
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 441
+- Step size:  441
+- Parameter (default):
+    - (None)
 - Outputs:
-    - transcription
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+    - transcription (Polyphonic Transcritpion)
+        - Description: Transcribe the input audio to estimated notes
+        - Comment: Shows MIDI notes in time
+        - Usefulness: 1
 
 ### segmentino:segmentino
+- URL:        https://code.soundsoftware.ac.uk/projects/segmenter-vamp-plugin
+- Block size: 32768
+- Step size:  557
+- Parameter (default):
+    - (None)
 - Outputs:
     - segmentation
+        - Description: Estimates contiguous segents pertaining to song parts such as verse and chorus
+        - Comment: Shows segments of a song
+        - Usefulness: 3
 
 ### silvet:silvet
 - Outputs:
