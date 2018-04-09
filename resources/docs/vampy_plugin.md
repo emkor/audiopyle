@@ -728,38 +728,63 @@
         - Usefulness: 0
 
 ### tempogram:tempogram
+- URL:        https://code.soundsoftware.ac.uk/projects/vamp-tempogram
+- Block size: 2048
+- Step size:  1024
+- Parameter (default):
+    - Novelty Curve Spectrogram Compression Constant (1000)
+    - Novelty Curve Minimum DB (-74)
+    - Tempogram Window Length (1024)
+    - Tempogram Hopsize (64)
 - Outputs:
     - cyclicTempogram
-        - Description:
-        - Comment:
-        - Usefulness:
+        - Description: Cyclic tempogram calculated by octave folding the DFT tempogram
+        - Comment: ?
+        - Usefulness: 1
     - tempogramDFT
-        - Description:
-        - Comment:
-        - Usefulness:
+        - Description: Tempogram calculated using Discrete Fourier Transform
+        - Comment: ?
+        - Usefulness: 1
     - tempogramACT
-        - Description:
-        - Comment:
-        - Usefulness:
+        - Description: Tempogram calculated using auto-correlation method
+        - Comment: ?
+        - Usefulness: 1
     - nc
-        - Description:
-        - Comment:
-        - Usefulness:
+        - Description: Novelty curve underlying the tempogram calculations
+        - Comment: Flat line?
+        - Usefulness: ?
 
-### ua-vamp-plugins
+### ua-vamp-plugins:mf0ua
+- URL:        https://grfia.dlsi.ua.es/cm/projects/drims/softwareVAMP.php
+- Block size: 4458
+- Step size:  557
+- Parameter (default):
+    - Algorithm (EURASIP12)
+    - Maximum polyphony (6)
+    - Minimum fundamental frequency (38 Hz)
+    - Maximum fundamental frequency (2100 Hz)
+    - Minimum note duration (0.02 s)
 - Outputs:
     - mf0ua
-        - Description:
-        - Comment:
-        - Usefulness:
-    - onsetsua
-        - Description:
-        - Comment:
-        - Usefulness:
-    - onsetsua
-        - Description:
-        - Comment:
-        - Usefulness:
+        - Description: Multiple fundamental frequency estimation for polyphonic music transcription
+        - Comment: Notes in time with duration, frequency and note classification
+        - Usefulness: 2
+
+### ua-vamp-plugins:onsetsua
+- URL:        https://grfia.dlsi.ua.es/cm/projects/drims/softwareVAMP.php
+- Block size: 4458
+- Step size:  2229
+- Parameter (default):
+    - Sensitivity (0.18)
+- Outputs:
+    - odf (Onset Detection Function)
+        - Description: Note onset detection using a one-semitone filterbank
+        - Comment: Function of likelihood that in given timestamp, a note is set
+        - Usefulness: 2
+    - onsets
+        - Description: Multiple fundamental frequency estimation for polyphonic music transcription
+        - Comment: Note onset detection using a one-semitone filterbank
+        - Usefulness: 1
 
 ### vamp-example-plugins:amplitudefollower
 - Outputs:
