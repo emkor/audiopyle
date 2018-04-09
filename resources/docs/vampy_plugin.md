@@ -690,27 +690,76 @@
         - Usefulness: 3
 
 ### silvet:silvet
+- URL:        https://code.soundsoftware.ac.uk/projects/silvet
+- Block size: 1024
+- Step size:  1024
+- Parameter (default):
+    - Processing mode (Intensive)
+    - Instrument (Multiple or unknown instruments)
+    - Return fine pitch estimates (False)
 - Outputs:
-    - notes
-    - onsets
-    - onoffsets
-    - timefreq
-    - pitchactivation
-    - chroma
+    - notes (Note Transcription)
+        - Description: Overall note transcription. Each note has time, duration, estimated fundamental frequency and synthetic MIDI velocity (0-127) estimated from strength of the pitch in the mixture
+        - Comment: MIDI notes (with frequencies and durations)
+        - Usefulness: 2
+    - onsets (Note onsets)
+        - Description: Note onsets with durations. These can be calculated sooner than complete notes, because it isn't necessary to wait for a note to finish before returning its feature. Each event has time, estimated fundamental frequency in Hz, and synthethic MIDI velocity.
+        - Comment: Same as notes, but with less detail
+        - Usefulness: 1
+    - onoffsets (Note onsets and offsets)
+        - Description: Note onsets and offsets as separate events (Offsets are represented in the same way but with a velocity of 0)
+        - Comment: Same as onsets but with offets, too
+        - Usefulness: 1
+    - timefreq (Time-frequency distribution)
+        - Description: Filtered constant-Q time-frequency distribution as used in input to the expectation-maximisation algorithm
+        - Comment: Seems very useful in determining "richness" of sound; constant-q with clearly visible notes and holes
+        - Usefulness: 2
+    - pitchactivation (Pitch activation distribution)
+        - Description: Pitch activation distribution resulting from expectation-maximisation algorithm, prior to note extraction
+        - Comment: Clearly visible melody of a track; values 1-87 (1 - A0, 88 - C8)
+        - Usefulness: 2
+    - chroma (Pitch chroma distribution)
+        - Description: Pitch chroma distribution formed by wrapping the un-thresholded pitch activation distribution into a single octave of semitone bins
+        - Comment: same as pitchactivation, but for single octave; values 1-12 (1-A, 12 - G#)
+        - Usefulness: 2
     - templates
+        - Description: Constant-Q spectral templates the selected instrument pack
+        - Comment: ?
+        - Usefulness: 0
 
 ### tempogram:tempogram
 - Outputs:
     - cyclicTempogram
+        - Description:
+        - Comment:
+        - Usefulness:
     - tempogramDFT
+        - Description:
+        - Comment:
+        - Usefulness:
     - tempogramACT
+        - Description:
+        - Comment:
+        - Usefulness:
     - nc
+        - Description:
+        - Comment:
+        - Usefulness:
 
 ### ua-vamp-plugins
 - Outputs:
     - mf0ua
+        - Description:
+        - Comment:
+        - Usefulness:
     - onsetsua
+        - Description:
+        - Comment:
+        - Usefulness:
     - onsetsua
+        - Description:
+        - Comment:
+        - Usefulness:
 
 ### vamp-example-plugins:amplitudefollower
 - Outputs:
