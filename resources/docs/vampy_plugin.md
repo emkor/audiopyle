@@ -571,38 +571,50 @@
         - Usefulness: 2
 
 ### qm-vamp-plugins:qm-segmenter
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 28800
+- Step size:  9600
+- Parameter (default):
+    - Number of segment-types (10)
+    - Feature Type (Hybrid (Constant-Q))
+    - Minimum segment duration (4)
 - Outputs:
     - segmentation
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Description: Divide the tack into a sequence of consistent segments
+        - Comment: Shows repeatable segments of a song
+        - Usefulness: 3
 
 ### qm-vamp-plugins:qm-similarity
+- URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
+- Block size: 4096
+- Step size:  2048
+- Parameter (default):
+    - Feature Type (Timbre and Rhythm; Timbre; Chroma; Chroma and Rhythm; Rhythm)
 - Outputs:
     - distancematrix
-        - Description: 
-        - Comment: 
-        - Usefulness: 
-    - distancevector
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Description: Distance matrix for similarity metric. Smaller = more similar. Should be assymetrical.
+        - Comment: 4 values, 2 per channel
+        - Usefulness: 1?
+    - distancevector (Distance from first channel)
+        - Description: Distance vector for similarity of each channel to the first channel. Smaller = more similar.
+        - Comment: Two values (one per channel)
+        - Usefulness: 1
     - sorteddistancevector
         - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Comment: ? 
+        - Usefulness: ?
     - means
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Description: Means of the feature bins. Feature time (sec) corresponds to input channel. Number of bins depends on selected feature type.
+        - Comment: ?
+        - Usefulness: ?
     - variances
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Description: Variances of the feature bins. Feature time (sec) corresponds to input channel. Number of bins depends on selected feature type.
+        - Comment: ?
+        - Usefulness: ? 
     - beatspectrum
-        - Description: 
-        - Comment: 
-        - Usefulness: 
+        - Description: Rhythmic self-similarity vectors (beat spectra) for the input channels. Feature time (sec) corresponds to input channel. Not returned if rhythm weighting is zero.
+        - Comment: ?
+        - Usefulness: ? 
 
 ### qm-vamp-plugins:qm-tempotracker
 - Outputs:
