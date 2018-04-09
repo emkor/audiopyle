@@ -544,8 +544,8 @@
         - Usefulness: 1 
     - means
         - Description: Mean values of MFCCs across duration of audio input
-        - Comment: ?
-        - Usefulness: Same as above but single values for each MFCC
+        - Comment: Same as above but single values for each MFCC
+        - Usefulness: ?
 
 ### qm-vamp-plugins:qm-onsetdetector
 - URL:        https://vamp-plugins.org/plugin-doc/qm-vamp-plugins.html
