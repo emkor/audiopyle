@@ -10,9 +10,9 @@ class PluginConfigProvider(object):
         self.file_store = file_store
         self.logger = logger
 
-    def get_all(self) -> Optional[Dict[str, Dict[str, Any]]]:
+    def get_all(self) -> Optional[Dict[str, Any]]:
         try:
-            return self.file_store.read(PLUGIN_CONFIG_IDENTIFIER)
+            return self.file_store.read(PLUGIN_CONFIG_IDENTIFIER)  # type: ignore
         except StoreError as e:
             self.logger.warning(str(e))
             return None
