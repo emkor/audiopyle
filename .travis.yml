@@ -13,9 +13,7 @@ before_script:
   - make config
 
 script:
-  - make test
-  - make package
-  - make verify
+  - make all
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then

@@ -1,4 +1,4 @@
-all: test package verify
+all: test basepackage package verify
 
 PIP = .venv/bin/python -m pip
 MYPY = .venv/bin/python -m mypy
@@ -25,9 +25,11 @@ test:
 	@echo "---- Running unit tests ----"
 	@$(PYTEST) -v --cov=commons ./commons
 
-package:
+basepackage:
 	@echo "---- Building base image ----"
 	@$(DOCKER) build -t endlessdrones/audiopyle-base:latest ./base
+
+package:
 	@echo "---- Installing app images ----"
 	@$(DOCKER) build -t endlessdrones/audiopyle-commons ./commons
 	@$(DOCKER) build -t endlessdrones/audiopyle-extractor ./extractor
@@ -39,4 +41,4 @@ verify:
 	@echo "---- Running integration tests ----"
 	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 
-.PHONY: all config test package verify
+.PHONY: all config test basepackage package verify
