@@ -9,16 +9,13 @@ services:
 
 before_script:
   - chmod u+x **/*.sh
-  - scripts/install_os_build_deps.sh
-  - scripts/install_py_build_deps.sh
+  - sudo apt-get install -y libav-tools
+  - make config
 
 script:
-  - scripts/run_type_check.sh
-  - scripts/run_unit_tests.sh
-  - scripts/build_base_image.sh
-  - scripts/build_app_images.sh
-  - scripts/build_test_image.sh
-  - scripts/run_integration_tests.sh
+  - make test
+  - make package
+  - make verify
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then

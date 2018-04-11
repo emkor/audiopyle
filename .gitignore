@@ -7,18 +7,18 @@ downloads/
 eggs/
 .eggs/
 *.egg-info/
+.venv/
+**/__pycache__
+**/.pytest_cache
 
 # Unit test / coverage reports
 .tox/
 .coverage
 .cache
-
+*coverage.xml
+*-coverage/
+.mypy_cache
 
 # IDEA files
 .idea/
 *.iml
-
-# tox files
-*coverage.xml
-*-coverage/
-.mypy_cache
