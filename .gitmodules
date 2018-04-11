@@ -1,0 +1,3 @@
+[submodule "audiopyle.wiki"]
+	path = audiopyle.wiki
+	url = git@github.com:emkor/audiopyle.wiki.git
