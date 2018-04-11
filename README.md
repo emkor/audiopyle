@@ -6,9 +6,3 @@ Docker-based app for extracting features from audio files. Makes use of standard
 
 ## Usage:
 TO DO
-
-## Development:
-- Glossary: TO DO
-- APIs: TO DO
-- Feature visualization: TO DO
-- Tips: TO DO
