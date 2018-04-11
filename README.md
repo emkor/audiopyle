@@ -2,4 +2,13 @@
 
 ![audiopyle](http://i.imgur.com/NDGeQg5.png)
 
-Distributed, scalable, Docker-based app for extracting features from audio files. Makes use of standard VAMP plugins for feature extraction.
+Docker-based app for extracting features from audio files. Makes use of standard VAMP plugins for feature extraction.
+
+## Usage:
+TO DO
+
+## Development:
+- Glossary: TO DO
+- APIs: TO DO
+- Feature visualization: TO DO
+- Tips: TO DO
