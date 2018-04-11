@@ -4,11 +4,15 @@
 - Audio meta - audio stream metadata; contains information on sample rate, bit depth, frames count, file size etc.; when it comes to MP3 file, contains also bitrate (kb/s)
 - Sample rate - number of frames per second; see [Sampling](https://en.wikipedia.org/wiki/Sampling_(signal_processing))
 - Audio frame - single point of audio-level measurement in time-domain
-
-- VAMP plugin - system library that does direct feature extraction; see [Vamp plugins page](https://vamp-plugins.org/)
 - Bit depth - number of bits for storing audio-wave level; standard: 16 bit; see [Audio bit depth](https://en.wikipedia.org/wiki/Audio_bit_depth)
+
+- VAMP plugin - system library that does direct feature extraction; see [Vamp plugins page](https://vamp-plugins.org/); plugin have single set of parameters defined
+- VAMP plugin key - string in format "plugin_vendor:plugin_name"; single plugin contains multiple outputs
+- VAMP plugin full key - audiopyle-specific string in format "plugin_vendor:plugin_name:plugin_output" - analysis is can be done only using this combination, so from Audiopyle perspective, single analysis consists of full-key combination, audio file name and plugin config
+- Plugin config - set of parameters passed to the vampy library and further to the VAMP plugin; contains two mandatory parameters (block_size and step_size, both fallbacks to plugins preferred values in case of valueof 0) 
+- Block size / window size - size of a block (in frames count) analyzed in single step by VAMP plugin
+- Block size increment / window increment - frames count by which block size is incremented between steps
+
 - Audio feature - raw feature from VAMP plugin output, wrapped in audiopyle-specific class abstraction
 - Variable step feature - one of two feature types from VAMP plugin output; basically, list of dictionaries, each one with timestamp, value and label (optionally)
 - Constant step feature - second feature type; dictionary containing feature_step value (seconds between subsequent measures) and vector or matrix of measured values
-- Block size / window size - size of a block (in frames count) analyzed in single step by VAMP plugin
-- Block size increment / window increment - frames count by which block size is incremented between steps
