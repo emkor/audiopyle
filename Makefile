@@ -1,15 +1,14 @@
 all: test package verify
 
-PIP = .venv/bin/pip
-MYPY = .venv/bin/mypy
-PYTEST = .venv/bin/py.test
+PIP = .venv/bin/python -m pip
+MYPY = .venv/bin/python -m mypy
+PYTEST = .venv/bin/python -m pytest
 DOCKER = docker
 DOCKER_COMPOSE = docker-compose
 
 config:
 	@echo "---- Setting virtualenv ----"
 	@rm -rf .venv && python -m venv .venv
-	@ls .venv && echo '@@@' && ls .venv/bin
 	@echo "---- Installing build dependencies ----"
 	@$(PIP) install numpy
 	@$(PIP) install vamp tox mypy pytest pytest-cov assertpy
