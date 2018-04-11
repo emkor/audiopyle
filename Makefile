@@ -37,6 +37,6 @@ verify:
 	@echo "---- Building test image ----"
 	@$(DOCKER) build -t endlessdrones/audiopyle-testcases ./testcases
 	@echo "---- Running integration tests ----"
-	@$(DOCKER_COMPOSE) docker-compose -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
+	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 
 .PHONY: all config test package verify
