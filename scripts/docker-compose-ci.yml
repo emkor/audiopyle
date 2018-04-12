@@ -73,3 +73,6 @@ services:
           - testcases.local
     image: "endlessdrones/audiopyle-testcases:latest"
     hostname: "testcases"
+    environment:
+      - COORDINATOR_SERVICE_HOST=coordinator.local
+      - COORDINATOR_SERVICE_PORT=8080

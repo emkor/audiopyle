@@ -3,13 +3,19 @@ from time import sleep
 
 import requests
 
+from commons.utils.env_var import read_env_var
+
 DEFAULT_API_TIMEOUT = 10.
 DEFAULT_TICK_TIME = .5
 DEFAULT_EXPECTED_STATUS = 200
 
 
 def get_api_host():
-    return "coordinator.local"
+    return read_env_var("COORDINATOR_SERVICE_HOST", str, "localhost")
+
+
+def get_api_port():
+    return read_env_var("COORDINATOR_SERVICE_PORT", int, 8080)
 
 
 class TimeoutException(Exception):

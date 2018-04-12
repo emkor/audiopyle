@@ -4,12 +4,12 @@ import requests
 from assertpy import assert_that
 
 from commons.models.plugin import VampyPlugin
-from testcases.utils import get_api_host
+from testcases.utils import get_api_host, get_api_port
 
 
 class PluginApiTest(TestCase):
     def setUp(self):
-        self.plugin_url = "http://{}:8080/plugin".format(get_api_host())
+        self.plugin_url = "http://{}:{}/plugin".format(get_api_host(), get_api_port())
         self.test_plugin_vendor = "vamp-example-plugins"
         self.test_plugin_name = "amplitudefollower"
         self.test_plugin_output = "amplitude"
