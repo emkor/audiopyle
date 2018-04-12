@@ -3,12 +3,12 @@ from assertpy import assert_that
 
 import requests
 
-from testcases.utils import get_api_host
+from testcases.utils import get_api_host, get_api_port
 
 
 class AudioApiTest(TestCase):
     def setUp(self):
-        self.audio_api_url = "http://{}:8080/audio".format(get_api_host())
+        self.audio_api_url = "http://{}:{}/audio".format(get_api_host(), get_api_port())
         self.audio_file = "102bpm_drum_loop"
 
     def test_should_list_audio_file(self):
