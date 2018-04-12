@@ -14,7 +14,6 @@ from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigR
 from commons.services.plugin_config_provider import PluginConfigProvider
 from commons.services.plugin_providing import VampyPluginProvider
 from commons.services.store_provider import Mp3FileStore, JsonFileStore
-from commons.utils.env_var import read_env_var
 from commons.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
@@ -37,9 +36,10 @@ def main():
 
 def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     audio_file_store = Mp3FileStore(AUDIO_FILES_DIR)
-    plugin_config_provider = PluginConfigProvider(JsonFileStore(CONFIG_DIR), logger)
+    config_json_store = JsonFileStore(CONFIG_DIR)
+    plugin_config_provider = PluginConfigProvider(config_json_store, logger)
 
-    plugin_provider = _initialize_plugin_provider(logger)
+    plugin_provider = _initialize_plugin_provider(logger, config_json_store)
     feature_data_repo, feature_meta_repo, result_repo, result_stats_repo = _initialize_db_repositories()
 
     app.add_url_rule("/automation", view_func=AutomationApi.as_view('automation_api',
@@ -117,8 +117,8 @@ def _initialize_db_repositories():
     return feature_data_repo, feature_meta_repo, result_repo, result_stats_repo
 
 
-def _initialize_plugin_provider(logger):
-    blacklisted_plugins = read_env_var(var_name="BLACKLISTED_PLUGINS", expected_type=str, default="").split(",")
+def _initialize_plugin_provider(logger, config_store: JsonFileStore):
+    blacklisted_plugins = config_store.read("blacklist")
     if blacklisted_plugins:
         logger.warning("Found {} blacklisted plugin keys: {}".format(len(blacklisted_plugins), blacklisted_plugins))
     plugin_provider = VampyPluginProvider(plugin_black_list=blacklisted_plugins, logger=logger)

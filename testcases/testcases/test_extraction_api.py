@@ -4,13 +4,13 @@ from assertpy import assert_that
 import requests
 
 from extractor.result_model import TaskStatus
-from testcases.utils import get_api_host, keep_polling_until
+from testcases.utils import get_api_host, keep_polling_until, get_api_port
 
 
 class CoordinatorApiTest(TestCase):
     def setUp(self):
-        self.extraction_api_url = "http://{}:8080/extraction".format(get_api_host())
-        self.result_api_url = "http://{}:8080/result".format(get_api_host())
+        self.extraction_api_url = "http://{}:{}/extraction".format(get_api_host(), get_api_port())
+        self.result_api_url = "http://{}:{}/result".format(get_api_host(), get_api_port())
         self.mp3_extraction_request = {
             "audio_file_identifier": "102bpm_drum_loop",
             "plugin_full_key": "vamp-example-plugins:amplitudefollower:amplitude",

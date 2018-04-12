@@ -4,12 +4,12 @@ from assertpy import assert_that
 import requests
 
 from commons.abstractions.api_model import HttpStatusCode
-from testcases.utils import get_api_host
+from testcases.utils import get_api_host, get_api_port
 
 
 class AutomationApiTest(TestCase):
     def setUp(self):
-        self.automation_api_url = "http://{}:8080/automation".format(get_api_host())
+        self.automation_api_url = "http://{}:{}/automation".format(get_api_host(), get_api_port())
 
     def test_should_return_method_not_allowed_on_get(self):
         response = requests.get(self.automation_api_url)
