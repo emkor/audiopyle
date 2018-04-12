@@ -9,7 +9,7 @@ DEFAULT_EXPECTED_STATUS = 200
 
 
 def get_api_host():
-    return "coordinator"
+    return "coordinator.local"
 
 
 class TimeoutException(Exception):

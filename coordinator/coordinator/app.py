@@ -14,7 +14,6 @@ from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigR
 from commons.services.plugin_config_provider import PluginConfigProvider
 from commons.services.plugin_providing import VampyPluginProvider
 from commons.services.store_provider import Mp3FileStore, JsonFileStore
-from commons.utils.env_var import read_env_var
 from commons.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
@@ -120,7 +119,6 @@ def _initialize_db_repositories():
 
 def _initialize_plugin_provider(logger, config_store: JsonFileStore):
     blacklisted_plugins = config_store.read("blacklist")
-    # blacklisted_plugins = read_env_var(var_name="BLACKLISTED_PLUGINS", expected_type=str, default="").split(",")
     if blacklisted_plugins:
         logger.warning("Found {} blacklisted plugin keys: {}".format(len(blacklisted_plugins), blacklisted_plugins))
     plugin_provider = VampyPluginProvider(plugin_black_list=blacklisted_plugins, logger=logger)
