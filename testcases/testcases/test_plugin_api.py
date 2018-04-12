@@ -4,12 +4,12 @@ import requests
 from assertpy import assert_that
 
 from commons.models.plugin import VampyPlugin
-from testcases.utils import get_api_host
+from testcases.utils import get_api_host, get_api_port
 
 
 class PluginApiTest(TestCase):
     def setUp(self):
-        self.plugin_url = "http://{}:8080/plugin".format(get_api_host())
+        self.plugin_url = "http://{}:{}/plugin".format(get_api_host(), get_api_port())
         self.test_plugin_vendor = "vamp-example-plugins"
         self.test_plugin_name = "amplitudefollower"
         self.test_plugin_output = "amplitude"
@@ -19,7 +19,7 @@ class PluginApiTest(TestCase):
 
     def test_should_list_plugins(self):
         expected_status_code = 200
-        expected_plugin_count = 13
+        expected_plugin_count = 6
         response = requests.get(url=self.plugin_url)
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_response = response.json()

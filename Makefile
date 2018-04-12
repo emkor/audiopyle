@@ -19,9 +19,9 @@ test:
 	@$(MYPY) --ignore-missing-imports ./coordinator
 	@$(MYPY) --ignore-missing-imports ./extractor
 	@echo "---- Installing modules ----"
-	@$(PIP) install ./commons
-	@$(PIP) install ./coordinator
-	@$(PIP) install ./extractor
+	@$(PIP) install -e ./commons
+	@$(PIP) install -e ./coordinator
+	@$(PIP) install -e ./extractor
 	@echo "---- Running unit tests ----"
 	@$(PYTEST) -v --cov=commons ./commons
 

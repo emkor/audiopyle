@@ -1,7 +1,14 @@
 version: '3'
 
+networks:
+  default:
+
 services:
   rabbitmq:
+    networks:
+      default:
+        aliases:
+          - rabbitmq.local
     image: "rabbitmq:3.6-alpine"
     hostname: "rabbitmq"
     environment:
@@ -10,6 +17,10 @@ services:
       RABBITMQ_DEFAULT_PASS: "rabbitmq"
       RABBITMQ_DEFAULT_VHOST: "/"
   mysql:
+    networks:
+      default:
+        aliases:
+          - mysql.local
     image: mysql:5.7
     hostname: "mysql"
     environment:
@@ -20,6 +31,10 @@ services:
     ports:
       - "3306:3306"
   coordinator:
+    networks:
+      default:
+        aliases:
+          - coordinator.local
     image: "endlessdrones/audiopyle-coordinator:latest"
     hostname: "coordinator"
     ports:
@@ -29,13 +44,16 @@ services:
       - "./resources/vamp:/root/vamp:ro"
       - "./resources/audio:/root/audio:ro"
     environment:
-      - BLACKLISTED_PLUGINS=bbc-vamp-plugins:bbc-energy:lowenergy,bbc-vamp-plugins:bbc-energy:pdip,bbc-vamp-plugins:bbc-peaks:peaks,bbc-vamp-plugins:bbc-rhythm:autocor,bbc-vamp-plugins:bbc-rhythm:diff,bbc-vamp-plugins:bbc-rhythm:mean-correlation-peak,bbc-vamp-plugins:bbc-rhythm:onset,bbc-vamp-plugins:bbc-rhythm:peak-valley-ratio,bbc-vamp-plugins:bbc-speechmusic-segmenter:segmentation,cqvamp:cqvamp:constantq,cqvamp:cqvampmidi:constantq,match-vamp-plugin-2:match:a_b,match-vamp-plugin-2:match:a_b_divergence,match-vamp-plugin-2:match:a_b_temporatio,match-vamp-plugin-2:match:a_cfeatures,match-vamp-plugin-2:match:a_features,match-vamp-plugin-2:match:b_a,match-vamp-plugin-2:match:b_cfeatures,match-vamp-plugin-2:match:b_features,match-vamp-plugin-2:match:overall_cost,match-vamp-plugin-2:match:path,match-vamp-plugin:match:a_b,match-vamp-plugin:match:a_b_divergence,match-vamp-plugin:match:a_b_temporatio,match-vamp-plugin:match:a_cfeatures,match-vamp-plugin:match:a_features,match-vamp-plugin:match:b_a,match-vamp-plugin:match:b_cfeatures,match-vamp-plugin:match:b_features,match-vamp-plugin:match:overall_cost,match-vamp-plugin:match:path,mtg-melodia:melodia:melody,mtg-melodia:melodiaviz:contoursall,mtg-melodia:melodiaviz:contoursmelody,mtg-melodia:melodiaviz:saliencefunction,nnls-chroma:chordino:chordnotes,nnls-chroma:chordino:loglikelihood,nnls-chroma:nnls-chroma:logfreqspec,nnls-chroma:nnls-chroma:semitonespectrum,nnls-chroma:nnls-chroma:tunedlogfreqspec,pyin:pyin:candidatesalience,pyin:pyin:f0candidates,pyin:pyin:f0probs,pyin:yin:salience,qm-vamp-plugins:qm-adaptivespectrogram:output,qm-vamp-plugins:qm-dwt:wcoeff,vamp-example-plugins:powerspectrum:powerspectrum,vamp-example-plugins:zerocrossing:zerocrossings,vamp-libxtract:amdf:amdf,vamp-libxtract:asdf:asdf,vamp-libxtract:autocorrelation:autocorrelation,vamp-libxtract:dct:dct,vamp-libxtract:spectrum:amplitudes
-      - RABBITMQ_SERIVCE_HOST=rabbitmq
-      - MYSQL_SERVICE_HOST=mysql
+      - RABBITMQ_SERIVCE_HOST=rabbitmq.local
+      - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
     depends_on:
       - rabbitmq
   extractor_1:
+    networks:
+      default:
+        aliases:
+          - extractor_1.local
     image: "endlessdrones/audiopyle-extractor:latest"
     hostname: "extractor_1"
     volumes:
@@ -47,8 +65,8 @@ services:
       - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=300
       - EXTRACTION_HARD_TIME_LIMIT_SECONDS=600
       - EXTRACTION_MEMORY_LIMIT_MB=512
-      - RABBITMQ_SERIVCE_HOST=rabbitmq
-      - MYSQL_SERVICE_HOST=mysql
+      - RABBITMQ_SERIVCE_HOST=rabbitmq.local
+      - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
     depends_on:
       - rabbitmq
