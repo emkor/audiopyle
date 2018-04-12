@@ -23,7 +23,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "./resources/config:/root/config:ro"
+      - "../resources/config:/root/config:ro"
       - "../resources/vamp:/root/vamp:ro"
       - "../resources/audio:/root/audio:ro"
     depends_on:
