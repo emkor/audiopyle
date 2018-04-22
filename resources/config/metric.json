@@ -1,0 +1,96 @@
+{
+  "bbc_energy_rms": {
+    "plugin": "bbc-vamp-plugins:bbc-energy:rmsenergy",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_energy_delta_rms": {
+    "plugin": "bbc-vamp-plugins:bbc-energy:rmsdelta",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_energy_average_rms": {
+    "plugin": "bbc-vamp-plugins:bbc-energy:average",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_intensity_overall": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_intensity_lo_bass": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        0
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_intensity_bass": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        1
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_intensity_lo_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        2
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_intensity_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        3
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_intensity_hi_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        4
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_intensity_lo_hi": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        5
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_intensity_hi": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        6
+      ],
+      "kwargs": {}
+    }
+  }
+}
