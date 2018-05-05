@@ -22,10 +22,10 @@ def build_feature_object(task_id: str, extracted_data: Dict[Text, Any]) -> Vampy
     data_type = list(extracted_data.keys())[0]
     if data_type == "list":
         value_list = [StepFeature(f.get("timestamp").to_float(), f.get("values"), f.get("label") or None)
-                      for f in extracted_data.get("list")]
+                      for f in extracted_data["list"]]
         return VampyVariableStepFeature(task_id, step_features=value_list)
     elif data_type in ("vector", "matrix"):
         data = extracted_data.get("vector") or extracted_data.get("matrix")
-        return VampyConstantStepFeature(task_id, time_step=data[0].to_float(), matrix=data[1])
+        return VampyConstantStepFeature(task_id, time_step=data[0].to_float(), matrix=data[1])  # type: ignore
     else:
         raise NotImplementedError("Can not recognize feature type: {}".format(extracted_data.keys()))

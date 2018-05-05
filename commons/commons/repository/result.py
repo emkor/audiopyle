@@ -55,5 +55,5 @@ class ResultRepository(DbRepository):
         audio_tag = self.audio_tag_repository.get_by_id(entity.audio_tag_id)
         plugin = self.plugin_repository.get_by_id(entity.vampy_plugin_id)
         plugin_config = self.plugin_config_repo.get_by_id(entity.plugin_config_id)
-        return AnalysisResult(task_id=entity.id, audio_meta=audio_meta, id3_tag=audio_tag,
+        return AnalysisResult(task_id=entity.id, audio_meta=audio_meta, id3_tag=audio_tag,  # type: ignore
                               plugin=plugin, plugin_config=plugin_config)
