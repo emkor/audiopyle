@@ -106,7 +106,7 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
     def values(self) -> numpy.ndarray:
         return numpy.asanyarray([step_feature.values for step_feature in self.step_features])
 
-    def labels(self) -> List[str]:
+    def labels(self) -> List[Optional[str]]:
         return [step_feature.label for step_feature in self.step_features]
 
     def value_shape(self) -> Tuple[int, int, int]:
