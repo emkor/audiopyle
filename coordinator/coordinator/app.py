@@ -18,8 +18,9 @@ from commons.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from coordinator.api.automation import AutomationApi
+from coordinator.api.config import PluginActiveConfigApi
 from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
-from coordinator.api.plugin import PluginListApi, PluginDetailApi, PluginActiveConfigApi
+from coordinator.api.plugin import PluginListApi, PluginDetailApi
 from coordinator.api.root import CoordinatorApi
 from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
 
