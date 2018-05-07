@@ -92,5 +92,105 @@
       ],
       "kwargs": {}
     }
+  },
+  "bbc_rhythm_onset": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:onset_curve",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_rhythm_onset_average": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:average",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_rhythm_onset_rate": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:avg-onset-freq",
+    "transformation": {
+      "name": "singe_value"
+    }
+  },
+  "bbc_rhythm_strength": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:rhythm-strength",
+    "transformation": {
+      "name": "singe_value"
+    }
+  },
+  "bbc_rhythm_tempo_bpm": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:tempo",
+    "transformation": {
+      "name": "singe_value"
+    }
+  },
+  "bbc_spectral_contrast_mean_lo_bas": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        0
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_spectral_contrast_peaks_bas": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        1
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_spectral_contrast_peaks_lo_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        2
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_spectral_contrast_peaks_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        4
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_spectral_contrast_peaks_hi_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        5
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_spectral_contrast_peaks_lo_hi": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        6
+      ],
+      "kwargs": {}
+    }
+  },
+  "bbc_spectral_contrast_peaks_hi": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "args": [
+        7
+      ],
+      "kwargs": {}
+    }
   }
 }
