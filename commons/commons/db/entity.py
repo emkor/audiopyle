@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, String, Integer, Float, UniqueConstraint, LargeBinary, ForeignKey
+from sqlalchemy import Column, DateTime, String, Integer, Float, UniqueConstraint, LargeBinary, ForeignKey, \
+    PrimaryKeyConstraint
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
 ENTITY_BASE = declarative_base()  # type: Optional[DeclarativeMeta]
@@ -116,3 +117,32 @@ class Result(ENTITY_BASE):  # type: ignore
                           nullable=False, index=True)
 
     done_at = Column(DateTime, default=datetime.utcnow)
+
+
+class MetricDefinition(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'metric_definition'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
+                       nullable=False, index=True)
+
+    name = Column(String(255), unique=True, index=True, nullable=False)
+    function = Column(String(255), index=False, nullable=False)
+    kwargs = Column(String(511), index=False, nullable=True)
+
+
+class Metric(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'metric'
+
+    task_id = Column(String(36), index=True, nullable=False)
+    definition_id = Column(Integer, ForeignKey("metric_definition.id", ondelete="CASCADE"),
+                           nullable=False, index=True)
+
+    minimum = Column(Float, index=False, nullable=True)
+    maximum = Column(Float, index=False, nullable=True)
+    median = Column(Float, index=False, nullable=True)
+    mean = Column(Float, index=False, nullable=True)
+    standard_deviation = Column(Float, index=False, nullable=True)
+    variance = Column(Float, index=False, nullable=True)
+
+    __table_args__ = (PrimaryKeyConstraint('task_id', 'definition_id'),)
