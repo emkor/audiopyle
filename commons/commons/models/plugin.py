@@ -1,6 +1,17 @@
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 
 from commons.abstractions.model import Model
+
+
+def full_key_to_params(vampy_full_key: str) -> Tuple[str, str, str]:
+    key_parts = vampy_full_key.split(":")
+    if len(key_parts) != 3:
+        raise ValueError("Can not parse {} as Vampy plugin key!".format(vampy_full_key))
+    return key_parts[0], key_parts[1], key_parts[2]
+
+
+def params_to_full_key(vendor: str, name: str, output: str) -> str:
+    return "{}:{}:{}".format(vendor, name, output)
 
 
 class VampyPlugin(Model):
@@ -17,7 +28,7 @@ class VampyPlugin(Model):
 
     @property
     def full_key(self) -> str:
-        return "{}:{}".format(self.vampy_key, self.output)
+        return params_to_full_key(self.vendor, self.name, self.output)
 
 
 class VampyPluginParams(Model):
