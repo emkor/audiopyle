@@ -45,11 +45,11 @@ def get_db_session_maker(db_engine: Optional[Engine] = None) -> sessionmaker:
 
 
 def create_db_tables(engine: Optional[Engine] = None, only_if_absent: bool = True) -> None:
-    ENTITY_BASE.metadata.create_all(engine or get_db_engine(), checkfirst=only_if_absent)
+    ENTITY_BASE.metadata.create_all(engine or get_db_engine(), checkfirst=only_if_absent)  # type: ignore
 
 
 def drop_db_tables(engine: Optional[Engine] = None) -> None:
-    ENTITY_BASE.metadata.drop_all(engine or get_db_engine())
+    ENTITY_BASE.metadata.drop_all(engine or get_db_engine())  # type: ignore
 
 
 def _build_mysql_conn_string(host: str = None, port: int = None) -> str:
