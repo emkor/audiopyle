@@ -5,7 +5,7 @@ from commons.models.feature import VampyFeatureAbstraction, VampyConstantStepFea
 
 
 class MetricDefinition(Model):
-    def __init__(self, name: str, plugin_key: str, function: str, kwargs: dict):
+    def __init__(self, name: str, plugin_key: str, function: str, kwargs: dict) -> None:
         self.name = name
         self.plugin_key = plugin_key
         self.function = function
@@ -13,7 +13,7 @@ class MetricDefinition(Model):
 
 
 class MetricTransformation(Model):
-    def __init__(self, name, *args, **kwargs):
+    def __init__(self, name, *args, **kwargs) -> None:
         self.name = name
         self.args = args
         self.kwargs = kwargs
@@ -34,7 +34,7 @@ class MetricTransformation(Model):
 
 
 class NoneTransformation(MetricTransformation):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__("none", *args, **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
@@ -45,7 +45,7 @@ class NoneTransformation(MetricTransformation):
 
 
 class SelectRowTransformation(MetricTransformation):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__("select_row", *args, **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
@@ -54,11 +54,11 @@ class SelectRowTransformation(MetricTransformation):
 
     def _call_on_variable_step(self, feature: VampyVariableStepFeature) -> numpy.ndarray:
         row_index = self.args[0]
-        return numpy.asanyarray([sf.values[row_index] for sf in feature.step_features])
+        return numpy.asanyarray([sf.values[row_index] for sf in feature.step_features])  # type: ignore
 
 
 class SingleValueTransformation(MetricTransformation):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__("singe_value", *args, **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
@@ -66,7 +66,7 @@ class SingleValueTransformation(MetricTransformation):
         return numpy.asanyarray([first_value, first_value])
 
     def _call_on_variable_step(self, feature: VampyVariableStepFeature) -> numpy.ndarray:
-        first_value = feature.step_features[0].values[0]
+        first_value = feature.step_features[0].values[0]  # type: ignore
         return numpy.asanyarray([first_value, first_value])
 
 

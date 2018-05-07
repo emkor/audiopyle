@@ -2,7 +2,7 @@ import json
 from typing import Optional
 
 from commons.models.metric import MetricDefinition as MetricDefObj
-from commons.db.entity import MetricDefinition as MetricDefEnt
+from commons.db.entity import MetricDefinition as MetricDefEnt, VampyPlugin
 from commons.db.session import SessionProvider
 from commons.models.plugin import full_key_to_params, params_to_full_key
 from commons.repository.abstract import DbRepository
@@ -22,10 +22,14 @@ class MetricDefinitionRepository(DbRepository):
         return MetricDefEnt(plugin_id=vampy_plugin_id, name=obj.name, function=obj.function, kwargs=json_kwargs_repr)
 
     def _map_to_object(self, entity: MetricDefEnt) -> MetricDefObj:
-        plugin_entity = self.plugin_repository.get_by_id(entity.plugin_id)
-        full_key = params_to_full_key(plugin_entity.vendor, plugin_entity.name, plugin_entity.output)
-        model_kwargs = json.loads(entity.kwargs)
-        return MetricDefObj(name=entity.name, plugin_key=full_key, function=entity.function, kwargs=model_kwargs)
+        plugin_entity = self.plugin_repository.get_by_id(entity.plugin_id)  # type: Optional[VampyPlugin]
+        if plugin_entity:
+            full_key = params_to_full_key(plugin_entity.vendor, plugin_entity.name, plugin_entity.output)
+            model_kwargs = json.loads(entity.kwargs)
+            return MetricDefObj(name=entity.name, plugin_key=full_key, function=entity.function, kwargs=model_kwargs)
+        raise ValueError(
+            "Could not find plugin with ID of {} when resolving metric definition named {}".format(entity.plugin_id,
+                                                                                                   entity.name))
 
     def get_id_by_model(self, model_object: MetricDefObj) -> Optional[int]:
         return safe_cast(self._get_id(id=model_object.name), int, None)

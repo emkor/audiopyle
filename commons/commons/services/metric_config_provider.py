@@ -18,8 +18,8 @@ class MetricConfigProvider(object):
             return None
 
     def get_for_plugin(self, plugin_full_key: str) -> Dict[str, Any]:
-        full_config = self.get_all()
         plugin_config = {}
+        full_config = self.get_all() or {}
         for metric_name, metric_config in full_config.items():
             if plugin_full_key == metric_config["plugin"]:
                 plugin_config.update({metric_name: metric_config})
