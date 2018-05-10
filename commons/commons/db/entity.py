@@ -72,13 +72,6 @@ class FeatureMeta(ENTITY_BASE):  # type: ignore
     feature_shape_z = Column(Integer, index=False, nullable=False)
     feature_size_bytes = Column(Integer, index=False, nullable=False)
 
-    feature_minimum = Column(Float, index=False, nullable=True)
-    feature_maximum = Column(Float, index=False, nullable=True)
-    feature_median = Column(Float, index=False, nullable=True)
-    feature_mean = Column(Float, index=False, nullable=True)
-    feature_standard_deviation = Column(Float, index=False, nullable=True)
-    feature_variance = Column(Float, index=False, nullable=True)
-
 
 class FeatureData(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_data'
