@@ -48,6 +48,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     app.add_url_rule("/extraction/automation", view_func=AutomationApi.as_view('automation_api',
                                                                                plugin_provider=plugin_provider,
                                                                                plugin_config_provider=plugin_config_provider,
+                                                                               metric_config_provider=metric_config_provider,
                                                                                audio_file_store=audio_file_store,
                                                                                result_repo=result_repo,
                                                                                logger=logger))

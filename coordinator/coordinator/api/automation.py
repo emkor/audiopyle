@@ -8,6 +8,7 @@ from commons.models.extraction_request import ExtractionRequest
 from commons.models.plugin import VampyPlugin
 from commons.repository.result import ResultRepository
 from commons.services.audio_tag_providing import ACCEPTED_EXTENSIONS
+from commons.services.metric_config_provider import MetricConfigProvider
 from commons.services.plugin_config_provider import PluginConfigProvider
 from commons.services.plugin_providing import VampyPluginProvider
 from commons.services.store_provider import FileStore
@@ -17,11 +18,12 @@ from extractor.task_api import run_task
 
 class AutomationApi(FlaskRestApi):
     def __init__(self, plugin_provider: VampyPluginProvider, plugin_config_provider: PluginConfigProvider,
-                 audio_file_store: FileStore,
+                 metric_config_provider: MetricConfigProvider, audio_file_store: FileStore,
                  result_repo: ResultRepository, logger: Logger) -> None:
         super().__init__(logger)
         self.plugin_provider = plugin_provider
         self.plugin_config_provider = plugin_config_provider
+        self.metric_config_provider = metric_config_provider
         self.audio_file_store = audio_file_store
         self.result_repo = result_repo
 
@@ -52,8 +54,10 @@ class AutomationApi(FlaskRestApi):
         extraction_requests = []
         for audio_file_identifier in audio_file_identifiers:
             for plugin in plugins:
+                plugin_metric_config = self.metric_config_provider.get_for_plugin(plugin_full_key=plugin.full_key)
                 extraction_requests.append(
                     ExtractionRequest(audio_file_identifier=audio_file_identifier,
                                       plugin_full_key=plugin.full_key,
-                                      plugin_config=plugin_configs.get(plugin.full_key, {})))
+                                      plugin_config=plugin_configs.get(plugin.full_key, {}),
+                                      metric_config=plugin_metric_config))
         return extraction_requests
