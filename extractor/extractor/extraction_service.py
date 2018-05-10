@@ -9,6 +9,7 @@ from commons.repository.audio_file import AudioFileRepository
 from commons.repository.audio_tag import AudioTagRepository
 from commons.repository.feature_data import FeatureDataRepository
 from commons.repository.feature_meta import FeatureMetaRepository
+from commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
 from commons.repository.result import ResultRepository, ResultStatsRepository
 from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from commons.services.compression import compress_model
@@ -32,6 +33,7 @@ class FeatureExtractionService(object):
     def __init__(self, plugin_provider: VampyPluginProvider, audio_file_store: Mp3FileStore,
                  audio_tag_repo: AudioTagRepository, audio_meta_repo: AudioFileRepository,
                  plugin_repo: VampyPluginRepository, plugin_config_repo: PluginConfigRepository,
+                 metric_definition_repo: MetricDefinitionRepository, metric_value_repo: MetricValueRepository,
                  feature_data_repo: FeatureDataRepository,
                  feature_meta_repo: FeatureMetaRepository, result_repo: ResultRepository,
                  result_stats_repo: ResultStatsRepository,
@@ -44,6 +46,8 @@ class FeatureExtractionService(object):
         self.audio_meta_repo = audio_meta_repo
         self.feature_data_repo = feature_data_repo
         self.feature_meta_repo = feature_meta_repo
+        self.metric_definition_repo = metric_definition_repo
+        self.metric_value_repo = metric_value_repo
         self.result_repo = result_repo
         self.result_stats_repo = result_stats_repo
         self.logger = logger
