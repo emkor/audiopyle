@@ -1,8 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, String, Integer, Float, UniqueConstraint, LargeBinary, ForeignKey, \
-    PrimaryKeyConstraint
+from sqlalchemy import Column, DateTime, String, Integer, Float, UniqueConstraint, LargeBinary, ForeignKey
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 
 ENTITY_BASE = declarative_base()  # type: Optional[DeclarativeMeta]
@@ -127,6 +126,7 @@ class MetricDefinition(ENTITY_BASE):  # type: ignore
 class Metric(ENTITY_BASE):  # type: ignore
     __tablename__ = 'metric'
 
+    id = Column(Integer, primary_key=True, autoincrement=True)
     task_id = Column(String(36), index=True, nullable=False)
     definition_id = Column(Integer, ForeignKey("metric_definition.id", ondelete="CASCADE"),
                            nullable=False, index=True)
@@ -138,4 +138,4 @@ class Metric(ENTITY_BASE):  # type: ignore
     standard_deviation = Column(Float, index=False, nullable=True)
     variance = Column(Float, index=False, nullable=True)
 
-    __table_args__ = (PrimaryKeyConstraint('task_id', 'definition_id'),)
+    __table_args__ = (UniqueConstraint('task_id', 'definition_id', name='unique_metric_value'),)

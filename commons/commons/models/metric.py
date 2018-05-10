@@ -1,7 +1,10 @@
+from typing import Dict, Text, Any
+
 import numpy
 
 from commons.abstractions.model import Model
 from commons.models.feature import VampyFeatureAbstraction, VampyConstantStepFeature, VampyVariableStepFeature
+from commons.models.result import DataStats
 
 
 class MetricDefinition(Model):
@@ -68,6 +71,27 @@ class SingleValueTransformation(MetricTransformation):
     def _call_on_variable_step(self, feature: VampyVariableStepFeature) -> numpy.ndarray:
         first_value = feature.step_features[0].values[0]  # type: ignore
         return numpy.asanyarray([first_value, first_value])
+
+
+class MetricValue(Model):
+    def __init__(self, task_id: str, definition: MetricDefinition, stats: DataStats) -> None:
+        self.task_id = task_id
+        self.definition = definition
+        self.stats = stats
+
+    def to_serializable(self):
+        base_serialized = super().to_serializable()
+        base_serialized.update({"definition": self.definition.to_serializable(),
+                                "stats": self.stats.to_serializable()})
+        return base_serialized
+
+    @classmethod
+    def from_serializable(cls, serialized: Dict[Text, Any]):
+        stats_object = DataStats.from_serializable(serialized["stats"])
+        definition_object = MetricDefinition.from_serializable(serialized["definition"])
+        serialized.update({"stats": stats_object,
+                           "definition": definition_object})
+        return MetricValue(**serialized)
 
 
 METRIC_TRANSFORMATIONS = {

@@ -1,10 +1,11 @@
 import json
 from typing import Optional
 
-from commons.models.metric import MetricDefinition as MetricDefObj
-from commons.db.entity import MetricDefinition as MetricDefEnt, VampyPlugin
+from commons.models.metric import MetricDefinition as MetricDefObj, MetricValue
+from commons.db.entity import MetricDefinition as MetricDefEnt, VampyPlugin, Metric
 from commons.db.session import SessionProvider
 from commons.models.plugin import full_key_to_params, params_to_full_key
+from commons.models.result import DataStats
 from commons.repository.abstract import DbRepository
 from commons.repository.vampy_plugin import VampyPluginRepository
 from commons.utils.conversion import safe_cast
@@ -33,3 +34,27 @@ class MetricDefinitionRepository(DbRepository):
 
     def get_id_by_model(self, model_object: MetricDefObj) -> Optional[int]:
         return safe_cast(self._get_id(id=model_object.name), int, None)
+
+
+class MetricValueRepository(DbRepository):
+    def __init__(self, session_provider: SessionProvider, definition_repository: MetricDefinitionRepository) -> None:
+        super().__init__(session_provider, MetricDefEnt)
+        self.definition_repository = definition_repository
+
+    def _map_to_entity(self, obj: MetricValue) -> Metric:
+        definition_id = self.definition_repository.get_id_by_model(obj.definition)
+        return Metric(task_id=obj.task_id, definition_id=definition_id,
+                      minimum=obj.stats.minimum, maximum=obj.stats.maximum,
+                      median=obj.stats.median, mean=obj.stats.mean,
+                      standard_deviation=obj.stats.standard_deviation, variance=obj.stats.variance)
+
+    def _map_to_object(self, entity: Metric) -> MetricValue:
+        definition_object = self.definition_repository.get_by_id(entity.definition_id)
+        data_stats = DataStats(minimum=entity.minimum, maximum=entity.maximum,
+                               median=entity.median, mean=entity.mean,
+                               standard_deviation=entity.standard_deviation, variance=entity.variance)
+        return MetricValue(entity.task_id, definition_object, data_stats)
+
+    def get_id_by_model(self, model_object: MetricValue) -> Optional[int]:
+        definition_id = self.definition_repository.get_id_by_model(model_object.definition)
+        return safe_cast(self._get_id(definition_id=definition_id, task_id=model_object.task_id), int, None)
