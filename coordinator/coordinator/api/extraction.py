@@ -3,6 +3,7 @@ from logging import Logger
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.abstractions.flask_api import FlaskRestApi
 from commons.models.extraction_request import ExtractionRequest
+from commons.services.metric_config_provider import MetricConfigProvider
 from commons.services.plugin_config_provider import PluginConfigProvider
 from extractor.engine.tasks import extract_feature
 from extractor.result_model import TaskStatus
@@ -25,9 +26,10 @@ class ExtractionStatusApi(FlaskRestApi):
 
 
 class ExtractionApi(FlaskRestApi):
-    def __init__(self, plugin_config_provider: PluginConfigProvider, logger: Logger) -> None:
+    def __init__(self, plugin_config_provider: PluginConfigProvider, metric_config_provider: MetricConfigProvider,logger: Logger) -> None:
         super().__init__(logger)
         self.plugin_config_provider = plugin_config_provider
+        self.metric_config_provider = metric_config_provider
 
     def _post(self, the_request: ApiRequest) -> ApiResponse:
         execution_request = self._parse_request(the_request)
@@ -47,6 +49,8 @@ class ExtractionApi(FlaskRestApi):
     def _parse_request(self, the_request: ApiRequest) -> ExtractionRequest:
         request_json = the_request.payload
         plugin_config = self.plugin_config_provider.get_for_plugin(request_json["plugin_full_key"])
-        request_json.update({"plugin_config": plugin_config})
+        metric_config = self.metric_config_provider.get_for_plugin(request_json["plugin_full_key"])
+        request_json.update({"plugin_config": plugin_config,
+                             "metric_config": metric_config})
         execution_request = ExtractionRequest.from_serializable(request_json)
         return execution_request
