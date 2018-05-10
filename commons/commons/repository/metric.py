@@ -50,10 +50,13 @@ class MetricValueRepository(DbRepository):
 
     def _map_to_object(self, entity: Metric) -> MetricValue:
         definition_object = self.definition_repository.get_by_id(entity.definition_id)
+        if not definition_object:
+            raise ValueError("Could not find metric definition with id {} for metric {}".format(entity.definition_id,
+                                                                                                entity.task_id))
         data_stats = DataStats(minimum=entity.minimum, maximum=entity.maximum,
                                median=entity.median, mean=entity.mean,
                                standard_deviation=entity.standard_deviation, variance=entity.variance)
-        return MetricValue(entity.task_id, definition_object, data_stats)
+        return MetricValue(task_id=entity.task_id, definition=definition_object, stats=data_stats)
 
     def get_id_by_model(self, model_object: MetricValue) -> Optional[int]:
         definition_id = self.definition_repository.get_id_by_model(model_object.definition)
