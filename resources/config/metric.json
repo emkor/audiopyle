@@ -27,70 +27,63 @@
     "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
     "transformation": {
       "name": "select_row",
-      "args": [
-        0
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 0
+      }
     }
   },
   "bbc_intensity_bass": {
     "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
     "transformation": {
       "name": "select_row",
-      "args": [
-        1
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 1
+      }
     }
   },
   "bbc_intensity_lo_mid": {
     "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
     "transformation": {
       "name": "select_row",
-      "args": [
-        2
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 2
+      }
     }
   },
   "bbc_intensity_mid": {
     "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
     "transformation": {
       "name": "select_row",
-      "args": [
-        3
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 3
+      }
     }
   },
   "bbc_intensity_hi_mid": {
     "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
     "transformation": {
       "name": "select_row",
-      "args": [
-        4
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 4
+      }
     }
   },
   "bbc_intensity_lo_hi": {
     "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
     "transformation": {
       "name": "select_row",
-      "args": [
-        5
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 5
+      }
     }
   },
   "bbc_intensity_hi": {
     "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
     "transformation": {
       "name": "select_row",
-      "args": [
-        6
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 6
+      }
     }
   },
   "bbc_rhythm_onset": {
@@ -127,70 +120,63 @@
     "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
     "transformation": {
       "name": "select_row",
-      "args": [
-        0
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 0
+      }
     }
   },
   "bbc_spectral_contrast_peaks_bas": {
     "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
     "transformation": {
       "name": "select_row",
-      "args": [
-        1
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 1
+      }
     }
   },
   "bbc_spectral_contrast_peaks_lo_mid": {
     "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
     "transformation": {
       "name": "select_row",
-      "args": [
-        2
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 2
+      }
     }
   },
   "bbc_spectral_contrast_peaks_mid": {
     "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
     "transformation": {
       "name": "select_row",
-      "args": [
-        4
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 3
+      }
     }
   },
   "bbc_spectral_contrast_peaks_hi_mid": {
     "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
     "transformation": {
       "name": "select_row",
-      "args": [
-        5
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 4
+      }
     }
   },
   "bbc_spectral_contrast_peaks_lo_hi": {
     "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
     "transformation": {
       "name": "select_row",
-      "args": [
-        6
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 5
+      }
     }
   },
   "bbc_spectral_contrast_peaks_hi": {
     "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
     "transformation": {
       "name": "select_row",
-      "args": [
-        7
-      ],
-      "kwargs": {}
+      "kwargs": {
+        "row": 6
+      }
     }
   }
 }

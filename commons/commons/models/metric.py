@@ -16,9 +16,8 @@ class MetricDefinition(Model):
 
 
 class MetricTransformation(Model):
-    def __init__(self, name, *args, **kwargs) -> None:
+    def __init__(self, name, **kwargs) -> None:
         self.name = name
-        self.args = args
         self.kwargs = kwargs
 
     def call(self, vampy_feature: VampyFeatureAbstraction) -> numpy.ndarray:
@@ -37,8 +36,8 @@ class MetricTransformation(Model):
 
 
 class NoneTransformation(MetricTransformation):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__("none", *args, **kwargs)
+    def __init__(self, **kwargs) -> None:
+        super().__init__("none", **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
         return feature.values()
@@ -48,21 +47,21 @@ class NoneTransformation(MetricTransformation):
 
 
 class SelectRowTransformation(MetricTransformation):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__("select_row", *args, **kwargs)
+    def __init__(self, **kwargs) -> None:
+        super().__init__("select_row", **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
-        row_index = self.args[0]
+        row_index = self.kwargs["row_index"]
         return numpy.asanyarray([vs[row_index] for vs in feature.values()])
 
     def _call_on_variable_step(self, feature: VampyVariableStepFeature) -> numpy.ndarray:
-        row_index = self.args[0]
+        row_index = self.kwargs["row_index"]
         return numpy.asanyarray([sf.values[row_index] for sf in feature.step_features])  # type: ignore
 
 
 class SingleValueTransformation(MetricTransformation):
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__("singe_value", *args, **kwargs)
+        super().__init__("singe_value", **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
         first_value = feature.values()[0]
@@ -99,3 +98,7 @@ METRIC_TRANSFORMATIONS = {
     "select_row": SelectRowTransformation,
     "singe_value": SingleValueTransformation
 }
+
+
+def get_transformation(function_name: str, function_kwargs: Dict[Text, Any]) -> MetricTransformation:
+    return METRIC_TRANSFORMATIONS[function_name](**function_kwargs)
