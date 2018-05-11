@@ -2,8 +2,9 @@ from typing import Dict, Text, Any, Callable, Optional
 
 import numpy
 
+from commons.models.feature import VampyFeatureAbstraction
 from commons.models.metric import NoneTransformation, SelectRowTransformation, SingleValueTransformation, \
-    MetricTransformation
+    MetricTransformation, MetricValue, MetricDefinition
 from commons.models.result import DataStats
 from commons.utils.logger import get_logger
 
@@ -18,6 +19,13 @@ _REGISTERED_METRIC_TRANSFORMATIONS = {
 
 def get_transformation(function_name: str, function_kwargs: Dict[Text, Any]) -> MetricTransformation:
     return _REGISTERED_METRIC_TRANSFORMATIONS[function_name](**function_kwargs)
+
+
+def extract_metric_value(task_id: str, definition: MetricDefinition, transformation: MetricTransformation,
+                         feature: VampyFeatureAbstraction) -> MetricValue:
+    data_vector = transformation.call(feature)
+    metric_stats = _extract_data_stats(data_vector)
+    return MetricValue(task_id, definition, metric_stats)
 
 
 def _extract_data_stats(numpy_array: numpy.ndarray) -> DataStats:

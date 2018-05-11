@@ -1,10 +1,11 @@
 from logging import Logger
-from typing import Text, Tuple
+from typing import Text, Tuple, List, Dict, Any
 from datetime import datetime
 
 import numpy as np
 
 from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
+from commons.models.metric import MetricValue, MetricDefinition
 from commons.repository.audio_file import AudioFileRepository
 from commons.repository.audio_tag import AudioTagRepository
 from commons.repository.feature_data import FeatureDataRepository
@@ -13,6 +14,7 @@ from commons.repository.metric import MetricDefinitionRepository, MetricValueRep
 from commons.repository.result import ResultRepository, ResultStatsRepository
 from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from commons.services.compression import compress_model
+from commons.services.metric_provider import get_transformation, extract_metric_value
 from commons.services.plugin_providing import VampyPluginProvider
 from commons.utils.conversion import seconds_between
 from commons.models.audio_tag import Id3Tag
@@ -68,10 +70,11 @@ class FeatureExtractionService(object):
         feature_dto, compression_time = self._compress_feature(feature_object, task_id)
         feature_meta, feature_meta_build_time = self._build_feature_meta(feature_object, task_id)
         analysis_result = AnalysisResult(task_id, audio_meta, id3_tag, plugin, plugin_config)
+        metric_values, metrics_extraction_time = self._extract_metrics(task_id, request.metric_config, feature_object)
 
         self.logger.debug("Extracted features for {}; storing...".format(request))
-        storage_time = self._store_results_in_db(analysis_result, audio_meta, feature_dto, feature_meta, id3_tag,
-                                                 plugin, plugin_config)
+        storage_time = self._store_results_in_db(analysis_result, metric_values, audio_meta, feature_dto, feature_meta,
+                                                 id3_tag, plugin, plugin_config)
 
         task_time = seconds_between(task_start_time)
         results_stats = AnalysisStats(task_id, task_time, extraction_time, compression_time, feature_meta_build_time,
@@ -85,11 +88,15 @@ class FeatureExtractionService(object):
         plugin_config = VampyPluginParams(block_size, step_size, **request.plugin_config)
         return plugin_config
 
-    def _store_results_in_db(self, analysis_result, audio_meta, feature_dto, feature_meta, id3_tag, plugin,
-                             plugin_config):
+    def _store_results_in_db(self, analysis_result, metric_values: List[MetricValue], audio_meta,
+                             feature_dto, feature_meta,
+                             id3_tag, plugin, plugin_config):
         start_time = datetime.utcnow()
         self.plugin_repo.get_or_create(plugin)
         self.plugin_config_repo.get_or_create(plugin_config)
+        for metric_value in metric_values:
+            self.metric_definition_repo.get_or_create(metric_value.definition)
+            self.metric_value_repo.get_or_create(metric_value)
         self.audio_tag_repo.get_or_create(id3_tag)
         self.audio_meta_repo.get_or_create(audio_meta)
         self.feature_data_repo.insert(feature_dto)
@@ -129,3 +136,20 @@ class FeatureExtractionService(object):
         input_audio_meta = read_mp3_file_meta(audio_file_absolute_path)
         id3_tag = read_id3_tag(audio_file_absolute_path)
         return input_file_meta, input_audio_meta, id3_tag
+
+    def _extract_metrics(self, task_id: str, metric_config: Dict[Text, Any],
+                         feature: VampyFeatureAbstraction) -> Tuple[List[MetricValue], float]:
+        extraction_start_time = datetime.utcnow()
+        metric_values = []
+        for metric_name, metric_config in metric_config.items():
+            transformation_function_name = metric_config["transformation"]["name"]
+            transformation_function_params = metric_config["transformation"].get("kwargs", {})
+            transformation_function = get_transformation(transformation_function_name,
+                                                         transformation_function_params)
+            definition = MetricDefinition(name=metric_name, plugin_key=metric_config["plugin"],
+                                          function=transformation_function_name,
+                                          kwargs=transformation_function_params)
+            value = extract_metric_value(task_id, definition, transformation_function, feature)
+            metric_values.append(value)
+        metric_extraction_time = seconds_between(extraction_start_time)
+        return metric_values, metric_extraction_time
