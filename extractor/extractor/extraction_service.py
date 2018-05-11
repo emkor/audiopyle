@@ -70,7 +70,8 @@ class FeatureExtractionService(object):
         feature_dto, compression_time = self._compress_feature(feature_object, task_id)
         feature_meta, feature_meta_build_time = self._build_feature_meta(feature_object, task_id)
         analysis_result = AnalysisResult(task_id, audio_meta, id3_tag, plugin, plugin_config)
-        metric_values, metrics_extraction_time = self._extract_metrics(task_id, request.metric_config, feature_object)
+        metric_values, metrics_extraction_time = self._extract_metrics(task_id, request.plugin_full_key,
+                                                                       request.metric_config, feature_object)
 
         self.logger.debug("Extracted features for {}; storing...".format(request))
         storage_time = self._store_results_in_db(analysis_result, metric_values, audio_meta, feature_dto, feature_meta,
@@ -137,7 +138,7 @@ class FeatureExtractionService(object):
         id3_tag = read_id3_tag(audio_file_absolute_path)
         return input_file_meta, input_audio_meta, id3_tag
 
-    def _extract_metrics(self, task_id: str, metric_config: Dict[Text, Any],
+    def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Dict[Text, Any],
                          feature: VampyFeatureAbstraction) -> Tuple[List[MetricValue], float]:
         extraction_start_time = datetime.utcnow()
         metric_values = []
@@ -146,7 +147,7 @@ class FeatureExtractionService(object):
             transformation_function_params = metric_config["transformation"].get("kwargs", {})
             transformation_function = get_transformation(transformation_function_name,
                                                          transformation_function_params)
-            definition = MetricDefinition(name=metric_name, plugin_key=metric_config["plugin"],
+            definition = MetricDefinition(name=metric_name, plugin_key=plugin_key,
                                           function=transformation_function_name,
                                           kwargs=transformation_function_params)
             value = extract_metric_value(task_id, definition, transformation_function, feature)
