@@ -29,8 +29,8 @@ class ConstantStepFeatureMetricTransformationTest(TestCase):
         assert_that(metric_vector[0]).is_equal_to(self.two_dimensional_feature[0])
 
     def test_should_extract_using_select_row_transformation_on_3d_feature(self):
-        first_row_transformation = SelectRowTransformation(0)
-        second_row_transformation = SelectRowTransformation(1)
+        first_row_transformation = SelectRowTransformation(row_index=0)
+        second_row_transformation = SelectRowTransformation(row_index=1)
         first_row_vector = first_row_transformation.call(self.constant_step_3d_feature)
         second_row_vector = second_row_transformation.call(self.constant_step_3d_feature)
         assert_that(first_row_vector).is_length(len(self.three_dimensional_feature))

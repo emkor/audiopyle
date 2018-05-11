@@ -91,14 +91,3 @@ class MetricValue(Model):
         serialized.update({"stats": stats_object,
                            "definition": definition_object})
         return MetricValue(**serialized)
-
-
-METRIC_TRANSFORMATIONS = {
-    "none": NoneTransformation,
-    "select_row": SelectRowTransformation,
-    "singe_value": SingleValueTransformation
-}
-
-
-def get_transformation(function_name: str, function_kwargs: Dict[Text, Any]) -> MetricTransformation:
-    return METRIC_TRANSFORMATIONS[function_name](**function_kwargs)
