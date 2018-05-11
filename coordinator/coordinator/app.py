@@ -56,10 +56,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                      view_func=ExtractionStatusApi.as_view('extraction_status_api',
                                                            logger=logger))
     app.add_url_rule("/extraction",
-                     view_func=ExtractionApi.as_view('extraction_api',
-                                                     plugin_config_provider=plugin_config_provider,
-                                                     metric_config_provider=metric_config_provider,
-                                                     logger=logger))
+                     view_func=ExtractionApi.as_view('extraction_api', logger=logger))
 
     app.add_url_rule("/extraction/result/<task_id>/data",
                      view_func=ResultDataApi.as_view('result_data_detail_api',

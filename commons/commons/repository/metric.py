@@ -38,7 +38,7 @@ class MetricDefinitionRepository(DbRepository):
 
 class MetricValueRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider, definition_repository: MetricDefinitionRepository) -> None:
-        super().__init__(session_provider, MetricDefEnt)
+        super().__init__(session_provider, Metric)
         self.definition_repository = definition_repository
 
     def _map_to_entity(self, obj: MetricValue) -> Metric:
