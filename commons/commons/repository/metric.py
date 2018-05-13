@@ -33,7 +33,7 @@ class MetricDefinitionRepository(DbRepository):
                                                                                                    entity.name))
 
     def get_id_by_model(self, model_object: MetricDefObj) -> Optional[int]:
-        return safe_cast(self._get_id(id=model_object.name), int, None)
+        return safe_cast(self._get_id(name=model_object.name), int, None)
 
 
 class MetricValueRepository(DbRepository):

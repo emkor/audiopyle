@@ -97,7 +97,7 @@ class FeatureExtractionService(object):
         self.plugin_config_repo.get_or_create(plugin_config)
         for metric_value in metric_values:
             self.metric_definition_repo.get_or_create(metric_value.definition)
-            self.metric_value_repo.get_or_create(metric_value)
+            self.metric_value_repo.insert(metric_value)
         self.audio_tag_repo.get_or_create(id3_tag)
         self.audio_meta_repo.get_or_create(audio_meta)
         self.feature_data_repo.insert(feature_dto)
