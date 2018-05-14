@@ -22,6 +22,7 @@ class MetricConfigProvider(object):
         full_config = self.get_all() or {}
         for metric_name, metric_config in full_config.items():
             if plugin_full_key == metric_config["plugin"]:
+                metric_config.pop("plugin")
                 plugin_config.update({metric_name: metric_config})
         return plugin_config
 
