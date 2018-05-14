@@ -3,6 +3,7 @@ from typing import Text, Tuple, List, Dict, Any
 from datetime import datetime
 
 import numpy as np
+from sqlalchemy.exc import DatabaseError
 
 from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
 from commons.models.metric import MetricValue, MetricDefinition
@@ -95,14 +96,20 @@ class FeatureExtractionService(object):
         start_time = datetime.utcnow()
         self.plugin_repo.get_or_create(plugin)
         self.plugin_config_repo.get_or_create(plugin_config)
+        self.audio_tag_repo.get_or_create(id3_tag)
+        self.audio_meta_repo.get_or_create(audio_meta)
+        self.result_repo.insert(analysis_result)
         for metric_value in metric_values:
             self.metric_definition_repo.get_or_create(metric_value.definition)
             self.metric_value_repo.insert(metric_value)
-        self.audio_tag_repo.get_or_create(id3_tag)
-        self.audio_meta_repo.get_or_create(audio_meta)
-        self.feature_data_repo.insert(feature_dto)
         self.feature_meta_repo.insert(feature_meta)
-        self.result_repo.insert(analysis_result)
+        try:
+            self.feature_data_repo.insert(feature_dto)
+        except DatabaseError as e:
+            self.logger.error(
+                "Couldn't insert feature of size {} from task {} into DB: {}".format(feature_dto.size_humanized(),
+                                                                                     analysis_result.task_id, e))
+            raise e
         return seconds_between(start_time)
 
     def _build_feature_meta(self, feature_object, task_id):
