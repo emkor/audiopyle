@@ -25,6 +25,8 @@ services:
       - MYSQL_USER=audiopyle
       - MYSQL_PASSWORD=audiopyle
       - MYSQL_DATABASE=audiopyle
+    volumes:
+      - "../resources/config/mysql:/etc/mysql/conf.d"
   coordinator:
     networks:
       default:

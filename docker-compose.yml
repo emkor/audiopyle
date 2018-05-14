@@ -30,6 +30,8 @@ services:
       - MYSQL_DATABASE=audiopyle
     ports:
       - "3306:3306"
+    volumes:
+      - "./resources/config/mysql:/etc/mysql/conf.d"
   coordinator:
     networks:
       default:
@@ -62,9 +64,9 @@ services:
     environment:
       - EXTRACTION_CONCURRENCY=4
       - EXTRACTION_BROKER_CONN_POOL_SIZE=4
-      - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=300
-      - EXTRACTION_HARD_TIME_LIMIT_SECONDS=600
-      - EXTRACTION_MEMORY_LIMIT_MB=512
+      - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=180
+      - EXTRACTION_HARD_TIME_LIMIT_SECONDS=300
+      - EXTRACTION_MEMORY_LIMIT_MB=1024
       - RABBITMQ_SERIVCE_HOST=rabbitmq.local
       - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
