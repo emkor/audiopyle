@@ -22,7 +22,8 @@ from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from coordinator.api.automation import AutomationApi
 from coordinator.api.config import PluginActiveConfigApi, MetricActiveConfigApi
 from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
-from coordinator.api.metric import MetricDefinitionListApi, MetricDefinitionDetailsApi
+from coordinator.api.metric import MetricDefinitionListApi, MetricDefinitionDetailsApi, MetricValueListApi, \
+    MetricValueDetailsApi
 from coordinator.api.plugin import PluginListApi, PluginDetailApi
 from coordinator.api.root import CoordinatorApi
 from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
@@ -88,14 +89,22 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                      view_func=PluginListApi.as_view('plugin_list_api',
                                                      plugin_provider=plugin_provider,
                                                      logger=logger))
-    app.add_url_rule("/metric",
+    app.add_url_rule("/metric/def",
                      view_func=MetricDefinitionListApi.as_view('metric_definition_list_api',
                                                                metric_repo=metric_def_repo,
                                                                logger=logger))
-    app.add_url_rule("/metric/<id>",
+    app.add_url_rule("/metric/def/<id>",
                      view_func=MetricDefinitionDetailsApi.as_view('metric_definition_details_api',
                                                                   metric_repo=metric_def_repo,
                                                                   logger=logger))
+    app.add_url_rule("/metric/val",
+                     view_func=MetricValueListApi.as_view('metric_value_list_api',
+                                                          metric_repo=metric_value_repo,
+                                                          logger=logger))
+    app.add_url_rule("/metric/val/<id>",
+                     view_func=MetricValueDetailsApi.as_view('metric_value_details_api',
+                                                             metric_repo=metric_value_repo,
+                                                             logger=logger))
     app.add_url_rule("/config/plugin",
                      view_func=PluginActiveConfigApi.as_view('plugin_config_api',
                                                              plugin_config_provider=plugin_config_provider,
