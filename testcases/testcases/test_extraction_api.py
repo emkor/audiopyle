@@ -11,6 +11,8 @@ class CoordinatorApiTest(TestCase):
     def setUp(self):
         self.extraction_api_url = "http://{}:{}/extraction".format(get_api_host(), get_api_port())
         self.result_api_url = "http://{}:{}/extraction/result".format(get_api_host(), get_api_port())
+        self.metric_def_api_url = "http://{}:{}/metric/def".format(get_api_host(), get_api_port())
+        self.metric_val_api_url = "http://{}:{}/metric/val".format(get_api_host(), get_api_port())
         self.mp3_extraction_request = {
             "audio_file_identifier": "102bpm_drum_loop",
             "plugin_full_key": "vamp-example-plugins:amplitudefollower:amplitude",
@@ -92,3 +94,14 @@ class CoordinatorApiTest(TestCase):
         result_stats_response_json = result_stats_response.json()
         assert_that(result_stats_response_json["total_time"]).is_between(0.01, 1.5)
         assert_that(result_stats_response_json["task_id"]).is_not_empty()
+
+        # retrieve metrics from raw feature data
+        metric_definitions_response = requests.get(url=self.metric_def_api_url)
+        assert_that(metric_definitions_response.status_code).is_equal_to(retrieval_expected_status_code)
+        metric_definitions_json = metric_definitions_response.json()
+        assert_that(metric_definitions_json).is_length(1)
+
+        metric_values_response = requests.get(url=self.metric_val_api_url)
+        assert_that(metric_values_response.status_code).is_equal_to(retrieval_expected_status_code)
+        metric_definitions_json = metric_values_response.json()
+        assert_that(metric_definitions_json).is_length(1)
