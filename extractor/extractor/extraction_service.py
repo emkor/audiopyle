@@ -79,7 +79,7 @@ class FeatureExtractionService(object):
 
         task_time = seconds_between(task_start_time)
         results_stats = AnalysisStats(task_id, task_time, extraction_time, compression_time, feature_meta_build_time,
-                                      read_raw_audio_time, storage_time)
+                                      read_raw_audio_time, storage_time, metrics_extraction_time)
         self.result_stats_repo.insert(results_stats)
         self.logger.debug("Done {}!".format(request))
 

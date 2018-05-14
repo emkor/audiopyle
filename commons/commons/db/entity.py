@@ -92,6 +92,7 @@ class ResultStats(ENTITY_BASE):  # type: ignore
     data_stats_build_time = Column(Float, index=False, nullable=True)
     encode_audio_time = Column(Float, index=False, nullable=True)
     result_store_time = Column(Float, index=False, nullable=True)
+    metrics_extraction_time = Column(Float, index=False, nullable=True)
 
 
 class Result(ENTITY_BASE):  # type: ignore
