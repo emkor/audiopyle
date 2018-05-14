@@ -9,6 +9,7 @@ from commons.repository.audio_file import AudioFileRepository
 from commons.repository.audio_tag import AudioTagRepository
 from commons.repository.feature_data import FeatureDataRepository
 from commons.repository.feature_meta import FeatureMetaRepository
+from commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
 from commons.repository.result import ResultRepository, ResultStatsRepository
 from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from commons.services.metric_config_provider import MetricConfigProvider
@@ -21,6 +22,7 @@ from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from coordinator.api.automation import AutomationApi
 from coordinator.api.config import PluginActiveConfigApi, MetricActiveConfigApi
 from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
+from coordinator.api.metric import MetricDefinitionListApi, MetricDefinitionDetailsApi
 from coordinator.api.plugin import PluginListApi, PluginDetailApi
 from coordinator.api.root import CoordinatorApi
 from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
@@ -43,7 +45,7 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
     metric_config_provider = MetricConfigProvider(config_json_store, logger)
 
     plugin_provider = _initialize_plugin_provider(logger, config_json_store)
-    feature_data_repo, feature_meta_repo, result_repo, result_stats_repo = _initialize_db_repositories()
+    feature_data_repo, feature_meta_repo, result_repo, result_stats_repo, metric_def_repo, metric_value_repo = _initialize_db_repositories()
 
     app.add_url_rule("/extraction/automation", view_func=AutomationApi.as_view('automation_api',
                                                                                plugin_provider=plugin_provider,
@@ -86,6 +88,14 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                      view_func=PluginListApi.as_view('plugin_list_api',
                                                      plugin_provider=plugin_provider,
                                                      logger=logger))
+    app.add_url_rule("/metric",
+                     view_func=MetricDefinitionListApi.as_view('metric_definition_list_api',
+                                                               metric_repo=metric_def_repo,
+                                                               logger=logger))
+    app.add_url_rule("/metric/<id>",
+                     view_func=MetricDefinitionDetailsApi.as_view('metric_definition_details_api',
+                                                                  metric_repo=metric_def_repo,
+                                                                  logger=logger))
     app.add_url_rule("/config/plugin",
                      view_func=PluginActiveConfigApi.as_view('plugin_config_api',
                                                              plugin_config_provider=plugin_config_provider,
@@ -117,10 +127,12 @@ def _initialize_db_repositories():
     plugin_config_repo = PluginConfigRepository(db_session_provider)
     feature_data_repo = FeatureDataRepository(db_session_provider)
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
+    metric_def_repo = MetricDefinitionRepository(db_session_provider, plugin_repo)
+    metric_value_repo = MetricValueRepository(db_session_provider, metric_def_repo)
     result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
                                    plugin_config_repo)
     result_stats_repo = ResultStatsRepository(db_session_provider)
-    return feature_data_repo, feature_meta_repo, result_repo, result_stats_repo
+    return feature_data_repo, feature_meta_repo, result_repo, result_stats_repo, metric_def_repo, metric_value_repo
 
 
 def _initialize_plugin_provider(logger, config_store: JsonFileStore):
