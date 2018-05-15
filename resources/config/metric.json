@@ -1,0 +1,182 @@
+{
+  "bbc_energy_rms": {
+    "plugin": "bbc-vamp-plugins:bbc-energy:rmsenergy",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_energy_delta_rms": {
+    "plugin": "bbc-vamp-plugins:bbc-energy:rmsdelta",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_energy_average_rms": {
+    "plugin": "bbc-vamp-plugins:bbc-energy:average",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_intensity_overall": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_intensity_lo_bass": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 0
+      }
+    }
+  },
+  "bbc_intensity_bass": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 1
+      }
+    }
+  },
+  "bbc_intensity_lo_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 2
+      }
+    }
+  },
+  "bbc_intensity_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 3
+      }
+    }
+  },
+  "bbc_intensity_hi_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 4
+      }
+    }
+  },
+  "bbc_intensity_lo_hi": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 5
+      }
+    }
+  },
+  "bbc_intensity_hi": {
+    "plugin": "bbc-vamp-plugins:bbc-intensity:intensity-ratio",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 6
+      }
+    }
+  },
+  "bbc_rhythm_onset": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:onset_curve",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_rhythm_onset_average": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:average",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_rhythm_onset_rate": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:avg-onset-freq",
+    "transformation": {
+      "name": "singe_value"
+    }
+  },
+  "bbc_rhythm_strength": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:rhythm-strength",
+    "transformation": {
+      "name": "singe_value"
+    }
+  },
+  "bbc_rhythm_tempo_bpm": {
+    "plugin": "bbc-vamp-plugins:bbc-rhythm:tempo",
+    "transformation": {
+      "name": "singe_value"
+    }
+  },
+  "bbc_spectral_contrast_mean_lo_bas": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 0
+      }
+    }
+  },
+  "bbc_spectral_contrast_peaks_bas": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 1
+      }
+    }
+  },
+  "bbc_spectral_contrast_peaks_lo_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 2
+      }
+    }
+  },
+  "bbc_spectral_contrast_peaks_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 3
+      }
+    }
+  },
+  "bbc_spectral_contrast_peaks_hi_mid": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 4
+      }
+    }
+  },
+  "bbc_spectral_contrast_peaks_lo_hi": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 5
+      }
+    }
+  },
+  "bbc_spectral_contrast_peaks_hi": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "transformation": {
+      "name": "select_row",
+      "kwargs": {
+        "row_index": 6
+      }
+    }
+  }
+}

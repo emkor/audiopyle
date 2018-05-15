@@ -38,24 +38,21 @@ class AnalysisStats(Model):
 
 class FeatureMeta(Model):
     def __init__(self, task_id: Text, feature_type: FeatureType, feature_size: int,
-                 data_shape: Tuple[int, int, int], data_stats: DataStats) -> None:
+                 data_shape: Tuple[int, int, int]) -> None:
         self.task_id = task_id
         self.feature_type = feature_type
         self.feature_size = feature_size
         self.data_shape = data_shape
-        self.data_stats = data_stats
 
     def to_serializable(self):
         base_serialized = super().to_serializable()
-        base_serialized.update({"feature_type": self.feature_type.value,
-                                "data_stats": self.data_stats.to_serializable()})
+        base_serialized.update({"feature_type": self.feature_type.value})
         return base_serialized
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
         type_enum_object = FeatureType(serialized["feature_type"])
-        data_stats = DataStats.from_serializable(serialized["data_stats"])
-        serialized.update({"feature_type": type_enum_object, "data_stats": data_stats})
+        serialized.update({"feature_type": type_enum_object})
         return FeatureMeta(**serialized)
 
 

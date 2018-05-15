@@ -71,13 +71,6 @@ class FeatureMeta(ENTITY_BASE):  # type: ignore
     feature_shape_z = Column(Integer, index=False, nullable=False)
     feature_size_bytes = Column(Integer, index=False, nullable=False)
 
-    feature_minimum = Column(Float, index=False, nullable=True)
-    feature_maximum = Column(Float, index=False, nullable=True)
-    feature_median = Column(Float, index=False, nullable=True)
-    feature_mean = Column(Float, index=False, nullable=True)
-    feature_standard_deviation = Column(Float, index=False, nullable=True)
-    feature_variance = Column(Float, index=False, nullable=True)
-
 
 class FeatureData(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_data'
@@ -116,3 +109,33 @@ class Result(ENTITY_BASE):  # type: ignore
                           nullable=False, index=True)
 
     done_at = Column(DateTime, default=datetime.utcnow)
+
+
+class MetricDefinition(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'metric_definition'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
+                       nullable=False, index=True)
+
+    name = Column(String(255), unique=True, index=True, nullable=False)
+    function = Column(String(255), index=False, nullable=False)
+    kwargs = Column(String(511), index=False, nullable=True)
+
+
+class Metric(ENTITY_BASE):  # type: ignore
+    __tablename__ = 'metric'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    task_id = Column(String(36), index=True, nullable=False)
+    definition_id = Column(Integer, ForeignKey("metric_definition.id", ondelete="CASCADE"),
+                           nullable=False, index=True)
+
+    minimum = Column(Float, index=False, nullable=True)
+    maximum = Column(Float, index=False, nullable=True)
+    median = Column(Float, index=False, nullable=True)
+    mean = Column(Float, index=False, nullable=True)
+    standard_deviation = Column(Float, index=False, nullable=True)
+    variance = Column(Float, index=False, nullable=True)
+
+    __table_args__ = (UniqueConstraint('task_id', 'definition_id', name='unique_metric_value'),)

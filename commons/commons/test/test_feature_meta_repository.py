@@ -19,8 +19,7 @@ class FeatureMetaRepositoryTest(unittest.TestCase):
     def setUp(self):
         self.task_id = "0f961f20-b036-5740-b526-013523dd88c7"
         self.data_stats = DataStats(0.1, 0.95, 0.6, 0.4, 0.01, 0.02)
-        self.feature_meta_example = FeatureMeta(self.task_id, FeatureType.ConstantStepFeature, 1024, (10, 1, 0),
-                                                self.data_stats)
+        self.feature_meta_example = FeatureMeta(self.task_id, FeatureType.ConstantStepFeature, 1024, (10, 1, 0))
         self.feature_repository = FeatureMetaRepository(self.session_provider)
 
     def tearDown(self):
