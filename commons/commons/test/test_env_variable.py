@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.utils.env_var import read_env_var
+from commons.utils.env_var import read_env_var, _select_value
 
 
 class OsEnvVariableAccessingTest(unittest.TestCase):
@@ -22,3 +22,11 @@ class OsEnvVariableAccessingTest(unittest.TestCase):
         default_value = 1.1
         wrong_type_variable = read_env_var("HOME", float, default_value)
         assert_that(wrong_type_variable).is_equal_to(default_value)
+
+    def test_should_cast_int_of_0_to_false(self):
+        wrong_type_variable = _select_value("DOESNT_MATTER", bool, default=True, actual=0)
+        assert_that(wrong_type_variable).is_equal_to(False)
+
+    def test_should_cast_int_of_1_to_true(self):
+        wrong_type_variable = _select_value("DOESNT_MATTER", bool, default=False, actual=1)
+        assert_that(wrong_type_variable).is_equal_to(True)
