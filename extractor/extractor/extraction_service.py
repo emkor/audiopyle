@@ -106,7 +106,7 @@ class FeatureExtractionService(object):
             self.metric_definition_repo.get_or_create(metric_value.definition)
             self.metric_value_repo.insert(metric_value)
         self.feature_meta_repo.insert(feature_meta)
-        if read_env_var("EXTRACTION_FULL_RESULT_PERSISTENCE", bool, True):
+        if read_env_var("EXTRACTION_FULL_RESULT_PERSISTENCE", int, 1):
             try:
                 self.feature_data_repo.insert(feature_dto)
             except DatabaseError as e:
