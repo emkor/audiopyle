@@ -9,7 +9,7 @@ from commons.utils.logger import get_logger
 
 logger = get_logger()
 
-ACCEPTED_EXTENSIONS = ["mp3"]
+ACCEPTED_EXTENSIONS = ["mp3", "flac"]
 
 
 def read_id3_tag(input_audio_file_absolute_path: Text, method_to_extract_id3tag: Callable) -> Optional[Id3Tag]:

@@ -29,8 +29,9 @@ from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.feature_extraction import extract_raw_feature, build_feature_object
 from commons.services.feature_meta_extraction import build_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
-from commons.services.segment_providing import read_raw_audio_from_mp3
+from commons.services.segment_providing import read_raw_audio_from_file
 from commons.services.store_provider import Mp3FileStore
+from commons.utils.file_system import extract_extension
 
 
 class FeatureExtractionService(object):
@@ -136,7 +137,7 @@ class FeatureExtractionService(object):
 
     def _read_raw_audio_data_from_mp3(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
         read_raw_audio_start_time = datetime.utcnow()
-        raw_data = read_raw_audio_from_mp3(input_file_path)
+        raw_data = read_raw_audio_from_file(input_file_path, extract_extension(input_file_path))
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
 
