@@ -31,6 +31,7 @@ from commons.services.feature_meta_extraction import build_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
 from commons.services.segment_providing import read_raw_audio_from_file
 from commons.services.store_provider import Mp3FileStore
+from commons.utils.env_var import read_env_var
 from commons.utils.file_system import extract_extension
 
 
@@ -105,13 +106,16 @@ class FeatureExtractionService(object):
             self.metric_definition_repo.get_or_create(metric_value.definition)
             self.metric_value_repo.insert(metric_value)
         self.feature_meta_repo.insert(feature_meta)
-        try:
-            self.feature_data_repo.insert(feature_dto)
-        except DatabaseError as e:
-            self.logger.error(
-                "Couldn't insert feature of size {} from task {} into DB: {}".format(feature_dto.size_humanized(),
-                                                                                     analysis_result.task_id, e))
-            raise e
+        if read_env_var("EXTRACTION_FULL_RESULT_PERSISTENCE", bool, True):
+            try:
+                self.feature_data_repo.insert(feature_dto)
+            except DatabaseError as e:
+                self.logger.error(
+                    "Couldn't insert feature of size {} from task {} into DB: {}".format(feature_dto.size_humanized(),
+                                                                                         analysis_result.task_id, e))
+                raise e
+        else:
+            self.logger.warning("Ignoring full result due to EXTRACTION_FULL_RESULT_PERSISTENCE setting!")
         return seconds_between(start_time)
 
     def _build_feature_meta(self, feature_object, task_id):

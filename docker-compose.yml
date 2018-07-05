@@ -62,6 +62,7 @@ services:
       - "./resources/vamp:/root/vamp:ro"
       - "./resources/audio:/root/audio:ro"
     environment:
+      - EXTRACTION_FULL_RESULT_PERSISTENCE=1
       - EXTRACTION_CONCURRENCY=4
       - EXTRACTION_BROKER_CONN_POOL_SIZE=4
       - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=240
