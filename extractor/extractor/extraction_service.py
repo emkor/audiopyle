@@ -3,6 +3,7 @@ from typing import Text, Tuple, List, Dict, Any
 from datetime import datetime
 
 import numpy as np
+from mutagen.easyid3 import EasyID3
 from sqlalchemy.exc import DatabaseError
 
 from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
@@ -142,7 +143,7 @@ class FeatureExtractionService(object):
     def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, Mp3AudioFileMeta, Id3Tag]:
         input_file_meta = read_file_meta(audio_file_absolute_path)
         input_audio_meta = read_mp3_file_meta(audio_file_absolute_path)
-        id3_tag = read_id3_tag(audio_file_absolute_path)
+        id3_tag = read_id3_tag(audio_file_absolute_path, EasyID3)
         return input_file_meta, input_audio_meta, id3_tag
 
     def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Dict[Text, Any],
