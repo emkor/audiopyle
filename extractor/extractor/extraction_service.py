@@ -25,7 +25,7 @@ from commons.models.feature import VampyFeatureAbstraction
 from commons.models.file_meta import FileMeta, Mp3AudioFileMeta, AudioFileMeta
 from commons.models.plugin import VampyPlugin, VampyPluginParams
 from commons.models.result import AnalysisResult, AnalysisStats
-from commons.services.audio_tag_providing import read_id3_tag
+from commons.services.audio_tag_providing import read_audio_tag
 from commons.services.feature_extraction import extract_raw_feature, build_feature_object
 from commons.services.feature_meta_extraction import build_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
@@ -148,7 +148,7 @@ class FeatureExtractionService(object):
     def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, Mp3AudioFileMeta, Id3Tag]:
         input_file_meta = read_file_meta(audio_file_absolute_path)
         input_audio_meta = read_mp3_file_meta(audio_file_absolute_path)
-        id3_tag = read_id3_tag(audio_file_absolute_path, EasyID3)
+        id3_tag = read_audio_tag(audio_file_absolute_path, EasyID3)
         return input_file_meta, input_audio_meta, id3_tag
 
     def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Dict[Text, Any],
