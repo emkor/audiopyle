@@ -58,8 +58,8 @@ class FileStore(object):
         """List file absolute paths (with extensions)"""
         return list_full_paths(self.base_dir)
 
-    def get_full_path(self, identifier: Text) -> Text:
-        return self._build_full_path(identifier)
+    def get_full_path(self, file_name: Text) -> Text:
+        return self._build_full_path(file_name)
 
     def remove(self, file_name: Text) -> None:
         full_path = self._build_full_path(file_name)
