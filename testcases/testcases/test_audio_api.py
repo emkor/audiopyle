@@ -26,7 +26,7 @@ class AudioApiTest(TestCase):
         assert_that(response.status_code).is_equal_to(expected_status_code)
 
         actual_response = response.json()
-        assert_that(actual_response["file_name"]).is_equal_to("{}.{}".format(self.audio_file, "mp3"))
+        assert_that(actual_response["file_name"]).is_equal_to(self.audio_file)
         assert_that(actual_response["size"]).is_equal_to(39044)
         assert_that(actual_response["created_on"]).is_not_none()
         assert_that(actual_response["last_access"]).is_not_none()
