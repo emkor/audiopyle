@@ -19,7 +19,7 @@ def read_env_var(var_name: Text, expected_type: Type, default: Optional[Any] = N
 def _select_value(var_name: str, expected_type: Type, default: Optional[Any], actual: Optional[Any]) -> Any:
     try:
         if expected_type == bool:
-            return bool(int(actual))
+            return bool(int(str(actual)))
         return expected_type(actual)
     except ValueError as e:
         logger.warning("Could not cast {}={} to {}: {}. Using default: {}".format(var_name, actual,
