@@ -31,7 +31,6 @@ from commons.services.file_meta_providing import read_file_meta, read_mp3_file_m
 from commons.services.segment_providing import read_raw_audio_from_file
 from commons.services.store_provider import Mp3FileStore
 from commons.utils.env_var import read_env_var
-from commons.utils.file_system import extract_extension
 
 
 class FeatureExtractionService(object):
@@ -66,7 +65,7 @@ class FeatureExtractionService(object):
         plugin = self.plugin_provider.build_plugin_from_full_key(str(request.plugin_full_key))
         plugin_config = self._build_plugin_config(request)
         file_meta, audio_meta, id3_tag = self._read_file_meta(input_audio_file_path)
-        wav_data, read_raw_audio_time = self._read_raw_audio_data_from_mp3(input_audio_file_path)
+        wav_data, read_raw_audio_time = self._read_raw_audio_data_from(input_audio_file_path)
 
         self.logger.debug("Built context: {}! Extracting features...".format(request))
         feature_object, extraction_time = self._do_extraction(task_id, plugin, audio_meta, wav_data, plugin_config)
@@ -138,9 +137,9 @@ class FeatureExtractionService(object):
         extraction_time = seconds_between(extraction_start_time)
         return feature_object, extraction_time
 
-    def _read_raw_audio_data_from_mp3(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
+    def _read_raw_audio_data_from(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
         read_raw_audio_start_time = datetime.utcnow()
-        raw_data = read_raw_audio_from_file(input_file_path, extract_extension(input_file_path))
+        raw_data = read_raw_audio_from_file(input_file_path)
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
 
