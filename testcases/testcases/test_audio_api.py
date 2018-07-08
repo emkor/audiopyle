@@ -9,7 +9,7 @@ from testcases.utils import get_api_host, get_api_port
 class AudioApiTest(TestCase):
     def setUp(self):
         self.audio_api_url = "http://{}:{}/audio".format(get_api_host(), get_api_port())
-        self.audio_file = "102bpm_drum_loop"
+        self.audio_file = "102bpm_drum_loop.mp3"
 
     def test_should_list_audio_file(self):
         expected_status_code = 200

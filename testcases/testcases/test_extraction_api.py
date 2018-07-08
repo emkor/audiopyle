@@ -14,7 +14,7 @@ class CoordinatorApiTest(TestCase):
         self.metric_def_api_url = "http://{}:{}/metric/def".format(get_api_host(), get_api_port())
         self.metric_val_api_url = "http://{}:{}/metric/val".format(get_api_host(), get_api_port())
         self.mp3_extraction_request = {
-            "audio_file_identifier": "102bpm_drum_loop",
+            "audio_file_identifier": "102bpm_drum_loop.mp3",
             "plugin_full_key": "vamp-example-plugins:amplitudefollower:amplitude",
             "plugin_config": {
                 "block_size": 4096,
