@@ -4,7 +4,7 @@ from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCo
 from commons.abstractions.flask_api import FlaskRestApi
 from commons.services.metric_config_provider import MetricConfigProvider
 from commons.services.plugin_config_provider import PluginConfigProvider
-from commons.utils.file_system import PLUGIN_CONFIG_IDENTIFIER
+from commons.utils.file_system import PLUGIN_CONFIG_FILE_NAME
 
 
 class PluginActiveConfigApi(FlaskRestApi):
@@ -17,7 +17,7 @@ class PluginActiveConfigApi(FlaskRestApi):
             return ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_config_provider.get_all())
         except Exception:
             return ApiResponse(HttpStatusCode.not_found,
-                               {"error": "Could not find config file: {}".format(PLUGIN_CONFIG_IDENTIFIER)})
+                               {"error": "Could not find config file: {}".format(PLUGIN_CONFIG_FILE_NAME)})
 
 
 class MetricActiveConfigApi(FlaskRestApi):
@@ -30,4 +30,4 @@ class MetricActiveConfigApi(FlaskRestApi):
             return ApiResponse(status_code=HttpStatusCode.ok, payload=self.metric_config_provider.get_all())
         except Exception:
             return ApiResponse(HttpStatusCode.not_found,
-                               {"error": "Could not find config file: {}".format(PLUGIN_CONFIG_IDENTIFIER)})
+                               {"error": "Could not find config file: {}".format(PLUGIN_CONFIG_FILE_NAME)})
