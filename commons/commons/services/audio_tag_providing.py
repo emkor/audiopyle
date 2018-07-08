@@ -14,7 +14,7 @@ logger = get_logger()
 ACCEPTED_EXTENSIONS = ["mp3", "flac"]
 
 
-def read_audio_tag(input_audio_file_absolute_path: str) -> Id3Tag:
+def read_audio_tag(input_audio_file_absolute_path: str) -> Optional[Id3Tag]:
     file_ext = extract_extension(input_audio_file_absolute_path)
     if file_ext == "mp3":
         return read_audio_tag_using(input_audio_file_absolute_path, EasyID3)
