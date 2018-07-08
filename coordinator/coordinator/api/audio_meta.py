@@ -1,5 +1,3 @@
-from mutagen.easyid3 import EasyID3
-
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.abstractions.flask_api import FlaskRestApi
 from commons.services.audio_tag_providing import read_audio_tag, ACCEPTED_EXTENSIONS
@@ -24,7 +22,7 @@ class AudioTagApi(FlaskRestApi):
         self.logger.info("Reading ID3 tags of {}...".format(audio_file_name))
         if extract_extension(audio_file_name) in ACCEPTED_EXTENSIONS:
             audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, audio_file_name)
-            id3_tag = read_audio_tag(audio_file_absolute_path, EasyID3)
+            id3_tag = read_audio_tag(audio_file_absolute_path)
             return ApiResponse(HttpStatusCode.ok, id3_tag.to_serializable())
         else:
             return ApiResponse(HttpStatusCode.bad_request,
