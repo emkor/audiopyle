@@ -32,10 +32,10 @@ def read_audio_tag_using(input_audio_file_absolute_path: str, method_extracting_
         logger.debug("Tags extracted from {}: {}".format(input_audio_file_absolute_path, id3_tag))
         return id3_tag
     except ID3NoHeaderError as e:
-        logger.warning("File {} does not contain ID3 tag: {}".format(input_audio_file_absolute_path, e))
+        logger.warning("File {} does not contain tag: {}".format(input_audio_file_absolute_path, e))
         return None
     except Exception as e:
-        logger.error("Could not read ID3 tags from: {}. Details: {}".format(input_audio_file_absolute_path, e))
+        logger.error("Could not read tags from: {}. Details: {}".format(input_audio_file_absolute_path, e))
         return None
 
 
