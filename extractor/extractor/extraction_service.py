@@ -21,13 +21,13 @@ from commons.utils.conversion import seconds_between
 from commons.models.audio_tag import Id3Tag
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.feature import VampyFeatureAbstraction
-from commons.models.file_meta import FileMeta, Mp3AudioFileMeta, AudioFileMeta
+from commons.models.file_meta import FileMeta, CompressedAudioFileMeta, AudioFileMeta
 from commons.models.plugin import VampyPlugin, VampyPluginParams
 from commons.models.result import AnalysisResult, AnalysisStats
 from commons.services.audio_tag_providing import read_audio_tag
 from commons.services.feature_extraction import extract_raw_feature, build_feature_object
 from commons.services.feature_meta_extraction import build_feature_meta
-from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
+from commons.services.file_meta_providing import read_file_meta, read_audio_file_meta
 from commons.services.segment_providing import read_raw_audio_from_file
 from commons.services.store_provider import Mp3FileStore
 from commons.utils.env_var import read_env_var
@@ -143,9 +143,9 @@ class FeatureExtractionService(object):
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
 
-    def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, Mp3AudioFileMeta, Id3Tag]:
+    def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, CompressedAudioFileMeta, Id3Tag]:
         input_file_meta = read_file_meta(audio_file_absolute_path)
-        input_audio_meta = read_mp3_file_meta(audio_file_absolute_path)
+        input_audio_meta = read_audio_file_meta(audio_file_absolute_path)
         id3_tag = read_audio_tag(audio_file_absolute_path)
         return input_file_meta, input_audio_meta, id3_tag
 

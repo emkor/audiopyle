@@ -2,10 +2,11 @@ from typing import Text, Optional
 
 import os
 from mutagen.mp3 import MP3
+from mutagen.flac import FLAC, StreamInfo
 
-from commons.models.file_meta import Mp3AudioFileMeta, FileMeta
+from commons.models.file_meta import CompressedAudioFileMeta, FileMeta
 from commons.utils.conversion import to_kilo, utc_timestamp_to_datetime
-from commons.utils.file_system import file_exists, file_size_bytes, get_file_name
+from commons.utils.file_system import file_exists, file_size_bytes, get_file_name, extract_extension
 from commons.utils.logger import get_logger
 
 logger = get_logger()
@@ -24,17 +25,31 @@ def read_file_meta(file_name: Text) -> Optional[FileMeta]:
         return None
 
 
-def read_mp3_file_meta(absolute_path: Text) -> Optional[Mp3AudioFileMeta]:
+def read_audio_file_meta(absolute_path: Text) -> Optional[CompressedAudioFileMeta]:
     if file_exists(absolute_path):
         audio_file = None
         audio_file_size = file_size_bytes(absolute_path)
         try:
-            mp3 = MP3(filename=absolute_path)
-            return Mp3AudioFileMeta(file_name=get_file_name(absolute_path), file_size_bytes=audio_file_size,
-                                    channels_count=mp3.info.channels, sample_rate=mp3.info.sample_rate,
-                                    bit_rate_kbps=to_kilo(mp3.info.bitrate), length_sec=mp3.info.length)
+            if extract_extension(absolute_path) == "mp3":
+                return _read_mp3_file_meta(absolute_path, audio_file_size)
+            elif extract_extension(absolute_path) == "flac":
+                return _read_flac_file_meta(absolute_path, audio_file_size)
         except Exception as e:
             logger.exception("Could not read audio file meta from {}. Details: {}".format(absolute_path, e))
             if audio_file:
                 audio_file.close()
     return None
+
+
+def _read_mp3_file_meta(absolute_path: str, audio_file_size: int) -> CompressedAudioFileMeta:
+    mp3 = MP3(filename=absolute_path)
+    return CompressedAudioFileMeta(file_name=get_file_name(absolute_path), file_size_bytes=audio_file_size,
+                                   channels_count=mp3.info.channels, sample_rate=mp3.info.sample_rate,
+                                   bit_rate_kbps=to_kilo(mp3.info.bitrate), length_sec=mp3.info.length)
+
+
+def _read_flac_file_meta(absolute_path, audio_file_size) -> CompressedAudioFileMeta:
+    flac = FLAC(filename=absolute_path)
+    return CompressedAudioFileMeta(file_name=get_file_name(absolute_path), file_size_bytes=audio_file_size,
+                                   channels_count=flac.info.channels, sample_rate=flac.info.sample_rate,
+                                   bit_rate_kbps=to_kilo(flac.info.bitrate), length_sec=flac.info.length)

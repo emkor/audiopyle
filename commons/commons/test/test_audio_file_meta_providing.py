@@ -3,7 +3,7 @@ from datetime import datetime
 
 from assertpy import assert_that
 
-from commons.services.file_meta_providing import read_mp3_file_meta, read_file_meta
+from commons.services.file_meta_providing import read_audio_file_meta, read_file_meta
 from commons.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDIO_FILE
 from commons.utils.file_system import get_file_name
 
@@ -36,7 +36,7 @@ class Mp3AudioFileMetaProvidingTest(unittest.TestCase):
         self.non_existing_file_name = "/dev/21343983908329089832"
 
     def test_should_create_mp3_audio_file_meta(self):
-        mp3_audio_file_meta = read_mp3_file_meta(self.mp3_audio_file_name)
+        mp3_audio_file_meta = read_audio_file_meta(self.mp3_audio_file_name)
         assert_that(mp3_audio_file_meta).is_not_none()
         assert_that(mp3_audio_file_meta.channels_count).is_equal_to(1)
         assert_that(mp3_audio_file_meta.sample_rate).is_equal_to(self.mp3_audio_file_sample_rate)
@@ -46,5 +46,5 @@ class Mp3AudioFileMetaProvidingTest(unittest.TestCase):
         assert_that(mp3_audio_file_meta.length_sec).is_equal_to(self.mp3_audio_file_length_seconds)
 
     def test_should_return_none_on_non_existing_file(self):
-        mp3_audio_file_meta = read_mp3_file_meta(self.non_existing_file_name)
+        mp3_audio_file_meta = read_audio_file_meta(self.non_existing_file_name)
         assert_that(mp3_audio_file_meta).is_none()

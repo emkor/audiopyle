@@ -1,7 +1,7 @@
 from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from commons.abstractions.flask_api import FlaskRestApi
 from commons.services.audio_tag_providing import read_audio_tag
-from commons.services.file_meta_providing import read_mp3_file_meta
+from commons.services.file_meta_providing import read_audio_file_meta
 from commons.utils.file_system import list_files, AUDIO_FILES_DIR, concatenate_paths, extract_extension
 
 
@@ -9,7 +9,7 @@ class AudioApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         absolute_files_paths = [concatenate_paths(AUDIO_FILES_DIR, f) for f in list_files(AUDIO_FILES_DIR)]
         mp3_absolute_file_paths = [f for f in absolute_files_paths if extract_extension(f) == "mp3"]
-        audio_files_metas = list(map(lambda p: read_mp3_file_meta(p).to_serializable(), mp3_absolute_file_paths))
+        audio_files_metas = list(map(lambda p: read_audio_file_meta(p).to_serializable(), mp3_absolute_file_paths))
         return ApiResponse(HttpStatusCode.ok, audio_files_metas)
 
 
