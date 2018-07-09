@@ -43,7 +43,7 @@ def read_audio_tag_using(input_audio_file_absolute_path: str, method_extracting_
 
 
 def _mutagen_tag_to_internal(mutagen_tag: Union[EasyID3, FLAC]) -> Id3Tag:
-    maybe_track_number = first_if_collection(mutagen_tag.get("tracknumber"))
+    maybe_track_number = first_if_collection(mutagen_tag.get("tracknumber", None))
     track_number = maybe_track_number.split("/")[0] if maybe_track_number else None
     return Id3Tag(artist=first_if_collection(mutagen_tag["artist"]),
                   title=first_if_collection(mutagen_tag["title"]),
