@@ -24,7 +24,7 @@ def read_audio_tag(input_audio_file_absolute_path: str) -> Optional[Id3Tag]:
         raise ValueError("Unsupported file for reading tags: {}".format(input_audio_file_absolute_path))
 
 
-def read_audio_tag_using(input_audio_file_absolute_path: str, method_extracting_tag: Callable = EasyID3) -> \
+def read_audio_tag_using(input_audio_file_absolute_path: str, method_extracting_tag: Callable = Union[EasyID3, FLAC]) -> \
         Optional[Id3Tag]:
     try:
         audio_tags = method_extracting_tag(input_audio_file_absolute_path)
@@ -33,6 +33,9 @@ def read_audio_tag_using(input_audio_file_absolute_path: str, method_extracting_
         return id3_tag
     except ID3NoHeaderError as e:
         logger.warning("File {} does not contain tag: {}".format(input_audio_file_absolute_path, e))
+        return None
+    except KeyError as e:
+        logger.warning("File {} does not contain crucial tag values: {}".format(input_audio_file_absolute_path, e))
         return None
     except Exception as e:
         logger.error("Could not read tags from: {}. Details: {}".format(input_audio_file_absolute_path, e))
