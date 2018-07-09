@@ -6,7 +6,7 @@ from mutagen.id3 import ID3NoHeaderError
 
 from commons.models.audio_tag import Id3Tag
 from commons.utils.conversion import first_if_collection, safe_cast
-from commons.utils.file_system import extract_extension
+from commons.utils.file_system import extract_extension, file_exists
 from commons.utils.logger import get_logger
 
 logger = get_logger()
@@ -15,13 +15,17 @@ ACCEPTED_EXTENSIONS = ["mp3", "flac"]
 
 
 def read_audio_tag(input_audio_file_absolute_path: str) -> Optional[Id3Tag]:
-    file_ext = extract_extension(input_audio_file_absolute_path)
-    if file_ext == "mp3":
-        return read_audio_tag_using(input_audio_file_absolute_path, EasyID3)
-    elif file_ext == "flac":
-        return read_audio_tag_using(input_audio_file_absolute_path, FLAC)
+    if file_exists(input_audio_file_absolute_path):
+        file_ext = extract_extension(input_audio_file_absolute_path)
+        if file_ext == "mp3":
+            return read_audio_tag_using(input_audio_file_absolute_path, EasyID3)
+        elif file_ext == "flac":
+            return read_audio_tag_using(input_audio_file_absolute_path, FLAC)
+        else:
+            raise ValueError("Unsupported file for reading tags: {}".format(input_audio_file_absolute_path))
     else:
-        raise ValueError("Unsupported file for reading tags: {}".format(input_audio_file_absolute_path))
+        logger.error("File {} does not exists, could not read tags".format(input_audio_file_absolute_path))
+        return None
 
 
 def read_audio_tag_using(input_audio_file_absolute_path: str, method_extracting_tag: Callable = Union[EasyID3, FLAC]) -> \
@@ -43,7 +47,7 @@ def read_audio_tag_using(input_audio_file_absolute_path: str, method_extracting_
 
 
 def _mutagen_tag_to_internal(mutagen_tag: Union[EasyID3, FLAC]) -> Id3Tag:
-    maybe_track_number = first_if_collection(mutagen_tag.get("tracknumber", None))
+    maybe_track_number = first_if_collection(mutagen_tag.get("tracknumber"))
     track_number = maybe_track_number.split("/")[0] if maybe_track_number else None
     return Id3Tag(artist=first_if_collection(mutagen_tag["artist"]),
                   title=first_if_collection(mutagen_tag["title"]),
