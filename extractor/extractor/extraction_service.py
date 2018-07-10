@@ -3,6 +3,8 @@ from typing import Text, Tuple, List, Dict, Any
 from datetime import datetime
 
 import numpy as np
+from mutagen.easyid3 import EasyID3
+from sqlalchemy.exc import DatabaseError
 
 from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
 from commons.models.metric import MetricValue, MetricDefinition
@@ -27,8 +29,10 @@ from commons.services.audio_tag_providing import read_id3_tag
 from commons.services.feature_extraction import extract_raw_feature, build_feature_object
 from commons.services.feature_meta_extraction import build_feature_meta
 from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
-from commons.services.segment_providing import read_raw_audio_from_mp3
+from commons.services.segment_providing import read_raw_audio_from_file
 from commons.services.store_provider import Mp3FileStore
+from commons.utils.env_var import read_env_var
+from commons.utils.file_system import extract_extension
 
 
 class FeatureExtractionService(object):
@@ -79,7 +83,7 @@ class FeatureExtractionService(object):
 
         task_time = seconds_between(task_start_time)
         results_stats = AnalysisStats(task_id, task_time, extraction_time, compression_time, feature_meta_build_time,
-                                      read_raw_audio_time, storage_time)
+                                      read_raw_audio_time, storage_time, metrics_extraction_time)
         self.result_stats_repo.insert(results_stats)
         self.logger.debug("Done {}!".format(request))
 
@@ -95,14 +99,23 @@ class FeatureExtractionService(object):
         start_time = datetime.utcnow()
         self.plugin_repo.get_or_create(plugin)
         self.plugin_config_repo.get_or_create(plugin_config)
+        self.audio_tag_repo.get_or_create(id3_tag)
+        self.audio_meta_repo.get_or_create(audio_meta)
+        self.result_repo.insert(analysis_result)
         for metric_value in metric_values:
             self.metric_definition_repo.get_or_create(metric_value.definition)
             self.metric_value_repo.insert(metric_value)
-        self.audio_tag_repo.get_or_create(id3_tag)
-        self.audio_meta_repo.get_or_create(audio_meta)
-        self.feature_data_repo.insert(feature_dto)
         self.feature_meta_repo.insert(feature_meta)
-        self.result_repo.insert(analysis_result)
+        if read_env_var("EXTRACTION_FULL_RESULT_PERSISTENCE", int, 1):
+            try:
+                self.feature_data_repo.insert(feature_dto)
+            except DatabaseError as e:
+                self.logger.error(
+                    "Couldn't insert feature of size {} from task {} into DB: {}".format(feature_dto.size_humanized(),
+                                                                                         analysis_result.task_id, e))
+                raise e
+        else:
+            self.logger.warning("Ignoring full result due to EXTRACTION_FULL_RESULT_PERSISTENCE setting!")
         return seconds_between(start_time)
 
     def _build_feature_meta(self, feature_object, task_id):
@@ -128,14 +141,14 @@ class FeatureExtractionService(object):
 
     def _read_raw_audio_data_from_mp3(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
         read_raw_audio_start_time = datetime.utcnow()
-        raw_data = read_raw_audio_from_mp3(input_file_path)
+        raw_data = read_raw_audio_from_file(input_file_path, extract_extension(input_file_path))
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
 
     def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, Mp3AudioFileMeta, Id3Tag]:
         input_file_meta = read_file_meta(audio_file_absolute_path)
         input_audio_meta = read_mp3_file_meta(audio_file_absolute_path)
-        id3_tag = read_id3_tag(audio_file_absolute_path)
+        id3_tag = read_id3_tag(audio_file_absolute_path, EasyID3)
         return input_file_meta, input_audio_meta, id3_tag
 
     def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Dict[Text, Any],

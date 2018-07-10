@@ -1,4 +1,4 @@
-from typing import Text, Optional
+from typing import Text, Optional, Callable
 
 from mutagen.easyid3 import EasyID3
 from mutagen.id3 import ID3NoHeaderError
@@ -9,12 +9,12 @@ from commons.utils.logger import get_logger
 
 logger = get_logger()
 
-ACCEPTED_EXTENSIONS = ["mp3"]
+ACCEPTED_EXTENSIONS = ["mp3", "flac"]
 
 
-def read_id3_tag(input_audio_file_absolute_path: Text) -> Optional[Id3Tag]:
+def read_id3_tag(input_audio_file_absolute_path: Text, method_to_extract_id3tag: Callable) -> Optional[Id3Tag]:
     try:
-        audio_tags = EasyID3(input_audio_file_absolute_path)
+        audio_tags = method_to_extract_id3tag(input_audio_file_absolute_path)
         id3_tag = _mutagen_id3_to_internal(audio_tags)
         logger.debug("Tags extracted from {}: {}".format(input_audio_file_absolute_path, id3_tag))
         return id3_tag
