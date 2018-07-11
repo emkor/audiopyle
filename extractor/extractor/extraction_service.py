@@ -3,7 +3,6 @@ from typing import Text, Tuple, List, Dict, Any
 from datetime import datetime
 
 import numpy as np
-from mutagen.easyid3 import EasyID3
 from sqlalchemy.exc import DatabaseError
 
 from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
@@ -22,17 +21,16 @@ from commons.utils.conversion import seconds_between
 from commons.models.audio_tag import Id3Tag
 from commons.models.extraction_request import ExtractionRequest
 from commons.models.feature import VampyFeatureAbstraction
-from commons.models.file_meta import FileMeta, Mp3AudioFileMeta, AudioFileMeta
+from commons.models.file_meta import FileMeta, CompressedAudioFileMeta, AudioFileMeta
 from commons.models.plugin import VampyPlugin, VampyPluginParams
 from commons.models.result import AnalysisResult, AnalysisStats
-from commons.services.audio_tag_providing import read_id3_tag
+from commons.services.audio_tag_providing import read_audio_tag
 from commons.services.feature_extraction import extract_raw_feature, build_feature_object
 from commons.services.feature_meta_extraction import build_feature_meta
-from commons.services.file_meta_providing import read_file_meta, read_mp3_file_meta
+from commons.services.file_meta_providing import read_file_meta, read_audio_file_meta
 from commons.services.segment_providing import read_raw_audio_from_file
 from commons.services.store_provider import Mp3FileStore
 from commons.utils.env_var import read_env_var
-from commons.utils.file_system import extract_extension
 
 
 class FeatureExtractionService(object):
@@ -63,11 +61,11 @@ class FeatureExtractionService(object):
         task_id = request.uuid()
 
         self.logger.info("Building context for extraction {}: {}...".format(task_id, request))
-        input_audio_file_path = self.audio_file_store.get_full_path(request.audio_file_identifier)
+        input_audio_file_path = self.audio_file_store.get_full_path(request.audio_file_name)
         plugin = self.plugin_provider.build_plugin_from_full_key(str(request.plugin_full_key))
         plugin_config = self._build_plugin_config(request)
         file_meta, audio_meta, id3_tag = self._read_file_meta(input_audio_file_path)
-        wav_data, read_raw_audio_time = self._read_raw_audio_data_from_mp3(input_audio_file_path)
+        wav_data, read_raw_audio_time = self._read_raw_audio_data_from(input_audio_file_path)
 
         self.logger.debug("Built context: {}! Extracting features...".format(request))
         feature_object, extraction_time = self._do_extraction(task_id, plugin, audio_meta, wav_data, plugin_config)
@@ -139,16 +137,16 @@ class FeatureExtractionService(object):
         extraction_time = seconds_between(extraction_start_time)
         return feature_object, extraction_time
 
-    def _read_raw_audio_data_from_mp3(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
+    def _read_raw_audio_data_from(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
         read_raw_audio_start_time = datetime.utcnow()
-        raw_data = read_raw_audio_from_file(input_file_path, extract_extension(input_file_path))
+        raw_data = read_raw_audio_from_file(input_file_path)
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
 
-    def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, Mp3AudioFileMeta, Id3Tag]:
+    def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, CompressedAudioFileMeta, Id3Tag]:
         input_file_meta = read_file_meta(audio_file_absolute_path)
-        input_audio_meta = read_mp3_file_meta(audio_file_absolute_path)
-        id3_tag = read_id3_tag(audio_file_absolute_path, EasyID3)
+        input_audio_meta = read_audio_file_meta(audio_file_absolute_path)
+        id3_tag = read_audio_tag(audio_file_absolute_path)
         return input_file_meta, input_audio_meta, id3_tag
 
     def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Dict[Text, Any],

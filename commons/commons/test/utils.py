@@ -8,6 +8,7 @@ from commons.db.session import SessionProvider
 from commons.utils.file_system import concatenate_paths
 
 TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop.mp3"
+TEST_FLAC_AUDIO_FILE = "resources/audio/102bpm_drum_loop.flac"
 
 
 def setup_db_repository_test_class(cls: Type[TestCase]) -> None:

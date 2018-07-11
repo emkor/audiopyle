@@ -53,10 +53,8 @@ class JsonFileStoreTest(unittest.TestCase):
         self.json_file_store.store(self.test_file_name, {})
 
         assert_that(self.json_file_store.list()).is_length(1).contains_only(self.test_file_name)
-        assert_that(self.json_file_store.list_file_names()).is_length(1).contains_only(
-            "{}.json".format(self.test_file_name))
         assert_that(self.json_file_store.list_full_paths()).is_length(1).contains_only(
-            "/tmp/audiopyle_json_tests/{}.json".format(self.test_file_name))
+            "/tmp/audiopyle_json_tests/{}".format(self.test_file_name))
 
         self.json_file_store.remove(self.test_file_name)
         file_list = self.json_file_store.list()

@@ -2,7 +2,7 @@ from logging import Logger
 from typing import Any, Dict, Optional
 
 from commons.services.store_provider import JsonFileStore, StoreError
-from commons.utils.file_system import METRIC_CONFIG_IDENTIFIER
+from commons.utils.file_system import METRIC_CONFIG_FILE_NAME
 
 
 class MetricConfigProvider(object):
@@ -12,7 +12,7 @@ class MetricConfigProvider(object):
 
     def get_all(self) -> Optional[Dict[str, Any]]:
         try:
-            return self.file_store.read(METRIC_CONFIG_IDENTIFIER)  # type: ignore
+            return self.file_store.read(METRIC_CONFIG_FILE_NAME)  # type: ignore
         except StoreError as e:
             self.logger.warning(str(e))
             return None

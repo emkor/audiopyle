@@ -61,7 +61,7 @@ class AudioFileMeta(Model):
         raise NotImplementedError()
 
 
-class Mp3AudioFileMeta(AudioFileMeta):
+class CompressedAudioFileMeta(AudioFileMeta):
     def __init__(self, file_name: Text, file_size_bytes: int, channels_count: int, sample_rate: int,
                  length_sec: float, bit_rate_kbps: float) -> None:
         super().__init__(file_name, file_size_bytes, channels_count, sample_rate)

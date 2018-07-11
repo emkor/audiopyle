@@ -16,9 +16,10 @@ from commons.services.metric_config_provider import MetricConfigProvider
 from commons.services.plugin_config_provider import PluginConfigProvider
 from commons.services.plugin_providing import VampyPluginProvider
 from commons.services.store_provider import Mp3FileStore, JsonFileStore
-from commons.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR
+from commons.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR, PLUGIN_BLACKLIST_CONFIG_FILE_NAME
 from commons.utils.logger import setup_logger, get_logger
 from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
+from coordinator.api.audio_tag import AudioTagApi
 from coordinator.api.automation import AutomationApi
 from coordinator.api.config import PluginActiveConfigApi, MetricActiveConfigApi
 from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
@@ -113,14 +114,19 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
                      view_func=MetricActiveConfigApi.as_view('metric_config_api',
                                                              metric_config_provider=metric_config_provider,
                                                              logger=logger))
-    app.add_url_rule("/audio/<identifier>",
+    app.add_url_rule("/audio/<file_name>/tag",
+                     view_func=AudioTagApi.as_view('audio_tag_api',
+                                                   logger=logger))
+    app.add_url_rule("/audio/<file_name>",
                      view_func=AudioFileDetailApi.as_view('audio_detail_api',
                                                           file_store=audio_file_store,
                                                           logger=logger))
+
     app.add_url_rule("/audio",
                      view_func=AudioFileListApi.as_view('audio_list_api',
                                                         file_store=audio_file_store,
                                                         logger=logger))
+
     app.add_url_rule("/", view_func=CoordinatorApi.as_view('coordinator_api', logger=logger))
     logger.info("Starting Coordinator API on {} port!".format(port))
     flask_logger = logging.getLogger('werkzeug')
@@ -145,7 +151,7 @@ def _initialize_db_repositories():
 
 
 def _initialize_plugin_provider(logger, config_store: JsonFileStore):
-    blacklisted_plugins = config_store.read("blacklist")
+    blacklisted_plugins = config_store.read(PLUGIN_BLACKLIST_CONFIG_FILE_NAME)
     if blacklisted_plugins:
         logger.warning("Found {} blacklisted plugin keys: {}".format(len(blacklisted_plugins), blacklisted_plugins))
     plugin_provider = VampyPluginProvider(plugin_black_list=blacklisted_plugins, logger=logger)
