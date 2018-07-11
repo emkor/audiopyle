@@ -141,7 +141,7 @@ class FeatureExtractionService(object):
 
     def _read_raw_audio_data_from_mp3(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
         read_raw_audio_start_time = datetime.utcnow()
-        raw_data = read_raw_audio_from_file(input_file_path, extract_extension(input_file_path))
+        raw_data = read_raw_audio_from_file(input_file_path)
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
 
