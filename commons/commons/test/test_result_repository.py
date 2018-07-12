@@ -3,7 +3,7 @@ import unittest
 from assertpy import assert_that
 
 from commons.models.audio_tag import Id3Tag
-from commons.models.file_meta import Mp3AudioFileMeta
+from commons.models.file_meta import CompressedAudioFileMeta
 from commons.models.plugin import VampyPlugin, VampyPluginParams
 from commons.models.result import AnalysisResult
 from commons.repository.audio_file import AudioFileRepository
@@ -24,8 +24,8 @@ class ResultRepositoryTest(unittest.TestCase):
 
     def setUp(self):
         self.task_id = "0f961f20-b036-5740-b526-013523dd88c7"
-        self.audio_meta_example_1 = Mp3AudioFileMeta("some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
-        self.audio_meta_example_2 = Mp3AudioFileMeta("some_file_2.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
+        self.audio_meta_example_1 = CompressedAudioFileMeta("some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
+        self.audio_meta_example_2 = CompressedAudioFileMeta("some_file_2.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
         self.tag_example_1 = Id3Tag(artist="Pink Floyd", title="Have a cigar", album="Wish you were here",
                                     date=1975, track=3, genre="Progressive rock")
         self.tag_example_2 = Id3Tag(artist="Floyd", title="Cigar", album="Wish you were here",

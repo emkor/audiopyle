@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from commons.models.file_meta import Mp3AudioFileMeta
+from commons.models.file_meta import CompressedAudioFileMeta
 from commons.repository.audio_file import AudioFileRepository
 from commons.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
@@ -17,7 +17,7 @@ class AudioFileDbRepositoryTest(unittest.TestCase):
         tear_down_db_repository_test_class(cls)
 
     def setUp(self):
-        self.audio_meta_example_1 = Mp3AudioFileMeta("some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
+        self.audio_meta_example_1 = CompressedAudioFileMeta("some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
         self.audio_repository = AudioFileRepository(self.session_provider)
 
     def tearDown(self):

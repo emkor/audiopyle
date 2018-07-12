@@ -3,7 +3,7 @@ import unittest
 from assertpy import assert_that
 
 from commons.models.audio_tag import Id3Tag
-from commons.models.file_meta import Mp3AudioFileMeta
+from commons.models.file_meta import CompressedAudioFileMeta
 from commons.models.plugin import VampyPlugin, VampyPluginParams
 from commons.models.result import FeatureMeta, FeatureType, AnalysisResult
 from commons.utils.serialization import to_json
@@ -28,7 +28,7 @@ class AnalysisResultDataModelTest(unittest.TestCase):
 
 class AnalysisResultModelTest(unittest.TestCase):
     def setUp(self):
-        self.audio_meta_example = Mp3AudioFileMeta("some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
+        self.audio_meta_example = CompressedAudioFileMeta("some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
         self.id3_tag_example = Id3Tag(artist="Unknown Artist", title="Unknown Title", album="Unknown Album",
                                       date=2017, track=1, genre="Unknown Genre")
         self.example_vampy_plugin = VampyPlugin("vamp-example-plugins", "amplitudefollower", "amplitude",

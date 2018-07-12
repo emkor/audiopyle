@@ -4,7 +4,7 @@ from enum import Enum
 
 from commons.abstractions.model import Model
 from commons.models.audio_tag import Id3Tag
-from commons.models.file_meta import Mp3AudioFileMeta
+from commons.models.file_meta import CompressedAudioFileMeta
 from commons.models.plugin import VampyPlugin, VampyPluginParams
 
 
@@ -59,7 +59,7 @@ class FeatureMeta(Model):
 
 
 class AnalysisResult(Model):
-    def __init__(self, task_id: Text, audio_meta: Mp3AudioFileMeta, id3_tag: Id3Tag, plugin: VampyPlugin,
+    def __init__(self, task_id: Text, audio_meta: CompressedAudioFileMeta, id3_tag: Id3Tag, plugin: VampyPlugin,
                  plugin_config: VampyPluginParams) -> None:
         self.task_id = task_id
         self.audio_meta = audio_meta
@@ -77,7 +77,7 @@ class AnalysisResult(Model):
 
     @classmethod
     def from_serializable(cls, serialized: Dict[Text, Any]):
-        audio_meta_object = Mp3AudioFileMeta.from_serializable(serialized["audio_meta"])
+        audio_meta_object = CompressedAudioFileMeta.from_serializable(serialized["audio_meta"])
         id3_tag_object = Id3Tag.from_serializable(serialized["id3_tag"])
         plugin_object = VampyPlugin.from_serializable(serialized["plugin"])
         plugin_config_object = VampyPluginParams.from_serializable(serialized["plugin_config"])

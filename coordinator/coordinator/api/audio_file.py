@@ -20,9 +20,9 @@ class AudioFileDetailApi(FlaskRestApi):
         self.file_store = file_store
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        file_identifier = the_request.query_params.get("identifier")
-        if self.file_store.exists(file_identifier):
-            return ApiResponse(HttpStatusCode.ok, self.file_store.meta(file_identifier).to_serializable())
+        file_name = the_request.query_params.get("file_name")
+        if self.file_store.exists(file_name):
+            return ApiResponse(HttpStatusCode.ok, self.file_store.meta(file_name).to_serializable())
         else:
             return ApiResponse(HttpStatusCode.not_found,
-                               {"error": "Can't find file with identifier: {}".format(file_identifier)})
+                               {"error": "Can't find file with name: {}".format(file_name)})
