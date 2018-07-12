@@ -2,9 +2,10 @@ from typing import Text, Optional
 
 import os
 from mutagen.mp3 import MP3
-from mutagen.flac import FLAC, StreamInfo
+from mutagen.flac import FLAC
 
 from commons.models.file_meta import CompressedAudioFileMeta, FileMeta
+from commons.services.audio_tag_providing import Extension
 from commons.utils.conversion import to_kilo, utc_timestamp_to_datetime
 from commons.utils.file_system import file_exists, file_size_bytes, get_file_name, extract_extension
 from commons.utils.logger import get_logger
@@ -30,9 +31,9 @@ def read_audio_file_meta(absolute_path: Text) -> Optional[CompressedAudioFileMet
         audio_file = None
         audio_file_size = file_size_bytes(absolute_path)
         try:
-            if extract_extension(absolute_path) == "mp3":
+            if extract_extension(absolute_path) == Extension.MP3.value:
                 return _read_mp3_file_meta(absolute_path, audio_file_size)
-            elif extract_extension(absolute_path) == "flac":
+            elif extract_extension(absolute_path) == Extension.FLAC.value:
                 return _read_flac_file_meta(absolute_path, audio_file_size)
         except Exception as e:
             logger.exception("Could not read audio file meta from {}. Details: {}".format(absolute_path, e))
