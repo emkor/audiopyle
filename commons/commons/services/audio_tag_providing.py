@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Optional, Callable, Union
 
 from mutagen.easyid3 import EasyID3
@@ -11,15 +12,21 @@ from commons.utils.logger import get_logger
 
 logger = get_logger()
 
-ACCEPTED_EXTENSIONS = ["mp3", "flac"]
+
+class Extension(Enum):
+    MP3 = "mp3"
+    FLAC = "flac"
+
+
+ACCEPTED_EXTENSIONS = [Extension.MP3.value, Extension.FLAC.value]
 
 
 def read_audio_tag(input_audio_file_absolute_path: str) -> Optional[Id3Tag]:
     if file_exists(input_audio_file_absolute_path):
         file_ext = extract_extension(input_audio_file_absolute_path)
-        if file_ext == "mp3":
+        if file_ext == Extension.MP3.value:
             return read_audio_tag_using(input_audio_file_absolute_path, EasyID3)
-        elif file_ext == "flac":
+        elif file_ext == Extension.FLAC.value:
             return read_audio_tag_using(input_audio_file_absolute_path, FLAC)
         else:
             raise ValueError("Unsupported file for reading tags: {}".format(input_audio_file_absolute_path))
