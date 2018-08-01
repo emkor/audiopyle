@@ -30,17 +30,17 @@ package:
 
 basedocker:
 	@echo "---- Building base Docker image ----"
-	@$(DOCKER) build -t audiopyle/base:latest -f ./scripts/Dockerfile_base ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-base:latest -f ./scripts/Dockerfile_base ./scripts
 
 docker:
 	@echo "---- Building app Docker images ----"
-	@$(DOCKER) build -t audiopyle/commons -f scripts/Dockerfile_commons  ./scripts
-	@$(DOCKER) build -t audiopyle/extractor -f scripts/Dockerfile_extractor  ./scripts
-	@$(DOCKER) build -t audiopyle/coordinator -f scripts/Dockerfile_coordinator  ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-commons -f scripts/Dockerfile_commons  ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-extractor -f scripts/Dockerfile_extractor  ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-coordinator -f scripts/Dockerfile_coordinator  ./scripts
 
 verify:
 	@echo "---- Building integration tests Docker image ----"
-	@$(DOCKER) build -t audiopyle/testcases -f scripts/Dockerfile_commons  ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-testcases -f scripts/Dockerfile_commons  ./scripts
 	@echo "---- Running integration tests ----"
 	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 

@@ -1,6 +1,6 @@
 FROM python:3.6-slim
 
-MAINTAINER mkorzeniowski93@gmail.com
+MAINTAINER emkor93@gmail.com
 LABEL version="0.7"
 LABEL description="Latest Python Alpine image with numpy and vamp"
 

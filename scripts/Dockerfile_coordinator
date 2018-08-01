@@ -1,4 +1,4 @@
-FROM audiopyle/commons
+FROM emkor/audiopyle-commons
 
 MAINTAINER emkor93@gmail.com
 LABEL version="0.1"
