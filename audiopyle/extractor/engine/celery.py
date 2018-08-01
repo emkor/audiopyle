@@ -5,8 +5,8 @@ from audiopyle.commons.utils.logger import setup_logger
 
 pymysql.install_as_MySQLdb()
 
-app = Celery(main='extractor.engine', include=['extractor.engine.tasks'])
-app.config_from_object('extractor.engine.config')
+app = Celery(main='audiopyle.extractor.engine', include=['audiopyle.extractor.engine.tasks'])
+app.config_from_object('audiopyle.extractor.engine.config')
 
 
 def get_celery() -> Celery:
@@ -14,6 +14,10 @@ def get_celery() -> Celery:
     return app
 
 
-if __name__ == '__main__':
+def main():
     setup_logger()
-    app.start()
+    app.worker_main()
+
+
+if __name__ == '__main__':
+    main()

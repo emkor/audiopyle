@@ -16,4 +16,4 @@ RUN mkdir -p /root/result
 EXPOSE 8080
 
 # DEFINE ENTRYPOINT AS EXTRACTOR API
-ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "celery", "-A", "audiopyle.extractor.engine", "worker", "--loglevel=info"]
+ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "audiopyle-extractor"]

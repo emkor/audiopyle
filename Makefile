@@ -40,7 +40,7 @@ docker:
 
 verify:
 	@echo "---- Building integration tests Docker image ----"
-	@$(DOCKER) build -t emkor/audiopyle-testcases -f scripts/Dockerfile_commons  ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-testcases -f scripts/Dockerfile_testcases  ./scripts
 	@echo "---- Running integration tests ----"
 	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 
