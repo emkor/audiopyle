@@ -1,4 +1,4 @@
-all: test package basebuild build verify
+all: test package package basedocker docker verify
 
 PYTHON3 = ~/.venv/audiopyle/bin/python
 DOCKER = docker
@@ -40,8 +40,8 @@ docker:
 
 verify:
 	@echo "---- Building integration tests Docker image ----"
-	@$(DOCKER) build -t audiopyle/testcases ./Dockerfile_testcases
+	@$(DOCKER) build -t audiopyle/testcases -f scripts/Dockerfile_commons  ./scripts
 	@echo "---- Running integration tests ----"
 	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 
-.PHONY: all config test basepackage package verify
+.PHONY: all config test package package basedocker docker verify
