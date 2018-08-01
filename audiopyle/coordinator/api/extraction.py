@@ -10,7 +10,7 @@ from audiopyle.extractor.task_api import run_task, retrieve_result, delete_resul
 
 class ExtractionStatusApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        task_id = the_request.query_params.get("task_id")
+        task_id = the_request.query_params["task_id"]
         task_result = retrieve_result(task_id)
         if task_result.status in [TaskStatus.in_progress, TaskStatus.not_known, TaskStatus.ignored]:
             return ApiResponse(HttpStatusCode.no_content, task_result.to_serializable())
@@ -18,7 +18,7 @@ class ExtractionStatusApi(FlaskRestApi):
             return ApiResponse(HttpStatusCode.ok, task_result.to_serializable())
 
     def _delete(self, the_request: ApiRequest) -> ApiResponse:
-        task_id = the_request.query_params.get("task_id")
+        task_id = the_request.query_params["task_id"]
         delete_result(task_id)
         return ApiResponse(HttpStatusCode.ok, {"task_id": task_id})
 

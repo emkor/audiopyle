@@ -20,7 +20,7 @@ class AudioFileDetailApi(FlaskRestApi):
         self.file_store = file_store
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        file_name = the_request.query_params.get("file_name")
+        file_name = the_request.query_params["file_name"]
         if self.file_store.exists(file_name):
             return ApiResponse(HttpStatusCode.ok, self.file_store.meta(file_name).to_serializable())
         else:
