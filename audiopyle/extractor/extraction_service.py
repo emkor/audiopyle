@@ -147,7 +147,11 @@ class FeatureExtractionService(object):
         input_file_meta = read_file_meta(audio_file_absolute_path)
         input_audio_meta = read_audio_file_meta(audio_file_absolute_path)
         id3_tag = read_audio_tag(audio_file_absolute_path)
-        return input_file_meta, input_audio_meta, id3_tag
+        if input_file_meta and input_audio_meta and id3_tag:
+            return input_file_meta, input_audio_meta, id3_tag
+        else:
+            raise ValueError(
+                "Either file meta, audio meta or tag for file {} is empty!".format(audio_file_absolute_path))
 
     def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Dict[Text, Any],
                          feature: VampyFeatureAbstraction) -> Tuple[List[MetricValue], float]:

@@ -30,23 +30,23 @@ class AutomationApi(FlaskRestApi):
     def _post(self, the_request: ApiRequest) -> ApiResponse:
         audio_file_names = self.audio_file_store.list()
         plugins = self.plugin_provider.list_vampy_plugins()
-        plugin_configs = self.plugin_config_provider.get_all()
+        plugin_configs = self.plugin_config_provider.get_all() or {}
 
         if audio_file_names and plugins:
             extraction_requests = self._generate_extraction_requests(audio_file_names, plugins, plugin_configs)
             task_id_to_request = {r.uuid(): r.to_serializable() for r in extraction_requests}
             self.logger.debug("Sending {} extraction requests...".format(task_id_to_request))
-            for task_id, the_request in task_id_to_request.items():
+            for task_id, request in task_id_to_request.items():
                 if self.result_repo.exists_by_id(task_id):
-                    self.logger.warning("Request {} #{} already exist in DB! Omitting...".format(the_request, task_id))
+                    self.logger.warning("Request {} #{} already exist in DB! Omitting...".format(request, task_id))
                 else:
-                    run_task(task=extract_feature, task_id=task_id, extraction_request=the_request)
-                    self.logger.info("Sent feature extraction request {} with id {}...".format(the_request, task_id))
+                    run_task(task=extract_feature, task_id=task_id, extraction_request=request)
+                    self.logger.info("Sent feature extraction request {} with id {}...".format(request, task_id))
             return ApiResponse(HttpStatusCode.accepted, task_id_to_request)
         elif not audio_file_names:
             return ApiResponse(status_code=HttpStatusCode.no_content,
                                payload="No audio files matching {} extensions found!".format(ACCEPTED_EXTENSIONS))
-        elif not plugins:
+        else:
             return ApiResponse(status_code=HttpStatusCode.no_content, payload="No whitelisted plugins found!")
 
     def _generate_extraction_requests(self, audio_file_names: List[str], plugins: List[VampyPlugin],
