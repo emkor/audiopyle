@@ -13,7 +13,7 @@ class MetricDefinitionListApi(FlaskRestApi):
         self.logger = logger
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        all_results = self.metric_repo.get_all_keys()  # type: List[int]
+        all_results = self.metric_repo.get_all_keys()  # type: ignore
         return ApiResponse(HttpStatusCode.ok, all_results)
 
 
@@ -26,11 +26,15 @@ class MetricDefinitionDetailsApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         try:
             metric_def_id = the_request.query_params["id"]
-        except Exception:
+            metric_definition = self.metric_repo.get_by_id(metric_def_id)
+            if metric_definition:
+                return ApiResponse(status_code=HttpStatusCode.ok, payload=metric_definition.to_serializable())
+            else:
+                return ApiResponse(status_code=HttpStatusCode.not_found,
+                                   payload={"Could not find metric definition with id: {}".format(metric_def_id)})
+        except KeyError:
             return ApiResponse(HttpStatusCode.bad_request,
                                {"error": "Could not find metric definition ID in URL: {}".format(the_request.url)})
-        metric_definition = self.metric_repo.get_by_id(metric_def_id)
-        return ApiResponse(status_code=HttpStatusCode.ok, payload=metric_definition.to_serializable())
 
 
 class MetricValueListApi(FlaskRestApi):
@@ -40,7 +44,7 @@ class MetricValueListApi(FlaskRestApi):
         self.logger = logger
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        all_results = self.metric_repo.get_all_keys()  # type: List[int]
+        all_results = self.metric_repo.get_all_keys()  # type: ignore
         return ApiResponse(HttpStatusCode.ok, all_results)
 
 
@@ -53,7 +57,7 @@ class MetricValueDetailsApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         try:
             metric_def_id = the_request.query_params["id"]
-        except Exception:
+        except KeyError:
             return ApiResponse(HttpStatusCode.bad_request,
                                {"error": "Could not find metric value ID in URL: {}".format(the_request.url)})
         metric_definition = self.metric_repo.get_by_id(metric_def_id)
