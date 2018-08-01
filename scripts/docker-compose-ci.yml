@@ -26,7 +26,7 @@ services:
       - MYSQL_PASSWORD=audiopyle
       - MYSQL_DATABASE=audiopyle
     volumes:
-      - "../scripts.resources/config/mysql:/etc/mysql/conf.d"
+      - "./resources/config/mysql:/etc/mysql/conf.d:ro"
   coordinator:
     networks:
       default:
@@ -37,9 +37,9 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "../scripts.resources/config:/root/config:ro"
-      - "../scripts.resources/vamp:/root/vamp:ro"
-      - "../scripts.resources/audio:/root/audio:ro"
+      - "./resources/config:/root/config:ro"
+      - "./resources/vamp:/root/vamp:ro"
+      - "./resources/audio:/root/audio:ro"
     depends_on:
       - rabbitmq
     environment:
@@ -54,8 +54,8 @@ services:
     image: "endlessdrones/audiopyle-extractor:latest"
     hostname: "extractor_1"
     volumes:
-      - "../scripts.resources/vamp:/root/vamp:ro"
-      - "../scripts.resources/audio:/root/audio:ro"
+      - "./resources/vamp:/root/vamp:ro"
+      - "./resources/audio:/root/audio:ro"
     depends_on:
       - rabbitmq
       - mysql

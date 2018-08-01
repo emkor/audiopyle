@@ -31,7 +31,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "resources/config/mysql:/etc/mysql/conf.d"
+      - "./resources/config/mysql:/etc/mysql/conf.d:ro"
   coordinator:
     build:
       context: ""
@@ -45,9 +45,9 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "resources/config:/root/config:ro"
-      - "resources/vamp:/root/vamp:ro"
-      - "resources/audio:/root/audio:ro"
+      - "./resources/config:/root/config:ro"
+      - "./resources/vamp:/root/vamp:ro"
+      - "./resources/audio:/root/audio:ro"
     environment:
       - RABBITMQ_SERIVCE_HOST=rabbitmq.local
       - MYSQL_SERVICE_HOST=mysql.local
@@ -62,8 +62,8 @@ services:
     image: "endlessdrones/audiopyle-extractor:latest"
     hostname: "extractor_1"
     volumes:
-      - "resources/vamp:/root/vamp:ro"
-      - "resources/audio:/root/audio:ro"
+      - "./resources/vamp:/root/vamp:ro"
+      - "./resources/audio:/root/audio:ro"
     environment:
       - EXTRACTION_FULL_RESULT_PERSISTENCE=1
       - EXTRACTION_NORMALIZE_AUDIO_VOLUME_TO_DBFS=-20
