@@ -9,3 +9,5 @@ pymysql
 requests
 sqlalchemy
 vamp
+pytest
+assertpy
