@@ -1,7 +1,7 @@
 from celery import Celery
 import pymysql
 
-from commons.utils.logger import setup_logger
+from audiopyle.commons.utils.logger import setup_logger
 
 pymysql.install_as_MySQLdb()
 

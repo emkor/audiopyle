@@ -3,8 +3,8 @@ from assertpy import assert_that
 
 import requests
 
-from commons.abstractions.api_model import HttpStatusCode
-from testcases.utils import get_api_host, get_api_port
+from audiopyle.commons.abstractions.api_model import HttpStatusCode
+from audiopyle.testcases.utils import get_api_host, get_api_port
 
 
 class AutomationApiTest(TestCase):

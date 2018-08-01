@@ -3,8 +3,8 @@ from celery.result import AsyncResult
 import celery.states as celery_state
 from enum import Enum
 
-from commons.abstractions.model import Model
-from commons.utils.logger import get_logger
+from audiopyle.commons.abstractions.model import Model
+from audiopyle.commons.utils.logger import get_logger
 
 logger = get_logger()
 

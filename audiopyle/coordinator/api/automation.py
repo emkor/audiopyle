@@ -2,18 +2,18 @@ from logging import Logger
 
 from typing import List, Dict, Any
 
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.abstractions.flask_api import FlaskRestApi
-from commons.models.extraction_request import ExtractionRequest
-from commons.models.plugin import VampyPlugin
-from commons.repository.result import ResultRepository
-from commons.services.audio_tag_providing import ACCEPTED_EXTENSIONS
-from commons.services.metric_config_provider import MetricConfigProvider
-from commons.services.plugin_config_provider import PluginConfigProvider
-from commons.services.plugin_providing import VampyPluginProvider
-from commons.services.store_provider import FileStore
-from extractor.engine.tasks import extract_feature
-from extractor.task_api import run_task
+from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from audiopyle.commons.abstractions.flask_api import FlaskRestApi
+from audiopyle.commons.models.extraction_request import ExtractionRequest
+from audiopyle.commons.models.plugin import VampyPlugin
+from audiopyle.commons.repository.result import ResultRepository
+from audiopyle.commons.services.audio_tag_providing import ACCEPTED_EXTENSIONS
+from audiopyle.commons.services.metric_config_provider import MetricConfigProvider
+from audiopyle.commons.services.plugin_config_provider import PluginConfigProvider
+from audiopyle.commons.services.plugin_providing import VampyPluginProvider
+from audiopyle.commons.services.store_provider import FileStore
+from audiopyle.extractor.engine.tasks import extract_feature
+from audiopyle.extractor.task_api import run_task
 
 
 class AutomationApi(FlaskRestApi):

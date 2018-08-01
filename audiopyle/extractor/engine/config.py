@@ -1,4 +1,4 @@
-from commons.utils.env_var import read_env_var
+from audiopyle.commons.utils.env_var import read_env_var
 
 broker_url = 'pyamqp://rabbitmq:rabbitmq@{}//'.format(read_env_var("RABBITMQ_SERIVCE_HOST", str))
 result_backend = 'db+mysql://audiopyle:audiopyle@{}:{}/audiopyle'.format(read_env_var("MYSQL_SERVICE_HOST", str),

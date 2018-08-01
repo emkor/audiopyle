@@ -1,21 +1,21 @@
 from typing import Any, Text, Dict
 from billiard.exceptions import SoftTimeLimitExceeded
 
-from commons.db.session import SessionProvider
-from commons.repository.audio_file import AudioFileRepository
-from commons.repository.audio_tag import AudioTagRepository
-from commons.repository.feature_data import FeatureDataRepository
-from commons.repository.feature_meta import FeatureMetaRepository
-from commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from commons.repository.result import ResultRepository, ResultStatsRepository
-from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
-from commons.services.plugin_providing import VampyPluginProvider
-from commons.utils.file_system import AUDIO_FILES_DIR
-from commons.utils.logger import get_logger
-from commons.models.extraction_request import ExtractionRequest
-from commons.services.store_provider import Mp3FileStore
-from extractor.engine.celery import get_celery
-from extractor.extraction_service import FeatureExtractionService
+from audiopyle.commons.db.session import SessionProvider
+from audiopyle.commons.repository.audio_file import AudioFileRepository
+from audiopyle.commons.repository.audio_tag import AudioTagRepository
+from audiopyle.commons.repository.feature_data import FeatureDataRepository
+from audiopyle.commons.repository.feature_meta import FeatureMetaRepository
+from audiopyle.commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
+from audiopyle.commons.repository.result import ResultRepository, ResultStatsRepository
+from audiopyle.commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
+from audiopyle.commons.services.plugin_providing import VampyPluginProvider
+from audiopyle.commons.utils.file_system import AUDIO_FILES_DIR
+from audiopyle.commons.utils.logger import get_logger
+from audiopyle.commons.models.extraction_request import ExtractionRequest
+from audiopyle.commons.services.store_provider import Mp3FileStore
+from audiopyle.extractor.engine.celery import get_celery
+from audiopyle.extractor.extraction_service import FeatureExtractionService
 
 celery_app = get_celery()
 

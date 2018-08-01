@@ -1,10 +1,10 @@
 from logging import Logger
 
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.abstractions.flask_api import FlaskRestApi
-from commons.services.metric_config_provider import MetricConfigProvider
-from commons.services.plugin_config_provider import PluginConfigProvider
-from commons.utils.file_system import PLUGIN_CONFIG_FILE_NAME
+from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from audiopyle.commons.abstractions.flask_api import FlaskRestApi
+from audiopyle.commons.services.metric_config_provider import MetricConfigProvider
+from audiopyle.commons.services.plugin_config_provider import PluginConfigProvider
+from audiopyle.commons.utils.file_system import PLUGIN_CONFIG_FILE_NAME
 
 
 class PluginActiveConfigApi(FlaskRestApi):

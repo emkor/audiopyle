@@ -3,31 +3,31 @@ from logging import Logger
 
 from flask import Flask
 
-from commons.db.engine import create_db_tables
-from commons.db.session import SessionProvider
-from commons.repository.audio_file import AudioFileRepository
-from commons.repository.audio_tag import AudioTagRepository
-from commons.repository.feature_data import FeatureDataRepository
-from commons.repository.feature_meta import FeatureMetaRepository
-from commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from commons.repository.result import ResultRepository, ResultStatsRepository
-from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
-from commons.services.metric_config_provider import MetricConfigProvider
-from commons.services.plugin_config_provider import PluginConfigProvider
-from commons.services.plugin_providing import VampyPluginProvider
-from commons.services.store_provider import Mp3FileStore, JsonFileStore
-from commons.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR, PLUGIN_BLACKLIST_CONFIG_FILE_NAME
-from commons.utils.logger import setup_logger, get_logger
-from coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
-from coordinator.api.audio_tag import AudioTagApi
-from coordinator.api.automation import AutomationApi
-from coordinator.api.config import PluginActiveConfigApi, MetricActiveConfigApi
-from coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
-from coordinator.api.metric import MetricDefinitionListApi, MetricDefinitionDetailsApi, MetricValueListApi, \
+from audiopyle.commons.db.engine import create_db_tables
+from audiopyle.commons.db.session import SessionProvider
+from audiopyle.commons.repository.audio_file import AudioFileRepository
+from audiopyle.commons.repository.audio_tag import AudioTagRepository
+from audiopyle.commons.repository.feature_data import FeatureDataRepository
+from audiopyle.commons.repository.feature_meta import FeatureMetaRepository
+from audiopyle.commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
+from audiopyle.commons.repository.result import ResultRepository, ResultStatsRepository
+from audiopyle.commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
+from audiopyle.commons.services.metric_config_provider import MetricConfigProvider
+from audiopyle.commons.services.plugin_config_provider import PluginConfigProvider
+from audiopyle.commons.services.plugin_providing import VampyPluginProvider
+from audiopyle.commons.services.store_provider import Mp3FileStore, JsonFileStore
+from audiopyle.commons.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR, PLUGIN_BLACKLIST_CONFIG_FILE_NAME
+from audiopyle.commons.utils.logger import setup_logger, get_logger
+from audiopyle.coordinator.api.audio_file import AudioFileListApi, AudioFileDetailApi
+from audiopyle.coordinator.api.audio_tag import AudioTagApi
+from audiopyle.coordinator.api.automation import AutomationApi
+from audiopyle.coordinator.api.config import PluginActiveConfigApi, MetricActiveConfigApi
+from audiopyle.coordinator.api.extraction import ExtractionStatusApi, ExtractionApi
+from audiopyle.coordinator.api.metric import MetricDefinitionListApi, MetricDefinitionDetailsApi, MetricValueListApi, \
     MetricValueDetailsApi
-from coordinator.api.plugin import PluginListApi, PluginDetailApi
-from coordinator.api.root import CoordinatorApi
-from coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
+from audiopyle.coordinator.api.plugin import PluginListApi, PluginDetailApi
+from audiopyle.coordinator.api.root import CoordinatorApi
+from audiopyle.coordinator.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
 
 app = Flask(__name__)
 

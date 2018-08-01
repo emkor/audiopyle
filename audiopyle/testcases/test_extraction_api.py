@@ -4,9 +4,9 @@ from unittest import TestCase
 from assertpy import assert_that
 import requests
 
-from commons.abstractions.api_model import HttpStatusCode
-from extractor.result_model import TaskStatus
-from testcases.utils import get_api_host, keep_polling_until, get_api_port
+from audiopyle.commons.abstractions.api_model import HttpStatusCode
+from audiopyle.extractor.result_model import TaskStatus
+from audiopyle.testcases.utils import get_api_host, keep_polling_until, get_api_port
 
 
 class CoordinatorApiTest(TestCase):

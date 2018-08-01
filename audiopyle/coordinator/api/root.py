@@ -1,6 +1,6 @@
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.abstractions.flask_api import FlaskRestApi
-from coordinator.utils import COORDINATOR_STATUS_RESPONSE
+from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from audiopyle.commons.abstractions.flask_api import FlaskRestApi
+from audiopyle.coordinator.utils import COORDINATOR_STATUS_RESPONSE
 
 
 class CoordinatorApi(FlaskRestApi):

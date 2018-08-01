@@ -3,8 +3,8 @@ from unittest import TestCase
 import requests
 from assertpy import assert_that
 
-from commons.models.audio_tag import Id3Tag
-from testcases.utils import get_api_host
+from audiopyle.commons.models.audio_tag import Id3Tag
+from audiopyle.testcases.utils import get_api_host
 
 
 class AudioTagApiTest(TestCase):

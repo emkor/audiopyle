@@ -1,8 +1,8 @@
 from logging import Logger
 
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.abstractions.flask_api import FlaskRestApi
-from commons.services.plugin_providing import VampyPluginProvider
+from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from audiopyle.commons.abstractions.flask_api import FlaskRestApi
+from audiopyle.commons.services.plugin_providing import VampyPluginProvider
 
 
 class PluginListApi(FlaskRestApi):

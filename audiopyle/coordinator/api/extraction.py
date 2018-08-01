@@ -1,11 +1,11 @@
 from logging import Logger
 
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode, ClientError
-from commons.abstractions.flask_api import FlaskRestApi
-from commons.models.extraction_request import ExtractionRequest
-from extractor.engine.tasks import extract_feature
-from extractor.result_model import TaskStatus
-from extractor.task_api import run_task, retrieve_result, delete_result
+from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode, ClientError
+from audiopyle.commons.abstractions.flask_api import FlaskRestApi
+from audiopyle.commons.models.extraction_request import ExtractionRequest
+from audiopyle.extractor.engine.tasks import extract_feature
+from audiopyle.extractor.result_model import TaskStatus
+from audiopyle.extractor.task_api import run_task, retrieve_result, delete_result
 
 
 class ExtractionStatusApi(FlaskRestApi):

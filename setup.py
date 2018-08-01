@@ -20,5 +20,10 @@ setup(
     url='https://github.com/emkor/audiopyle',
     packages=find_packages(exclude=["audiopyle.test", "audiopyle.test.*", "scripts"]),
     install_requires=REQUIREMENTS,
-    tests_require=REQUIREMENTS_TEST
+    tests_require=REQUIREMENTS_TEST,
+    entry_points={
+        'console_scripts': [
+            'audiopyle-coordinator = audiopyle.coordinator.app:main'
+        ]
+    }
 )

@@ -1,7 +1,7 @@
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.abstractions.flask_api import FlaskRestApi
-from commons.services.audio_tag_providing import read_audio_tag, ACCEPTED_EXTENSIONS
-from commons.utils.file_system import AUDIO_FILES_DIR, concatenate_paths, extract_extension
+from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from audiopyle.commons.abstractions.flask_api import FlaskRestApi
+from audiopyle.commons.services.audio_tag_providing import read_audio_tag, ACCEPTED_EXTENSIONS
+from audiopyle.commons.utils.file_system import AUDIO_FILES_DIR, concatenate_paths, extract_extension
 
 
 class AudioTagApi(FlaskRestApi):

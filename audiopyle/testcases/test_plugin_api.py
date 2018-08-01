@@ -3,8 +3,8 @@ from unittest import TestCase
 import requests
 from assertpy import assert_that
 
-from commons.models.plugin import VampyPlugin
-from testcases.utils import get_api_host, get_api_port
+from audiopyle.commons.models.plugin import VampyPlugin
+from audiopyle.testcases.utils import get_api_host, get_api_port
 
 
 class PluginApiTest(TestCase):

@@ -5,32 +5,32 @@ from datetime import datetime
 import numpy as np
 from sqlalchemy.exc import DatabaseError
 
-from commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
-from commons.models.metric import MetricValue, MetricDefinition
-from commons.repository.audio_file import AudioFileRepository
-from commons.repository.audio_tag import AudioTagRepository
-from commons.repository.feature_data import FeatureDataRepository
-from commons.repository.feature_meta import FeatureMetaRepository
-from commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from commons.repository.result import ResultRepository, ResultStatsRepository
-from commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
-from commons.services.compression import compress_model
-from commons.services.metric_provider import get_transformation, extract_metric_value
-from commons.services.plugin_providing import VampyPluginProvider
-from commons.utils.conversion import seconds_between
-from commons.models.audio_tag import Id3Tag
-from commons.models.extraction_request import ExtractionRequest
-from commons.models.feature import VampyFeatureAbstraction
-from commons.models.file_meta import FileMeta, CompressedAudioFileMeta, AudioFileMeta
-from commons.models.plugin import VampyPlugin, VampyPluginParams
-from commons.models.result import AnalysisResult, AnalysisStats
-from commons.services.audio_tag_providing import read_audio_tag
-from commons.services.feature_extraction import extract_raw_feature, build_feature_object
-from commons.services.feature_meta_extraction import build_feature_meta
-from commons.services.file_meta_providing import read_file_meta, read_audio_file_meta
-from commons.services.segment_providing import read_raw_audio_from_file
-from commons.services.store_provider import Mp3FileStore
-from commons.utils.env_var import read_env_var
+from audiopyle.commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
+from audiopyle.commons.models.metric import MetricValue, MetricDefinition
+from audiopyle.commons.repository.audio_file import AudioFileRepository
+from audiopyle.commons.repository.audio_tag import AudioTagRepository
+from audiopyle.commons.repository.feature_data import FeatureDataRepository
+from audiopyle.commons.repository.feature_meta import FeatureMetaRepository
+from audiopyle.commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
+from audiopyle.commons.repository.result import ResultRepository, ResultStatsRepository
+from audiopyle.commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
+from audiopyle.commons.services.compression import compress_model
+from audiopyle.commons.services.metric_provider import get_transformation, extract_metric_value
+from audiopyle.commons.services.plugin_providing import VampyPluginProvider
+from audiopyle.commons.utils.conversion import seconds_between
+from audiopyle.commons.models.audio_tag import Id3Tag
+from audiopyle.commons.models.extraction_request import ExtractionRequest
+from audiopyle.commons.models.feature import VampyFeatureAbstraction
+from audiopyle.commons.models.file_meta import FileMeta, CompressedAudioFileMeta, AudioFileMeta
+from audiopyle.commons.models.plugin import VampyPlugin, VampyPluginParams
+from audiopyle.commons.models.result import AnalysisResult, AnalysisStats
+from audiopyle.commons.services.audio_tag_providing import read_audio_tag
+from audiopyle.commons.services.feature_extraction import extract_raw_feature, build_feature_object
+from audiopyle.commons.services.feature_meta_extraction import build_feature_meta
+from audiopyle.commons.services.file_meta_providing import read_file_meta, read_audio_file_meta
+from audiopyle.commons.services.segment_providing import read_raw_audio_from_file
+from audiopyle.commons.services.store_provider import Mp3FileStore
+from audiopyle.commons.utils.env_var import read_env_var
 
 
 class FeatureExtractionService(object):

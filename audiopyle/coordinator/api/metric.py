@@ -1,9 +1,9 @@
 from logging import Logger
 from typing import List
 
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.abstractions.flask_api import FlaskRestApi
-from commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
+from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from audiopyle.commons.abstractions.flask_api import FlaskRestApi
+from audiopyle.commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
 
 
 class MetricDefinitionListApi(FlaskRestApi):

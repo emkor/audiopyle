@@ -1,8 +1,8 @@
 from logging import Logger
 
-from commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from commons.abstractions.flask_api import FlaskRestApi
-from commons.services.store_provider import FileStore
+from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
+from audiopyle.commons.abstractions.flask_api import FlaskRestApi
+from audiopyle.commons.services.store_provider import FileStore
 
 
 class AudioFileListApi(FlaskRestApi):

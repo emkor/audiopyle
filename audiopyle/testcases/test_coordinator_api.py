@@ -3,7 +3,7 @@ from assertpy import assert_that
 
 import requests
 
-from testcases.utils import get_api_host, get_api_port
+from audiopyle.testcases.utils import get_api_host, get_api_port
 
 
 class CoordinatorApiTest(TestCase):

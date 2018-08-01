@@ -13,4 +13,4 @@ WORKDIR /audiopyle
 EXPOSE 8080
 
 # DEFINE ENTRYPOINT AS COORDINATOR API
-ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "mysql:3306", "--", "/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "coordinator"]
+ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "mysql:3306", "--", "/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "audiopyle-coordinator"]

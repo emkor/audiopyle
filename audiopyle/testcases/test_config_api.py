@@ -3,7 +3,7 @@ from unittest import TestCase
 import requests
 from assertpy import assert_that
 
-from testcases.utils import get_api_host, get_api_port
+from audiopyle.testcases.utils import get_api_host, get_api_port
 
 
 class ConfigApiTest(TestCase):
