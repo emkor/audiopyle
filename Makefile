@@ -1,4 +1,4 @@
-all: test package package basedocker docker verify
+all: test package basedocker docker verify
 
 PYTHON3 = ~/.venv/audiopyle/bin/python
 DOCKER = docker
