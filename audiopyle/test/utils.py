@@ -7,8 +7,8 @@ from audiopyle.commons.db.engine import get_test_db_engine, create_db_tables, dr
 from audiopyle.commons.db.session import SessionProvider
 from audiopyle.commons.utils.file_system import concatenate_paths
 
-TEST_MP3_AUDIO_FILE = "resources/audio/102bpm_drum_loop.mp3"
-TEST_FLAC_AUDIO_FILE = "resources/audio/102bpm_drum_loop.flac"
+TEST_MP3_AUDIO_FILE = "scripts/resources/audio/102bpm_drum_loop.mp3"
+TEST_FLAC_AUDIO_FILE = "scripts/resources/audio/102bpm_drum_loop.flac"
 
 
 def setup_db_repository_test_class(cls: Type[TestCase]) -> None:
