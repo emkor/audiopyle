@@ -1,5 +1,4 @@
 from logging import Logger
-from typing import List
 
 from audiopyle.commons.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
 from audiopyle.commons.abstractions.flask_api import FlaskRestApi
@@ -16,7 +15,7 @@ class ResultListApi(FlaskRestApi):
         self.logger = logger
 
     def _get(self, the_request: ApiRequest) -> ApiResponse:
-        all_results = self.result_repo.get_all_keys()  # type: List[str]
+        all_results = self.result_repo.get_all_keys()  # type: ignore
         return ApiResponse(HttpStatusCode.ok, all_results)
 
 
@@ -116,12 +115,15 @@ class ResultStatsApi(FlaskRestApi):
     def _get(self, the_request: ApiRequest) -> ApiResponse:
         try:
             task_id = the_request.query_params["task_id"]
-        except Exception:
+            data_entity = self.stats_repo.get_by_id(task_id)
+            if data_entity:
+                return ApiResponse(HttpStatusCode.ok, data_entity.to_serializable())
+            else:
+                return ApiResponse(HttpStatusCode.not_found,
+                            payload={"error": "Could not find stats with id: {}".format(task_id)})
+        except KeyError:
             return ApiResponse(HttpStatusCode.bad_request,
                                payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
-        try:
-            data_entity = self.stats_repo.get_by_id(task_id)
-            return ApiResponse(HttpStatusCode.ok, data_entity.to_serializable())
         except EntityNotFound:
             return ApiResponse(HttpStatusCode.not_found,
                                payload={"error": "Could not find result with id: {}".format(task_id)})

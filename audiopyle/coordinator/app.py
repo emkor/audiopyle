@@ -154,7 +154,7 @@ def _initialize_plugin_provider(logger, config_store: JsonFileStore):
     blacklisted_plugins = config_store.read(PLUGIN_BLACKLIST_CONFIG_FILE_NAME)
     if blacklisted_plugins:
         logger.warning("Found {} blacklisted plugin keys: {}".format(len(blacklisted_plugins), blacklisted_plugins))
-    plugin_provider = VampyPluginProvider(plugin_black_list=blacklisted_plugins, logger=logger)
+    plugin_provider = VampyPluginProvider(plugin_black_list=blacklisted_plugins, logger=logger)  # type: ignore
     return plugin_provider
 
 
