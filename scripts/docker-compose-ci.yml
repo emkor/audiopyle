@@ -32,7 +32,7 @@ services:
       default:
         aliases:
           - coordinator.local
-    image: "endlessdrones/audiopyle-coordinator:latest"
+    image: "emkor/audiopyle-coordinator:latest"
     hostname: "coordinator"
     ports:
       - "8080:8080"
@@ -51,7 +51,7 @@ services:
       default:
         aliases:
           - extractor_1.local
-    image: "endlessdrones/audiopyle-extractor:latest"
+    image: "emkor/audiopyle-extractor:latest"
     hostname: "extractor_1"
     volumes:
       - "./resources/vamp:/root/vamp:ro"
@@ -73,7 +73,7 @@ services:
       default:
         aliases:
           - testcases.local
-    image: "endlessdrones/audiopyle-testcases:latest"
+    image: "emkor/audiopyle-testcases:latest"
     hostname: "testcases"
     environment:
       - COORDINATOR_SERVICE_HOST=coordinator.local
