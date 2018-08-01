@@ -1,5 +1,8 @@
 version: '3'
 
+networks:
+  default:
+
 services:
   rabbitmq:
     networks:
@@ -9,7 +12,7 @@ services:
     image: "rabbitmq:3.6-alpine"
     hostname: "rabbitmq"
     environment:
-      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_ERLANG_COOKIE: "YCNMKDZOOPNXITXYRWMP"
       RABBITMQ_DEFAULT_USER: "rabbitmq"
       RABBITMQ_DEFAULT_PASS: "rabbitmq"
       RABBITMQ_DEFAULT_VHOST: "/"
@@ -25,9 +28,14 @@ services:
       - MYSQL_USER=audiopyle
       - MYSQL_PASSWORD=audiopyle
       - MYSQL_DATABASE=audiopyle
+    ports:
+      - "3306:3306"
     volumes:
-      - "../scripts.resources/config/mysql:/etc/mysql/conf.d"
+      - "resources/config/mysql:/etc/mysql/conf.d"
   coordinator:
+    build:
+      context: ""
+      dockerfile:
     networks:
       default:
         aliases:
@@ -37,15 +45,15 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "../scripts.resources/config:/root/config:ro"
-      - "../scripts.resources/vamp:/root/vamp:ro"
-      - "../scripts.resources/audio:/root/audio:ro"
-    depends_on:
-      - rabbitmq
+      - "resources/config:/root/config:ro"
+      - "resources/vamp:/root/vamp:ro"
+      - "resources/audio:/root/audio:ro"
     environment:
       - RABBITMQ_SERIVCE_HOST=rabbitmq.local
       - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
+    depends_on:
+      - rabbitmq
   extractor_1:
     networks:
       default:
@@ -54,27 +62,19 @@ services:
     image: "endlessdrones/audiopyle-extractor:latest"
     hostname: "extractor_1"
     volumes:
-      - "../scripts.resources/vamp:/root/vamp:ro"
-      - "../scripts.resources/audio:/root/audio:ro"
-    depends_on:
-      - rabbitmq
-      - mysql
+      - "resources/vamp:/root/vamp:ro"
+      - "resources/audio:/root/audio:ro"
     environment:
+      - EXTRACTION_FULL_RESULT_PERSISTENCE=1
+      - EXTRACTION_NORMALIZE_AUDIO_VOLUME_TO_DBFS=-20
+      - EXTRACTION_CONCURRENCY=4
+      - EXTRACTION_BROKER_CONN_POOL_SIZE=4
+      - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=240
+      - EXTRACTION_HARD_TIME_LIMIT_SECONDS=300
+      - EXTRACTION_MEMORY_LIMIT_MB=1024
       - RABBITMQ_SERIVCE_HOST=rabbitmq.local
       - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
-      - EXTRACTION_CONCURRENCY=1
-      - EXTRACTION_BROKER_CONN_POOL_SIZE=1
-      - EXTRACTION_SOFT_TIME_LIMIT_SECONDS=30
-      - EXTRACTION_HARD_TIME_LIMIT_SECONDS=60
-      - EXTRACTION_MEMORY_LIMIT_MB=128
-  testcases:
-    networks:
-      default:
-        aliases:
-          - testcases.local
-    image: "endlessdrones/audiopyle-testcases:latest"
-    hostname: "testcases"
-    environment:
-      - COORDINATOR_SERVICE_HOST=coordinator.local
-      - COORDINATOR_SERVICE_PORT=8080
+    depends_on:
+      - rabbitmq
+      - mysql

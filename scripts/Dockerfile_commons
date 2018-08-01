@@ -1,0 +1,18 @@
+FROM audiopyle/base
+
+MAINTAINER emkor93@gmail.com
+LABEL version="0.1"
+LABEL description="Image containing common functionality of an Audiopyle app"
+
+# CREATE AND SET DIRECTORIES
+RUN mkdir -p /audiopyle
+WORKDIR /audiopyle
+
+# INCLUDE SCRIPT (https://github.com/vishnubob/wait-for-it) FOR WAITING FOR OTHER SERVICE UNDER /audiopyle
+COPY wait-for-it.sh .
+COPY audiopyle-*.whl .
+RUN chmod u+x wait-for-it.sh
+
+# INSTALL AUDIOPYLE
+RUN pip install --no-cache-dir ./audiopyle-*.whl
+RUN rm ./audiopyle-*.whl

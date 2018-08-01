@@ -1,0 +1,10 @@
+FROM audiopyle/extractor
+
+MAINTAINER emkor93@gmail.com
+LABEL version="0.1"
+LABEL description="Image containing integration tests"
+
+# CREATE AND SET DIRECTORIES
+WORKDIR /audiopyle
+
+ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "30", "coordinator:8080", "--", "python", "-m", "pytest", "-v"]

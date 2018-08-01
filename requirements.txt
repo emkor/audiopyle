@@ -1,0 +1,11 @@
+billiard
+celery[sqlalchemy]
+flask
+mutagen
+numpy
+pydub
+pympler
+pymysql
+requests
+sqlalchemy
+vamp

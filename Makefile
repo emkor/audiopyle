@@ -1,43 +1,46 @@
-all: test basepackage package verify
+all: test package basebuild build verify
 
-PIP = .venv/bin/python -m pip
-MYPY = .venv/bin/python -m mypy
-PYTEST = .venv/bin/python -m pytest
+PYTHON3 = ~/.venv/audiopyle/bin/python
 DOCKER = docker
 DOCKER_COMPOSE = docker-compose
 
 config:
+	@echo "---- Doing cleanup ----"
+	@mkdir -p ~/.venv
+	@rm -rf ~/.venv/audiopyle
 	@echo "---- Setting virtualenv ----"
-	@rm -rf .venv && python -m venv .venv
+	@rm -rf ~/.venv/audiopyle && python -m venv ~/.venv/audiopyle
 	@echo "---- Installing build dependencies ----"
-	@$(PIP) install numpy
-	@$(PIP) install vamp tox mypy pytest pytest-cov assertpy
+	@$(PYTHON3) -m pip install wheel mypy pytest pytest-cov assertpy
+	@echo "---- Installing app dependencies ----"
+	@$(PYTHON3) -m pip install numpy
+	@$(PYTHON3) -m pip install vamp
+	@echo "---- Installing app in editable mode ----"
+	@$(PYTHON3) -m pip install -e .
 
 test:
-	@echo "---- Running MyPy ---- "
-	@$(MYPY) --ignore-missing-imports ./commons
-	@$(MYPY) --ignore-missing-imports ./coordinator
-	@$(MYPY) --ignore-missing-imports ./extractor
-	@echo "---- Installing modules ----"
-	@$(PIP) install -e ./commons
-	@$(PIP) install -e ./coordinator
-	@$(PIP) install -e ./extractor
-	@echo "---- Running unit tests ----"
-	@$(PYTEST) -v --cov=commons ./commons
-
-basepackage:
-	@echo "---- Building base image ----"
-	@$(DOCKER) build -t endlessdrones/audiopyle-base:latest ./base
+	@echo "---- Running MyPy static code analysis ---- "
+	@$(PYTHON3) -m mypy --ignore-missing-imports .
+	@echo "---- Executing unit tests ----"
+	@$(PYTHON3) -m pytest -v --cov=audiopyle ./audiopyle/test
 
 package:
-	@echo "---- Installing app images ----"
-	@$(DOCKER) build -t endlessdrones/audiopyle-commons ./commons
-	@$(DOCKER) build -t endlessdrones/audiopyle-extractor ./extractor
-	@$(DOCKER) build -t endlessdrones/audiopyle-coordinator ./coordinator
+	@echo "---- Building python wheel package ---- "
+	@$(PYTHON3) setup.py bdist_wheel --python-tag py3 --dist-dir ./scripts
+
+basedocker:
+	@echo "---- Building base Docker image ----"
+	@$(DOCKER) build -t audiopyle/base:latest -f ./scripts/Dockerfile_base ./scripts
+
+docker:
+	@echo "---- Building app Docker images ----"
+	@$(DOCKER) build -t audiopyle/commons -f scripts/Dockerfile_commons  ./scripts
+	@$(DOCKER) build -t audiopyle/extractor -f scripts/Dockerfile_extractor  ./scripts
+	@$(DOCKER) build -t audiopyle/coordinator -f scripts/Dockerfile_coordinator  ./scripts
 
 verify:
-	@echo "---- Building test image ----"
-	@$(DOCKER) build -t endlessdrones/audiopyle-testcases ./testcases
+	@echo "---- Building integration tests Docker image ----"
+	@$(DOCKER) build -t audiopyle/testcases ./Dockerfile_testcases
 	@echo "---- Running integration tests ----"
 	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 
