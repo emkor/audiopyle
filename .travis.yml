@@ -13,7 +13,11 @@ before_script:
   - make config
 
 script:
-  - make all
+  - make test
+  - make package
+  - make basedocker
+  - make docker
+  - make verify
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
