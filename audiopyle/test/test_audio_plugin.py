@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from audiopyle.commons.models.plugin import VampyPlugin, VampyPluginParams
+from audiopyle.lib.models.plugin import VampyPlugin, VampyPluginParams
 
 
 class AudioPluginModelTest(unittest.TestCase):

@@ -1,0 +1,19 @@
+FROM emkor/audiopyle-lib
+
+MAINTAINER emkor93@gmail.com
+LABEL version="0.1"
+LABEL description="Image containing extractor module of an audiopyle app"
+
+# SET WORKDIR
+WORKDIR /audiopyle
+
+# CREATE DIRECTORY FOR INPUT FILES
+RUN mkdir -p /root/audio
+RUN mkdir -p /root/vamp
+RUN mkdir -p /root/result
+
+# EXPOSE PORTS
+EXPOSE 8080
+
+# DEFINE ENTRYPOINT AS EXTRACTOR API
+ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "audiopyle-worker"]

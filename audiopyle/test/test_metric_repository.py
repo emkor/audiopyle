@@ -3,12 +3,12 @@ from unittest.mock import Mock
 
 from assertpy import assert_that
 
-from audiopyle.commons.db.exception import DuplicateEntity
-from audiopyle.commons.models.metric import MetricDefinition, MetricValue
-from audiopyle.commons.models.plugin import VampyPlugin
-from audiopyle.commons.models.result import DataStats
-from audiopyle.commons.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from audiopyle.commons.repository.vampy_plugin import VampyPluginRepository
+from audiopyle.lib.db.exception import DuplicateEntity
+from audiopyle.lib.models.metric import MetricDefinition, MetricValue
+from audiopyle.lib.models.plugin import VampyPlugin
+from audiopyle.lib.models.result import DataStats
+from audiopyle.lib.repository.metric import MetricDefinitionRepository, MetricValueRepository
+from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class, \
     fake_function_from_method
 

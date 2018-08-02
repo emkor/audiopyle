@@ -34,9 +34,9 @@ basedocker:
 
 docker:
 	@echo "---- Building app Docker images ----"
-	@$(DOCKER) build -t emkor/audiopyle-commons -f scripts/Dockerfile_commons  ./scripts
-	@$(DOCKER) build -t emkor/audiopyle-extractor -f scripts/Dockerfile_extractor  ./scripts
-	@$(DOCKER) build -t emkor/audiopyle-coordinator -f scripts/Dockerfile_coordinator  ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-lib -f scripts/Dockerfile_lib  ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-worker -f scripts/Dockerfile_worker  ./scripts
+	@$(DOCKER) build -t emkor/audiopyle-api -f scripts/Dockerfile_api  ./scripts
 
 verify:
 	@echo "---- Building integration tests Docker image ----"

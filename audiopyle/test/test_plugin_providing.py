@@ -3,8 +3,8 @@ from typing import List, Dict
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.plugin import VampyPlugin
-from audiopyle.commons.services.plugin_providing import VampyPluginProvider
+from audiopyle.lib.models.plugin import VampyPlugin
+from audiopyle.lib.services.plugin_providing import VampyPluginProvider
 
 
 class TestPluginProviding(unittest.TestCase):

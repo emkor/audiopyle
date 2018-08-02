@@ -3,9 +3,9 @@ from datetime import datetime
 
 from assertpy import assert_that
 
-from audiopyle.commons.services.file_meta_providing import read_audio_file_meta, read_file_meta
+from audiopyle.lib.services.file_meta_providing import read_audio_file_meta, read_file_meta
 from audiopyle.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDIO_FILE, TEST_FLAC_AUDIO_FILE
-from audiopyle.commons.utils.file_system import get_file_name
+from audiopyle.lib.utils.file_system import get_file_name
 
 
 class FileMetaProvidingTest(unittest.TestCase):

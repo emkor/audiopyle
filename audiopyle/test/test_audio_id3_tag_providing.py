@@ -3,8 +3,8 @@ import unittest
 from assertpy import assert_that
 from mutagen.id3 import ID3NoHeaderError
 
-from audiopyle.commons.models.audio_tag import Id3Tag
-from audiopyle.commons.services.audio_tag_providing import read_audio_tag_using, read_audio_tag
+from audiopyle.lib.models.audio_tag import Id3Tag
+from audiopyle.lib.services.audio_tag_providing import read_audio_tag_using, read_audio_tag
 from audiopyle.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDIO_FILE, TEST_FLAC_AUDIO_FILE
 
 

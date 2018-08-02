@@ -4,8 +4,8 @@ from unittest import TestCase
 from assertpy import assert_that
 import requests
 
-from audiopyle.commons.abstractions.api_model import HttpStatusCode
-from audiopyle.extractor.result_model import TaskStatus
+from audiopyle.lib.abstractions.api_model import HttpStatusCode
+from audiopyle.worker.result_model import TaskStatus
 from audiopyle.testcases.utils import get_api_host, keep_polling_until, get_api_port
 
 

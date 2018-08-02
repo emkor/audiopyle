@@ -3,7 +3,7 @@ from time import sleep
 
 import requests
 
-from audiopyle.commons.utils.env_var import read_env_var
+from audiopyle.lib.utils.env_var import read_env_var
 
 DEFAULT_API_TIMEOUT = 10.
 DEFAULT_TICK_TIME = .5

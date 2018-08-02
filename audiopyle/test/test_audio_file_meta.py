@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from audiopyle.commons.models.file_meta import CompressedAudioFileMeta
+from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
 
 
 class Mp3AudioFileMetaTest(unittest.TestCase):

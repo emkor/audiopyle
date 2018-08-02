@@ -2,11 +2,11 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.audio_tag import Id3Tag
-from audiopyle.commons.models.file_meta import CompressedAudioFileMeta
-from audiopyle.commons.models.plugin import VampyPlugin, VampyPluginParams
-from audiopyle.commons.models.result import FeatureMeta, FeatureType, AnalysisResult
-from audiopyle.commons.utils.serialization import to_json
+from audiopyle.lib.models.audio_tag import Id3Tag
+from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
+from audiopyle.lib.models.plugin import VampyPlugin, VampyPluginParams
+from audiopyle.lib.models.result import FeatureMeta, FeatureType, AnalysisResult
+from audiopyle.lib.utils.serialization import to_json
 
 
 class AnalysisResultDataModelTest(unittest.TestCase):

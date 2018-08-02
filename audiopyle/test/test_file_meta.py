@@ -4,7 +4,7 @@ import json
 from assertpy import assert_that
 from datetime import datetime
 
-from audiopyle.commons.models.file_meta import FileMeta
+from audiopyle.lib.models.file_meta import FileMeta
 
 
 class FileMetaModelTest(unittest.TestCase):

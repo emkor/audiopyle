@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.services.uuid_generation import generate_uuid
+from audiopyle.lib.services.uuid_generation import generate_uuid
 
 
 class TestUuidGeneration(unittest.TestCase):

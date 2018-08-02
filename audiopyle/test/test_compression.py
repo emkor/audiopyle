@@ -2,8 +2,8 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.compressed_feature import CompressionType
-from audiopyle.commons.services.compression import compress_model, decompress_model
+from audiopyle.lib.models.compressed_feature import CompressionType
+from audiopyle.lib.services.compression import compress_model, decompress_model
 
 
 class CompressionTest(unittest.TestCase):

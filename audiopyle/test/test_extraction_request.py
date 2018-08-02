@@ -4,7 +4,7 @@ import time
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.extraction_request import ExtractionRequest
+from audiopyle.lib.models.extraction_request import ExtractionRequest
 
 
 class ExtractionRequestModelTest(unittest.TestCase):

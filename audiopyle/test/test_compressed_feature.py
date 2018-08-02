@@ -3,7 +3,7 @@ import unittest
 import json
 from assertpy import assert_that
 
-from audiopyle.commons.models.compressed_feature import CompressedFeatureDTO, CompressionType
+from audiopyle.lib.models.compressed_feature import CompressedFeatureDTO, CompressionType
 
 
 class CompressedFeatureModelTest(unittest.TestCase):

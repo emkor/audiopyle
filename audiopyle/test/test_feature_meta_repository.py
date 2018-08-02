@@ -2,8 +2,8 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.result import FeatureMeta, FeatureType, DataStats
-from audiopyle.commons.repository.feature_meta import FeatureMetaRepository
+from audiopyle.lib.models.result import FeatureMeta, FeatureType, DataStats
+from audiopyle.lib.repository.feature_meta import FeatureMetaRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
 

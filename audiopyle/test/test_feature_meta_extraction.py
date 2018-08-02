@@ -3,7 +3,7 @@ import unittest
 import numpy
 from assertpy import assert_that
 
-from audiopyle.commons.services.metric_provider import _extract_data_stats
+from audiopyle.lib.services.metric_provider import _extract_data_stats
 
 
 class FeatureMetaExtractionTest(unittest.TestCase):

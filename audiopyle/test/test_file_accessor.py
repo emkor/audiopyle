@@ -1,7 +1,7 @@
 import unittest
 from assertpy import assert_that
 
-from audiopyle.commons.utils.file_system import get_file_name, extract_extension, file_exists, list_files
+from audiopyle.lib.utils.file_system import get_file_name, extract_extension, file_exists, list_files
 
 
 class TestFileAccessor(unittest.TestCase):
