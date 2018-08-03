@@ -6,7 +6,7 @@ LABEL description="Latest Python Alpine image with numpy and vamp"
 
 # install_os_deps
 RUN apt-get update
-RUN apt-get install -y build-essential gcc libav-tools
+RUN apt-get install -y --no-install-recommends build-essential gcc libav-tools
 
 # vamp requires numpy at setup time, so don't concantenate those lines
 RUN pip install --no-cache-dir numpy
@@ -15,5 +15,17 @@ RUN pip install --no-cache-dir vamp
 RUN apt-get purge -y build-essential gcc
 RUN apt-get clean
 RUN apt-get autoclean
+RUN rm -rf /var/lib/apt/lists/*
 
+# CREATE AND SET DIRECTORIES FOR AUDIOPYLE AND INPUT FILES
+RUN mkdir -p /root/audio
+RUN mkdir -p /root/vamp
+RUN mkdir -p /audiopyle
+WORKDIR /audiopyle
+
+# INCLUDE SCRIPT (https://github.com/vishnubob/wait-for-it) FOR WAITING FOR OTHER SERVICE UNDER /audiopyle
+COPY wait-for-it.sh .
+RUN chmod u+x wait-for-it.sh
+
+# DUMMY ENTRY POINT
 CMD ["/bin/bash"]
