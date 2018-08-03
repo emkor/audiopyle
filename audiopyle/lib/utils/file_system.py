@@ -7,7 +7,6 @@ from audiopyle.lib.utils.logger import get_logger
 
 AUDIO_FILES_DIR = "/root/audio"
 CONFIG_DIR = "/root/config"
-RESULTS_DIR = "/root/result"
 PLUGIN_CONFIG_FILE_NAME = "plugin.json"
 PLUGIN_BLACKLIST_CONFIG_FILE_NAME = "blacklist.json"
 METRIC_CONFIG_FILE_NAME = "metric.json"
