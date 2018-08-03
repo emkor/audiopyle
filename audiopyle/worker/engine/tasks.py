@@ -7,7 +7,8 @@ from audiopyle.lib.repository.audio_tag import AudioTagRepository
 from audiopyle.lib.repository.feature_data import FeatureDataRepository
 from audiopyle.lib.repository.feature_meta import FeatureMetaRepository
 from audiopyle.lib.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from audiopyle.lib.repository.result import ResultRepository, ResultStatsRepository
+from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.stats import ResultStatsRepository
 from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.lib.services.plugin_providing import VampyPluginProvider
 from audiopyle.lib.utils.file_system import AUDIO_FILES_DIR

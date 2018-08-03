@@ -12,7 +12,8 @@ from audiopyle.lib.repository.audio_tag import AudioTagRepository
 from audiopyle.lib.repository.feature_data import FeatureDataRepository
 from audiopyle.lib.repository.feature_meta import FeatureMetaRepository
 from audiopyle.lib.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from audiopyle.lib.repository.result import ResultRepository, ResultStatsRepository
+from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.stats import ResultStatsRepository
 from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.lib.services.compression import compress_model
 from audiopyle.lib.services.metric_provider import get_transformation, extract_metric_value
@@ -23,7 +24,7 @@ from audiopyle.lib.models.extraction_request import ExtractionRequest
 from audiopyle.lib.models.feature import VampyFeatureAbstraction
 from audiopyle.lib.models.file_meta import FileMeta, CompressedAudioFileMeta, AudioFileMeta
 from audiopyle.lib.models.plugin import VampyPlugin, VampyPluginParams
-from audiopyle.lib.models.result import AnalysisResult, AnalysisStats
+from audiopyle.lib.models.result import AnalysisRequest, AnalysisStats
 from audiopyle.lib.services.audio_tag_providing import read_audio_tag
 from audiopyle.lib.services.feature_extraction import extract_raw_feature, build_feature_object
 from audiopyle.lib.services.feature_meta_extraction import build_feature_meta
@@ -71,7 +72,7 @@ class FeatureExtractionService(object):
         feature_object, extraction_time = self._do_extraction(task_id, plugin, audio_meta, wav_data, plugin_config)
         feature_dto, compression_time = self._compress_feature(feature_object, task_id)
         feature_meta, feature_meta_build_time = self._build_feature_meta(feature_object, task_id)
-        analysis_result = AnalysisResult(task_id, audio_meta, id3_tag, plugin, plugin_config)
+        analysis_result = AnalysisRequest(task_id, audio_meta, id3_tag, plugin, plugin_config)
         metric_values, metrics_extraction_time = self._extract_metrics(task_id, request.plugin_full_key,
                                                                        request.metric_config, feature_object)
 
