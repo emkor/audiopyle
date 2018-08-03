@@ -38,10 +38,19 @@ docker:
 	@$(DOCKER) build -t emkor/audiopyle-worker -f scripts/Dockerfile_worker  ./scripts
 	@$(DOCKER) build -t emkor/audiopyle-api -f scripts/Dockerfile_api  ./scripts
 
+run:
+	@echo "---- Running Audiopyle app ----"
+	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose.yml up
+
+cleanup:
+	@echo "---- Cleaning up Audiopyle app ----"
+	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose.yml down
+	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose-ci.yml down
+
 verify:
 	@echo "---- Building integration tests Docker image ----"
 	@$(DOCKER) build -t emkor/audiopyle-testcases -f scripts/Dockerfile_testcases  ./scripts
 	@echo "---- Running integration tests ----"
 	@$(DOCKER_COMPOSE) -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 
-.PHONY: all config test package package basedocker docker verify
+.PHONY: all config test package package basedocker docker run verify

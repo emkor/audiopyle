@@ -33,9 +33,6 @@ services:
     volumes:
       - "./resources/config/mysql:/etc/mysql/conf.d:ro"
   api:
-    build:
-      context: ""
-      dockerfile:
     networks:
       default:
         aliases:
