@@ -46,13 +46,13 @@ services:
       - RABBITMQ_SERIVCE_HOST=rabbitmq.local
       - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
-  worker_1:
+  worker:
     networks:
       default:
         aliases:
-          - worker_1.local
+          - worker.local
     image: "emkor/audiopyle-worker:latest"
-    hostname: "worker_1"
+    hostname: "worker"
     volumes:
       - "./resources/vamp:/root/vamp:ro"
       - "./resources/audio:/root/audio:ro"
