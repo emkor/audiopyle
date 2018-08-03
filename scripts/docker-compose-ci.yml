@@ -27,7 +27,7 @@ services:
       - MYSQL_DATABASE=audiopyle
     volumes:
       - "./resources/config/mysql:/etc/mysql/conf.d:ro"
-  coordinator:
+  api:
     networks:
       default:
         aliases:
@@ -46,13 +46,13 @@ services:
       - RABBITMQ_SERIVCE_HOST=rabbitmq.local
       - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
-  extractor_1:
+  worker_1:
     networks:
       default:
         aliases:
-          - extractor_1.local
+          - worker_1.local
     image: "emkor/audiopyle-worker:latest"
-    hostname: "extractor_1"
+    hostname: "worker_1"
     volumes:
       - "./resources/vamp:/root/vamp:ro"
       - "./resources/audio:/root/audio:ro"
