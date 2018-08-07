@@ -4,8 +4,8 @@ import json
 import numpy
 from assertpy import assert_that
 
-from audiopyle.commons.models.feature import VampyConstantStepFeature, StepFeature, VampyVariableStepFeature
-from audiopyle.commons.models.file_meta import AudioFileMeta
+from audiopyle.lib.models.feature import VampyConstantStepFeature, StepFeature, VampyVariableStepFeature
+from audiopyle.lib.models.file_meta import AudioFileMeta
 
 
 class ConstantStepAudioFeatureModelTest(unittest.TestCase):

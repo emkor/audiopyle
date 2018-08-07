@@ -3,9 +3,9 @@ from unittest import TestCase
 
 import os
 
-from audiopyle.commons.db.engine import get_test_db_engine, create_db_tables, drop_db_tables
-from audiopyle.commons.db.session import SessionProvider
-from audiopyle.commons.utils.file_system import concatenate_paths
+from audiopyle.lib.db.engine import get_test_db_engine, create_db_tables, drop_db_tables
+from audiopyle.lib.db.session import SessionProvider
+from audiopyle.lib.utils.file_system import concatenate_paths
 
 TEST_MP3_AUDIO_FILE = "scripts/resources/audio/102bpm_drum_loop.mp3"
 TEST_FLAC_AUDIO_FILE = "scripts/resources/audio/102bpm_drum_loop.flac"

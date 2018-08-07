@@ -2,14 +2,14 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.audio_tag import Id3Tag
-from audiopyle.commons.models.file_meta import CompressedAudioFileMeta
-from audiopyle.commons.models.plugin import VampyPlugin, VampyPluginParams
-from audiopyle.commons.models.result import AnalysisResult
-from audiopyle.commons.repository.audio_file import AudioFileRepository
-from audiopyle.commons.repository.audio_tag import AudioTagRepository
-from audiopyle.commons.repository.result import ResultRepository
-from audiopyle.commons.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
+from audiopyle.lib.models.audio_tag import Id3Tag
+from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
+from audiopyle.lib.models.plugin import VampyPlugin, VampyPluginParams
+from audiopyle.lib.models.result import AnalysisResult
+from audiopyle.lib.repository.audio_file import AudioFileRepository
+from audiopyle.lib.repository.audio_tag import AudioTagRepository
+from audiopyle.lib.repository.result import ResultRepository
+from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
 

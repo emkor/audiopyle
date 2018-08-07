@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.services.segment_providing import read_raw_audio_from_file
+from audiopyle.lib.services.segment_providing import read_raw_audio_from_file
 from audiopyle.test.utils import get_absolute_path_for_project_file, TEST_MP3_AUDIO_FILE, TEST_FLAC_AUDIO_FILE
 
 

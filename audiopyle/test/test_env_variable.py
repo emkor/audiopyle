@@ -2,7 +2,7 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.utils.env_var import read_env_var, _select_value
+from audiopyle.lib.utils.env_var import read_env_var, _select_value
 
 
 class OsEnvVariableAccessingTest(unittest.TestCase):

@@ -3,8 +3,8 @@ from unittest import TestCase
 from assertpy import assert_that
 from numpy import array, float32
 
-from audiopyle.commons.models.feature import VampyConstantStepFeature, VampyVariableStepFeature, StepFeature
-from audiopyle.commons.models.metric import NoneTransformation, SelectRowTransformation, SingleValueTransformation
+from audiopyle.lib.models.feature import VampyConstantStepFeature, VampyVariableStepFeature, StepFeature
+from audiopyle.lib.models.metric import NoneTransformation, SelectRowTransformation, SingleValueTransformation
 
 
 class ConstantStepFeatureMetricTransformationTest(TestCase):

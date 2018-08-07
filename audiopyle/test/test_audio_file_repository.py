@@ -2,8 +2,8 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.file_meta import CompressedAudioFileMeta
-from audiopyle.commons.repository.audio_file import AudioFileRepository
+from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
+from audiopyle.lib.repository.audio_file import AudioFileRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
 

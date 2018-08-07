@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from assertpy import assert_that
 
-from audiopyle.commons.utils.conversion import seconds_between
+from audiopyle.lib.utils.conversion import seconds_between
 
 
 class ConversionUtilsTest(unittest.TestCase):

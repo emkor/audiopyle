@@ -2,11 +2,10 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.audio_tag import Id3Tag
-from audiopyle.commons.models.file_meta import CompressedAudioFileMeta
-from audiopyle.commons.models.plugin import VampyPlugin, VampyPluginParams
-from audiopyle.commons.models.result import FeatureMeta, FeatureType, AnalysisResult
-from audiopyle.commons.utils.serialization import to_json
+from audiopyle.lib.models.audio_tag import Id3Tag
+from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
+from audiopyle.lib.models.plugin import VampyPlugin, VampyPluginParams
+from audiopyle.lib.models.result import FeatureMeta, FeatureType, AnalysisResult
 
 
 class AnalysisResultDataModelTest(unittest.TestCase):
@@ -20,10 +19,6 @@ class AnalysisResultDataModelTest(unittest.TestCase):
         serialized = self.result_data_example.to_serializable()
         deserialized = FeatureMeta.from_serializable(serialized)
         assert_that(deserialized).is_not_none().is_equal_to(self.result_data_example)
-
-    def test_should_serialized_to_json(self):
-        as_json = to_json(self.result_data_example.to_serializable())
-        assert_that(as_json).is_not_none().is_not_empty()
 
 
 class AnalysisResultModelTest(unittest.TestCase):
@@ -42,7 +37,3 @@ class AnalysisResultModelTest(unittest.TestCase):
         serialized = self.analysis_result_example.to_serializable()
         deserialized = AnalysisResult.from_serializable(serialized)
         assert_that(deserialized).is_not_none().is_equal_to(self.analysis_result_example)
-
-    def test_should_serialized_to_json(self):
-        as_json = to_json(self.analysis_result_example.to_serializable())
-        assert_that(as_json).is_not_none().is_not_empty()

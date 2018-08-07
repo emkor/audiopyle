@@ -2,9 +2,9 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.db.exception import DuplicateEntity, EntityNotFound
-from audiopyle.commons.models.plugin import VampyPlugin
-from audiopyle.commons.repository.vampy_plugin import VampyPluginRepository
+from audiopyle.lib.db.exception import DuplicateEntity, EntityNotFound
+from audiopyle.lib.models.plugin import VampyPlugin
+from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class, \
     fake_function_from_method
 

@@ -3,7 +3,7 @@ from assertpy import assert_that
 
 import requests
 
-from audiopyle.commons.abstractions.api_model import HttpStatusCode
+from audiopyle.lib.abstractions.api_model import HttpStatusCode
 from audiopyle.testcases.utils import get_api_host, get_api_port
 
 

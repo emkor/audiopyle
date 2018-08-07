@@ -3,7 +3,7 @@ from unittest import TestCase
 import requests
 from assertpy import assert_that
 
-from audiopyle.commons.models.plugin import VampyPlugin
+from audiopyle.lib.models.plugin import VampyPlugin
 from audiopyle.testcases.utils import get_api_host, get_api_port
 
 

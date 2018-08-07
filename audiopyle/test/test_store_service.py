@@ -3,7 +3,7 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.services.store_provider import JsonFileStore, GzipJsonFileStore, StoreError, LzmaJsonFileStore
+from audiopyle.lib.services.store_provider import JsonFileStore, GzipJsonFileStore, StoreError, LzmaJsonFileStore
 from audiopyle.test.utils import fake_function_from_method
 
 

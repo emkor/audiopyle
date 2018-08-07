@@ -2,8 +2,8 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.audio_tag import Id3Tag
-from audiopyle.commons.repository.audio_tag import AudioTagRepository
+from audiopyle.lib.models.audio_tag import Id3Tag
+from audiopyle.lib.repository.audio_tag import AudioTagRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
 

@@ -4,8 +4,8 @@ from assertpy import assert_that
 from numpy import array, float32, ndarray
 from vampyhost import RealTime
 
-from audiopyle.commons.models.feature import VampyConstantStepFeature, VampyVariableStepFeature
-from audiopyle.commons.services.feature_extraction import build_feature_object
+from audiopyle.lib.models.feature import VampyConstantStepFeature, VampyVariableStepFeature
+from audiopyle.lib.services.feature_extraction import build_feature_object
 
 
 class ExtractedFeatureMappingTest(TestCase):

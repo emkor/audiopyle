@@ -3,8 +3,8 @@ import unittest
 
 from assertpy import assert_that
 
-from audiopyle.commons.models.metric import MetricDefinition, MetricValue
-from audiopyle.commons.models.result import DataStats
+from audiopyle.lib.models.metric import MetricDefinition, MetricValue
+from audiopyle.lib.models.result import DataStats
 
 
 class MetricDefinitionModelTest(unittest.TestCase):

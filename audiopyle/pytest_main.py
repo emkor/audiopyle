@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+
 import pytest
 
-from audiopyle.commons.utils.logger import setup_logger
+from audiopyle.lib.utils.logger import setup_logger
 
 
 def main():

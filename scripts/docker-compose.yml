@@ -39,9 +39,9 @@ services:
     networks:
       default:
         aliases:
-          - coordinator.local
-    image: "emkor/audiopyle-coordinator:latest"
-    hostname: "coordinator"
+          - api.local
+    image: "emkor/audiopyle-api:latest"
+    hostname: "api"
     ports:
       - "8080:8080"
     volumes:
@@ -59,7 +59,7 @@ services:
       default:
         aliases:
           - extractor_1.local
-    image: "emkor/audiopyle-extractor:latest"
+    image: "emkor/audiopyle-worker:latest"
     hostname: "extractor_1"
     volumes:
       - "./resources/vamp:/root/vamp:ro"
