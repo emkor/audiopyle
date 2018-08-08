@@ -32,10 +32,7 @@ services:
       - "3306:3306"
     volumes:
       - "./resources/config/mysql:/etc/mysql/conf.d:ro"
-  coordinator:
-    build:
-      context: ""
-      dockerfile:
+  api:
     networks:
       default:
         aliases:
@@ -54,13 +51,13 @@ services:
       - MYSQL_SERVICE_PORT=3306
     depends_on:
       - rabbitmq
-  extractor_1:
+  worker:
     networks:
       default:
         aliases:
-          - extractor_1.local
+          - worker.local
     image: "emkor/audiopyle-worker:latest"
-    hostname: "extractor_1"
+    hostname: "worker"
     volumes:
       - "./resources/vamp:/root/vamp:ro"
       - "./resources/audio:/root/audio:ro"

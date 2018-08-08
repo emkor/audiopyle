@@ -5,10 +5,10 @@ from assertpy import assert_that
 from audiopyle.lib.models.audio_tag import Id3Tag
 from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
 from audiopyle.lib.models.plugin import VampyPlugin, VampyPluginParams
-from audiopyle.lib.models.result import AnalysisResult
+from audiopyle.lib.models.result import AnalysisRequest
 from audiopyle.lib.repository.audio_file import AudioFileRepository
 from audiopyle.lib.repository.audio_tag import AudioTagRepository
-from audiopyle.lib.repository.result import ResultRepository
+from audiopyle.lib.repository.request import ResultRepository
 from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
@@ -33,9 +33,9 @@ class ResultRepositoryTest(unittest.TestCase):
         self.plugin_example_1 = VampyPlugin("my_vendor", "my_name", "outputs", "my_file.so")
         self.plugin_example_2 = VampyPlugin("my_vendor", "my_name_2", "outputs", "my_file_2.so")
         self.plugin_config_example_1 = VampyPluginParams(block_size=2048, step_size=1024)
-        self.result = AnalysisResult(task_id=self.task_id, audio_meta=self.audio_meta_example_1,
-                                     id3_tag=self.tag_example_1, plugin=self.plugin_example_1,
-                                     plugin_config=self.plugin_config_example_1)
+        self.result = AnalysisRequest(task_id=self.task_id, audio_meta=self.audio_meta_example_1,
+                                      id3_tag=self.tag_example_1, plugin=self.plugin_example_1,
+                                      plugin_config=self.plugin_config_example_1)
         self.plugin_repository = VampyPluginRepository(self.session_provider)
         self.audio_repository = AudioFileRepository(self.session_provider)
         self.audio_tag_repository = AudioTagRepository(self.session_provider)

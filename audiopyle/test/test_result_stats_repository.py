@@ -3,7 +3,7 @@ import unittest
 from assertpy import assert_that
 
 from audiopyle.lib.models.result import AnalysisStats
-from audiopyle.lib.repository.result import ResultStatsRepository
+from audiopyle.lib.repository.stats import ResultStatsRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
 

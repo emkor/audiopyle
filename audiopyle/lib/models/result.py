@@ -58,9 +58,9 @@ class FeatureMeta(Model):
         return FeatureMeta(**serialized)
 
 
-class AnalysisResult(Model):
-    def __init__(self, task_id: Text, audio_meta: CompressedAudioFileMeta, id3_tag: Id3Tag, plugin: VampyPlugin,
-                 plugin_config: VampyPluginParams) -> None:
+class AnalysisRequest(Model):
+    def __init__(self, task_id: Text, audio_meta: CompressedAudioFileMeta, id3_tag: Optional[Id3Tag],
+                 plugin: VampyPlugin, plugin_config: VampyPluginParams) -> None:
         self.task_id = task_id
         self.audio_meta = audio_meta
         self.id3_tag = id3_tag
@@ -70,7 +70,7 @@ class AnalysisResult(Model):
     def to_serializable(self):
         base_serialized = super().to_serializable()
         base_serialized.update({"audio_meta": self.audio_meta.to_serializable(),
-                                "id3_tag": self.id3_tag.to_serializable(),
+                                "id3_tag": self.id3_tag.to_serializable() if self.id3_tag else None,
                                 "plugin": self.plugin.to_serializable(),
                                 "plugin_config": self.plugin_config.to_serializable()})
         return base_serialized
@@ -83,4 +83,4 @@ class AnalysisResult(Model):
         plugin_config_object = VampyPluginParams.from_serializable(serialized["plugin_config"])
         serialized.update({"audio_meta": audio_meta_object, "id3_tag": id3_tag_object,
                            "plugin": plugin_object, "plugin_config": plugin_config_object})
-        return AnalysisResult(**serialized)
+        return AnalysisRequest(**serialized)

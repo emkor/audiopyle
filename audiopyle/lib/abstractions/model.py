@@ -7,7 +7,7 @@ from audiopyle.lib.utils.conversion import object_size, object_size_humanized
 class Model(object):
     @classmethod
     def from_serializable(cls: Type, serialized: Dict[Text, Any]) -> Any:
-        return cls(**serialized)
+        return cls(**serialized) if serialized is not None else None
 
     def to_serializable(self) -> Dict[Text, Any]:
         return copy(self.__dict__)
