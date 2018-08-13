@@ -8,7 +8,7 @@ from audiopyle.lib.models.plugin import VampyPlugin, VampyPluginParams
 from audiopyle.lib.models.result import AnalysisRequest
 from audiopyle.lib.repository.audio_file import AudioFileRepository
 from audiopyle.lib.repository.audio_tag import AudioTagRepository
-from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
@@ -40,8 +40,8 @@ class ResultRepositoryTest(unittest.TestCase):
         self.audio_repository = AudioFileRepository(self.session_provider)
         self.audio_tag_repository = AudioTagRepository(self.session_provider)
         self.plugin_config_repo = PluginConfigRepository(self.session_provider)
-        self.repository = ResultRepository(self.session_provider, self.audio_repository, self.audio_tag_repository,
-                                           self.plugin_repository, self.plugin_config_repo)
+        self.repository = RequestRepository(self.session_provider, self.audio_repository, self.audio_tag_repository,
+                                            self.plugin_repository, self.plugin_config_repo)
 
     def tearDown(self):
         self.repository.delete_all()

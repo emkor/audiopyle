@@ -12,7 +12,7 @@ from audiopyle.lib.repository.audio_tag import AudioTagRepository
 from audiopyle.lib.repository.feature_data import FeatureDataRepository
 from audiopyle.lib.repository.feature_meta import FeatureMetaRepository
 from audiopyle.lib.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.repository.stats import ResultStatsRepository
 from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.lib.services.compression import compress_model
@@ -40,7 +40,7 @@ class FeatureExtractionService(object):
                  plugin_repo: VampyPluginRepository, plugin_config_repo: PluginConfigRepository,
                  metric_definition_repo: MetricDefinitionRepository, metric_value_repo: MetricValueRepository,
                  feature_data_repo: FeatureDataRepository,
-                 feature_meta_repo: FeatureMetaRepository, result_repo: ResultRepository,
+                 feature_meta_repo: FeatureMetaRepository, result_repo: RequestRepository,
                  result_stats_repo: ResultStatsRepository,
                  logger: Logger) -> None:
         self.plugin_provider = plugin_provider
@@ -91,6 +91,9 @@ class FeatureExtractionService(object):
         step_size = request.plugin_config.pop("step_size", None)
         plugin_config = VampyPluginParams(block_size, step_size, **request.plugin_config)
         return plugin_config
+
+    def _store_request_in_db(self, analysis_request: AnalysisRequest):
+        pass
 
     def _store_results_in_db(self, analysis_result, metric_values: List[MetricValue], audio_meta,
                              feature_dto, feature_meta,
