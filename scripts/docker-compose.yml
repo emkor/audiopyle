@@ -75,3 +75,40 @@ services:
     depends_on:
       - rabbitmq
       - mysql
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
+    volumes:
+    - ./resources/elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    ports:
+    - "9200:9200"
+    - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+    - default
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash-oss:6.3.0
+    volumes:
+    - ./resources/elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    - ./resources/elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+    - "5000:5000"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+    - default
+    depends_on:
+    - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:6.3.0
+    volumes:
+    - ./resources/elk/kibana/config/:/usr/share/kibana/config:ro
+    ports:
+    - "5601:5601"
+    networks:
+    - default
+    depends_on:
+    - elasticsearch
