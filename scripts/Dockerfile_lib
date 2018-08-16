@@ -4,13 +4,15 @@ MAINTAINER emkor93@gmail.com
 LABEL version="0.1"
 LABEL description="Image containing libraries of an Audiopyle app"
 
-# SET WORK DIRECTORY
-WORKDIR /audiopyle
+# ADD AUDIOPYLE PACKAGE; EXECUTED AS ROOT
+USER root
+COPY audiopyle-*.whl /home/audiopyle/
+RUN chown audiopyle:audiopyle /home/audiopyle/*.whl
 
-# INSTALL AUDIOPYLE
-COPY audiopyle-*.whl .
-RUN pip install --no-cache-dir ./audiopyle-*.whl
-RUN rm ./audiopyle-*.whl
+# SET WORK DIRECTORY AND USER, INSTALL AUDIOPYLE
+USER audiopyle
+WORKDIR /home/audiopyle
+RUN . /home/audiopyle/.venv/bin/activate && pip install --no-cache-dir ./audiopyle-*.whl && rm ./audiopyle-*.whl
 
 # DUMMY ENTRY POINT
 CMD ["/bin/bash"]
