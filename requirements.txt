@@ -1,6 +1,7 @@
 billiard
 celery[sqlalchemy]
 flask
+gevent
 mutagen
 numpy
 pydub
