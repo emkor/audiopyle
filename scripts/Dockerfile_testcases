@@ -12,4 +12,4 @@ RUN chown audiopyle:audiopyle ./start_testcases.sh && chmod u+x ./start_testcase
 USER audiopyle
 
 # CREATE AND SET DIRECTORIES
-ENTRYPOINT "./start_testcases.sh"
+ENTRYPOINT ["./start_testcases.sh"]

@@ -5,8 +5,8 @@ from typing import Text, List
 
 from audiopyle.lib.utils.logger import get_logger
 
-AUDIO_FILES_DIR = "/root/audio"
-CONFIG_DIR = "/root/config"
+AUDIO_FILES_DIR = "/home/audiopyle/audio"
+CONFIG_DIR = "/home/audiopyle/config"
 PLUGIN_CONFIG_FILE_NAME = "plugin.json"
 PLUGIN_BLACKLIST_CONFIG_FILE_NAME = "blacklist.json"
 METRIC_CONFIG_FILE_NAME = "metric.json"
@@ -55,11 +55,11 @@ def extract_all_extensions(file_path: Text) -> Text:
 def remove_file(file_path: Text, ignore_errors: bool = False) -> None:
     try:
         os.remove(file_path)
-    except Exception:
+    except Exception as e:
         if ignore_errors:
             pass
         else:
-            raise
+            raise e
 
 
 def file_size_bytes(absolute_path: Text) -> int:
