@@ -1,11 +1,14 @@
 version: '3'
 
+networks:
+  default:
+
 services:
   rabbitmq:
     networks:
       default:
         aliases:
-          - rabbitmq.local
+        - rabbitmq.local
     image: "rabbitmq:3.6-alpine"
     hostname: "rabbitmq"
     environment:
@@ -17,7 +20,7 @@ services:
     networks:
       default:
         aliases:
-          - mysql.local
+        - mysql.local
     image: mysql:5.7
     hostname: "mysql"
     environment:
@@ -31,15 +34,15 @@ services:
     networks:
       default:
         aliases:
-          - api.local
+        - api.local
     image: "emkor/audiopyle-api:latest"
     hostname: "api"
     ports:
       - "8080:8080"
     volumes:
-      - "./resources/config:/root/config:ro"
-      - "./resources/vamp:/root/vamp:ro"
-      - "./resources/audio:/root/audio:ro"
+      - "./resources/config:/home/audiopyle/config:ro"
+      - "./resources/vamp:/home/audiopyle/vamp:ro"
+      - "./resources/audio:/home/audiopyle/audio:ro"
     depends_on:
       - rabbitmq
     environment:
@@ -50,12 +53,12 @@ services:
     networks:
       default:
         aliases:
-          - worker.local
+        - worker.local
     image: "emkor/audiopyle-worker:latest"
     hostname: "worker"
     volumes:
-      - "./resources/vamp:/root/vamp:ro"
-      - "./resources/audio:/root/audio:ro"
+      - "./resources/vamp:/home/audiopyle/vamp:ro"
+      - "./resources/audio:/home/audiopyle/audio:ro"
     depends_on:
       - rabbitmq
       - mysql
@@ -72,7 +75,7 @@ services:
     networks:
       default:
         aliases:
-          - testcases.local
+        - testcases.local
     image: "emkor/audiopyle-testcases:latest"
     hostname: "testcases"
     environment:
