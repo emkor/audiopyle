@@ -29,7 +29,8 @@ class FlaskRestApi(AbstractRestApi, MethodView):
         try:
             the_response = self._get(the_request)
             self._log_api_call(the_request, the_response)
-            return make_response(jsonify(the_response.payload), the_response.status_code.value, the_response.headers or {})
+            return make_response(self._build_json(the_response), the_response.status_code.value,
+                                 the_response.headers or {})
         except _ApiError as e:
             self.logger.warning(e)
             return make_response(jsonify({"error": e.message}), e.status_code.value, {})
@@ -40,7 +41,8 @@ class FlaskRestApi(AbstractRestApi, MethodView):
         try:
             the_response = self._post(the_request)
             self._log_api_call(the_request, the_response)
-            return make_response(jsonify(the_response.payload), the_response.status_code.value, the_response.headers or {})
+            return make_response(self._build_json(the_response), the_response.status_code.value,
+                                 the_response.headers or {})
         except _ApiError as e:
             self.logger.warning(e)
             return make_response(jsonify({"error": e.message}), e.status_code.value, {})
@@ -51,7 +53,8 @@ class FlaskRestApi(AbstractRestApi, MethodView):
         try:
             the_response = self._put(the_request)
             self._log_api_call(the_request, the_response)
-            return make_response(jsonify(the_response.payload), the_response.status_code.value, the_response.headers or {})
+            return make_response(self._build_json(the_response), the_response.status_code.value,
+                                 the_response.headers or {})
         except _ApiError as e:
             self.logger.warning(e)
             return make_response(jsonify({"error": e.message}), e.status_code.value, {})
@@ -62,7 +65,11 @@ class FlaskRestApi(AbstractRestApi, MethodView):
         try:
             the_response = self._delete(the_request)
             self._log_api_call(the_request, the_response)
-            return make_response(jsonify(the_response.payload), the_response.status_code.value, the_response.headers or {})
+            return make_response(self._build_json(the_response), the_response.status_code.value,
+                                 the_response.headers or {})
         except _ApiError as e:
             self.logger.warning(e)
             return make_response(jsonify({"error": e.message}), e.status_code.value, {})
+
+    def _build_json(self, the_response: ApiResponse) -> str:
+        return jsonify(the_response.payload) if the_response.payload is not None else ''

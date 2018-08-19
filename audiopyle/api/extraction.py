@@ -13,7 +13,7 @@ class ExtractionStatusApi(FlaskRestApi):
         task_id = the_request.query_params["task_id"]
         task_result = retrieve_result(task_id)
         if task_result.status in [TaskStatus.in_progress, TaskStatus.not_known, TaskStatus.ignored]:
-            return ApiResponse(HttpStatusCode.no_content, task_result.to_serializable())
+            return ApiResponse(HttpStatusCode.no_content, None)
         else:
             return ApiResponse(HttpStatusCode.ok, task_result.to_serializable())
 
