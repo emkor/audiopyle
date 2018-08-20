@@ -4,8 +4,12 @@ MAINTAINER emkor93@gmail.com
 LABEL version="0.1"
 LABEL description="Image containing worker module of an Audiopyle app"
 
-# EXPOSE PORTS
-EXPOSE 8080
+# COPY STARTUP SCRIPT AND SET PERMISSIONS
+USER root
+WORKDIR /home/audiopyle
+COPY start_worker.sh ./start_worker.sh
+RUN chown audiopyle:audiopyle ./start_worker.sh && chmod u+x ./start_worker.sh
+USER audiopyle
 
 # DEFINE ENTRY POINT AS AUDIOPYLE WORKER
-ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "audiopyle-worker"]
+ENTRYPOINT ["./start_worker.sh"]

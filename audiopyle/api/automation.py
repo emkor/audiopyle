@@ -43,11 +43,8 @@ class AutomationApi(FlaskRestApi):
                     run_task(task=extract_feature, task_id=task_id, extraction_request=request)
                     self.logger.info("Sent feature extraction request {} with id {}...".format(request, task_id))
             return ApiResponse(HttpStatusCode.accepted, task_id_to_request)
-        elif not audio_file_names:
-            return ApiResponse(status_code=HttpStatusCode.no_content,
-                               payload="No audio files matching {} extensions found!".format(ACCEPTED_EXTENSIONS))
         else:
-            return ApiResponse(status_code=HttpStatusCode.no_content, payload="No whitelisted plugins found!")
+            return ApiResponse(status_code=HttpStatusCode.no_content, payload=None)
 
     def _generate_extraction_requests(self, audio_file_names: List[str], plugins: List[VampyPlugin],
                                       plugin_configs: Dict[str, Dict[str, Any]]) -> List[ExtractionRequest]:

@@ -31,6 +31,7 @@ from audiopyle.api.metric import MetricDefinitionListApi, MetricDefinitionDetail
 from audiopyle.api.plugin import PluginListApi, PluginDetailApi
 from audiopyle.api.root import CoordinatorApi
 from audiopyle.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
+from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 
@@ -132,9 +133,8 @@ def start_app(logger: Logger, host: str, port: int, debug: bool = False):
 
     app.add_url_rule("/", view_func=CoordinatorApi.as_view('coordinator_api', logger=logger))
     logger.info("Starting Coordinator API on {} port!".format(port))
-    flask_logger = logging.getLogger('werkzeug')
-    flask_logger.setLevel(logging.WARNING)
-    app.run(host=host, port=port, debug=debug)
+    logging.getLogger('werkzeug').setLevel(logging.WARNING)
+    WSGIServer((host, port), app).serve_forever()
 
 
 def _initialize_db_repositories():

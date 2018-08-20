@@ -7,5 +7,12 @@ LABEL description="Image containing API module of an Audiopyle app"
 # EXPOSE HTTP PORT
 EXPOSE 8080
 
+# COPY STARTUP SCRIPT AND SET PERMISSIONS
+USER root
+WORKDIR /home/audiopyle
+COPY start_api.sh ./start_api.sh
+RUN chown audiopyle:audiopyle ./start_api.sh && chmod u+x ./start_api.sh
+USER audiopyle
+
 # DEFINE ENTRY POINT AS AUDIOPYLE API
-ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "15", "mysql:3306", "--", "/audiopyle/wait-for-it.sh", "-t", "15", "rabbitmq:5672", "--", "audiopyle-api"]
+ENTRYPOINT ["./start_api.sh"]

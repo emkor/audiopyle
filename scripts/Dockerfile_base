@@ -4,28 +4,22 @@ MAINTAINER emkor93@gmail.com
 LABEL version="0.7"
 LABEL description="Latest Python Alpine image with numpy and vamp"
 
-# install_os_deps
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends build-essential gcc libav-tools
+# install_os_deps and perform cleanup
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential gcc libav-tools && apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
-# vamp requires numpy at setup time, so don't concantenate those lines
-RUN pip install --no-cache-dir numpy
-RUN pip install --no-cache-dir vamp
-
-RUN apt-get purge -y build-essential gcc
-RUN apt-get clean
-RUN apt-get autoclean
-RUN rm -rf /var/lib/apt/lists/*
+# CREATE CUSTOM USER FOR THE APP
+RUN groupadd -g 999 -r audiopyle && useradd -m -r -u 999 -g audiopyle audiopyle
+WORKDIR /home/audiopyle
 
 # CREATE AND SET DIRECTORIES FOR AUDIOPYLE AND INPUT FILES
-RUN mkdir -p /root/audio
-RUN mkdir -p /root/vamp
-RUN mkdir -p /audiopyle
-WORKDIR /audiopyle
+RUN mkdir -p ./audio && mkdir -p ./vamp
 
-# INCLUDE SCRIPT (https://github.com/vishnubob/wait-for-it) FOR WAITING FOR OTHER SERVICE UNDER /audiopyle
-COPY wait-for-it.sh .
+# INCLUDE SCRIPT (https://github.com/vishnubob/wait-for-it) FOR WAITING FOR OTHER SERVICE UNDER /home/audiopyle
+COPY wait-for-it.sh ./wait-for-it.sh
 RUN chmod u+x wait-for-it.sh
+RUN chown -R audiopyle:audiopyle /home/audiopyle
+USER audiopyle
+RUN python3 -m venv /home/audiopyle/.venv && . /home/audiopyle/.venv/bin/activate && pip install --upgrade pip && pip install --no-cache-dir numpy && pip install --no-cache-dir vamp
 
 # DUMMY ENTRY POINT
 CMD ["/bin/bash"]

@@ -4,7 +4,12 @@ MAINTAINER emkor93@gmail.com
 LABEL version="0.1"
 LABEL description="Image containing integration tests"
 
-# CREATE AND SET DIRECTORIES
-WORKDIR /audiopyle
+# COPY STARTUP SCRIPT AND SET PERMISSIONS
+USER root
+WORKDIR /home/audiopyle
+COPY start_testcases.sh ./start_testcases.sh
+RUN chown audiopyle:audiopyle ./start_testcases.sh && chmod u+x ./start_testcases.sh
+USER audiopyle
 
-ENTRYPOINT ["/audiopyle/wait-for-it.sh", "-t", "30", "api:8080", "--", "audiopyle-testcases"]
+# CREATE AND SET DIRECTORIES
+ENTRYPOINT ["./start_testcases.sh"]
