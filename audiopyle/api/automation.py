@@ -55,6 +55,6 @@ class AutomationApi(FlaskRestApi):
                 extraction_requests.append(
                     ExtractionRequest(audio_file_name=audio_file_name,
                                       plugin_full_key=plugin.full_key,
-                                      plugin_config=plugin_configs.get(plugin.full_key, {}),
-                                      metric_config=plugin_metric_config))
+                                      plugin_config=plugin_configs.get(plugin.full_key, None),
+                                      metric_config=plugin_metric_config or None))
         return extraction_requests

@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Text, Tuple, List, Dict, Any
+from typing import Text, Tuple, List, Dict, Any, Optional
 from datetime import datetime
 
 import numpy as np
@@ -87,10 +87,12 @@ class FeatureExtractionService(object):
         self.logger.debug("Done {}!".format(request))
 
     def _build_plugin_config(self, request: ExtractionRequest) -> VampyPluginParams:
-        block_size = request.plugin_config.pop("block_size", None)
-        step_size = request.plugin_config.pop("step_size", None)
-        plugin_config = VampyPluginParams(block_size, step_size, **request.plugin_config)
-        return plugin_config
+        if request.plugin_config:
+            block_size = request.plugin_config.pop("block_size", None)
+            step_size = request.plugin_config.pop("step_size", None)
+            return VampyPluginParams(block_size, step_size, **request.plugin_config)
+        else:
+            return VampyPluginParams(None, None)
 
     def _store_results_in_db(self, analysis_result, metric_values: List[MetricValue], audio_meta,
                              feature_dto, feature_meta,
@@ -154,19 +156,24 @@ class FeatureExtractionService(object):
             raise ValueError(
                 "Either file meta, audio meta or tag for file {} is empty!".format(audio_file_absolute_path))
 
-    def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Dict[Text, Any],
+    def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Optional[Dict[str, Any]],
                          feature: VampyFeatureAbstraction) -> Tuple[List[MetricValue], float]:
         extraction_start_time = datetime.utcnow()
         metric_values = []
-        for metric_name, metric_config in metric_config.items():
-            transformation_function_name = metric_config["transformation"]["name"]
-            transformation_function_params = metric_config["transformation"].get("kwargs", {})
-            transformation_function = get_transformation(transformation_function_name,
-                                                         transformation_function_params)
-            definition = MetricDefinition(name=metric_name, plugin_key=plugin_key,
-                                          function=transformation_function_name,
-                                          kwargs=transformation_function_params)
-            value = extract_metric_value(task_id, definition, transformation_function, feature)
-            metric_values.append(value)
+        if metric_config is not None:
+            for metric_name, metric_config in metric_config.items():
+                value = self._calculate_metric(feature, metric_config, metric_name, plugin_key, task_id)  # type: ignore
+                metric_values.append(value)
         metric_extraction_time = seconds_between(extraction_start_time)
         return metric_values, metric_extraction_time
+
+    def _calculate_metric(self, feature: VampyFeatureAbstraction, metric_config: Dict[str, Any], metric_name: str,
+                          plugin_key: str, task_id: str) -> MetricValue:
+        transformation_function_name = metric_config["transformation"]["name"]
+        transformation_function_params = metric_config["transformation"].get("kwargs", {})
+        transformation_function = get_transformation(transformation_function_name,
+                                                     transformation_function_params)
+        definition = MetricDefinition(name=metric_name, plugin_key=plugin_key,
+                                      function=transformation_function_name,
+                                      kwargs=transformation_function_params)
+        return extract_metric_value(task_id, definition, transformation_function, feature)
