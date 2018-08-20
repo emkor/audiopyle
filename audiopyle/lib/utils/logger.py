@@ -1,6 +1,5 @@
 import logging
 import time
-from typing import Text
 
 GLOBAL_LOGGER = None
 
@@ -11,7 +10,7 @@ def setup_logger(level: int = logging.INFO) -> None:
     logging.Formatter.converter = time.gmtime
 
 
-def get_logger(calling_module: Text = "audiopyle") -> logging.Logger:
+def get_logger(calling_module: str = "audiopyle") -> logging.Logger:
     global GLOBAL_LOGGER
     if GLOBAL_LOGGER is None:
         GLOBAL_LOGGER = logging.getLogger(calling_module)

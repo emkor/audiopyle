@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Text, List, Optional, Any, Tuple
+from typing import List, Optional, Any, Tuple
 
 import vamp
 import vampyhost
@@ -17,7 +17,7 @@ class VampyPluginProvider(object):
         self.black_list_plugin_key = plugin_black_list or []
         self.logger = logger or get_logger()
 
-    def build_plugins_from_key(self, vampy_key: Text) -> List[VampyPlugin]:
+    def build_plugins_from_key(self, vampy_key: str) -> List[VampyPlugin]:
         vendor, name = self._split_vampy_key_into_vendor_and_name(vampy_key)
         plugin_outputs = self.vamp_interface.get_outputs_of(vampy_key)
         library_file_name = get_file_name(self.vamp_host_interface.get_library_for(vampy_key))
@@ -49,7 +49,7 @@ class VampyPluginProvider(object):
             all_plugin.extend(new_plugins)
         return all_plugin
 
-    def _list_vampy_plugin_keys(self) -> List[Text]:
+    def _list_vampy_plugin_keys(self) -> List[str]:
         """Returns list of VAMPy plugin keys available under OS"""
         return self.vamp_interface.list_plugins()
 

@@ -1,4 +1,4 @@
-from typing import Text, Any, Dict
+from typing import Any, Dict
 from celery.result import AsyncResult
 import celery.states as celery_state
 from enum import Enum
@@ -28,12 +28,12 @@ CELERY_TO_AUDIOPYLE_STATUS_MAP = {celery_state.PENDING: TaskStatus.not_known,
                                   celery_state.IGNORED: TaskStatus.ignored}
 
 
-def map_celery_status(celery_status: Text) -> TaskStatus:
+def map_celery_status(celery_status: str) -> TaskStatus:
     return CELERY_TO_AUDIOPYLE_STATUS_MAP[celery_status]
 
 
 class ExtractionResult(Model):
-    def __init__(self, task_id: Text, status: TaskStatus) -> None:
+    def __init__(self, task_id: str, status: TaskStatus) -> None:
         self.task_id = task_id
         self.status = status
 
@@ -43,7 +43,7 @@ class ExtractionResult(Model):
         return super_serialized
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[str, Any]):
         status_value = serialized["status"]
         serialized.update({"status": TaskStatus(status_value)})
         return serialized

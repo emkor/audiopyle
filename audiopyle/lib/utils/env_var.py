@@ -1,13 +1,13 @@
 import os
 
-from typing import Text, Type, Any, Optional
+from typing import Type, Any, Optional
 
 from audiopyle.lib.utils.logger import get_logger
 
 logger = get_logger()
 
 
-def read_env_var(var_name: Text, expected_type: Type, default: Optional[Any] = None) -> Any:
+def read_env_var(var_name: str, expected_type: Type, default: Optional[Any] = None) -> Any:
     actual_value = os.environ.get(var_name)
     if actual_value is not None:
         return _select_value(var_name, expected_type, default, actual_value)

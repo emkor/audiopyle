@@ -7,7 +7,6 @@ from audiopyle.lib.abstractions.flask_api import FlaskRestApi
 from audiopyle.lib.models.extraction_request import ExtractionRequest
 from audiopyle.lib.models.plugin import VampyPlugin
 from audiopyle.lib.repository.request import ResultRepository
-from audiopyle.lib.services.audio_tag_providing import ACCEPTED_EXTENSIONS
 from audiopyle.lib.services.metric_config_provider import MetricConfigProvider
 from audiopyle.lib.services.plugin_config_provider import PluginConfigProvider
 from audiopyle.lib.services.plugin_providing import VampyPluginProvider

@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Text, Tuple, List, Dict, Any, Optional
+from typing import Tuple, List, Dict, Any, Optional
 from datetime import datetime
 
 import numpy as np
@@ -140,13 +140,13 @@ class FeatureExtractionService(object):
         extraction_time = seconds_between(extraction_start_time)
         return feature_object, extraction_time
 
-    def _read_raw_audio_data_from(self, input_file_path: Text) -> Tuple[np.ndarray, float]:
+    def _read_raw_audio_data_from(self, input_file_path: str) -> Tuple[np.ndarray, float]:
         read_raw_audio_start_time = datetime.utcnow()
         raw_data = read_raw_audio_from_file(input_file_path)
         read_raw_audio_time = seconds_between(read_raw_audio_start_time)
         return raw_data, read_raw_audio_time
 
-    def _read_file_meta(self, audio_file_absolute_path: Text) -> Tuple[FileMeta, CompressedAudioFileMeta, Id3Tag]:
+    def _read_file_meta(self, audio_file_absolute_path: str) -> Tuple[FileMeta, CompressedAudioFileMeta, Id3Tag]:
         input_file_meta = read_file_meta(audio_file_absolute_path)
         input_audio_meta = read_audio_file_meta(audio_file_absolute_path)
         id3_tag = read_audio_tag(audio_file_absolute_path)

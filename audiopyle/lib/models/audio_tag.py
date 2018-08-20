@@ -1,10 +1,10 @@
-from typing import Text, Optional
+from typing import Optional
 from audiopyle.lib.abstractions.model import Model
 
 
 class Id3Tag(Model):
-    def __init__(self, artist: Text, title: Text, album: Optional[Text] = None, date: Optional[int] = None,
-                 track: Optional[int] = None, genre: Optional[Text] = None) -> None:
+    def __init__(self, artist: str, title: str, album: Optional[str] = None, date: Optional[int] = None,
+                 track: Optional[int] = None, genre: Optional[str] = None) -> None:
         self.artist = artist
         self.title = title
         self.album = album

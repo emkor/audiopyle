@@ -1,4 +1,4 @@
-from typing import Any, Text, Dict
+from typing import Any, Dict
 from billiard.exceptions import SoftTimeLimitExceeded
 
 from audiopyle.lib.db.session import SessionProvider
@@ -22,7 +22,7 @@ celery_app = get_celery()
 
 
 @celery_app.task
-def extract_feature(extraction_request: Dict[Text, Any]) -> Dict[Text, Any]:
+def extract_feature(extraction_request: Dict[str, Any]) -> Dict[str, Any]:
     logger = get_logger()
     request = ExtractionRequest.from_serializable(extraction_request)
 
