@@ -11,8 +11,7 @@ from audiopyle.testcases.utils import get_api_host, keep_polling_until, get_api_
 
 class CoordinatorApiTest(TestCase):
     def setUp(self):
-        self.extraction_api_url = "http://{}:{}/extraction".format(get_api_host(), get_api_port())
-        self.result_api_url = "http://{}:{}/extraction/result".format(get_api_host(), get_api_port())
+        self.request_api_url = "http://{}:{}/request".format(get_api_host(), get_api_port())
         self.metric_def_api_url = "http://{}:{}/metric/def".format(get_api_host(), get_api_port())
         self.metric_val_api_url = "http://{}:{}/metric/val".format(get_api_host(), get_api_port())
         self.mp3_extraction_request = {
@@ -44,13 +43,13 @@ class CoordinatorApiTest(TestCase):
 
     def test_should_accept_mp3_task_and_return_extracted_data(self):
         # request extraction
-        extraction_task_id = self._request_extraction_and_verify(self.extraction_api_url,
+        extraction_task_id = self._request_extraction_and_verify(self.request_api_url,
                                                                  self.mp3_extraction_request,
                                                                  HttpStatusCode.accepted.value)
 
         # wait until extraction completes, verify extraction status
         self._wait_for_extraction_to_complete_and_verify(extraction_task_id, HttpStatusCode.ok.value, 5., 0.5,
-                                                         self.extraction_api_url)
+                                                         self.request_api_url)
 
         # retrieve and assert request params
         mp3_audio_meta = {"bit_rate_kbps": 128.0, "channels_count": 1, "file_name": "102bpm_drum_loop.mp3",
@@ -60,20 +59,20 @@ class CoordinatorApiTest(TestCase):
         plugin_meta = {"library_file_name": "vamp-example-plugins.so", "name": "amplitudefollower",
                        "output": "amplitude",
                        "vendor": "vamp-example-plugins"}
-        self._retrieve_and_verify_request_details(extraction_task_id, self.result_api_url, HttpStatusCode.ok.value,
+        self._retrieve_and_verify_request_details(extraction_task_id, self.request_api_url, HttpStatusCode.ok.value,
                                                   mp3_audio_meta, audio_tag, plugin_meta, 4096, 4096)
 
         # retrieve data, meta and stats of an extraction
-        self._retrieve_and_verify_analysis_data(extraction_task_id, self.result_api_url,
+        self._retrieve_and_verify_analysis_data(extraction_task_id, self.request_api_url,
                                                 HttpStatusCode.ok.value, 26, (0.092, 0.093))
 
-        result_meta_response = requests.get(url="{}/{}/meta".format(self.result_api_url, extraction_task_id))
+        result_meta_response = requests.get(url="{}/{}/meta".format(self.request_api_url, extraction_task_id))
         assert_that(result_meta_response.status_code).is_equal_to(HttpStatusCode.ok.value)
         result_meta_response_json = result_meta_response.json()
         assert_that(result_meta_response_json["data_shape"]).is_equal_to([26, 1, 0])
         assert_that(result_meta_response_json["feature_type"]).is_equal_to("constant_step")
 
-        result_stats_response = requests.get(url="{}/{}/stats".format(self.result_api_url, extraction_task_id))
+        result_stats_response = requests.get(url="{}/{}/stats".format(self.request_api_url, extraction_task_id))
         assert_that(result_stats_response.status_code).is_equal_to(HttpStatusCode.ok.value)
         result_stats_response_json = result_stats_response.json()
         assert_that(result_stats_response_json["total_time"]).is_between(0.01, 1.5)
@@ -92,13 +91,13 @@ class CoordinatorApiTest(TestCase):
 
     def test_should_accept_flac_task_and_return_extracted_data(self):
         # request extraction
-        extraction_task_id = self._request_extraction_and_verify(self.extraction_api_url,
+        extraction_task_id = self._request_extraction_and_verify(self.request_api_url,
                                                                  self.flac_extraction_request,
                                                                  HttpStatusCode.accepted.value)
 
         # wait until extraction completes, verify extraction status
         self._wait_for_extraction_to_complete_and_verify(extraction_task_id, HttpStatusCode.ok.value, 5., 0.5,
-                                                         self.extraction_api_url)
+                                                         self.request_api_url)
 
         # retrieve and assert request params
         expected_flac_audio_meta = {"bit_rate_kbps": 371.7, "channels_count": 1, "file_name": "102bpm_drum_loop.flac",
@@ -109,18 +108,18 @@ class CoordinatorApiTest(TestCase):
         expected_plugin_meta = {"library_file_name": "vamp-example-plugins.so", "name": "amplitudefollower",
                                 "output": "amplitude",
                                 "vendor": "vamp-example-plugins"}
-        self._retrieve_and_verify_request_details(extraction_task_id, self.result_api_url, HttpStatusCode.ok.value,
+        self._retrieve_and_verify_request_details(extraction_task_id, self.request_api_url, HttpStatusCode.ok.value,
                                                   expected_flac_audio_meta, expected_audio_tag, expected_plugin_meta,
                                                   expected_plugin_block_size=8192, expected_plugin_step_size=8192)
 
         # retrieve data, meta and stats of an extraction
-        self._retrieve_and_verify_analysis_data(extraction_task_id, self.result_api_url,
+        self._retrieve_and_verify_analysis_data(extraction_task_id, self.request_api_url,
                                                 HttpStatusCode.ok.value, 13, (0.185, 0.186))
 
-    def _retrieve_and_verify_analysis_data(self, extraction_task_id: str, result_api_url: str,
+    def _retrieve_and_verify_analysis_data(self, extraction_task_id: str, request_api_url: str,
                                            expected_status_code: int, expected_result_len: int,
                                            expected_time_step_range: Tuple[float, float]):
-        result_data_response = requests.get(url="{}/{}/data".format(result_api_url, extraction_task_id))
+        result_data_response = requests.get(url="{}/{}/data".format(request_api_url, extraction_task_id))
         assert_that(result_data_response.status_code).is_equal_to(expected_status_code)
         result_data_response_json = result_data_response.json()
         assert_that(result_data_response_json["matrix"]).is_length(expected_result_len)
@@ -137,7 +136,7 @@ class CoordinatorApiTest(TestCase):
 
     def _wait_for_extraction_to_complete_and_verify(self, extraction_task_id, expected_status_code: int, timeout: float,
                                                     tick: float, api_url: str):
-        status_response = keep_polling_until(url="{}/{}".format(api_url, extraction_task_id),
+        status_response = keep_polling_until(url="{}/{}/status".format(api_url, extraction_task_id),
                                              expected_status=expected_status_code,
                                              timeout=timeout, tick=tick)
         json_status_response = status_response.json()
@@ -152,9 +151,9 @@ class CoordinatorApiTest(TestCase):
                                              expected_plugin_meta: Dict[str, Any],
                                              expected_plugin_block_size: int,
                                              expected_plugin_step_size: int):
-        result_request_response = requests.get(url="{}/{}".format(result_api_url, extraction_task_id))
-        assert_that(result_request_response.status_code).is_equal_to(status_code)
-        result_request_response_json = result_request_response.json()
+        request_response = requests.get(url="{}/{}".format(result_api_url, extraction_task_id))
+        assert_that(request_response.status_code).is_equal_to(status_code)
+        result_request_response_json = request_response.json()
         assert_that(result_request_response_json["audio_meta"]).is_equal_to(expected_audio_meta)
         assert_that(result_request_response_json["id3_tag"]).is_equal_to(expected_audio_tag)
         assert_that(result_request_response_json["plugin"]).is_equal_to(expected_plugin_meta)
