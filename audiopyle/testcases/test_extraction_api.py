@@ -89,6 +89,9 @@ class CoordinatorApiTest(TestCase):
         metric_definitions_json = metric_values_response.json()
         assert_that(metric_definitions_json).is_not_empty()
 
+        # delete result
+        self._delete_request_and_verify(self.request_api_url, extraction_task_id)
+
     def test_should_accept_flac_task_and_return_extracted_data(self):
         # request extraction
         extraction_task_id = self._request_extraction_and_verify(self.request_api_url,
@@ -115,6 +118,8 @@ class CoordinatorApiTest(TestCase):
         # retrieve data, meta and stats of an extraction
         self._retrieve_and_verify_analysis_data(extraction_task_id, self.request_api_url,
                                                 HttpStatusCode.ok.value, 13, (0.185, 0.186))
+        # delete result
+        self._delete_request_and_verify(self.request_api_url, extraction_task_id)
 
     def _retrieve_and_verify_analysis_data(self, extraction_task_id: str, request_api_url: str,
                                            expected_status_code: int, expected_result_len: int,
@@ -143,15 +148,13 @@ class CoordinatorApiTest(TestCase):
         assert_that(json_status_response["status"]).is_equal_to(TaskStatus.done.value)
         assert_that(json_status_response["task_id"]).is_equal_to(extraction_task_id)
 
-
-    def _retrieve_and_verify_request_details(self, extraction_task_id: str,
-                                             result_api_url: str, status_code: int,
+    def _retrieve_and_verify_request_details(self, task_id: str, request_api_url: str, status_code: int,
                                              expected_audio_meta: Dict[str, Any],
                                              expected_audio_tag: Dict[str, Any],
                                              expected_plugin_meta: Dict[str, Any],
                                              expected_plugin_block_size: int,
                                              expected_plugin_step_size: int):
-        request_response = requests.get(url="{}/{}".format(result_api_url, extraction_task_id))
+        request_response = requests.get(url="{}/{}".format(request_api_url, task_id))
         assert_that(request_response.status_code).is_equal_to(status_code)
         result_request_response_json = request_response.json()
         assert_that(result_request_response_json["audio_meta"]).is_equal_to(expected_audio_meta)
@@ -160,3 +163,10 @@ class CoordinatorApiTest(TestCase):
         assert_that(result_request_response_json["plugin_config"]["block_size"]).is_equal_to(expected_plugin_block_size)
         assert_that(result_request_response_json["plugin_config"]["step_size"]).is_equal_to(expected_plugin_step_size)
         assert_that(result_request_response_json["task_id"]).is_not_empty()
+
+    def _delete_request_and_verify(self, request_api_url: str, task_id: str):
+        deletion_response = requests.delete(url="{}/{}".format(request_api_url, task_id))
+        assert_that(deletion_response.status_code).is_equal_to(HttpStatusCode.ok.value)
+
+        request_response = requests.get(url="{}/{}".format(request_api_url, task_id))
+        assert_that(request_response.status_code).is_equal_to(HttpStatusCode.not_found.value)
