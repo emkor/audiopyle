@@ -26,13 +26,12 @@ from audiopyle.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from audiopyle.api.audio_tag import AudioTagApi
 from audiopyle.api.automation import AutomationApi
 from audiopyle.api.config import PluginActiveConfigApi, MetricActiveConfigApi
-from audiopyle.api.extraction import ExtractionStatusApi, ExtractionApi
 from audiopyle.api.metric import MetricDefinitionListApi, MetricDefinitionDetailsApi, MetricValueListApi, \
     MetricValueDetailsApi
 from audiopyle.api.plugin import PluginListApi, PluginDetailApi
 from audiopyle.api.root import CoordinatorApi
 from audiopyle.api.result import ResultDataApi, ResultMetaApi, ResultStatsApi
-from audiopyle.api.request import RequestListApi, RequestDetailsApi
+from audiopyle.api.request import RequestListApi, RequestDetailsApi, RequestStatusApi
 
 app = Flask(__name__)
 
@@ -54,38 +53,38 @@ def start_app(logger: Logger, host: str, port: int):
     plugin_provider = _initialize_plugin_provider(logger, config_json_store)
     feature_data_repo, feature_meta_repo, request_repo, result_stats_repo, metric_def_repo, metric_value_repo = _initialize_db_repositories()
 
-    app.add_url_rule("/extraction/automation", view_func=AutomationApi.as_view('automation_api',
-                                                                               plugin_provider=plugin_provider,
-                                                                               plugin_config_provider=plugin_config_provider,
-                                                                               metric_config_provider=metric_config_provider,
-                                                                               audio_file_store=audio_file_store,
-                                                                               result_repo=request_repo,
-                                                                               logger=logger))
-    app.add_url_rule("/extraction/<task_id>",
-                     view_func=ExtractionStatusApi.as_view('extraction_status_api',
-                                                           logger=logger))
-    app.add_url_rule("/extraction",
-                     view_func=ExtractionApi.as_view('extraction_api', logger=logger))
+    app.add_url_rule("/request/automation",
+                     view_func=AutomationApi.as_view('automation_api',
+                                                     plugin_provider=plugin_provider,
+                                                     plugin_config_provider=plugin_config_provider,
+                                                     metric_config_provider=metric_config_provider,
+                                                     audio_file_store=audio_file_store,
+                                                     result_repo=request_repo,
+                                                     logger=logger))
 
-    app.add_url_rule("/extraction/result/<task_id>/data",
-                     view_func=ResultDataApi.as_view('result_data_detail_api',
-                                                     feature_data_repo=feature_data_repo,
-                                                     logger=logger))
-    app.add_url_rule("/extraction/result/<task_id>/meta",
-                     view_func=ResultMetaApi.as_view('result_meta_detail_api',
-                                                     feature_meta_repo=feature_meta_repo,
-                                                     logger=logger))
-    app.add_url_rule("/extraction/result/<task_id>/stats",
-                     view_func=ResultStatsApi.as_view('result_stats_detail_api',
-                                                      stats_repo=result_stats_repo,
+    app.add_url_rule("/request",
+                     view_func=RequestListApi.as_view('request_list_api',
+                                                      request_repo=request_repo,
                                                       logger=logger))
-    app.add_url_rule("/extraction/result/<task_id>",
+
+    app.add_url_rule("/request/<task_id>",
                      view_func=RequestDetailsApi.as_view('request_detail_api',
                                                          request_repo=request_repo,
                                                          logger=logger))
-    app.add_url_rule("/extraction/result",
-                     view_func=RequestListApi.as_view('request_list_api',
-                                                      request_repo=request_repo,
+    app.add_url_rule("/request/<task_id>/status",
+                     view_func=RequestStatusApi.as_view('request_status_api',
+                                                        logger=logger))
+    app.add_url_rule("/request/<task_id>/data",
+                     view_func=ResultDataApi.as_view('result_data_detail_api',
+                                                     feature_data_repo=feature_data_repo,
+                                                     logger=logger))
+    app.add_url_rule("/request/<task_id>/meta",
+                     view_func=ResultMetaApi.as_view('result_meta_detail_api',
+                                                     feature_meta_repo=feature_meta_repo,
+                                                     logger=logger))
+    app.add_url_rule("/request/<task_id>/stats",
+                     view_func=ResultStatsApi.as_view('result_stats_detail_api',
+                                                      stats_repo=result_stats_repo,
                                                       logger=logger))
     app.add_url_rule("/plugin/<vendor>/<name>/<output>",
                      view_func=PluginDetailApi.as_view('plugin_detail_api',

@@ -26,3 +26,10 @@ def delete_result(task_id: str) -> bool:
         return True
     else:
         return False
+
+
+def has_finished(task_id: str) -> bool:
+    """Deletes the result if present. Returns success or failure in case of no task in DB"""
+    celery_app = get_celery()
+    async_result = celery_app.AsyncResult(id=task_id)
+    return async_result.ready()
