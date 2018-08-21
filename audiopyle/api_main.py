@@ -13,7 +13,7 @@ from audiopyle.lib.repository.audio_tag import AudioTagRepository
 from audiopyle.lib.repository.feature_data import FeatureDataRepository
 from audiopyle.lib.repository.feature_meta import FeatureMetaRepository
 from audiopyle.lib.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.repository.stats import ResultStatsRepository
 from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.lib.services.metric_config_provider import MetricConfigProvider
@@ -147,8 +147,8 @@ def _initialize_db_repositories():
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
     metric_def_repo = MetricDefinitionRepository(db_session_provider, plugin_repo)
     metric_value_repo = MetricValueRepository(db_session_provider, metric_def_repo)
-    result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
-                                   plugin_config_repo)
+    result_repo = RequestRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
+                                    plugin_config_repo)
     result_stats_repo = ResultStatsRepository(db_session_provider)
     return feature_data_repo, feature_meta_repo, result_repo, result_stats_repo, metric_def_repo, metric_value_repo
 

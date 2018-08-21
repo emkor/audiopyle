@@ -4,13 +4,13 @@ from audiopyle.lib.abstractions.api_model import ApiRequest, ApiResponse, HttpSt
 from audiopyle.lib.abstractions.flask_api import FlaskRestApi
 from audiopyle.lib.db.exception import EntityNotFound
 from audiopyle.lib.repository.feature_data import FeatureDataRepository
-from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.repository.stats import ResultStatsRepository
 from audiopyle.lib.services.compression import from_compressed_feature
 
 
 class ResultListApi(FlaskRestApi):
-    def __init__(self, result_repo: ResultRepository, logger: Logger) -> None:
+    def __init__(self, result_repo: RequestRepository, logger: Logger) -> None:
         super().__init__(logger)
         self.result_repo = result_repo
         self.logger = logger
@@ -21,7 +21,7 @@ class ResultListApi(FlaskRestApi):
 
 
 class ResultDetailsApi(FlaskRestApi):
-    def __init__(self, result_repo: ResultRepository, logger: Logger) -> None:
+    def __init__(self, result_repo: RequestRepository, logger: Logger) -> None:
         super().__init__(logger)
         self.result_repo = result_repo
         self.logger = logger

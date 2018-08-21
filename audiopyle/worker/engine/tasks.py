@@ -7,7 +7,7 @@ from audiopyle.lib.repository.audio_tag import AudioTagRepository
 from audiopyle.lib.repository.feature_data import FeatureDataRepository
 from audiopyle.lib.repository.feature_meta import FeatureMetaRepository
 from audiopyle.lib.repository.metric import MetricDefinitionRepository, MetricValueRepository
-from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.repository.stats import ResultStatsRepository
 from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.lib.services.plugin_providing import VampyPluginProvider
@@ -38,8 +38,8 @@ def extract_feature(extraction_request: Dict[str, Any]) -> Dict[str, Any]:
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
     metric_definition_repo = MetricDefinitionRepository(db_session_provider, plugin_repo)
     metric_value_repo = MetricValueRepository(db_session_provider, metric_definition_repo)
-    result_repo = ResultRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
-                                   plugin_config_repo)
+    result_repo = RequestRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
+                                    plugin_config_repo)
     result_stats_repo = ResultStatsRepository(db_session_provider)
 
     extraction_service = FeatureExtractionService(plugin_provider=plugin_provider,
@@ -52,7 +52,7 @@ def extract_feature(extraction_request: Dict[str, Any]) -> Dict[str, Any]:
                                                   metric_value_repo=metric_value_repo,
                                                   feature_data_repo=feature_data_repo,
                                                   feature_meta_repo=feature_meta_repo,
-                                                  result_repo=result_repo,
+                                                  request_repo=result_repo,
                                                   result_stats_repo=result_stats_repo,
                                                   logger=logger)
     try:

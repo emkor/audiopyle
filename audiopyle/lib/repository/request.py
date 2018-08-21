@@ -10,7 +10,7 @@ from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginC
 from audiopyle.lib.utils.conversion import safe_cast
 
 
-class ResultRepository(DbRepository):
+class RequestRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider, audio_file_repository: AudioFileRepository,
                  audio_tag_repository: AudioTagRepository, plugin_repository: VampyPluginRepository,
                  plugin_config_repo: PluginConfigRepository) -> None:
@@ -24,10 +24,10 @@ class ResultRepository(DbRepository):
         return safe_cast(self._query_single(id=model_object.task_id), str, None)
 
     def _map_to_entity(self, obj: AnalysisRequest) -> Request:
-        plugin_id = self.plugin_repository.get_id_by_model(obj.plugin)
-        audio_meta_id = self.audio_file_repository.get_id_by_model(obj.audio_meta)
-        audio_tag_id = self.audio_tag_repository.get_id_by_model(obj.id3_tag) if obj.id3_tag else None
-        plugin_config_id = self.plugin_config_repo.get_id_by_model(obj.plugin_config)
+        plugin_id = self.plugin_repository.get_or_create(obj.plugin)
+        plugin_config_id = self.plugin_config_repo.get_or_create(obj.plugin_config)
+        audio_meta_id = self.audio_file_repository.get_or_create(obj.audio_meta)
+        audio_tag_id = self.audio_tag_repository.get_or_create(obj.id3_tag) if obj.id3_tag else None
         return Request(id=obj.task_id, vampy_plugin_id=plugin_id, audio_file_id=audio_meta_id,
                        audio_tag_id=audio_tag_id, plugin_config_id=plugin_config_id)
 
