@@ -4,6 +4,7 @@ import logging
 from logging import Logger
 
 from flask import Flask
+from gevent.pywsgi import WSGIServer
 
 from audiopyle.lib.db.engine import create_db_tables
 from audiopyle.lib.db.session import SessionProvider
@@ -31,7 +32,6 @@ from audiopyle.api.metric import MetricDefinitionListApi, MetricDefinitionDetail
 from audiopyle.api.plugin import PluginListApi, PluginDetailApi
 from audiopyle.api.root import CoordinatorApi
 from audiopyle.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
-from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 
@@ -41,10 +41,10 @@ def main():
     logger = get_logger()
     logger.info("Initializing Coordinator app...")
     create_db_tables(only_if_absent=True)
-    start_app(logger, "0.0.0.0", 8080, debug=False)
+    start_app(logger, "0.0.0.0", 8080)
 
 
-def start_app(logger: Logger, host: str, port: int, debug: bool = False):
+def start_app(logger: Logger, host: str, port: int):
     audio_file_store = Mp3FileStore(AUDIO_FILES_DIR)
     config_json_store = JsonFileStore(CONFIG_DIR)
     plugin_config_provider = PluginConfigProvider(config_json_store, logger)

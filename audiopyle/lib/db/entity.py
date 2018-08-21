@@ -64,7 +64,7 @@ class MetricDefinition(ENTITY_BASE):  # type: ignore
     __tablename__ = 'metric_definition'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
+    plugin_id = Column(Integer, ForeignKey(VampyPlugin.id, ondelete="CASCADE"),
                        nullable=False, index=True)
 
     name = Column(String(255), unique=True, index=True, nullable=False)
@@ -77,13 +77,13 @@ class Request(ENTITY_BASE):  # type: ignore
 
     id = Column(String(36), primary_key=True, unique=True, index=True, nullable=False)
 
-    vampy_plugin_id = Column(Integer, ForeignKey("vampy_plugin.id", ondelete="CASCADE"),
+    vampy_plugin_id = Column(Integer, ForeignKey(VampyPlugin.id, ondelete="CASCADE"),
                              nullable=False, index=True)
-    plugin_config_id = Column(Integer, ForeignKey("plugin_config.id", ondelete="CASCADE"),
+    plugin_config_id = Column(Integer, ForeignKey(PluginConfig.id, ondelete="CASCADE"),
                               nullable=False, index=True)
-    audio_file_id = Column(Integer, ForeignKey("audio_file.id", ondelete="CASCADE"),
+    audio_file_id = Column(Integer, ForeignKey(AudioFile.id, ondelete="CASCADE"),
                            nullable=False, index=True)
-    audio_tag_id = Column(Integer, ForeignKey("audio_tag.id", ondelete="CASCADE"),
+    audio_tag_id = Column(Integer, ForeignKey(AudioTag.id, ondelete="CASCADE"),
                           nullable=False, index=True)
     started_at = Column(DateTime, default=datetime.now())
 
@@ -91,7 +91,7 @@ class Request(ENTITY_BASE):  # type: ignore
 class FeatureMeta(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_meta'
 
-    id = Column(String(36), ForeignKey("request.id", ondelete="CASCADE"), primary_key=True)
+    id = Column(String(36), ForeignKey(Request.id, ondelete="CASCADE"), primary_key=True)
 
     feature_type = Column(String(63), index=True, nullable=False)
     feature_shape_x = Column(Integer, index=False, nullable=False)
@@ -103,7 +103,7 @@ class FeatureMeta(ENTITY_BASE):  # type: ignore
 class FeatureData(ENTITY_BASE):  # type: ignore
     __tablename__ = 'feature_data'
 
-    id = Column(String(36), ForeignKey("request.id", ondelete="CASCADE"), primary_key=True)
+    id = Column(String(36), ForeignKey(Request.id, ondelete="CASCADE"), primary_key=True)
 
     compression = Column(String(31), index=True, nullable=False)
     feature_data = Column(LargeBinary(16777215), index=False, nullable=False)
@@ -112,7 +112,7 @@ class FeatureData(ENTITY_BASE):  # type: ignore
 class ResultStats(ENTITY_BASE):  # type: ignore
     __tablename__ = 'result_stats'
 
-    id = Column(String(36), ForeignKey("request.id", ondelete="CASCADE"), primary_key=True)
+    id = Column(String(36), ForeignKey(Request.id, ondelete="CASCADE"), primary_key=True)
 
     total_time = Column(Float, index=False, nullable=True)
     extraction_time = Column(Float, index=False, nullable=True)
@@ -127,8 +127,8 @@ class Metric(ENTITY_BASE):  # type: ignore
     __tablename__ = 'metric'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    task_id = Column(String(36), ForeignKey("request.id", ondelete="CASCADE"), nullable=False, index=True)
-    definition_id = Column(Integer, ForeignKey("metric_definition.id", ondelete="CASCADE"),
+    task_id = Column(String(36), ForeignKey(Request.id, ondelete="CASCADE"), nullable=False, index=True)
+    definition_id = Column(Integer, ForeignKey(MetricDefinition.id, ondelete="CASCADE"),
                            nullable=False, index=True)
 
     minimum = Column(Float, index=False, nullable=True)
