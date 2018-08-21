@@ -36,27 +36,49 @@ class RequestRepositoryTest(unittest.TestCase):
         self.the_request = AnalysisRequest(task_id=self.task_id, audio_meta=self.audio_meta_example_1,
                                            id3_tag=self.tag_example_1, plugin=self.plugin_example_1,
                                            plugin_config=self.plugin_config_example_1)
-        self.plugin_repository = VampyPluginRepository(self.session_provider)
-        self.audio_repository = AudioFileRepository(self.session_provider)
-        self.audio_tag_repository = AudioTagRepository(self.session_provider)
+        self.plugin_repo = VampyPluginRepository(self.session_provider)
+        self.audio_repo = AudioFileRepository(self.session_provider)
+        self.audio_tag_repo = AudioTagRepository(self.session_provider)
         self.plugin_config_repo = PluginConfigRepository(self.session_provider)
-        self.request_repo = RequestRepository(self.session_provider, self.audio_repository, self.audio_tag_repository,
-                                              self.plugin_repository, self.plugin_config_repo)
+        self.request_repo = RequestRepository(self.session_provider, self.audio_repo, self.audio_tag_repo,
+                                              self.plugin_repo, self.plugin_config_repo)
 
     def tearDown(self):
         self.request_repo.delete_all()
+        self.plugin_repo.delete_all()
+        self.plugin_config_repo.delete_all()
+        self.audio_repo.delete_all()
+        self.audio_tag_repo.delete_all()
 
     def test_should_insert_sub_entities_of_request_and_then_list_them(self):
-        self.plugin_repository.insert(self.plugin_example_1)
+        self.plugin_repo.insert(self.plugin_example_1)
         self.plugin_config_repo.insert(self.plugin_config_example_1)
-        self.audio_repository.insert(self.audio_meta_example_1)
-        self.audio_tag_repository.insert(self.tag_example_1)
+        self.audio_repo.insert(self.audio_meta_example_1)
+        self.audio_tag_repo.insert(self.tag_example_1)
 
         request_list = self.request_repo.get_all()
-        assert_that(request_list).is_length(0)
+        assert_that(request_list).is_empty()
 
         self.request_repo.insert(self.the_request)
 
         request_list = self.request_repo.get_all()
         assert_that(request_list).is_length(1)
         assert_that(request_list[0]).is_equal_to(self.the_request)
+
+    def test_should_insert_the_request_with_sub_entities_automatically_and_then_list_them(self):
+        assert_that(self.plugin_repo.get_all()).is_empty()
+        assert_that(self.plugin_config_repo.get_all()).is_empty()
+        assert_that(self.audio_repo.get_all()).is_empty()
+        assert_that(self.audio_tag_repo.get_all()).is_empty()
+        assert_that(self.request_repo.get_all()).is_empty()
+
+        self.request_repo.insert(self.the_request)
+
+        assert_that(self.plugin_repo.get_all()).is_length(1)
+        assert_that(self.plugin_config_repo.get_all()).is_length(1)
+        assert_that(self.audio_repo.get_all()).is_length(1)
+        assert_that(self.audio_tag_repo.get_all()).is_length(1)
+
+        result_list = self.request_repo.get_all()
+        assert_that(result_list).is_length(1)
+        assert_that(result_list[0]).is_equal_to(self.the_request)
