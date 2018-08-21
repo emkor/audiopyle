@@ -8,12 +8,12 @@ from audiopyle.lib.models.plugin import VampyPlugin, VampyPluginParams
 from audiopyle.lib.models.result import AnalysisRequest
 from audiopyle.lib.repository.audio_file import AudioFileRepository
 from audiopyle.lib.repository.audio_tag import AudioTagRepository
-from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.repository.vampy_plugin import VampyPluginRepository, PluginConfigRepository
 from audiopyle.test.utils import setup_db_repository_test_class, tear_down_db_repository_test_class
 
 
-class ResultRepositoryTest(unittest.TestCase):
+class RequestRepositoryTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         setup_db_repository_test_class(cls)
@@ -33,30 +33,30 @@ class ResultRepositoryTest(unittest.TestCase):
         self.plugin_example_1 = VampyPlugin("my_vendor", "my_name", "outputs", "my_file.so")
         self.plugin_example_2 = VampyPlugin("my_vendor", "my_name_2", "outputs", "my_file_2.so")
         self.plugin_config_example_1 = VampyPluginParams(block_size=2048, step_size=1024)
-        self.result = AnalysisRequest(task_id=self.task_id, audio_meta=self.audio_meta_example_1,
-                                      id3_tag=self.tag_example_1, plugin=self.plugin_example_1,
-                                      plugin_config=self.plugin_config_example_1)
+        self.the_request = AnalysisRequest(task_id=self.task_id, audio_meta=self.audio_meta_example_1,
+                                           id3_tag=self.tag_example_1, plugin=self.plugin_example_1,
+                                           plugin_config=self.plugin_config_example_1)
         self.plugin_repository = VampyPluginRepository(self.session_provider)
         self.audio_repository = AudioFileRepository(self.session_provider)
         self.audio_tag_repository = AudioTagRepository(self.session_provider)
         self.plugin_config_repo = PluginConfigRepository(self.session_provider)
-        self.repository = ResultRepository(self.session_provider, self.audio_repository, self.audio_tag_repository,
-                                           self.plugin_repository, self.plugin_config_repo)
+        self.request_repo = RequestRepository(self.session_provider, self.audio_repository, self.audio_tag_repository,
+                                              self.plugin_repository, self.plugin_config_repo)
 
     def tearDown(self):
-        self.repository.delete_all()
+        self.request_repo.delete_all()
 
-    def test_should_insert_descendants_of_result_and_then_result_and_list_it(self):
+    def test_should_insert_sub_entities_of_request_and_then_list_them(self):
         self.plugin_repository.insert(self.plugin_example_1)
         self.plugin_config_repo.insert(self.plugin_config_example_1)
         self.audio_repository.insert(self.audio_meta_example_1)
         self.audio_tag_repository.insert(self.tag_example_1)
 
-        result_list = self.repository.get_all()
-        assert_that(result_list).is_length(0)
+        request_list = self.request_repo.get_all()
+        assert_that(request_list).is_length(0)
 
-        self.repository.insert(self.result)
+        self.request_repo.insert(self.the_request)
 
-        result_list = self.repository.get_all()
-        assert_that(result_list).is_length(1)
-        assert_that(result_list[0]).is_equal_to(self.result)
+        request_list = self.request_repo.get_all()
+        assert_that(request_list).is_length(1)
+        assert_that(request_list[0]).is_equal_to(self.the_request)
