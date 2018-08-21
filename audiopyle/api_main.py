@@ -31,7 +31,8 @@ from audiopyle.api.metric import MetricDefinitionListApi, MetricDefinitionDetail
     MetricValueDetailsApi
 from audiopyle.api.plugin import PluginListApi, PluginDetailApi
 from audiopyle.api.root import CoordinatorApi
-from audiopyle.api.result import ResultListApi, ResultDataApi, ResultMetaApi, ResultStatsApi, ResultDetailsApi
+from audiopyle.api.result import ResultDataApi, ResultMetaApi, ResultStatsApi
+from audiopyle.api.request import RequestListApi, RequestDetailsApi
 
 app = Flask(__name__)
 
@@ -51,14 +52,14 @@ def start_app(logger: Logger, host: str, port: int):
     metric_config_provider = MetricConfigProvider(config_json_store, logger)
 
     plugin_provider = _initialize_plugin_provider(logger, config_json_store)
-    feature_data_repo, feature_meta_repo, result_repo, result_stats_repo, metric_def_repo, metric_value_repo = _initialize_db_repositories()
+    feature_data_repo, feature_meta_repo, request_repo, result_stats_repo, metric_def_repo, metric_value_repo = _initialize_db_repositories()
 
     app.add_url_rule("/extraction/automation", view_func=AutomationApi.as_view('automation_api',
                                                                                plugin_provider=plugin_provider,
                                                                                plugin_config_provider=plugin_config_provider,
                                                                                metric_config_provider=metric_config_provider,
                                                                                audio_file_store=audio_file_store,
-                                                                               result_repo=result_repo,
+                                                                               result_repo=request_repo,
                                                                                logger=logger))
     app.add_url_rule("/extraction/<task_id>",
                      view_func=ExtractionStatusApi.as_view('extraction_status_api',
@@ -79,13 +80,13 @@ def start_app(logger: Logger, host: str, port: int):
                                                       stats_repo=result_stats_repo,
                                                       logger=logger))
     app.add_url_rule("/extraction/result/<task_id>",
-                     view_func=ResultDetailsApi.as_view('result_detail_api',
-                                                        result_repo=result_repo,
-                                                        logger=logger))
+                     view_func=RequestDetailsApi.as_view('request_detail_api',
+                                                         request_repo=request_repo,
+                                                         logger=logger))
     app.add_url_rule("/extraction/result",
-                     view_func=ResultListApi.as_view('result_list_api',
-                                                     result_repo=result_repo,
-                                                     logger=logger))
+                     view_func=RequestListApi.as_view('request_list_api',
+                                                      request_repo=request_repo,
+                                                      logger=logger))
     app.add_url_rule("/plugin/<vendor>/<name>/<output>",
                      view_func=PluginDetailApi.as_view('plugin_detail_api',
                                                        plugin_provider=plugin_provider,
@@ -147,10 +148,10 @@ def _initialize_db_repositories():
     feature_meta_repo = FeatureMetaRepository(db_session_provider)
     metric_def_repo = MetricDefinitionRepository(db_session_provider, plugin_repo)
     metric_value_repo = MetricValueRepository(db_session_provider, metric_def_repo)
-    result_repo = RequestRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
-                                    plugin_config_repo)
+    request_repo = RequestRepository(db_session_provider, audio_meta_repo, audio_tag_repo, plugin_repo,
+                                     plugin_config_repo)
     result_stats_repo = ResultStatsRepository(db_session_provider)
-    return feature_data_repo, feature_meta_repo, result_repo, result_stats_repo, metric_def_repo, metric_value_repo
+    return feature_data_repo, feature_meta_repo, request_repo, result_stats_repo, metric_def_repo, metric_value_repo
 
 
 def _initialize_plugin_provider(logger, config_store: JsonFileStore):
