@@ -4,7 +4,9 @@
 Docker-based app for extracting features from audio files. Makes use of standard VAMP plugins for feature extraction.
 
 ### Usage
-To start the app in Docker containers, do `make run` from the directory with `Makefile`. Docker should pull the images and Audiopyle will start web server on your localhost on port `8080`
+To start the app in Docker containers
+    - make sure volumes are mapped correctly in `scripts/docker-compose.yml` in `api/volumes` and `worker/volumes` sections
+    - do `make run` from the directory with `Makefile`. Docker should pull the images and Audiopyle will start web server on your localhost on port `8080`
 
 ### App REST API description
 TO DO
