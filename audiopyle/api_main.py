@@ -94,19 +94,19 @@ def start_app(logger: Logger, host: str, port: int):
                      view_func=PluginListApi.as_view('plugin_list_api',
                                                      plugin_provider=plugin_provider,
                                                      logger=logger))
-    app.add_url_rule("/metric/def",
+    app.add_url_rule("/metric-def",
                      view_func=MetricDefinitionListApi.as_view('metric_definition_list_api',
                                                                metric_repo=metric_def_repo,
                                                                logger=logger))
-    app.add_url_rule("/metric/def/<id>",
+    app.add_url_rule("/metric-def/<id>",
                      view_func=MetricDefinitionDetailsApi.as_view('metric_definition_details_api',
                                                                   metric_repo=metric_def_repo,
                                                                   logger=logger))
-    app.add_url_rule("/metric/val",
+    app.add_url_rule("/metric-val",
                      view_func=MetricValueListApi.as_view('metric_value_list_api',
                                                           metric_repo=metric_value_repo,
                                                           logger=logger))
-    app.add_url_rule("/metric/val/<id>",
+    app.add_url_rule("/metric-val/<id>",
                      view_func=MetricValueDetailsApi.as_view('metric_value_details_api',
                                                              metric_repo=metric_value_repo,
                                                              logger=logger))
@@ -118,6 +118,10 @@ def start_app(logger: Logger, host: str, port: int):
                      view_func=MetricActiveConfigApi.as_view('metric_config_api',
                                                              metric_config_provider=metric_config_provider,
                                                              logger=logger))
+    app.add_url_rule("/audio",
+                     view_func=AudioFileListApi.as_view('audio_list_api',
+                                                        file_store=audio_file_store,
+                                                        logger=logger))
     app.add_url_rule("/audio/<file_name>/tag",
                      view_func=AudioTagApi.as_view('audio_tag_api',
                                                    logger=logger))
@@ -125,12 +129,6 @@ def start_app(logger: Logger, host: str, port: int):
                      view_func=AudioFileDetailApi.as_view('audio_detail_api',
                                                           file_store=audio_file_store,
                                                           logger=logger))
-
-    app.add_url_rule("/audio",
-                     view_func=AudioFileListApi.as_view('audio_list_api',
-                                                        file_store=audio_file_store,
-                                                        logger=logger))
-
     app.add_url_rule("/", view_func=CoordinatorApi.as_view('coordinator_api', logger=logger))
     logger.info("Starting Coordinator API on {} port!".format(port))
     logging.getLogger('werkzeug').setLevel(logging.WARNING)
