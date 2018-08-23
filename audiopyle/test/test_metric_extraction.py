@@ -4,10 +4,12 @@ from assertpy import assert_that
 from numpy import array, float32
 
 from audiopyle.lib.models.feature import VampyConstantStepFeature, VampyVariableStepFeature, StepFeature
-from audiopyle.lib.models.metric import NoneTransformation, SelectRowTransformation, SingleValueTransformation
+from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
+from audiopyle.lib.models.metric import NoneTransformation, SelectRowTransformation, SingleValueTransformation, \
+    SegmentLabelShareRatioTransformation
 
 
-class ConstantStepFeatureMetricTransformationTest(TestCase):
+class FeatureMetricTransformationTest(TestCase):
     def setUp(self):
         self.single_dimensional_feature = array([0.38888031], dtype=float32)
         self.two_dimensional_feature = array([0.38888031, 0.3144314, 0.46564227, 0.31890243, 0.22512659], dtype=float32)
@@ -42,7 +44,28 @@ class ConstantStepFeatureMetricTransformationTest(TestCase):
 
     def test_should_extract_using_single_value_transformation(self):
         single_value_transformation = SingleValueTransformation()
-        single_value_from_variable_step_feature = single_value_transformation.call(self.variable_step_single_value_feature)
-        single_value_from_constant_step_feature = single_value_transformation.call(self.constant_step_single_value_feature)
+        single_value_from_variable_step_feature = single_value_transformation.call(
+            self.variable_step_single_value_feature)
+        single_value_from_constant_step_feature = single_value_transformation.call(
+            self.constant_step_single_value_feature)
         assert_that(single_value_from_variable_step_feature).is_length(2)
         assert_that(single_value_from_constant_step_feature).is_length(2)
+
+    def test_should_transform_segment_based_simple_variable_feature_into_ratio_metric(self):
+        audio_meta = CompressedAudioFileMeta("some_name.mp3", 1024, 1, 44100, length_sec=4., bit_rate_kbps=128)
+        segment_share_ratio = SegmentLabelShareRatioTransformation(audio_meta=audio_meta, label="b")
+        segment_variable_step_feature = VampyVariableStepFeature("task_id", [StepFeature(timestamp=0.0,
+                                                                                         values=array([0]),
+                                                                                         label="a"),
+                                                                             StepFeature(timestamp=1.0,
+                                                                                         values=array([1]),
+                                                                                         label="b"),
+                                                                             StepFeature(timestamp=2.0,
+                                                                                         values=array([0]),
+                                                                                         label="a"),
+                                                                             StepFeature(timestamp=3.0,
+                                                                                         values=array([1]),
+                                                                                         label="b")
+                                                                             ])
+        actual_metric_vector = segment_share_ratio.call(segment_variable_step_feature)
+        assert_that(actual_metric_vector).is_length(2).contains(0.25)

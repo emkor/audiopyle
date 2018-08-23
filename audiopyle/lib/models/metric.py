@@ -4,6 +4,7 @@ import numpy
 
 from audiopyle.lib.abstractions.model import Model
 from audiopyle.lib.models.feature import VampyFeatureAbstraction, VampyConstantStepFeature, VampyVariableStepFeature
+from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
 from audiopyle.lib.models.result import DataStats
 
 
@@ -70,6 +71,35 @@ class SingleValueTransformation(MetricTransformation):
     def _call_on_variable_step(self, feature: VampyVariableStepFeature) -> numpy.ndarray:
         first_value = feature.step_features[0].values[0]  # type: ignore
         return numpy.asanyarray([first_value, first_value])
+
+
+class SegmentLabelShareRatioTransformation(MetricTransformation):
+    def __init__(self, **kwargs) -> None:
+        super().__init__("segment_share_ratio", **kwargs)
+        self.audio_meta = kwargs["audio_meta"]  # type: CompressedAudioFileMeta
+
+    def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
+        raise NotImplementedError("Can not run segment_share_ratio transformation on constant step feature!")
+
+    def _call_on_variable_step(self, feature: VampyVariableStepFeature) -> numpy.ndarray:
+        segment_label = self.kwargs["label"]
+        segment_lengths_seconds = []
+        last_segment_start_sec = None
+        for step in feature.step_features:
+            if last_segment_start_sec is not None:
+                # case when segment with selected label has ended and step.timestamp represents next segment start time
+                segment_lengths_seconds.append(step.timestamp - last_segment_start_sec)
+                last_segment_start_sec = None
+            elif step.label == segment_label:
+                # case when step.timestamp is start of segment with selected label
+                last_segment_start_sec = step.timestamp
+            else:
+                # case when step is point between two segments without selected label
+                last_segment_start_sec = None
+        if last_segment_start_sec is not None:
+            # case when last segment was selected
+            segment_lengths_seconds.append(self.audio_meta.length_sec - last_segment_start_sec)
+        return numpy.asanyarray([sls / self.audio_meta.length_sec for sls in segment_lengths_seconds])  # type: ignore
 
 
 class MetricValue(Model):
