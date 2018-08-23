@@ -73,7 +73,7 @@ class FeatureExtractionService(object):
         feature_dto, compression_time = self._compress_feature(feature_object, task_id)
         feature_meta, feature_meta_build_time = self._build_feature_meta(feature_object, task_id)
         analysis_result = AnalysisRequest(task_id, audio_meta, id3_tag, plugin, plugin_config)
-        metric_values, metrics_extraction_time = self._extract_metrics(task_id, request.plugin_full_key,
+        metric_values, metrics_extraction_time = self._extract_metrics(task_id, audio_meta, request.plugin_full_key,
                                                                        request.metric_config, feature_object)
 
         self.logger.debug("Extracted features for {}; storing...".format(request))
@@ -154,14 +154,15 @@ class FeatureExtractionService(object):
             raise ValueError(
                 "Either file meta, audio meta or tag for file {} is empty!".format(audio_file_absolute_path))
 
-    def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Dict[Text, Any],
-                         feature: VampyFeatureAbstraction) -> Tuple[List[MetricValue], float]:
+    def _extract_metrics(self, task_id: str, audio_meta: CompressedAudioFileMeta, plugin_key: str,
+                         metric_config: Dict[Text, Any], feature: VampyFeatureAbstraction) -> Tuple[List[MetricValue], float]:
         extraction_start_time = datetime.utcnow()
         metric_values = []
         for metric_name, metric_config in metric_config.items():
             transformation_function_name = metric_config["transformation"]["name"]
             transformation_function_params = metric_config["transformation"].get("kwargs", {})
             transformation_function = get_transformation(transformation_function_name,
+                                                         audio_meta,
                                                          transformation_function_params)
             definition = MetricDefinition(name=metric_name, plugin_key=plugin_key,
                                           function=transformation_function_name,

@@ -17,8 +17,9 @@ class MetricDefinition(Model):
 
 
 class MetricTransformation(Model):
-    def __init__(self, name, **kwargs) -> None:
+    def __init__(self, name, audio_meta, **kwargs) -> None:
         self.name = name
+        self.audio_meta = audio_meta
         self.kwargs = kwargs
 
     def call(self, vampy_feature: VampyFeatureAbstraction) -> numpy.ndarray:
@@ -37,8 +38,8 @@ class MetricTransformation(Model):
 
 
 class NoneTransformation(MetricTransformation):
-    def __init__(self, **kwargs) -> None:
-        super().__init__("none", **kwargs)
+    def __init__(self, audio_meta, **kwargs) -> None:
+        super().__init__("none", audio_meta, **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
         return feature.values()
@@ -48,8 +49,8 @@ class NoneTransformation(MetricTransformation):
 
 
 class SelectRowTransformation(MetricTransformation):
-    def __init__(self, **kwargs) -> None:
-        super().__init__("select_row", **kwargs)
+    def __init__(self, audio_meta, **kwargs) -> None:
+        super().__init__("select_row", audio_meta, **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
         row_index = self.kwargs["row_index"]
@@ -61,8 +62,8 @@ class SelectRowTransformation(MetricTransformation):
 
 
 class SingleValueTransformation(MetricTransformation):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__("singe_value", **kwargs)
+    def __init__(self, audio_meta, **kwargs) -> None:
+        super().__init__("singe_value", audio_meta, **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
         first_value = feature.values()[0]
@@ -74,9 +75,8 @@ class SingleValueTransformation(MetricTransformation):
 
 
 class SegmentLabelShareRatioTransformation(MetricTransformation):
-    def __init__(self, **kwargs) -> None:
-        super().__init__("segment_share_ratio", **kwargs)
-        self.audio_meta = kwargs["audio_meta"]  # type: CompressedAudioFileMeta
+    def __init__(self, audio_meta, **kwargs) -> None:
+        super().__init__("segment_share_ratio", audio_meta, **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
         raise NotImplementedError("Can not run segment_share_ratio transformation on constant step feature!")

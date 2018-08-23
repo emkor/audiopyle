@@ -15,13 +15,16 @@ class FeatureType(Enum):
 
 class DataStats(Model):
     def __init__(self, minimum: Optional[float], maximum: Optional[float], median: Optional[float],
-                 mean: Optional[float], standard_deviation: Optional[float], variance: Optional[float]) -> None:
+                 mean: Optional[float], standard_deviation: Optional[float], variance: Optional[float],
+                 sum: Optional[float], count: Optional[int]) -> None:
         self.minimum = minimum
         self.maximum = maximum
         self.median = median
         self.mean = mean
         self.standard_deviation = standard_deviation
         self.variance = variance
+        self.sum = sum
+        self.count = count
 
 
 class AnalysisStats(Model):

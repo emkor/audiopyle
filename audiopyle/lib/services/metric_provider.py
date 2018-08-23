@@ -3,8 +3,9 @@ from typing import Dict, Text, Any, Callable, Optional
 import numpy
 
 from audiopyle.lib.models.feature import VampyFeatureAbstraction
+from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
 from audiopyle.lib.models.metric import NoneTransformation, SelectRowTransformation, SingleValueTransformation, \
-    MetricTransformation, MetricValue, MetricDefinition
+    MetricTransformation, MetricValue, MetricDefinition, SegmentLabelShareRatioTransformation
 from audiopyle.lib.models.result import DataStats
 from audiopyle.lib.utils.logger import get_logger
 
@@ -13,12 +14,14 @@ logger = get_logger()
 _REGISTERED_METRIC_TRANSFORMATIONS = {
     "none": NoneTransformation,
     "select_row": SelectRowTransformation,
-    "singe_value": SingleValueTransformation
+    "singe_value": SingleValueTransformation,
+    "segment_share_ratio": SegmentLabelShareRatioTransformation
 }
 
 
-def get_transformation(function_name: str, function_kwargs: Dict[Text, Any]) -> MetricTransformation:
-    return _REGISTERED_METRIC_TRANSFORMATIONS[function_name](**function_kwargs)
+def get_transformation(function_name: str, audio_meta: CompressedAudioFileMeta,
+                       function_kwargs: Dict[Text, Any]) -> MetricTransformation:
+    return _REGISTERED_METRIC_TRANSFORMATIONS[function_name](audio_meta, **function_kwargs)
 
 
 def extract_metric_value(task_id: str, definition: MetricDefinition, transformation: MetricTransformation,
@@ -34,7 +37,9 @@ def _extract_data_stats(numpy_array: numpy.ndarray) -> DataStats:
                      median=_try_calculate_data_stat(numpy.median, numpy_array),
                      mean=_try_calculate_data_stat(numpy.mean, numpy_array),
                      standard_deviation=_try_calculate_data_stat(numpy.std, numpy_array),
-                     variance=_try_calculate_data_stat(numpy.var, numpy_array))
+                     variance=_try_calculate_data_stat(numpy.var, numpy_array),
+                     sum=_try_calculate_data_stat(numpy.sum, numpy_array),
+                     count=len(numpy_array))
 
 
 def _try_calculate_data_stat(calc_callable: Callable[..., float], calc_input: numpy.ndarray) -> Optional[float]:
