@@ -5,7 +5,7 @@ from numpy import array, float32
 
 from audiopyle.lib.models.feature import VampyConstantStepFeature, VampyVariableStepFeature, StepFeature
 from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
-from audiopyle.lib.models.metric import NoneTransformation, SelectRowTransformation, SingleValueTransformation, \
+from audiopyle.lib.models.metric_transform import NoneTransformation, SelectRowTransformation, SingleValueTransformation, \
     SegmentLabelShareRatioTransformation
 
 

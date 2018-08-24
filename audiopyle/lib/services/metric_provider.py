@@ -4,8 +4,9 @@ import numpy
 
 from audiopyle.lib.models.feature import VampyFeatureAbstraction
 from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
-from audiopyle.lib.models.metric import NoneTransformation, SelectRowTransformation, SingleValueTransformation, \
-    MetricTransformation, MetricValue, MetricDefinition, SegmentLabelShareRatioTransformation
+from audiopyle.lib.models.metric import MetricValue, MetricDefinition
+from audiopyle.lib.models.metric_transform import NoneTransformation, SelectRowTransformation, \
+    SingleValueTransformation, SegmentLabelShareRatioTransformation, MetricTransformation
 from audiopyle.lib.models.result import DataStats
 from audiopyle.lib.utils.logger import get_logger
 
