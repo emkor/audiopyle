@@ -4,7 +4,6 @@ import numpy
 
 from audiopyle.lib.abstractions.model import Model
 from audiopyle.lib.models.feature import VampyFeatureAbstraction, VampyConstantStepFeature, VampyVariableStepFeature
-from audiopyle.lib.models.file_meta import CompressedAudioFileMeta
 from audiopyle.lib.models.result import DataStats
 
 
