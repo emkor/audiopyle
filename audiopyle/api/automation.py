@@ -1,9 +1,11 @@
-from logging import Logger
 
 from typing import List, Dict, Any
 
-from audiopyle.lib.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from audiopyle.lib.abstractions.flask_api import FlaskRestApi
+from flask import request
+
+from audiopyle.lib.abstractions.api import AbstractRestApi
+from audiopyle.lib.abstractions.api_model import ApiResponse, HttpStatusCode
+from audiopyle.api.utils import build_request, build_response, log_api_call
 from audiopyle.lib.models.extraction_request import ExtractionRequest
 from audiopyle.lib.models.plugin import VampyPlugin
 from audiopyle.lib.repository.request import RequestRepository
@@ -15,18 +17,18 @@ from audiopyle.worker.engine.tasks import extract_feature
 from audiopyle.worker.task_api import run_task
 
 
-class AutomationApi(FlaskRestApi):
+class AutomationApi(AbstractRestApi):
     def __init__(self, plugin_provider: VampyPluginProvider, plugin_config_provider: PluginConfigProvider,
                  metric_config_provider: MetricConfigProvider, audio_file_store: FileStore,
-                 result_repo: RequestRepository, logger: Logger) -> None:
-        super().__init__(logger)
+                 result_repo: RequestRepository) -> None:
         self.plugin_provider = plugin_provider
         self.plugin_config_provider = plugin_config_provider
         self.metric_config_provider = metric_config_provider
         self.audio_file_store = audio_file_store
         self.result_repo = result_repo
 
-    def _post(self, the_request: ApiRequest) -> ApiResponse:
+    def post(self, **kwargs) -> str:
+        api_request = build_request(request, **kwargs)
         audio_file_names = self.audio_file_store.list()
         plugins = self.plugin_provider.list_vampy_plugins()
         plugin_configs = self.plugin_config_provider.get_all() or {}
@@ -35,15 +37,17 @@ class AutomationApi(FlaskRestApi):
             extraction_requests = self._generate_extraction_requests(audio_file_names, plugins, plugin_configs)
             task_id_to_request = {r.uuid(): r.to_serializable() for r in extraction_requests}
             self.logger.debug("Sending {} extraction requests...".format(task_id_to_request))
-            for task_id, request in task_id_to_request.items():
+            for task_id, task_request in task_id_to_request.items():
                 if self.result_repo.exists_by_id(task_id):
-                    self.logger.warning("Request {} #{} already exist in DB! Omitting...".format(request, task_id))
+                    self.logger.warning("Request {} #{} already exist in DB! Omitting...".format(task_request, task_id))
                 else:
-                    run_task(task=extract_feature, task_id=task_id, extraction_request=request)
-                    self.logger.info("Sent feature extraction request {} with id {}...".format(request, task_id))
-            return ApiResponse(HttpStatusCode.accepted, task_id_to_request)
+                    run_task(task=extract_feature, task_id=task_id, extraction_request=task_request)
+                    self.logger.info("Sent feature extraction request {} with id {}...".format(task_request, task_id))
+            api_response = ApiResponse(HttpStatusCode.accepted, task_id_to_request)
         else:
-            return ApiResponse(status_code=HttpStatusCode.no_content, payload=None)
+            api_response = ApiResponse(status_code=HttpStatusCode.no_content, payload=None)
+        log_api_call(api_request, api_response)
+        return build_response(api_response)
 
     def _generate_extraction_requests(self, audio_file_names: List[str], plugins: List[VampyPlugin],
                                       plugin_configs: Dict[str, Dict[str, Any]]) -> List[ExtractionRequest]:

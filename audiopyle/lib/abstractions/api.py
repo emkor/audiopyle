@@ -1,33 +1,24 @@
-from logging import Logger
+from flask import request
+from flask.views import MethodView
 
-from audiopyle.lib.abstractions.api_model import ApiRequest, ApiResponse, MethodNotSupportedError
-from audiopyle.lib.utils.conversion import seconds_between
-from audiopyle.lib.utils.logger import get_logger
+from audiopyle.api.utils import build_response
+from audiopyle.lib.abstractions.api_model import ApiResponse, HttpStatusCode, HttpMethod
 
 
-class AbstractRestApi(object):
-    def __init__(self, logger: Logger = None) -> None:
-        self.logger = logger or get_logger()
+def prepare_method_not_supported_response(method: HttpMethod) -> str:
+    payload = {"error": "URL {} does not support {} method".format(request.full_path, method.value)}
+    return build_response(ApiResponse(HttpStatusCode.method_not_allowed, payload))
 
-    def _get(self, the_request: ApiRequest) -> ApiResponse:
-        raise MethodNotSupportedError("{} does not support GET at {}".format(self.__class__.__name__, the_request.url))
 
-    def _post(self, the_request: ApiRequest) -> ApiResponse:
-        raise MethodNotSupportedError("{} does not support POST at {}".format(self.__class__.__name__, the_request.url))
+class AbstractRestApi(MethodView):
+    def get(self, **kwargs) -> str:
+        return prepare_method_not_supported_response(HttpMethod.GET)
 
-    def _put(self, the_request: ApiRequest) -> ApiResponse:
-        raise MethodNotSupportedError("{} does not support PUT at {}".format(self.__class__.__name__, the_request.url))
+    def post(self, **kwargs) -> str:
+        return prepare_method_not_supported_response(HttpMethod.GET)
 
-    def _delete(self, the_request: ApiRequest) -> ApiResponse:
-        raise MethodNotSupportedError(
-            "{} does not support DELETE at {}".format(self.__class__.__name__, the_request.url))
+    def put(self, **kwargs) -> str:
+        return prepare_method_not_supported_response(HttpMethod.GET)
 
-    def _log_api_call(self, api_request: ApiRequest, api_response: ApiResponse):
-        serving_time = seconds_between(api_request.creation_time)
-        self.logger.info("{} served {} at {} with {} ({} -> {}) in {}s.".format(self.__class__.__name__,
-                                                                                api_request.method,
-                                                                                api_request.url,
-                                                                                api_response.status_code,
-                                                                                api_request.size_humanized(),
-                                                                                api_response.size_humanized(),
-                                                                                serving_time))
+    def delete(self, **kwargs) -> str:
+        return prepare_method_not_supported_response(HttpMethod.GET)

@@ -59,77 +59,59 @@ def start_app(logger: Logger, host: str, port: int):
                                                      plugin_config_provider=plugin_config_provider,
                                                      metric_config_provider=metric_config_provider,
                                                      audio_file_store=audio_file_store,
-                                                     result_repo=request_repo,
-                                                     logger=logger))
+                                                     result_repo=request_repo))
 
     app.add_url_rule("/request",
                      view_func=RequestListApi.as_view('request_list_api',
-                                                      request_repo=request_repo,
-                                                      logger=logger))
+                                                      request_repo=request_repo))
 
     app.add_url_rule("/request/<task_id>",
                      view_func=RequestDetailsApi.as_view('request_detail_api',
-                                                         request_repo=request_repo,
-                                                         logger=logger))
+                                                         request_repo=request_repo))
     app.add_url_rule("/request/<task_id>/status",
-                     view_func=RequestStatusApi.as_view('request_status_api',
-                                                        logger=logger))
+                     view_func=RequestStatusApi.as_view('request_status_api'))
     app.add_url_rule("/request/<task_id>/data",
                      view_func=ResultDataApi.as_view('result_data_detail_api',
-                                                     feature_data_repo=feature_data_repo,
-                                                     logger=logger))
+                                                     feature_data_repo=feature_data_repo))
     app.add_url_rule("/request/<task_id>/meta",
                      view_func=ResultMetaApi.as_view('result_meta_detail_api',
-                                                     feature_meta_repo=feature_meta_repo,
-                                                     logger=logger))
+                                                     feature_meta_repo=feature_meta_repo))
     app.add_url_rule("/request/<task_id>/stats",
                      view_func=ResultStatsApi.as_view('result_stats_detail_api',
-                                                      stats_repo=result_stats_repo,
-                                                      logger=logger))
+                                                      stats_repo=result_stats_repo))
     app.add_url_rule("/plugin/<vendor>/<name>/<output>",
                      view_func=PluginDetailApi.as_view('plugin_detail_api',
-                                                       plugin_provider=plugin_provider,
-                                                       logger=logger))
+                                                       plugin_provider=plugin_provider))
     app.add_url_rule("/plugin",
                      view_func=PluginListApi.as_view('plugin_list_api',
-                                                     plugin_provider=plugin_provider,
-                                                     logger=logger))
+                                                     plugin_provider=plugin_provider, ))
     app.add_url_rule("/metric-def",
                      view_func=MetricDefinitionListApi.as_view('metric_definition_list_api',
-                                                               metric_repo=metric_def_repo,
-                                                               logger=logger))
+                                                               metric_repo=metric_def_repo))
     app.add_url_rule("/metric-def/<id>",
                      view_func=MetricDefinitionDetailsApi.as_view('metric_definition_details_api',
-                                                                  metric_repo=metric_def_repo,
-                                                                  logger=logger))
+                                                                  metric_repo=metric_def_repo))
     app.add_url_rule("/metric-val",
                      view_func=MetricValueListApi.as_view('metric_value_list_api',
-                                                          metric_repo=metric_value_repo,
-                                                          logger=logger))
+                                                          metric_repo=metric_value_repo))
     app.add_url_rule("/metric-val/<id>",
                      view_func=MetricValueDetailsApi.as_view('metric_value_details_api',
-                                                             metric_repo=metric_value_repo,
-                                                             logger=logger))
+                                                             metric_repo=metric_value_repo))
     app.add_url_rule("/config/plugin",
                      view_func=PluginActiveConfigApi.as_view('plugin_config_api',
-                                                             plugin_config_provider=plugin_config_provider,
-                                                             logger=logger))
+                                                             plugin_config_provider=plugin_config_provider))
     app.add_url_rule("/config/metric",
                      view_func=MetricActiveConfigApi.as_view('metric_config_api',
-                                                             metric_config_provider=metric_config_provider,
-                                                             logger=logger))
+                                                             metric_config_provider=metric_config_provider))
     app.add_url_rule("/audio",
                      view_func=AudioFileListApi.as_view('audio_list_api',
-                                                        file_store=audio_file_store,
-                                                        logger=logger))
+                                                        file_store=audio_file_store))
     app.add_url_rule("/audio/<file_name>/tag",
-                     view_func=AudioTagApi.as_view('audio_tag_api',
-                                                   logger=logger))
+                     view_func=AudioTagApi.as_view('audio_tag_api'))
     app.add_url_rule("/audio/<file_name>",
                      view_func=AudioFileDetailApi.as_view('audio_detail_api',
-                                                          file_store=audio_file_store,
-                                                          logger=logger))
-    app.add_url_rule("/", view_func=CoordinatorApi.as_view('coordinator_api', logger=logger))
+                                                          file_store=audio_file_store))
+    app.add_url_rule("/", view_func=CoordinatorApi.as_view('coordinator_api'))
     logger.info("Starting Coordinator API on {} port!".format(port))
     logging.getLogger('werkzeug').setLevel(logging.WARNING)
     WSGIServer((host, port), app).serve_forever()
