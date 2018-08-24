@@ -15,10 +15,10 @@ class AbstractRestApi(MethodView):
         return prepare_method_not_supported_response(HttpMethod.GET)
 
     def post(self, **kwargs) -> str:
-        return prepare_method_not_supported_response(HttpMethod.GET)
+        return prepare_method_not_supported_response(HttpMethod.POST)
 
     def put(self, **kwargs) -> str:
-        return prepare_method_not_supported_response(HttpMethod.GET)
+        return prepare_method_not_supported_response(HttpMethod.PUT)
 
     def delete(self, **kwargs) -> str:
-        return prepare_method_not_supported_response(HttpMethod.GET)
+        return prepare_method_not_supported_response(HttpMethod.DELETE)

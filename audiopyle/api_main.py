@@ -3,6 +3,7 @@
 import logging
 from logging import Logger
 
+from flasgger import Swagger
 from flask import Flask
 from gevent.pywsgi import WSGIServer
 
@@ -34,6 +35,7 @@ from audiopyle.api.result import ResultDataApi, ResultMetaApi, ResultStatsApi
 from audiopyle.api.request import RequestListApi, RequestDetailsApi, RequestStatusApi
 
 app = Flask(__name__)
+swagger = Swagger(app)
 
 
 def main():
