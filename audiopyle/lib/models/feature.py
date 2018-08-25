@@ -1,4 +1,4 @@
-from typing import Text, List, Tuple, Optional, Dict, Any
+from typing import List, Tuple, Optional, Dict, Any
 
 import numpy
 
@@ -59,7 +59,7 @@ class VampyConstantStepFeature(VampyFeatureAbstraction):
         return {"task_id": self.task_id, "matrix": self._matrix.tolist(), "time_step": self._time_step}
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[str, Any]):
         _matrix = numpy.asanyarray(serialized.pop("matrix"))
         _time_step = serialized.pop("time_step")
         _task_id = serialized.pop("task_id")
@@ -68,7 +68,7 @@ class VampyConstantStepFeature(VampyFeatureAbstraction):
 
 
 class StepFeature(Model):
-    def __init__(self, timestamp: float, values: Optional[numpy.ndarray], label: Optional[Text] = None) -> None:
+    def __init__(self, timestamp: float, values: Optional[numpy.ndarray], label: Optional[str] = None) -> None:
         self.timestamp = timestamp
         self.values = values
         self.label = label
@@ -82,7 +82,7 @@ class StepFeature(Model):
         return super_serialized
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[str, Any]):
         values = serialized.pop("values")
         if values:
             serialized.update({"values": numpy.asanyarray(values)})
@@ -127,7 +127,7 @@ class VampyVariableStepFeature(VampyFeatureAbstraction):
         return {"task_id": self.task_id, "value_list": [s.to_serializable() for s in self.step_features]}
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[str, Any]):
         _task_id = serialized.pop("task_id")
         step_features_serialized = numpy.asanyarray(serialized.pop("value_list"))
         step_features = [StepFeature.from_serializable(sf) for sf in step_features_serialized]

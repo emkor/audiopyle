@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Text, Dict, Any
+from typing import Dict, Any
 
 from audiopyle.lib.abstractions.model import Model
 from audiopyle.lib.utils.conversion import to_kilo, to_mega, utc_datetime_to_iso_format, utc_iso_format_to_datetime
@@ -7,7 +7,7 @@ from audiopyle.lib.utils.file_system import extract_extension
 
 
 class FileMeta(Model):
-    def __init__(self, file_name: Text, size: int, last_access: datetime, last_modification: datetime,
+    def __init__(self, file_name: str, size: int, last_access: datetime, last_modification: datetime,
                  created_on: datetime) -> None:
         self.file_name = file_name
         self.created_on = created_on
@@ -24,7 +24,7 @@ class FileMeta(Model):
         return to_mega(self.size)
 
     @property
-    def extension(self) -> Text:
+    def extension(self) -> str:
         return extract_extension(self.file_name)
 
     def to_serializable(self):
@@ -35,7 +35,7 @@ class FileMeta(Model):
         return base_serialized
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[str, Any]):
         serialized.update({
             "created_on": utc_iso_format_to_datetime(serialized["created_on"]),
             "last_modification": utc_iso_format_to_datetime(serialized["last_modification"]),
@@ -45,7 +45,7 @@ class FileMeta(Model):
 
 
 class AudioFileMeta(Model):
-    def __init__(self, file_name: Text, file_size_bytes: int, channels_count: int, sample_rate: int) -> None:
+    def __init__(self, file_name: str, file_size_bytes: int, channels_count: int, sample_rate: int) -> None:
         """Represents metadata of a raw audio file"""
         self.file_name = file_name
         self.channels_count = channels_count
@@ -62,7 +62,7 @@ class AudioFileMeta(Model):
 
 
 class CompressedAudioFileMeta(AudioFileMeta):
-    def __init__(self, file_name: Text, file_size_bytes: int, channels_count: int, sample_rate: int,
+    def __init__(self, file_name: str, file_size_bytes: int, channels_count: int, sample_rate: int,
                  length_sec: float, bit_rate_kbps: float) -> None:
         super().__init__(file_name, file_size_bytes, channels_count, sample_rate)
         self._length_sec = length_sec

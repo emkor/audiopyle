@@ -1,10 +1,10 @@
-from typing import Text, Any
+from typing import Any
 from uuid import uuid5, UUID
 
 SEED_TEXT = UUID(int=1248789574)
 
 
-def generate_uuid(content: Any) -> Text:
+def generate_uuid(content: Any) -> str:
     """
     :type content: object
     :rtype: str

@@ -1,7 +1,7 @@
 import calendar
 import math
 from datetime import datetime
-from typing import Text, Any, Type, List, Union
+from typing import Any, Type, List, Union
 
 from pympler.asizeof import asizeof
 
@@ -54,17 +54,17 @@ def utc_timestamp_to_datetime(timestamp: float) -> datetime:
     return datetime.utcfromtimestamp(round(timestamp))
 
 
-def utc_datetime_to_iso_format(dt: datetime) -> Text:
+def utc_datetime_to_iso_format(dt: datetime) -> str:
     """Converts datetime (UTC) to ISO 8601 format"""
     return dt.strftime(ISO_8601_TIME_FORMAT)
 
 
-def utc_iso_format_to_datetime(iso_dt: Text) -> datetime:
+def utc_iso_format_to_datetime(iso_dt: str) -> datetime:
     """Converts ISO 8601 formatted UTC date string to datetime"""
     return datetime.strptime(iso_dt, ISO_8601_TIME_FORMAT)
 
 
-def normalize(text: Text) -> Text:
+def normalize(text: str) -> str:
     return text.lower().strip()
 
 
@@ -86,7 +86,7 @@ def first_if_collection(maybe_collection: Union[List[Any], Any]) -> Any:
     return maybe_collection[0] if isinstance(maybe_collection, List) else maybe_collection
 
 
-def object_size_humanized(any_object: Any) -> Text:
+def object_size_humanized(any_object: Any) -> str:
     return _sizeof_fmt(object_size(any_object))
 
 
@@ -94,7 +94,7 @@ def object_size(any_object: Any) -> int:
     return asizeof(any_object)
 
 
-def _sizeof_fmt(num: float, suffix: Text = 'B') -> Text:
+def _sizeof_fmt(num: float, suffix: str = 'B') -> str:
     for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
         if abs(num) < 1024.0:
             return "%3.1f %s%s" % (num, unit, suffix)

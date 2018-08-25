@@ -1,4 +1,4 @@
-from typing import Text, Any, Dict
+from typing import Any, Dict
 
 from enum import Enum
 
@@ -19,25 +19,25 @@ class CompressedFeatureDTO(Model):
         self.data = data
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]) -> Any:
+    def from_serializable(cls, serialized: Dict[str, Any]) -> Any:
         compression_object = CompressionType(serialized["compression"])
         data_bytes = serialized["data"].encode(ENCODING_UTF_8)
         serialized.update({"compression": compression_object,
                            "data": data_bytes})
         return CompressedFeatureDTO(**serialized)
 
-    def to_serializable(self) -> Dict[Text, Any]:
+    def to_serializable(self) -> Dict[str, Any]:
         super_serialized = super(CompressedFeatureDTO, self).to_serializable()
         super_serialized.update({"compression": self.compression.value})
         super_serialized.update({"data": self.data.decode(ENCODING_UTF_8)})
         return super_serialized
 
-    def __str__(self) -> Text:
+    def __str__(self) -> str:
         return "<{}: {} {}>".format(self.__class__.__name__,
                                     {"task_id": self.task_id, "compression": self.compression},
                                     self.size_humanized())
 
-    def __repr__(self) -> Text:
+    def __repr__(self) -> str:
         return self.__str__()
 
     def __eq__(self, other: Any) -> bool:

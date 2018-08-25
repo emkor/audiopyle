@@ -4,40 +4,9 @@ from audiopyle.lib.abstractions.api_model import ApiRequest, ApiResponse, HttpSt
 from audiopyle.lib.abstractions.flask_api import FlaskRestApi
 from audiopyle.lib.db.exception import EntityNotFound
 from audiopyle.lib.repository.feature_data import FeatureDataRepository
-from audiopyle.lib.repository.request import ResultRepository
+from audiopyle.lib.repository.feature_meta import FeatureMetaRepository
 from audiopyle.lib.repository.stats import ResultStatsRepository
 from audiopyle.lib.services.compression import from_compressed_feature
-
-
-class ResultListApi(FlaskRestApi):
-    def __init__(self, result_repo: ResultRepository, logger: Logger) -> None:
-        super().__init__(logger)
-        self.result_repo = result_repo
-        self.logger = logger
-
-    def _get(self, the_request: ApiRequest) -> ApiResponse:
-        all_results = self.result_repo.get_all_keys()  # type: ignore
-        return ApiResponse(HttpStatusCode.ok, all_results)
-
-
-class ResultDetailsApi(FlaskRestApi):
-    def __init__(self, result_repo: ResultRepository, logger: Logger) -> None:
-        super().__init__(logger)
-        self.result_repo = result_repo
-        self.logger = logger
-
-    def _get(self, the_request: ApiRequest) -> ApiResponse:
-        try:
-            task_id = the_request.query_params["task_id"]
-        except Exception:
-            return ApiResponse(HttpStatusCode.bad_request,
-                               payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
-        data_model = self.result_repo.get_by_id(task_id)
-        if data_model is not None:
-            return ApiResponse(HttpStatusCode.ok, data_model.to_serializable())
-        else:
-            return ApiResponse(HttpStatusCode.not_found,
-                               payload={"error": "Could not find result with id: {}".format(task_id)})
 
 
 class ResultDataApi(FlaskRestApi):
@@ -75,7 +44,7 @@ class ResultDataApi(FlaskRestApi):
 
 
 class ResultMetaApi(FlaskRestApi):
-    def __init__(self, feature_meta_repo: FeatureDataRepository, logger: Logger) -> None:
+    def __init__(self, feature_meta_repo: FeatureMetaRepository, logger: Logger) -> None:
         super().__init__(logger)
         self.feature_meta_repo = feature_meta_repo
         self.logger = logger
@@ -121,7 +90,7 @@ class ResultStatsApi(FlaskRestApi):
                 return ApiResponse(HttpStatusCode.ok, data_entity.to_serializable())
             else:
                 return ApiResponse(HttpStatusCode.not_found,
-                            payload={"error": "Could not find stats with id: {}".format(task_id)})
+                                   payload={"error": "Could not find stats with id: {}".format(task_id)})
         except KeyError:
             return ApiResponse(HttpStatusCode.bad_request,
                                payload={"error": "Could not find task_id parameter in URL: {}".format(the_request.url)})
