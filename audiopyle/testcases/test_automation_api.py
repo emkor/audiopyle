@@ -9,7 +9,7 @@ from audiopyle.testcases.utils import get_api_host, get_api_port
 
 class AutomationApiTest(TestCase):
     def setUp(self):
-        self.automation_api_url = "http://{}:{}/extraction/automation".format(get_api_host(), get_api_port())
+        self.automation_api_url = "http://{}:{}/request/automation".format(get_api_host(), get_api_port())
 
     def test_should_return_method_not_allowed_on_get(self):
         response = requests.get(self.automation_api_url)

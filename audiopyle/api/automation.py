@@ -6,8 +6,7 @@ from audiopyle.lib.abstractions.api_model import ApiRequest, ApiResponse, HttpSt
 from audiopyle.lib.abstractions.flask_api import FlaskRestApi
 from audiopyle.lib.models.extraction_request import ExtractionRequest
 from audiopyle.lib.models.plugin import VampyPlugin
-from audiopyle.lib.repository.request import ResultRepository
-from audiopyle.lib.services.audio_tag_providing import ACCEPTED_EXTENSIONS
+from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.services.metric_config_provider import MetricConfigProvider
 from audiopyle.lib.services.plugin_config_provider import PluginConfigProvider
 from audiopyle.lib.services.plugin_providing import VampyPluginProvider
@@ -19,7 +18,7 @@ from audiopyle.worker.task_api import run_task
 class AutomationApi(FlaskRestApi):
     def __init__(self, plugin_provider: VampyPluginProvider, plugin_config_provider: PluginConfigProvider,
                  metric_config_provider: MetricConfigProvider, audio_file_store: FileStore,
-                 result_repo: ResultRepository, logger: Logger) -> None:
+                 result_repo: RequestRepository, logger: Logger) -> None:
         super().__init__(logger)
         self.plugin_provider = plugin_provider
         self.plugin_config_provider = plugin_config_provider
@@ -55,6 +54,6 @@ class AutomationApi(FlaskRestApi):
                 extraction_requests.append(
                     ExtractionRequest(audio_file_name=audio_file_name,
                                       plugin_full_key=plugin.full_key,
-                                      plugin_config=plugin_configs.get(plugin.full_key, {}),
-                                      metric_config=plugin_metric_config))
+                                      plugin_config=plugin_configs.get(plugin.full_key, None),
+                                      metric_config=plugin_metric_config or None))
         return extraction_requests

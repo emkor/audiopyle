@@ -21,7 +21,7 @@ class AnalysisResultDataModelTest(unittest.TestCase):
         assert_that(deserialized).is_not_none().is_equal_to(self.result_data_example)
 
 
-class AnalysisResultModelTest(unittest.TestCase):
+class AnalysisRequestModelTest(unittest.TestCase):
     def setUp(self):
         self.audio_meta_example = CompressedAudioFileMeta("some_file.mp3", 1024 * 1024 * 2, 1, 44100, 45., 128.)
         self.id3_tag_example = Id3Tag(artist="Unknown Artist", title="Unknown Title", album="Unknown Album",
@@ -30,10 +30,10 @@ class AnalysisResultModelTest(unittest.TestCase):
                                                 library_file_name="/root/vamp/vamp-example-plugins.so")
         self.task_id = "fa3b5d8c-b760-49e0-b8b5-7ce0737621d8"
         self.plugin_config_example = VampyPluginParams(block_size=2048, step_size=512)
-        self.analysis_result_example = AnalysisRequest(self.task_id, self.audio_meta_example, self.id3_tag_example,
-                                                       self.example_vampy_plugin, self.plugin_config_example)
+        self.analysis_request_example = AnalysisRequest(self.task_id, self.audio_meta_example, self.id3_tag_example,
+                                                        self.example_vampy_plugin, self.plugin_config_example)
 
     def test_should_serialize_and_deserialize_analysis_result_data_model(self):
-        serialized = self.analysis_result_example.to_serializable()
+        serialized = self.analysis_request_example.to_serializable()
         deserialized = AnalysisRequest.from_serializable(serialized)
-        assert_that(deserialized).is_not_none().is_equal_to(self.analysis_result_example)
+        assert_that(deserialized).is_not_none().is_equal_to(self.analysis_request_example)

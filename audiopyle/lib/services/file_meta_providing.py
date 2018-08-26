@@ -1,4 +1,4 @@
-from typing import Text, Optional
+from typing import Optional
 
 import os
 from mutagen.mp3 import MP3
@@ -13,7 +13,7 @@ from audiopyle.lib.utils.logger import get_logger
 logger = get_logger()
 
 
-def read_file_meta(file_name: Text) -> Optional[FileMeta]:
+def read_file_meta(file_name: str) -> Optional[FileMeta]:
     if file_exists(file_name):
         file_stats = os.stat(file_name)
         last_access_utc = utc_timestamp_to_datetime(file_stats.st_atime)
@@ -26,7 +26,7 @@ def read_file_meta(file_name: Text) -> Optional[FileMeta]:
         return None
 
 
-def read_audio_file_meta(absolute_path: Text) -> Optional[CompressedAudioFileMeta]:
+def read_audio_file_meta(absolute_path: str) -> Optional[CompressedAudioFileMeta]:
     if file_exists(absolute_path):
         audio_file = None
         audio_file_size = file_size_bytes(absolute_path)

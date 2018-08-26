@@ -1,4 +1,4 @@
-from typing import Dict, Text, Any
+from typing import Dict, Any
 
 from audiopyle.lib.abstractions.model import Model
 from audiopyle.lib.models.result import DataStats
@@ -25,7 +25,7 @@ class MetricValue(Model):
         return base_serialized
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[str, Any]):
         stats_object = DataStats.from_serializable(serialized["stats"])
         definition_object = MetricDefinition.from_serializable(serialized["definition"])
         serialized.update({"stats": stats_object,

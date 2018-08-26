@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from typing import Text, Any, Dict, Optional
+from typing import Any, Dict, Optional
 
 from audiopyle.lib.abstractions.model import Model
 
@@ -26,32 +26,32 @@ class HttpMethod(Enum):
 
 
 class _ApiError(Exception):
-    def __init__(self, message: Text, status_code: HttpStatusCode) -> None:
+    def __init__(self, message: str, status_code: HttpStatusCode) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.message = message
 
 
 class MethodNotSupportedError(_ApiError):
-    def __init__(self, message: Text) -> None:
+    def __init__(self, message: str) -> None:
         super().__init__(message, HttpStatusCode.method_not_allowed)
 
 
 class ClientError(_ApiError):
-    def __init__(self, message: Text, status_code: HttpStatusCode = HttpStatusCode.bad_request) -> None:
+    def __init__(self, message: str, status_code: HttpStatusCode = HttpStatusCode.bad_request) -> None:
         self.status_code = status_code
         self.message = message
 
 
 class ServerError(_ApiError):
-    def __init__(self, message: Text, status_code: HttpStatusCode = HttpStatusCode.internal_server_error) -> None:
+    def __init__(self, message: str, status_code: HttpStatusCode = HttpStatusCode.internal_server_error) -> None:
         self.status_code = status_code
         self.message = message
 
 
 class ApiRequest(Model):
-    def __init__(self, url: Text, method: HttpMethod, query_params: Dict[Text, Any],
-                 headers: Dict[Text, Any], payload: Dict[Text, Any]) -> None:
+    def __init__(self, url: str, method: HttpMethod, query_params: Dict[str, Any],
+                 headers: Dict[str, Any], payload: Dict[str, Any]) -> None:
         self.method = method
         self.url = url
         self.query_params = query_params
@@ -62,7 +62,7 @@ class ApiRequest(Model):
 
 class ApiResponse(Model):
     def __init__(self, status_code: HttpStatusCode, payload: Optional[Any],
-                 headers: Optional[Dict[Text, Any]] = None) -> None:
+                 headers: Optional[Dict[str, Any]] = None) -> None:
         self.status_code = status_code
         self.payload = payload
         self.headers = headers

@@ -1,4 +1,4 @@
-from typing import Dict, Text, Any, Callable, Optional
+from typing import Dict, Any, Callable, Optional
 
 import numpy
 
@@ -20,8 +20,7 @@ _REGISTERED_METRIC_TRANSFORMATIONS = {
 }
 
 
-def get_transformation(function_name: str, audio_meta: CompressedAudioFileMeta,
-                       function_kwargs: Dict[Text, Any]) -> MetricTransformation:
+def get_transformation(function_name: str, audio_meta: CompressedAudioFileMeta,function_kwargs: Dict[str, Any]) -> MetricTransformation:
     return _REGISTERED_METRIC_TRANSFORMATIONS[function_name](audio_meta, **function_kwargs)
 
 

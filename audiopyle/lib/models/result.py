@@ -1,4 +1,4 @@
-from typing import Text, Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 from enum import Enum
 
@@ -42,7 +42,7 @@ class AnalysisStats(Model):
 
 
 class FeatureMeta(Model):
-    def __init__(self, task_id: Text, feature_type: FeatureType, feature_size: int,
+    def __init__(self, task_id: str, feature_type: FeatureType, feature_size: int,
                  data_shape: Tuple[int, int, int]) -> None:
         self.task_id = task_id
         self.feature_type = feature_type
@@ -55,14 +55,14 @@ class FeatureMeta(Model):
         return base_serialized
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[str, Any]):
         type_enum_object = FeatureType(serialized["feature_type"])
         serialized.update({"feature_type": type_enum_object})
         return FeatureMeta(**serialized)
 
 
 class AnalysisRequest(Model):
-    def __init__(self, task_id: Text, audio_meta: CompressedAudioFileMeta, id3_tag: Optional[Id3Tag],
+    def __init__(self, task_id: str, audio_meta: CompressedAudioFileMeta, id3_tag: Optional[Id3Tag],
                  plugin: VampyPlugin, plugin_config: VampyPluginParams) -> None:
         self.task_id = task_id
         self.audio_meta = audio_meta
@@ -79,7 +79,7 @@ class AnalysisRequest(Model):
         return base_serialized
 
     @classmethod
-    def from_serializable(cls, serialized: Dict[Text, Any]):
+    def from_serializable(cls, serialized: Dict[str, Any]):
         audio_meta_object = CompressedAudioFileMeta.from_serializable(serialized["audio_meta"])
         id3_tag_object = Id3Tag.from_serializable(serialized["id3_tag"])
         plugin_object = VampyPlugin.from_serializable(serialized["plugin"])
