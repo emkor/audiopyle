@@ -11,6 +11,16 @@ class AudioFileListApi(AbstractRestApi):
         self.file_store = file_store
 
     def get(self, **kwargs) -> str:
+        """Returns list of available audio file names
+        ---
+        responses:
+            200:
+                description: A list of file names
+                schema:
+                    type: array
+                    items:
+                        type: string
+        """
         api_request = build_request(request, **kwargs)
         api_response = ApiResponse(HttpStatusCode.ok, self.file_store.list())
         log_api_call(api_request, api_response)
