@@ -74,7 +74,7 @@ class FeatureExtractionService(object):
         feature_object, extraction_time = self._do_extraction(task_id, plugin, audio_meta, wav_data, plugin_config)
         feature_dto, compression_time = self._compress_feature(feature_object, task_id)
         feature_meta, feature_meta_build_time = self._build_feature_meta(feature_object, task_id)
-        metric_values, metrics_extraction_time = self._extract_metrics(task_id, request.plugin_full_key,
+        metric_values, metrics_extraction_time = self._extract_metrics(task_id, audio_meta, request.plugin_full_key,
                                                                        request.metric_config, feature_object)
 
         self.logger.debug("Extracted features for {}; storing...".format(request))
@@ -147,22 +147,23 @@ class FeatureExtractionService(object):
             raise ValueError(
                 "Either file meta, audio meta or tag for file {} is empty!".format(audio_file_absolute_path))
 
-    def _extract_metrics(self, task_id: str, plugin_key: str, metric_config: Optional[Dict[str, Any]],
+    def _extract_metrics(self, task_id: str, audio_meta: CompressedAudioFileMeta, plugin_key: str, metric_config: Optional[Dict[str, Any]],
                          feature: VampyFeatureAbstraction) -> Tuple[List[MetricValue], float]:
         extraction_start_time = datetime.utcnow()
         metric_values = []
         if metric_config is not None:
             for metric_name, metric_config in metric_config.items():
-                value = self._calculate_metric(feature, metric_config, metric_name, plugin_key, task_id)  # type: ignore
+                value = self._calculate_metric(feature, metric_config, metric_name, plugin_key, task_id, audio_meta)  # type: ignore
                 metric_values.append(value)
         metric_extraction_time = seconds_between(extraction_start_time)
         return metric_values, metric_extraction_time
 
     def _calculate_metric(self, feature: VampyFeatureAbstraction, metric_config: Dict[str, Any], metric_name: str,
-                          plugin_key: str, task_id: str) -> MetricValue:
+                          plugin_key: str, task_id: str, audio_meta) -> MetricValue:
         transformation_function_name = metric_config["transformation"]["name"]
         transformation_function_params = metric_config["transformation"].get("kwargs", {})
         transformation_function = get_transformation(transformation_function_name,
+                                                     audio_meta,
                                                      transformation_function_params)
         definition = MetricDefinition(name=metric_name, plugin_key=plugin_key,
                                       function=transformation_function_name,

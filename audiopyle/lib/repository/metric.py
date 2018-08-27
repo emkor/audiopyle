@@ -46,7 +46,8 @@ class MetricValueRepository(DbRepository):
         return Metric(task_id=obj.task_id, definition_id=definition_id,
                       minimum=obj.stats.minimum, maximum=obj.stats.maximum,
                       median=obj.stats.median, mean=obj.stats.mean,
-                      standard_deviation=obj.stats.standard_deviation, variance=obj.stats.variance)
+                      standard_deviation=obj.stats.standard_deviation, variance=obj.stats.variance,
+                      sum=obj.stats.sum, count=obj.stats.count)
 
     def _map_to_object(self, entity: Metric) -> MetricValue:
         definition_object = self.definition_repository.get_by_id(entity.definition_id)
@@ -55,7 +56,8 @@ class MetricValueRepository(DbRepository):
                                                                                                 entity.task_id))
         data_stats = DataStats(minimum=entity.minimum, maximum=entity.maximum,
                                median=entity.median, mean=entity.mean,
-                               standard_deviation=entity.standard_deviation, variance=entity.variance)
+                               standard_deviation=entity.standard_deviation, variance=entity.variance,
+                               sum=entity.sum, count=entity.count)
         return MetricValue(task_id=entity.task_id, definition=definition_object, stats=data_stats)
 
     def get_id_by_model(self, model_object: MetricValue) -> Optional[int]:

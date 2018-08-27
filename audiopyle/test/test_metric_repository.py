@@ -81,7 +81,7 @@ class MetricValueDbRepositoryTest(unittest.TestCase):
                                                           function="select_row", kwargs={"row_index": 3})
         self.metric_value_1 = MetricValue("0f961f20-b036-5740-b526-013523dd88c7", self.metric_definition_example,
                                           DataStats(minimum=0.03276, maximum=0.44241, median=0.22399, mean=0.21448,
-                                                    standard_deviation=0.12923, variance=0.01670))
+                                                    standard_deviation=0.12923, variance=0.01670, sum=10.1, count=8))
         self.plugin_example = VampyPlugin("vamp-example-plugins", "amplitudefollower", "amplitude", "")
         self.plugin_repo_mock = Mock(VampyPluginRepository)
         self.definition_repo_mock = Mock(MetricDefinitionRepository)

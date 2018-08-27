@@ -137,5 +137,7 @@ class Metric(ENTITY_BASE):  # type: ignore
     mean = Column(Float, index=False, nullable=True)
     standard_deviation = Column(Float, index=False, nullable=True)
     variance = Column(Float, index=False, nullable=True)
+    sum = Column(Float, index=False, nullable=True)
+    count = Column(Integer, index=False, nullable=True)
 
     __table_args__ = (UniqueConstraint('task_id', 'definition_id', name='unique_metric'),)
