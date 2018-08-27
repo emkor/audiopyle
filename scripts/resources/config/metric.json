@@ -178,5 +178,23 @@
         "row_index": 6
       }
     }
+  },
+  "qm_major_mode_share_ratio": {
+    "plugin": "qm-vamp-plugins:qm-keydetector:mode",
+    "transformation": {
+      "name": "segment_share_ratio",
+      "kwargs": {
+        "label": "Major"
+      }
+    }
+  },
+  "qm_minor_mode_share_ratio": {
+    "plugin": "qm-vamp-plugins:qm-keydetector:mode",
+    "transformation": {
+      "name": "segment_share_ratio",
+      "kwargs": {
+        "label": "Minor"
+      }
+    }
   }
 }

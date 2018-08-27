@@ -34,7 +34,7 @@ class MetricDefinitionModelTest(unittest.TestCase):
 class MetricValueModelTest(unittest.TestCase):
     def setUp(self):
         self.data_stats = DataStats(minimum=0.03276, maximum=0.44241, median=0.22399, mean=0.21448,
-                                    standard_deviation=0.12923, variance=0.01670)
+                                    standard_deviation=0.12923, variance=0.01670, sum=3.2, count=4)
         self.metric_definition = MetricDefinition(name="my_metric",
                                                   plugin_key="vamp-example-plugins:amplitudefollower:amplitude",
                                                   function="none", kwargs={"param1": 2.0})
