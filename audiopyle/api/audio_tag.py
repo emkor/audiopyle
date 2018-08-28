@@ -9,53 +9,6 @@ from audiopyle.lib.utils.file_system import AUDIO_FILES_DIR, concatenate_paths, 
 
 class AudioTagApi(AbstractRestApi):
     def get(self, **kwargs) -> str:
-        """Returns given audio file tag
-        ---
-        definitions:
-            AudioTag:
-                type: object
-                properties:
-                    artist:
-                        type: "string"
-                    album:
-                        type: "string"
-                    title:
-                        type: "string"
-                    genre:
-                        type: "string"
-                    track:
-                        description: "Track number on an album"
-                        type: "integer"
-                    date:
-                        description: "Year of album release"
-                        type: "integer"
-        parameters:
-            -   name: "file_name"
-                in: path
-                required: "true"
-                type: "string"
-        responses:
-            200:
-                description: Id3 tag of given audio file
-                schema:
-                    $ref: '#/definitions/AudioTag'
-                examples:
-                    application/json: |-
-                        {
-                            album: "Unknown Album",
-                            artist: "Unknown Artist",
-                            date: 2017,
-                            genre: "Unknown Genre",
-                            title: "Unknown Title",
-                            track: 1
-                        }
-            204:
-                description: Given audio file does not have Id3 tags
-            400:
-                description: file_name parameter was not provided in URL
-            404:
-                description: Can not find a file with given name
-        """
         api_request = build_request(request, **kwargs)
         audio_file_name = api_request.query_params.get("file_name")
         if audio_file_name is not None:

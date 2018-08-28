@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
+import os
 from logging import Logger
 
 from flasgger import Swagger
@@ -35,7 +36,13 @@ from audiopyle.api.result import ResultDataApi, ResultMetaApi, ResultStatsApi
 from audiopyle.api.request import RequestListApi, RequestDetailsApi, RequestStatusApi
 
 app = Flask(__name__)
-swagger = Swagger(app)
+
+app.config['SWAGGER'] = {
+    'title': 'Audiopyle API',
+    'uiversion': 2
+}
+docs_dir_path, _ = os.path.split(__file__)
+swagger = Swagger(app, template_file=os.path.join(docs_dir_path, "open_api_docs.yml"))
 
 
 def main():
