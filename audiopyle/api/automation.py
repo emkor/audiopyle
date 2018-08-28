@@ -1,4 +1,3 @@
-
 from typing import List, Dict, Any
 
 from flask import request
@@ -28,6 +27,45 @@ class AutomationApi(AbstractRestApi):
         self.result_repo = result_repo
 
     def post(self, **kwargs) -> str:
+        """Creates Cartesian product of requests from list of audio files and available (non-blacklisted) VAMP plugins
+        ---
+        definitions:
+            GeneratedRequests:
+                type: array
+                    items:
+                        type: object
+                        properties:
+                            uuid:
+                                type: "string"
+                            audio_file_name:
+                                type: "string"
+                            plugin_full_key:
+                                type: "string"
+                            plugin_config:
+                                type: "object"
+                                nullable: true
+                            metric_config:
+                                type: "object"
+                                nullable: true
+        responses:
+            202:
+                description: Returns details of generated requests
+                schema:
+                    $ref: '#/definitions/GeneratedRequests'
+                examples:
+                    application/json: |-
+                        [
+                            {
+                                "audio_file_name": "102bpm_drum_loop.flac",
+                                "metric_config": null,
+                                "plugin_config": null,
+                                "plugin_full_key": "vamp-example-plugins:spectralcentroid:logcentroid",
+                                "uuid": "0b04c1b3-b366-5145-9248-6cb118d3be99"
+                            }
+                        ]
+            412:
+                description: Audio files directory or VAMP plugins directory is empty; could not generate requests
+        """
         api_request = build_request(request, **kwargs)
         audio_file_names = self.audio_file_store.list()
         plugins = self.plugin_provider.list_vampy_plugins()
@@ -35,17 +73,12 @@ class AutomationApi(AbstractRestApi):
 
         if audio_file_names and plugins:
             extraction_requests = self._generate_extraction_requests(audio_file_names, plugins, plugin_configs)
-            task_id_to_request = {r.uuid(): r.to_serializable() for r in extraction_requests}
-            self.logger.debug("Sending {} extraction requests...".format(task_id_to_request))
-            for task_id, task_request in task_id_to_request.items():
-                if self.result_repo.exists_by_id(task_id):
-                    self.logger.warning("Request {} #{} already exist in DB! Omitting...".format(task_request, task_id))
-                else:
-                    run_task(task=extract_feature, task_id=task_id, extraction_request=task_request)
-                    self.logger.info("Sent feature extraction request {} with id {}...".format(task_request, task_id))
-            api_response = ApiResponse(HttpStatusCode.accepted, task_id_to_request)
+            for task_request in extraction_requests:
+                if not self.result_repo.exists_by_id(task_request.uuid):
+                    run_task(task=extract_feature, task_id=task_request.uuid, extraction_request=task_request)
+            api_response = ApiResponse(HttpStatusCode.accepted, extraction_requests)
         else:
-            api_response = ApiResponse(status_code=HttpStatusCode.no_content, payload=None)
+            api_response = ApiResponse(status_code=HttpStatusCode.precondition_failed, payload=None)
         log_api_call(api_request, api_response)
         return build_response(api_response)
 
