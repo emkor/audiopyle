@@ -59,7 +59,7 @@ class FeatureExtractionService(object):
 
     def extract_feature_and_store(self, request: ExtractionRequest):
         task_start_time = datetime.utcnow()
-        task_id = request.uuid()
+        task_id = request.uuid
 
         self.logger.info("Building context for extraction {}: {}...".format(task_id, request))
         input_audio_file_path = self.audio_file_store.get_full_path(request.audio_file_name)
