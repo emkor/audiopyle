@@ -14,14 +14,23 @@ definitions:
         description: "File size in bytes"
         type: integer
       created_on:
-        description: "Unix creation date (UTC) in format: %Y-%m-%d %H:%M:%S"
+        description: "Unix creation date (UTC) in ISO 8601 format"
         type: string
+        format: date-time
       last_modification:
-        description: "Unix last modification date (UTC) in format: %Y-%m-%d %H:%M:%S"
+        description: "Unix last modification date (UTC) in ISO 8601 format"
         type: string
+        format: date-time
       last_access:
-        description: "Unix last access date (UTC) in format: %Y-%m-%d %H:%M:%S"
+        description: "Unix last access date (UTC) in ISO 8601 format"
         type: string
+        format: date-time
+    required:
+      - file_name
+      - size
+      - created_on
+      - last_modification
+      - last_access
   AudioTag:
     type: object
     properties:
@@ -39,6 +48,13 @@ definitions:
       date:
         description: "Year of album release"
         type: integer
+    required:
+      - artist
+      - album
+      - title
+      - genre
+      - track
+      - date
   MetricConfig:
     type: object
     additionalProperties:
@@ -54,6 +70,9 @@ definitions:
             kwargs:
               type: object
               additionalProperties: true
+      required:
+        - plugin
+        - transformation
   PluginConfig:
     type: object
     additionalProperties:
@@ -71,6 +90,7 @@ definitions:
     properties:
       uuid:
         type: string
+        nullable: true
       audio_file_name:
         type: string
       plugin_full_key:
@@ -81,6 +101,9 @@ definitions:
       metric_config:
         type: object
         nullable: true
+    required:
+      - audio_file_name
+      - plugin_full_key
 paths:
   "/audio/":
     get:
