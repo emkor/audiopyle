@@ -36,8 +36,9 @@ class AutomationApi(AbstractRestApi):
             extraction_requests = self._generate_extraction_requests(audio_file_names, plugins, plugin_configs)
             for task_request in extraction_requests:
                 if not self.result_repo.exists_by_id(task_request.uuid):
-                    run_task(task=extract_feature, task_id=task_request.uuid, extraction_request=task_request)
-            api_response = ApiResponse(HttpStatusCode.accepted, extraction_requests)
+                    run_task(task=extract_feature, task_id=task_request.uuid,
+                             extraction_request=task_request.to_serializable())
+            api_response = ApiResponse(HttpStatusCode.accepted, [er.to_serializable() for er in extraction_requests])
         else:
             api_response = ApiResponse(status_code=HttpStatusCode.precondition_failed, payload=None)
         log_api_call(api_request, api_response)
