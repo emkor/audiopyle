@@ -35,7 +35,7 @@ class MetricDefinitionDetailsApi(AbstractRestApi):
                                                "Could not find metric definition with id: {}".format(metric_def_id)})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       {"error": "Could not find metric definition ID in URL: {}".format(
+                                       {"message": "Could not find metric definition ID in URL: {}".format(
                                            api_request.url)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
@@ -67,10 +67,10 @@ class MetricValueDetailsApi(AbstractRestApi):
             else:
                 api_response = ApiResponse(status_code=HttpStatusCode.not_found,
                                            payload={
-                                               "error": "Could not find metric value with ID of {}".format(
+                                               "message": "Could not find metric value with ID of {}".format(
                                                    metric_def_id)})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       {"error": "Could not find metric value ID in URL: {}".format(api_request.url)})
+                                       {"message": "Could not find metric value ID in URL: {}".format(api_request.url)})
         log_api_call(api_request, api_response)
         return build_response(api_response)

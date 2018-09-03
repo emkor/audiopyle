@@ -24,10 +24,10 @@ class ResultDataApi(AbstractRestApi):
                 api_response = ApiResponse(HttpStatusCode.ok, vampy_feature.to_serializable())
             else:
                 api_response = ApiResponse(HttpStatusCode.not_found,
-                                           payload={"error": "Could not find result with id: {}".format(task_id)})
+                                           payload={"message": "Could not find result with id: {}".format(task_id)})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       payload={"error": "Could not find task_id parameter in URL: {}".format(
+                                       payload={"message": "Could not find task_id parameter in URL: {}".format(
                                            api_request.url)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
@@ -40,11 +40,11 @@ class ResultDataApi(AbstractRestApi):
             api_response = ApiResponse(HttpStatusCode.ok, None)
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       payload={"error": "Could not find task_id parameter in URL: {}".format(
+                                       payload={"message": "Could not find task_id parameter in URL: {}".format(
                                            api_request.url)})
         except EntityNotFound:
             api_response = ApiResponse(HttpStatusCode.not_found,
-                                       payload={"error": "Could not find result with id: {}".format(task_id)})
+                                       payload={"message": "Could not find result with id: {}".format(task_id)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
 
@@ -62,10 +62,10 @@ class ResultMetaApi(AbstractRestApi):
                 api_response = ApiResponse(HttpStatusCode.ok, data_entity.to_serializable())
             else:
                 api_response = ApiResponse(HttpStatusCode.not_found,
-                                           payload={"error": "Could not find result with id: {}".format(task_id)})
+                                           payload={"message": "Could not find result with id: {}".format(task_id)})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       payload={"error": "Could not find task_id parameter in URL: {}".format(
+                                       payload={"message": "Could not find task_id parameter in URL: {}".format(
                                            api_request.url)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
@@ -78,11 +78,11 @@ class ResultMetaApi(AbstractRestApi):
             api_response = ApiResponse(HttpStatusCode.ok, None)
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       payload={"error": "Could not find task_id parameter in URL: {}".format(
+                                       payload={"message": "Could not find task_id parameter in URL: {}".format(
                                            api_request.url)})
         except EntityNotFound:
             api_response = ApiResponse(HttpStatusCode.not_found,
-                                       payload={"error": "Could not find result with id: {}".format(task_id)})
+                                       payload={"message": "Could not find result with id: {}".format(task_id)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
 
@@ -100,14 +100,14 @@ class ResultStatsApi(AbstractRestApi):
                 api_response = ApiResponse(HttpStatusCode.ok, data_entity.to_serializable())
             else:
                 api_response = ApiResponse(HttpStatusCode.not_found,
-                                           payload={"error": "Could not find stats with id: {}".format(task_id)})
+                                           payload={"message": "Could not find stats with id: {}".format(task_id)})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       payload={"error": "Could not find task_id parameter in URL: {}".format(
+                                       payload={"message": "Could not find task_id parameter in URL: {}".format(
                                            api_request.url)})
         except EntityNotFound:
             api_response = ApiResponse(HttpStatusCode.not_found,
-                                       payload={"error": "Could not find result with id: {}".format(task_id)})
+                                       payload={"message": "Could not find result with id: {}".format(task_id)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
 
@@ -119,10 +119,10 @@ class ResultStatsApi(AbstractRestApi):
             api_response = ApiResponse(HttpStatusCode.ok, None)
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       payload={"error": "Could not find task_id parameter in URL: {}".format(
+                                       payload={"message": "Could not find task_id parameter in URL: {}".format(
                                            api_request.url)})
         except EntityNotFound:
             api_response = ApiResponse(HttpStatusCode.not_found,
-                                       payload={"error": "Could not find result with id: {}".format(task_id)})
+                                       payload={"message": "Could not find result with id: {}".format(task_id)})
         log_api_call(api_request, api_response)
         return build_response(api_response)

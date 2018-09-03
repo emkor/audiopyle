@@ -26,11 +26,11 @@ class AudioFileDetailApi(AbstractRestApi):
         file_name = api_request.query_params.get("file_name")
         if file_name is None:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       {"error": "Parameter file_name was not provided"})
+                                       {"message": "Parameter file_name was not provided"})
         elif self.file_store.exists(file_name):
             api_response = ApiResponse(HttpStatusCode.ok, self.file_store.meta(file_name).to_serializable())
         else:
             api_response = ApiResponse(HttpStatusCode.not_found,
-                                       {"error": "Can't find file with name: {}".format(file_name)})
+                                       {"message": "Can't find file with name: {}".format(file_name)})
         log_api_call(api_request, api_response)
         return build_response(api_response)

@@ -21,9 +21,9 @@ class AudioTagApi(AbstractRestApi):
                     api_response = ApiResponse(HttpStatusCode.no_content, payload=None)
             else:
                 api_response = ApiResponse(HttpStatusCode.not_found,
-                                           {"error": "File does not exist: {}".format(audio_file_name)})
+                                           {"message": "File does not exist: {}".format(audio_file_name)})
         else:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       {"error": "Parameter file_name was not provided"})
+                                       {"message": "Parameter file_name was not provided"})
         log_api_call(api_request, api_response)
         return build_response(api_response)

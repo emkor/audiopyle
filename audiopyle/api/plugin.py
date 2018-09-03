@@ -33,9 +33,9 @@ class PluginDetailApi(AbstractRestApi):
             else:
                 message = "Could not find VAMP plugin with key: {}:{}:{}".format(plugin_vendor, plugin_name,
                                                                                  plugin_output)
-                api_response = ApiResponse(status_code=HttpStatusCode.not_found, payload={"error": message})
+                api_response = ApiResponse(status_code=HttpStatusCode.not_found, payload={"message": message})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request, {
-                "error": "Could not find vendor, name or output in request URL: {}".format(api_request.url)})
+                "message": "Could not find vendor, name or output in request URL: {}".format(api_request.url)})
         log_api_call(api_request, api_response)
         return build_response(api_response)

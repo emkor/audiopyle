@@ -29,7 +29,7 @@ class RequestListApi(AbstractRestApi):
         task_result = retrieve_result(task_id)
         if task_result.status in [TaskStatus.ignored, TaskStatus.in_progress, TaskStatus.done]:
             message = "Could not send task #{}: is already in state {}".format(task_id, task_result.status)
-            api_response = ApiResponse(HttpStatusCode.precondition_failed, {"error": message})
+            api_response = ApiResponse(HttpStatusCode.precondition_failed, {"message": message})
         else:
             async_result = run_task(task=extract_feature, task_id=task_id,
                                     extraction_request=execution_request.to_serializable())
@@ -59,10 +59,10 @@ class RequestDetailsApi(AbstractRestApi):
                 api_response = ApiResponse(HttpStatusCode.ok, data_model.to_serializable())
             else:
                 api_response = ApiResponse(HttpStatusCode.not_found,
-                                           payload={"error": "Could not find result with id: {}".format(task_id)})
+                                           payload={"message": "Could not find result with id: {}".format(task_id)})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       payload={"error": "Could not find task_id parameter in URL: {}".format(
+                                       payload={"message": "Could not find task_id parameter in URL: {}".format(
                                            api_request.url)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
@@ -79,15 +79,15 @@ class RequestDetailsApi(AbstractRestApi):
             else:
                 api_response = ApiResponse(HttpStatusCode.precondition_failed,
                                            payload={
-                                               "error": "Can not remove request that has not finished; status: {}".format(
+                                               "message": "Can not remove request that has not finished; status: {}".format(
                                                    task_result.status.name)})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request,
-                                       payload={"error": "Could not find task_id parameter in URL: {}".format(
+                                       payload={"message": "Could not find task_id parameter in URL: {}".format(
                                            api_request.url)})
         except EntityNotFound:
             api_response = ApiResponse(HttpStatusCode.not_found,
-                                       payload={"error": "Could not find result with id: {}".format(task_id)})
+                                       payload={"message": "Could not find result with id: {}".format(task_id)})
 
         log_api_call(api_request, api_response)
         return build_response(api_response)

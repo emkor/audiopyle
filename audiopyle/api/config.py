@@ -18,7 +18,7 @@ class PluginActiveConfigApi(AbstractRestApi):
             api_response = ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_config_provider.get_all())
         except Exception:
             api_response = ApiResponse(HttpStatusCode.not_found,
-                                       {"error": "Could not find config file: {}".format(PLUGIN_CONFIG_FILE_NAME)})
+                                       {"message": "Could not find config file: {}".format(PLUGIN_CONFIG_FILE_NAME)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
 
@@ -33,6 +33,6 @@ class MetricActiveConfigApi(AbstractRestApi):
             api_response = ApiResponse(status_code=HttpStatusCode.ok, payload=self.metric_config_provider.get_all())
         except Exception:
             api_response = ApiResponse(HttpStatusCode.not_found,
-                                       {"error": "Could not find config file: {}".format(PLUGIN_CONFIG_FILE_NAME)})
+                                       {"message": "Could not find config file: {}".format(PLUGIN_CONFIG_FILE_NAME)})
         log_api_call(api_request, api_response)
         return build_response(api_response)
