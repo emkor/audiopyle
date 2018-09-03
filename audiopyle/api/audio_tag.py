@@ -12,8 +12,8 @@ class AudioTagApi(AbstractRestApi):
         api_request = build_request(request, **kwargs)
         audio_file_name = api_request.query_params.get("file_name")
         if audio_file_name is not None:
-            if file_exists(audio_file_name):
-                audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, audio_file_name)
+            audio_file_absolute_path = concatenate_paths(AUDIO_FILES_DIR, audio_file_name)
+            if file_exists(audio_file_absolute_path):
                 id3_tag = read_audio_tag(audio_file_absolute_path)
                 if id3_tag:
                     api_response = ApiResponse(HttpStatusCode.ok, id3_tag.to_serializable())

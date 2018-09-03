@@ -27,8 +27,13 @@ class PluginDetailApi(AbstractRestApi):
             plugin_vendor = api_request.query_params["vendor"]
             plugin_name = api_request.query_params["name"]
             plugin_output = api_request.query_params["output"]
-            vampy_plugins = self.plugin_provider.build_plugin_from_params(plugin_vendor, plugin_name, plugin_output)
-            api_response = ApiResponse(status_code=HttpStatusCode.ok, payload=vampy_plugins.to_serializable())
+            vampy_plugin = self.plugin_provider.build_plugin_from_params(plugin_vendor, plugin_name, plugin_output)
+            if vampy_plugin is not None:
+                api_response = ApiResponse(status_code=HttpStatusCode.ok, payload=vampy_plugin.to_serializable())
+            else:
+                message = "Could not find VAMP plugin with key: {}:{}:{}".format(plugin_vendor, plugin_name,
+                                                                                 plugin_output)
+                api_response = ApiResponse(status_code=HttpStatusCode.not_found, payload={"error": message})
         except KeyError:
             api_response = ApiResponse(HttpStatusCode.bad_request, {
                 "error": "Could not find vendor, name or output in request URL: {}".format(api_request.url)})

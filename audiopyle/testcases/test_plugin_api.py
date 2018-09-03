@@ -36,3 +36,9 @@ class PluginApiTest(TestCase):
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_plugin = VampyPlugin.from_serializable(response.json())
         assert_that(actual_plugin).is_equal_to(expected_plugin)
+
+    def test_should_return_404_on_non_existing_plugin_details(self):
+        expected_status_code = 404
+        response = requests.get(url="{}/{}/{}/{}".format(self.plugin_url, "non-existing-vendor",
+                                                         "non-existing-name", "non-existing-value"))
+        assert_that(response.status_code).is_equal_to(expected_status_code)
