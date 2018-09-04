@@ -123,6 +123,24 @@ definitions:
         type: string
       library_file_name:
         type: string
+    required:
+    - vendor
+    - name
+    - output
+    - library_file_name
+  ExtractionStatus:
+    type: object
+    properties:
+      task_id:
+        type: string
+        nullable: false
+      status:
+        type: string
+        nullable: false
+        enum: ["not_known", "in_progress", "done", "failed", "ignored"]
+    required:
+    - task_id
+    - status
 paths:
   "/audio/":
     get:
@@ -366,6 +384,27 @@ paths:
           description: "There is no extraction request with task_id (UUID) provided in URL"
           schema:
             "$ref": "#/definitions/ErrorModel"
+  "/request/{task_id}/status":
+    get:
+      description: "Returns status of extraction request task selected by UUID (task ID)"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Returns details of requests task status"
+          schema:
+            "$ref": "#/definitions/ExtractionStatus"
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "Requested task status is not known, which means that either there was no request with given UUID (task_id), or the task did not execute yet"
+          schema:
+            "$ref": "#/definitions/ExtractionStatus"
   "/request/automation":
     post:
       description: "Creates Cartesian product of requests from list of audio files and available (non-blacklisted) VAMP plugins and sends them for execution"

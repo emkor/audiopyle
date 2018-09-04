@@ -96,11 +96,15 @@ class RequestDetailsApi(AbstractRestApi):
 class RequestStatusApi(AbstractRestApi):
     def get(self, **kwargs) -> str:
         api_request = build_request(request, **kwargs)
-        task_id = api_request.query_params["task_id"]
-        task_result = retrieve_result(task_id)
-        if task_result.status in [TaskStatus.in_progress, TaskStatus.not_known, TaskStatus.ignored]:
-            api_response = ApiResponse(HttpStatusCode.no_content, None)
-        else:
-            api_response = ApiResponse(HttpStatusCode.ok, task_result.to_serializable())
+        try:
+            task_id = api_request.query_params["task_id"]
+            task_result = retrieve_result(task_id)
+            if task_result.status == TaskStatus.not_known:
+                api_response = ApiResponse(HttpStatusCode.not_found, task_result.to_serializable())
+            else:
+                api_response = ApiResponse(HttpStatusCode.ok, task_result.to_serializable())
+        except KeyError:
+            api_response = ApiResponse(HttpStatusCode.bad_request,
+                                       {"message": "Parameter task_id was not provided in URL"})
         log_api_call(api_request, api_response)
         return build_response(api_response)
