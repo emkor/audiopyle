@@ -39,6 +39,22 @@ definitions:
     - created_on
     - last_modification
     - last_access
+  VampPlugin:
+    type: object
+    properties:
+      vendor:
+        type: string
+      name:
+        type: string
+      output:
+        type: string
+      library_file_name:
+        type: string
+    required:
+    - vendor
+    - name
+    - output
+    - library_file_name
   AudioTag:
     type: object
     properties:
@@ -98,6 +114,7 @@ definitions:
     properties:
       uuid:
         type: string
+        format: uuid
         nullable: true
       audio_file_name:
         type: string
@@ -112,27 +129,76 @@ definitions:
     required:
     - audio_file_name
     - plugin_full_key
-  VampPlugin:
+  MetricDefinition:
     type: object
     properties:
-      vendor:
-        type: string
       name:
         type: string
-      output:
+        nullable: false
+        description: "Name of a metric"
+      plugin:
         type: string
-      library_file_name:
-        type: string
+        nullable: false
+        description: "Full key of a plugin on which metric is calculated"
+      transformation:
+        type: object
+        properties:
+          name:
+            type: string
+            nullable: false
+            description: "Name of a Python function used to transform raw values into vector"
+          kwargs:
+            type: object
+            nullable: true
+            additionalProperties: true
+        required:
+          - name
     required:
-    - vendor
-    - name
-    - output
-    - library_file_name
+      - name
+      - plugin
+      - transformation
+  MetricValue:
+    type: object
+    properties:
+      count:
+        type: integer
+        nullable: false
+      maximum:
+        type: number
+        nullable: false
+      mean:
+        type: number
+        nullable: false
+      median:
+        type: number
+        nullable: false
+      minimum:
+        type: number
+        nullable: false
+      standard_deviation:
+        type: number
+        nullable: false
+      sum:
+        type: number
+        nullable: false
+      variance:
+        type: number
+        nullable: false
+    required:
+      - count
+      - maximum
+      - mean
+      - median
+      - minimum
+      - standard_deviation
+      - sum
+      - variance
   ExtractionStatus:
     type: object
     properties:
       task_id:
         type: string
+        format: uuid
         nullable: false
       status:
         type: string
@@ -266,6 +332,14 @@ paths:
           description: "Content of metric config JSON file"
           schema:
             "$ref": "#/definitions/MetricConfig"
+          examples: {
+            "bbc_energy_average_rms": {
+              "plugin":"bbc-vamp-plugins:bbc-energy:average",
+              "transformation": {
+                "name":"none"
+              }
+            }
+          }
         404:
           description: "There was no metric config file found"
           schema:
@@ -286,6 +360,82 @@ paths:
           }
         404:
           description: "There was no plugin config file found"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+  "/metric-def":
+    get:
+      description: "Lists metric definitions inserted by finished extractions"
+      responses:
+        200:
+          description: "List of metric definitions inserted by finished extractions"
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/MetricDefinition"
+          examples: [{
+            "function":"none",
+            "kwargs":{},
+            "name":"example_amplitude",
+            "plugin_key":"vamp-example-plugins:amplitudefollower:amplitude"
+          }]
+  "/metric-val":
+    get:
+      description: "Lists metric values inserted by finished extractions"
+      responses:
+        200:
+          description: "List of metric value IDs inserted by finished extractions"
+          schema:
+            type: array
+            items:
+              type: integer
+          examples: [1, 2]
+  "/metric-val/{id}":
+    get:
+      description: "Returns metric value extracted and calculated by the extraction task"
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "Metric value extracted and calculated by the extraction task"
+          schema:
+            type: object
+            properties:
+              task_id:
+                type: string
+                format: uuid
+              definition:
+                "$ref": "#/definitions/MetricDefinition"
+              stats:
+                "$ref": "#/definitions/Value"
+          examples: {
+            "definition": {
+              "function":"none",
+              "kwargs":{},
+              "name":"example_amplitude",
+              "plugin_key":"vamp-example-plugins:amplitudefollower:amplitude"
+            },
+            "stats": {
+              "count":26,
+              "maximum":0.303983,
+              "mean":0.148125,
+              "median":0.159242,
+              "minimum":0.0224164,
+              "standard_deviation":0.0915299,
+              "sum":3.85125,
+              "variance":0.00837772
+            },
+            "task_id":"68620db9-5c2f-5336-816a-d6db9f2850f3"
+          }
+
+        400:
+          description: "Required id parameter was not provided in URL"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "Provided id parameter doesn't belong to any extracted metric value"
           schema:
             "$ref": "#/definitions/ErrorModel"
   "/request":
@@ -319,6 +469,7 @@ paths:
             properties:
               task_id:
                 type: string
+                format: uuid
                 nullable: false
             required:
             - task_id
@@ -334,6 +485,7 @@ paths:
         in: path
         required: true
         type: string
+        format: uuid
       responses:
         200:
           description: "Details of extraction request"
@@ -342,6 +494,7 @@ paths:
             properties:
               task_id:
                 type: string
+                format: uuid
               id3_tag:
                 "$ref": "#/definitions/AudioTag"
               plugin:
@@ -392,11 +545,16 @@ paths:
         in: path
         required: true
         type: string
+        format: uuid
       responses:
         200:
           description: "Returns details of requests task status"
           schema:
             "$ref": "#/definitions/ExtractionStatus"
+          examples: {
+            status: "done",
+            task_id: "0b04c1b3-b366-5145-9248-6cb118d3be99"
+          }
         400:
           description: "Required parameter UUID (task_id) was not provided"
           schema:
