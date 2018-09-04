@@ -123,10 +123,10 @@ definitions:
 paths:
   "/audio/":
     get:
-      description: Returns list of available audio file names
+      description: "Returns list of available audio file names"
       responses:
         200:
-          description: A list of file names
+          description: "A list of file names"
           schema:
             type: array
             items:
@@ -137,7 +137,7 @@ paths:
           ]
   "/audio/{file_name}":
     get:
-      description: Returns list of available audio file names
+      description: "Returns list of available audio file names"
       parameters:
       - in: path
         name: file_name
@@ -161,7 +161,7 @@ paths:
           description: "Can not find a file with given name"
   "/audio/{file_name}/tag":
     get:
-      description: Returns given audio file tag
+      description: "Returns given audio file tag"
       parameters:
       - in: path
         name: file_name
@@ -169,7 +169,7 @@ paths:
         type: string
       responses:
         200:
-          description: Id3 tag of given audio file
+          description: "Id3 tag of given audio file"
           schema:
             "$ref": "#/definitions/AudioTag"
           examples: {
@@ -181,17 +181,17 @@ paths:
             track: 1
           }
         204:
-          description: Given audio file does not have Id3 tags
+          description: "Given audio file does not have Id3 tags"
         400:
-          description: file_name parameter was not provided in URL
+          description: "file_name parameter was not provided in URL"
         404:
-          description: Can not find a file with given name
+          description: "Can not find a file with given name"
   "/plugin":
     get:
-      description: Returns list of available VAMP plugins
+      description: "Returns list of available VAMP plugins"
       responses:
         200:
-          description: List of available VAMP plugins
+          description: "List of available VAMP plugins"
           schema:
             type: array
             items:
@@ -202,7 +202,7 @@ paths:
           ]
   "/plugin/{vendor}/{name}/{output}":
     get:
-      description: Returns details of given VAMP plugin
+      description: "Returns details of given VAMP plugin"
       parameters:
       - name: vendor
         in: path
@@ -218,29 +218,29 @@ paths:
         type: string
       responses:
         200:
-          description: Details of given VAMP plugin
+          description: "Details of given VAMP plugin"
           schema:
             "$ref": "#/definitions/VampPlugin"
         400:
-          description: Vendor, name or output parameter were not given
+          description: "Vendor, name or output parameter were not given"
         404:
-          description: Plugin with given vendor, name or output dos not exist
+          description: "Plugin with given vendor, name or output dos not exist"
   "/config/metric":
     get:
-      description: Returns available metric configuration
+      description: "Returns available metric configuration"
       responses:
         200:
-          description: Content of metric config JSON file
+          description: "Content of metric config JSON file"
           schema:
             "$ref": "#/definitions/MetricConfig"
         404:
-          description: There was no metric config file found
+          description: "There was no metric config file found"
   "/config/plugin":
     get:
-      description: Returns available plugin configuration
+      description: "Returns available plugin configuration"
       responses:
         200:
-          description: Content of plugin config JSON file
+          description: "Content of plugin config JSON file"
           schema:
             "$ref": "#/definitions/PluginConfig"
           examples: {
@@ -250,13 +250,13 @@ paths:
             }
           }
         404:
-          description: There was no plugin config file found
+          description: "There was no plugin config file found"
   "/request":
     get:
-      description: Returns list of received extraction requests
+      description: "Returns list of received extraction requests"
       responses:
         200:
-          description: List of UUIDs (task IDs) from received requests
+          description: "List of UUIDs (task IDs) from received requests"
           schema:
             type: array
             items:
@@ -267,7 +267,7 @@ paths:
           ]
   "/request/{task_id}":
     get:
-      description: Returns details of extraction request selected by UUID (task ID)
+      description: "Returns details of extraction request selected by UUID (task ID)"
       parameters:
       - name: task_id
         in: path
@@ -275,7 +275,7 @@ paths:
         type: string
       responses:
         200:
-          description: Details of extraction request
+          description: "Details of extraction request"
           schema:
             type: object
             properties:
@@ -316,15 +316,15 @@ paths:
             "task_id":"0b04c1b3-b366-5145-9248-6cb118d3be99"
           }
         400:
-          description: There was no task_id parameter provided in URL
+          description: "There was no task_id parameter provided in URL"
         404:
-          description: There is no extraction request with task_id (UUID) provided in URL
+          description: "There is no extraction request with task_id (UUID) provided in URL"
   "/request/automation":
     post:
-      description: Creates Cartesian product of requests from list of audio files and available (non-blacklisted) VAMP plugins and sends them for execution
+      description: "Creates Cartesian product of requests from list of audio files and available (non-blacklisted) VAMP plugins and sends them for execution"
       responses:
         202:
-          description: Returns details of generated requests
+          description: "Returns details of generated requests"
           schema:
             type: array
             items:
@@ -337,4 +337,4 @@ paths:
                        "uuid": "0b04c1b3-b366-5145-9248-6cb118d3be99"
                      }]
         412:
-          description: Audio files directory or VAMP plugins directory is empty; could not generate requests
+          description: "Audio files directory or VAMP plugins directory is empty; could not generate requests"
