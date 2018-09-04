@@ -7,14 +7,12 @@ info:
 definitions:
   ErrorModel:
     type: object
-    required:
-    - message
     properties:
       message:
         type: string
         nullable: true
-      required:
-      - message
+    required:
+    - message
   FileDetail:
     type: object
     properties:
@@ -125,11 +123,6 @@ definitions:
         type: string
       library_file_name:
         type: string
-      required:
-      - vendor
-      - name
-      - output
-      - library_file_name
 paths:
   "/audio/":
     get:
