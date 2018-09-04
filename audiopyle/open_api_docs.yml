@@ -265,6 +265,28 @@ paths:
             "0b04c1b3-b366-5145-9248-6cb118d3be99",
             "27f0ccab-349c-51f7-9acc-37e8ade111dc"
           ]
+    post:
+      description: "Consumes extraction request parameters"
+      parameters:
+      - name: "request"
+        in: "body"
+        description: "Extraction request to be executed"
+        required: true
+        schema:
+          "$ref": "#/definitions/ExtractionRequest"
+      responses:
+        201:
+          description: "Accepted extraction request for further processing"
+          schema:
+            type: object
+            properties:
+              task_id:
+                type: string
+                nullable: false
+            required:
+            - task_id
+        412:
+          description: "Task can not be processed because its already processed (illegal state)"
   "/request/{task_id}":
     get:
       description: "Returns details of extraction request selected by UUID (task ID)"
