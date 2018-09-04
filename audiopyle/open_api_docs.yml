@@ -5,6 +5,16 @@ info:
   title: Audiopyle API
   version: 0.0.1
 definitions:
+  ErrorModel:
+    type: object
+    required:
+    - message
+    properties:
+      message:
+        type: string
+        nullable: true
+      required:
+      - message
   FileDetail:
     type: object
     properties:
@@ -157,8 +167,12 @@ paths:
           }
         400:
           description: "file_name parameter was not provided in URL"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
         404:
           description: "Can not find a file with given name"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
   "/audio/{file_name}/tag":
     get:
       description: "Returns given audio file tag"
@@ -184,8 +198,12 @@ paths:
           description: "Given audio file does not have Id3 tags"
         400:
           description: "file_name parameter was not provided in URL"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
         404:
           description: "Can not find a file with given name"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
   "/plugin":
     get:
       description: "Returns list of available VAMP plugins"
@@ -223,8 +241,12 @@ paths:
             "$ref": "#/definitions/VampPlugin"
         400:
           description: "Vendor, name or output parameter were not given"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
         404:
           description: "Plugin with given vendor, name or output dos not exist"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
   "/config/metric":
     get:
       description: "Returns available metric configuration"
@@ -235,6 +257,8 @@ paths:
             "$ref": "#/definitions/MetricConfig"
         404:
           description: "There was no metric config file found"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
   "/config/plugin":
     get:
       description: "Returns available plugin configuration"
@@ -251,6 +275,8 @@ paths:
           }
         404:
           description: "There was no plugin config file found"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
   "/request":
     get:
       description: "Returns list of received extraction requests"
@@ -287,6 +313,8 @@ paths:
             - task_id
         412:
           description: "Task can not be processed because its already processed (illegal state)"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
   "/request/{task_id}":
     get:
       description: "Returns details of extraction request selected by UUID (task ID)"
@@ -339,8 +367,12 @@ paths:
           }
         400:
           description: "There was no task_id parameter provided in URL"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
         404:
           description: "There is no extraction request with task_id (UUID) provided in URL"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
   "/request/automation":
     post:
       description: "Creates Cartesian product of requests from list of audio files and available (non-blacklisted) VAMP plugins and sends them for execution"
@@ -360,3 +392,5 @@ paths:
                      }]
         412:
           description: "Audio files directory or VAMP plugins directory is empty; could not generate requests"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
