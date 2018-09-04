@@ -1,8 +1,11 @@
+from typing import List
+
 from flask import request
 
 from audiopyle.lib.abstractions.api import AbstractRestApi
 from audiopyle.lib.abstractions.api_model import ApiResponse, HttpStatusCode
 from audiopyle.api.utils import build_request, log_api_call, build_response
+from audiopyle.lib.models.metric import MetricDefinition
 from audiopyle.lib.repository.metric import MetricDefinitionRepository, MetricValueRepository
 
 
@@ -12,8 +15,8 @@ class MetricDefinitionListApi(AbstractRestApi):
 
     def get(self, **kwargs) -> str:
         api_request = build_request(request, **kwargs)
-        all_results = self.metric_repo.get_all_keys()  # type: ignore
-        api_response = ApiResponse(HttpStatusCode.ok, all_results)
+        all_definitions = self.metric_repo.get_all()  # type: List[MetricDefinition]
+        api_response = ApiResponse(HttpStatusCode.ok, [d.to_serializable() for d in all_definitions])
         log_api_call(api_request, api_response)
         return build_response(api_response)
 

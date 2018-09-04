@@ -1,4 +1,10 @@
 {
+  "example_amplitude": {
+    "plugin": "vamp-example-plugins:amplitudefollower:amplitude",
+    "transformation": {
+      "name": "none"
+    }
+  },
   "bbc_energy_rms": {
     "plugin": "bbc-vamp-plugins:bbc-energy:rmsenergy",
     "transformation": {
