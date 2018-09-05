@@ -607,6 +607,36 @@ paths:
           description: "There is no extraction request with task_id (UUID) provided in URL"
           schema:
             "$ref": "#/definitions/ErrorModel"
+    delete:
+      description: "Details extraction request selected by UUID (task ID)"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+      responses:
+        200:
+          description: "Deletes given extraction request"
+          schema:
+            type: object
+            properties:
+              task_id:
+                type: string
+                format: uuid
+                nullable: false
+        400:
+          description: "There was no task_id parameter provided in URL"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "There is no extraction request with task_id (UUID) provided in URL"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        412:
+          description: "Could not remove task request with given task_id because it's in wrong state"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
   "/request/{task_id}/status":
     get:
       description: "Returns status of extraction request task selected by UUID (task ID)"
@@ -661,6 +691,25 @@ paths:
           description: "Could not find feature meta-information for given task_id (UUID)"
           schema:
             "$ref": "#/definitions/ExtractionStatus"
+    delete:
+      description: "Deletes meta information of raw features"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+      responses:
+        200:
+          description: "Meta information about raw, extracted feature data"
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature meta-information for given task_id (UUID)"
+          schema:
+            "$ref": "#/definitions/ExtractionStatus"
   "/request/{task_id}/stats":
     get:
       description: "Returns statistics of extracting feature data process"
@@ -691,6 +740,66 @@ paths:
             "$ref": "#/definitions/ErrorModel"
         404:
           description: "Could not find feature extraction statistics information for given task_id (UUID)"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+    delete:
+      description: "Deletes statistics information of a request"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+      responses:
+        200:
+          description: "Delete statistics of a given extraction"
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature extraction statistics for given task_id (UUID)"
+          schema:
+            "$ref": "#/definitions/ExtractionStatus"
+  "/request/{task_id}/data":
+    get:
+      description: "Returns raw feature data extracted by the task"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+      responses:
+        200:
+          description: "Raw feature data extracted by the task; data format may vary"
+          type: object
+          additional_properties: true
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature extraction data information for given task_id (UUID)"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+    delete:
+      description: "Deletes raw feature data of a given request"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+      responses:
+        200:
+          description: "Deletes raw feature data of a given request"
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature extraction statistics for given task_id (UUID)"
           schema:
             "$ref": "#/definitions/ExtractionStatus"
   "/request/automation":
