@@ -207,6 +207,76 @@ definitions:
     required:
     - task_id
     - status
+  FeatureMeta:
+    type: object
+    properties:
+      data_shape:
+        description: "3-element array describing element count in X, Y, Z dimensions"
+        type: array
+        items:
+          type: integer
+        nullable: false
+      feature_size:
+        description: "Feature raw data size in bytes"
+        type: integer
+        nullable: false
+      feature_type:
+        type: string
+        enum: ["constant_step", "variable_step"]
+        nullable: false
+      task_id:
+        type: string
+        format: uuid
+        nullable: false
+    required:
+      - data_shape
+      - feature_size
+      - feature_type
+      - task_id
+  ExtractionStats:
+    type: object
+    properties:
+      task_id:
+        type: string
+        format: uuid
+        nullable: false
+      total_time:
+        description: "Time (in seconds) taken by total processing of an extraction request"
+        type: number
+        nullable: false
+      compression_time:
+        description: "Time (in seconds) taken by compressing raw feature data"
+        type: number
+        nullable: false
+      data_stats_build_time:
+        description: "Time (in seconds) taken by building these stats"
+        type: number
+        nullable: false
+      encode_audio_time:
+        description: "Time (in seconds) taken by encoding audio file"
+        type: number
+        nullable: false
+      extraction_time:
+        description: "Time (in seconds) taken by raw feature extraction"
+        type: number
+        nullable: false
+      metrics_extraction_time:
+        description: "Time (in seconds) taken by calculating metrics from raw features"
+        type: number
+        nullable: false
+      result_store_time:
+        description: "Time (in seconds) taken by inserting data related to extraction to DB"
+        type: number
+        nullable: false
+      required:
+        - task_id
+        - total_time
+        - compression_time
+        - data_stats_build_time
+        - encode_audio_time
+        - extraction_time
+        - metrics_extraction_time
+        - result_store_time
 paths:
   "/audio/":
     get:
@@ -561,6 +631,66 @@ paths:
             "$ref": "#/definitions/ErrorModel"
         404:
           description: "Requested task status is not known, which means that either there was no request with given UUID (task_id), or the task did not execute yet"
+          schema:
+            "$ref": "#/definitions/ExtractionStatus"
+  "/request/{task_id}/meta":
+    get:
+      description: "Returns meta information about raw, extracted feature data"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+      responses:
+        200:
+          description: "Meta information about raw, extracted feature data"
+          schema:
+            "$ref": "#/definitions/FeatureData"
+          examples: {
+            "data_shape": [204, 1, 0],
+            "feature_size": 1368,
+            "feature_type": "constant_step",
+            "task_id": "0b04c1b3-b366-5145-9248-6cb118d3be99"
+          }
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature meta-information for given task_id (UUID)"
+          schema:
+            "$ref": "#/definitions/ExtractionStatus"
+  "/request/{task_id}/stats":
+    get:
+      description: "Returns statistics of extracting feature data process"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+      responses:
+        200:
+          description: "Statistics of extracting feature data process"
+          schema:
+            "$ref": "#/definitions/ExtractionStats"
+          examples: {
+            compression_time: 0.003,
+            data_stats_build_time: 0,
+            encode_audio_time: 0.13,
+            extraction_time: 0.016,
+            metrics_extraction_time: 0,
+            result_store_time: 0.021,
+            task_id: "0b04c1b3-b366-5145-9248-6cb118d3be99",
+            total_time: 0.227
+          }
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            "$ref": "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature extraction statistics information for given task_id (UUID)"
           schema:
             "$ref": "#/definitions/ExtractionStatus"
   "/request/automation":
