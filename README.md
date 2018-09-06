@@ -4,10 +4,7 @@
 Docker-based app for extracting features from audio files. Makes use of standard VAMP plugins for feature extraction.
 
 ### App REST API description
-TO DO
-
-### Web UI description
-TO DO
+File `open_api_docs.yml` contains audiopyle API documentation compliant with OpenAPI / Swagger 2.0 spec (you may just paste file contents into https://editor.swagger.io/ )
 
 ### Build from source
 To build Docker images, follow these steps:
