@@ -1,68 +1,79 @@
-from logging import Logger
 from typing import List
 
-from audiopyle.lib.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode
-from audiopyle.lib.abstractions.flask_api import FlaskRestApi
+from flask import request
+
+from audiopyle.lib.abstractions.api import AbstractRestApi
+from audiopyle.lib.abstractions.api_model import ApiResponse, HttpStatusCode
+from audiopyle.api.utils import build_request, log_api_call, build_response
+from audiopyle.lib.models.metric import MetricDefinition
 from audiopyle.lib.repository.metric import MetricDefinitionRepository, MetricValueRepository
 
 
-class MetricDefinitionListApi(FlaskRestApi):
-    def __init__(self, metric_repo: MetricDefinitionRepository, logger: Logger) -> None:
-        super().__init__(logger)
+class MetricDefinitionListApi(AbstractRestApi):
+    def __init__(self, metric_repo: MetricDefinitionRepository) -> None:
         self.metric_repo = metric_repo
-        self.logger = logger
 
-    def _get(self, the_request: ApiRequest) -> ApiResponse:
-        all_results = self.metric_repo.get_all_keys()  # type: ignore
-        return ApiResponse(HttpStatusCode.ok, all_results)
+    def get(self, **kwargs) -> str:
+        api_request = build_request(request, **kwargs)
+        all_definitions = self.metric_repo.get_all()  # type: List[MetricDefinition]
+        api_response = ApiResponse(HttpStatusCode.ok, [d.to_serializable() for d in all_definitions])
+        log_api_call(api_request, api_response)
+        return build_response(api_response)
 
 
-class MetricDefinitionDetailsApi(FlaskRestApi):
-    def __init__(self, metric_repo: MetricDefinitionRepository, logger: Logger) -> None:
-        super().__init__(logger)
+class MetricDefinitionDetailsApi(AbstractRestApi):
+    def __init__(self, metric_repo: MetricDefinitionRepository) -> None:
         self.metric_repo = metric_repo
-        self.logger = logger
 
-    def _get(self, the_request: ApiRequest) -> ApiResponse:
+    def get(self, **kwargs) -> str:
+        api_request = build_request(request, **kwargs)
         try:
-            metric_def_id = the_request.query_params["id"]
+            metric_def_id = api_request.query_params["id"]
             metric_definition = self.metric_repo.get_by_id(metric_def_id)
             if metric_definition:
-                return ApiResponse(status_code=HttpStatusCode.ok, payload=metric_definition.to_serializable())
+                api_response = ApiResponse(status_code=HttpStatusCode.ok, payload=metric_definition.to_serializable())
             else:
-                return ApiResponse(status_code=HttpStatusCode.not_found,
-                                   payload={"Could not find metric definition with id: {}".format(metric_def_id)})
+                api_response = ApiResponse(status_code=HttpStatusCode.not_found,
+                                           payload={
+                                               "Could not find metric definition with id: {}".format(metric_def_id)})
         except KeyError:
-            return ApiResponse(HttpStatusCode.bad_request,
-                               {"error": "Could not find metric definition ID in URL: {}".format(the_request.url)})
+            api_response = ApiResponse(HttpStatusCode.bad_request,
+                                       {"message": "Could not find metric definition ID in URL: {}".format(
+                                           api_request.url)})
+        log_api_call(api_request, api_response)
+        return build_response(api_response)
 
 
-class MetricValueListApi(FlaskRestApi):
-    def __init__(self, metric_repo: MetricValueRepository, logger: Logger) -> None:
-        super().__init__(logger)
+class MetricValueListApi(AbstractRestApi):
+    def __init__(self, metric_repo: MetricValueRepository) -> None:
         self.metric_repo = metric_repo
-        self.logger = logger
 
-    def _get(self, the_request: ApiRequest) -> ApiResponse:
+    def get(self, **kwargs) -> str:
+        api_request = build_request(request, **kwargs)
         all_results = self.metric_repo.get_all_keys()  # type: ignore
-        return ApiResponse(HttpStatusCode.ok, all_results)
+        api_response = ApiResponse(HttpStatusCode.ok, all_results)
+        log_api_call(api_request, api_response)
+        return build_response(api_response)
 
 
-class MetricValueDetailsApi(FlaskRestApi):
-    def __init__(self, metric_repo: MetricValueRepository, logger: Logger) -> None:
-        super().__init__(logger)
+class MetricValueDetailsApi(AbstractRestApi):
+    def __init__(self, metric_repo: MetricValueRepository) -> None:
         self.metric_repo = metric_repo
-        self.logger = logger
 
-    def _get(self, the_request: ApiRequest) -> ApiResponse:
+    def get(self, **kwargs) -> str:
+        api_request = build_request(request, **kwargs)
         try:
-            metric_def_id = the_request.query_params["id"]
+            metric_def_id = api_request.query_params["id"]
+            metric_definition = self.metric_repo.get_by_id(metric_def_id)
+            if metric_definition is not None:
+                api_response = ApiResponse(status_code=HttpStatusCode.ok, payload=metric_definition.to_serializable())
+            else:
+                api_response = ApiResponse(status_code=HttpStatusCode.not_found,
+                                           payload={
+                                               "message": "Could not find metric value with ID of {}".format(
+                                                   metric_def_id)})
         except KeyError:
-            return ApiResponse(HttpStatusCode.bad_request,
-                               {"error": "Could not find metric value ID in URL: {}".format(the_request.url)})
-        metric_definition = self.metric_repo.get_by_id(metric_def_id)
-        if metric_definition is not None:
-            return ApiResponse(status_code=HttpStatusCode.ok, payload=metric_definition.to_serializable())
-        else:
-            return ApiResponse(status_code=HttpStatusCode.not_found,
-                               payload={"error": "Could not find metric value with ID of {}".format(metric_def_id)})
+            api_response = ApiResponse(HttpStatusCode.bad_request,
+                                       {"message": "Could not find metric value ID in URL: {}".format(api_request.url)})
+        log_api_call(api_request, api_response)
+        return build_response(api_response)

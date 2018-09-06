@@ -5,7 +5,7 @@ from typing import Any, Type, List, Union
 
 from pympler.asizeof import asizeof
 
-ISO_8601_TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+ISO_8601_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 
 def b_to_B(b: float) -> int:

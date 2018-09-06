@@ -4,7 +4,7 @@ from typing import List, Optional, Any, Tuple
 import vamp
 import vampyhost
 
-from audiopyle.lib.models.plugin import VampyPlugin
+from audiopyle.lib.models.plugin import VampyPlugin, params_to_full_key
 from audiopyle.lib.utils.file_system import get_file_name
 from audiopyle.lib.utils.logger import get_logger
 
@@ -24,13 +24,18 @@ class VampyPluginProvider(object):
         all_plugins = [VampyPlugin(vendor, name, o, library_file_name) for o in plugin_outputs]
         return [p for p in all_plugins if p.full_key not in self.black_list_plugin_key]
 
-    def build_plugin_from_params(self, vendor: str, name: str, output: str) -> VampyPlugin:
+    def build_plugin_from_params(self, vendor: str, name: str, output: str) -> Optional[VampyPlugin]:
         library_file_name = get_file_name(self.vamp_host_interface.get_library_for("{}:{}".format(vendor, name)))
-        return VampyPlugin(vendor, name, output, library_file_name)
+        if self._is_plugin_available(vendor, name):
+            return VampyPlugin(vendor, name, output, library_file_name)
+        return None
 
-    def build_plugin_from_full_key(self, full_plugin_key: str) -> VampyPlugin:
+    def build_plugin_from_full_key(self, full_plugin_key: str) -> Optional[VampyPlugin]:
         vendor, name, output = self._split_full_key_into_params(full_plugin_key)
-        return self.build_plugin_from_params(vendor, name, output)
+        if self._is_plugin_available(vendor, name):
+            return self.build_plugin_from_params(vendor, name, output)
+        else:
+            return None
 
     def list_full_plugin_keys(self) -> List[str]:
         full_key_list = []
@@ -48,6 +53,9 @@ class VampyPluginProvider(object):
             new_plugins = self.build_plugins_from_key(k)
             all_plugin.extend(new_plugins)
         return all_plugin
+
+    def _is_plugin_available(self, vendor: str, name: str) -> bool:
+        return "{}:{}".format(vendor, name) in self._list_vampy_plugin_keys()
 
     def _list_vampy_plugin_keys(self) -> List[str]:
         """Returns list of VAMPy plugin keys available under OS"""

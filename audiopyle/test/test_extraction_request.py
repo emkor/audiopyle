@@ -37,14 +37,14 @@ class ExtractionRequestModelTest(unittest.TestCase):
         assert_that(actual_object).is_equal_to(self.extraction_request_2)
 
     def test_same_request_should_generate_same_uuid(self):
-        uuid_1 = self.extraction_request_1.uuid()
+        uuid_1 = self.extraction_request_1.uuid
         time.sleep(0.001)  # make sure time does not take part in uuid computation
-        uuid_2 = self.extraction_request_1.uuid()
+        uuid_2 = self.extraction_request_1.uuid
         assert_that(uuid_1).is_not_none().is_not_empty().is_equal_to(uuid_2)
 
     def test_different_requests_should_generate_different_uuids(self):
-        uuid_1, uuid_2 = self.extraction_request_1.uuid(), self.extraction_request_2.uuid()
-        uuid_3, uuid_4 = self.extraction_request_3.uuid(), self.extraction_request_4.uuid()
+        uuid_1, uuid_2 = self.extraction_request_1.uuid, self.extraction_request_2.uuid
+        uuid_3, uuid_4 = self.extraction_request_3.uuid, self.extraction_request_4.uuid
         assert_that(uuid_1).is_not_none().is_not_equal_to(uuid_2).is_not_equal_to(uuid_3).is_not_equal_to(uuid_4)
         assert_that(uuid_2).is_not_equal_to(uuid_3).is_not_equal_to(uuid_4)
         assert_that(uuid_3).is_not_equal_to(uuid_4)

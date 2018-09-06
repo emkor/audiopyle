@@ -59,11 +59,13 @@ class FeatureExtractionService(object):
 
     def extract_feature_and_store(self, request: ExtractionRequest):
         task_start_time = datetime.utcnow()
-        task_id = request.uuid()
+        task_id = request.uuid
 
         self.logger.info("Building context for extraction {}: {}...".format(task_id, request))
         input_audio_file_path = self.audio_file_store.get_full_path(request.audio_file_name)
         plugin = self.plugin_provider.build_plugin_from_full_key(str(request.plugin_full_key))
+        if plugin is None:
+            raise ValueError("Could not find plugin with full key: {}".format(request.plugin_full_key))
         plugin_config = self._build_plugin_config(request)
         file_meta, audio_meta, id3_tag = self._read_file_meta(input_audio_file_path)
         analysis_request = AnalysisRequest(task_id, audio_meta, id3_tag, plugin, plugin_config)

@@ -32,19 +32,8 @@ class _ApiError(Exception):
         self.message = message
 
 
-class MethodNotSupportedError(_ApiError):
-    def __init__(self, message: str) -> None:
-        super().__init__(message, HttpStatusCode.method_not_allowed)
-
-
 class ClientError(_ApiError):
     def __init__(self, message: str, status_code: HttpStatusCode = HttpStatusCode.bad_request) -> None:
-        self.status_code = status_code
-        self.message = message
-
-
-class ServerError(_ApiError):
-    def __init__(self, message: str, status_code: HttpStatusCode = HttpStatusCode.internal_server_error) -> None:
         self.status_code = status_code
         self.message = message
 
