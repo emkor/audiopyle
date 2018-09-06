@@ -65,6 +65,14 @@ class MetricDefinitionDbRepositoryTest(unittest.TestCase):
         assert_that(fake_function_from_method).raises(DuplicateEntity).when_called_with(self.definition_repo.insert,
                                                                                         self.metric_definition_3)
 
+    def test_should_filter_metrics_by_name(self):
+        self.plugin_repo_mock.get_id_by_params.return_value = 1
+        self.plugin_repo_mock.get_by_id.return_value = self.plugin_1
+        self.definition_repo.insert(self.metric_definition_1)
+        self.definition_repo.insert(self.metric_definition_2)
+        metric_by_name = self.definition_repo.get_metric_by_name("second_metric")
+        assert_that(metric_by_name).is_equal_to(self.metric_definition_2)
+
 
 class MetricValueDbRepositoryTest(unittest.TestCase):
     @classmethod
@@ -74,6 +82,9 @@ class MetricValueDbRepositoryTest(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         tear_down_db_repository_test_class(cls)
+
+    def tearDown(self):
+        self.metric_value_repo.delete_all()
 
     def setUp(self):
         self.metric_definition_example = MetricDefinition(name="first_metric",
@@ -97,3 +108,12 @@ class MetricValueDbRepositoryTest(unittest.TestCase):
 
         retrieved_model = self.metric_value_repo.get_by_id(metric_value_id)
         assert_that(retrieved_model).is_equal_to(self.metric_value_1)
+
+    def test_should_select_metric_values_by_name(self):
+        self.definition_repo_mock.get_id_by_model.return_value = 1
+        self.definition_repo_mock.get_by_id.return_value = self.metric_definition_example
+        self.definition_repo_mock.get_key_by_metric_name.return_value = 1  # fragile!
+
+        self.metric_value_repo.insert(self.metric_value_1)
+        values_by_name = self.metric_value_repo.get_values_by_name("first_metric")
+        assert_that(values_by_name).contains(self.metric_value_1)
