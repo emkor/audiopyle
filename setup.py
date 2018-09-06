@@ -16,7 +16,6 @@ setup(
     author_email='emkor93@gmail.com',
     url='https://github.com/emkor/audiopyle',
     packages=find_packages(exclude=["audiopyle.test", "audiopyle.test.*"]),
-    include_package_data=True,
     install_requires=REQUIREMENTS,
     entry_points={
         'console_scripts': [
