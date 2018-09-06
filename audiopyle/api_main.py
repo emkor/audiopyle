@@ -93,7 +93,7 @@ def start_app(logger: Logger, host: str, port: int):
                                                        plugin_provider=plugin_provider))
     app.add_url_rule("/plugin",
                      view_func=PluginListApi.as_view('plugin_list_api',
-                                                     plugin_provider=plugin_provider, ))
+                                                     plugin_provider=plugin_provider))
     app.add_url_rule("/metric-def",
                      view_func=MetricDefinitionListApi.as_view('metric_definition_list_api',
                                                                metric_repo=metric_def_repo))
