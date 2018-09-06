@@ -12,8 +12,8 @@ from audiopyle.testcases.utils import get_api_host, keep_polling_until, get_api_
 class CoordinatorApiTest(TestCase):
     def setUp(self):
         self.request_api_url = "http://{}:{}/request".format(get_api_host(), get_api_port())
-        self.metric_def_api_url = "http://{}:{}/metric-def".format(get_api_host(), get_api_port())
-        self.metric_val_api_url = "http://{}:{}/metric-val".format(get_api_host(), get_api_port())
+        self.metric_def_api_url = "http://{}:{}/metric".format(get_api_host(), get_api_port())
+        self.metric_name = "my_metric"
         self.mp3_extraction_request = {
             "audio_file_name": "102bpm_drum_loop.mp3",
             "plugin_full_key": "vamp-example-plugins:amplitudefollower:amplitude",
@@ -21,7 +21,7 @@ class CoordinatorApiTest(TestCase):
                 "block_size": 4096,
                 "step_size": 4096
             },
-            "metric_config": {"my_metric": {
+            "metric_config": {self.metric_name: {
                 "transformation": {
                     "name": "none"
                 }
@@ -34,7 +34,7 @@ class CoordinatorApiTest(TestCase):
                 "block_size": 8192,
                 "step_size": 8192
             },
-            "metric_config": {"my_metric": {
+            "metric_config": {self.metric_name: {
                 "transformation": {
                     "name": "none"
                 }
@@ -84,10 +84,19 @@ class CoordinatorApiTest(TestCase):
         metric_definitions_json = metric_definitions_response.json()
         assert_that(metric_definitions_json).is_not_empty()
 
-        metric_values_response = requests.get(url=self.metric_val_api_url)
-        assert_that(metric_values_response.status_code).is_equal_to(HttpStatusCode.ok.value)
-        metric_definitions_json = metric_values_response.json()
-        assert_that(metric_definitions_json).is_not_empty()
+        # retrieve metric definition
+        metric_definition_response = requests.get(url="{}/{}".format(self.metric_def_api_url, self.metric_name))
+        assert_that(metric_definition_response.status_code).is_equal_to(HttpStatusCode.ok.value)
+
+        # retrieve metric value
+        metric_value_response = requests.get(
+            url="{}/{}/values/{}".format(self.metric_def_api_url, self.metric_name, extraction_task_id))
+        assert_that(metric_value_response.status_code).is_equal_to(HttpStatusCode.ok.value)
+
+        # retrieve metric value - alternative way
+        metric_value_response = requests.get(
+            url="{}/{}/metric/{}".format(self.request_api_url, extraction_task_id, self.metric_name))
+        assert_that(metric_value_response.status_code).is_equal_to(HttpStatusCode.ok.value)
 
         # delete result
         self._delete_request_and_verify(self.request_api_url, extraction_task_id)
