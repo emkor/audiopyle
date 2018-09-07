@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Optional, List
 
 from audiopyle.lib.models.metric import MetricDefinition as MetricDefObj, MetricValue
 from audiopyle.lib.db.entity import MetricDefinition as MetricDefEnt, VampyPlugin, Metric
@@ -35,6 +35,12 @@ class MetricDefinitionRepository(DbRepository):
     def get_id_by_model(self, model_object: MetricDefObj) -> Optional[int]:
         return safe_cast(self._get_id(name=model_object.name), int, None)
 
+    def get_metric_by_name(self, metric_name: str) -> Optional[MetricDefObj]:
+        return self._query_single(name=metric_name)
+
+    def get_key_by_metric_name(self, metric_name: str) -> Optional[int]:
+        return self._get_id(name=metric_name)  # type: ignore
+
 
 class MetricValueRepository(DbRepository):
     def __init__(self, session_provider: SessionProvider, definition_repository: MetricDefinitionRepository) -> None:
@@ -63,3 +69,20 @@ class MetricValueRepository(DbRepository):
     def get_id_by_model(self, model_object: MetricValue) -> Optional[int]:
         definition_id = self.definition_repository.get_id_by_model(model_object.definition)
         return safe_cast(self._get_id(definition_id=definition_id, task_id=model_object.task_id), int, None)
+
+    def get_values_by_name(self, metric_name: str) -> Optional[List[MetricValue]]:
+        metric_def_id = self.definition_repository.get_key_by_metric_name(metric_name=metric_name)
+        if metric_def_id is None:
+            return None
+        else:
+            return self._query_multiple(definition_id=metric_def_id)
+
+    def get_by_task_id(self, task_id: str) -> List[MetricValue]:
+        return self._query_multiple(task_id=task_id)
+
+    def get_by_name_and_task_id(self, metric_name: str, task_id: str) -> Optional[MetricValue]:
+        metric_def_id = self.definition_repository.get_key_by_metric_name(metric_name=metric_name)
+        if metric_def_id is None:
+            return None
+        else:
+            return self._query_single(definition_id=metric_def_id, task_id=task_id)

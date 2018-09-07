@@ -1,0 +1,928 @@
+---
+swagger: "2.0"
+info:
+  description: "An API offering inputs and outputs from the Audiopyle app"
+  title: "Audiopyle API"
+  version: "0.0.1"
+host: "localhost"
+basePath: "/"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+definitions:
+  ErrorModel:
+    type: "object"
+    required:
+    - "message"
+    properties:
+      message:
+        type: "string"
+  FileDetail:
+    type: "object"
+    required:
+      - "file_name"
+      - "size"
+      - "created_on"
+      - "last_modification"
+      - "last_access"
+    properties:
+      file_name:
+        type: "string"
+      size:
+        description: "File size in bytes"
+        type: "integer"
+      created_on:
+        description: "Unix creation date (UTC) in ISO 8601 format"
+        type: "string"
+        format: "date-time"
+      last_modification:
+        description: "Unix last modification date (UTC) in ISO 8601 format"
+        type: "string"
+        format: "date-time"
+      last_access:
+        description: "Unix last access date (UTC) in ISO 8601 format"
+        type: "string"
+        format: "date-time"
+  VampPlugin:
+    type: "object"
+    required:
+      - "vendor"
+      - "name"
+      - "output"
+      - "library_file_name"
+    properties:
+      vendor:
+        type: "string"
+      name:
+        type: "string"
+      output:
+        type: "string"
+      library_file_name:
+        type: "string"
+  AudioTag:
+    type: "object"
+    required:
+      - "artist"
+      - "album"
+      - "title"
+      - "genre"
+      - "track"
+      - "date"
+    properties:
+      artist:
+        type: "string"
+      album:
+        type: "string"
+      title:
+        type: "string"
+      genre:
+        type: "string"
+      track:
+        description: "Track number on an album"
+        type: "integer"
+      date:
+        description: "Year of album release"
+        type: "integer"
+  MetricConfig:
+    type: "object"
+    additionalProperties:
+      type: "object"
+      required:
+        - "plugin"
+        - "transformation"
+      properties:
+        plugin:
+          type: "string"
+        transformation:
+          type: "object"
+          properties:
+            name:
+              type: "string"
+            kwargs:
+              type: "object"
+              additionalProperties: true
+  PluginConfig:
+    type: "object"
+    additionalProperties:
+      type: "object"
+      properties:
+        block_size:
+          type: "integer"
+        step_size:
+          type: "integer"
+      additionalProperties: true
+  ExtractionRequest:
+    type: "object"
+    required:
+      - "audio_file_name"
+      - "plugin_full_key"
+    properties:
+      uuid:
+        type: "string"
+        format: "uuid"
+      audio_file_name:
+        type: "string"
+      plugin_full_key:
+        type: "string"
+      plugin_config:
+        type: "object"
+      metric_config:
+        type: "object"
+  MetricDefinition:
+    type: "object"
+    required:
+      - "name"
+      - "plugin"
+      - "transformation"
+    properties:
+      name:
+        type: "string"
+        description: "Name of a metric"
+      plugin:
+        type: "string"
+        description: "Full key of a plugin on which metric is calculated"
+      transformation:
+        type: "object"
+        required:
+          - "name"
+        properties:
+          name:
+            type: "string"
+            description: "Name of a Python function used to transform raw values into vector"
+          kwargs:
+            type: "object"
+            additionalProperties: true
+  MetricValue:
+    type: "object"
+    required:
+      - "count"
+      - "maximum"
+      - "mean"
+      - "median"
+      - "minimum"
+      - "standard_deviation"
+      - "sum"
+      - "variance"
+    properties:
+      count:
+        type: "integer"
+      maximum:
+        type: "number"
+      mean:
+        type: "number"
+      median:
+        type: "number"
+      minimum:
+        type: "number"
+      standard_deviation:
+        type: "number"
+      sum:
+        type: "number"
+      variance:
+        type: "number"
+  ExtractionStatus:
+    type: "object"
+    required:
+      - "task_id"
+      - "status"
+    properties:
+      task_id:
+        type: "string"
+        format: "uuid"
+      status:
+        type: "string"
+        enum: ["not_known", "in_progress", "done", "failed", "ignored"]
+  FeatureMeta:
+    type: "object"
+    required:
+    - "data_shape"
+    - "feature_size"
+    - "feature_type"
+    - "task_id"
+    properties:
+      data_shape:
+        description: "3-element array describing element count in X, Y, Z dimensions"
+        type: array
+        items:
+          type: "integer"
+      feature_size:
+        description: "Feature raw data size in bytes"
+        type: "integer"
+      feature_type:
+        type: "string"
+        enum: ["constant_step", "variable_step"]
+      task_id:
+        type: "string"
+        format: "uuid"
+  ExtractionStats:
+    type: "object"
+    required:
+      - "task_id"
+      - "total_time"
+      - "compression_time"
+      - "data_stats_build_time"
+      - "encode_audio_time"
+      - "extraction_time"
+      - "metrics_extraction_time"
+      - "result_store_time"
+    properties:
+      task_id:
+        type: "string"
+        format: "uuid"
+      total_time:
+        description: "Time (in seconds) taken by total processing of an extraction request"
+        type: "number"
+      compression_time:
+        description: "Time (in seconds) taken by compressing raw feature data"
+        type: "number"
+      data_stats_build_time:
+        description: "Time (in seconds) taken by building these stats"
+        type: "number"
+      encode_audio_time:
+        description: "Time (in seconds) taken by encoding audio file"
+        type: "number"
+      extraction_time:
+        description: "Time (in seconds) taken by raw feature extraction"
+        type: "number"
+      metrics_extraction_time:
+        description: "Time (in seconds) taken by calculating metrics from raw features"
+        type: "number"
+      result_store_time:
+        description: "Time (in seconds) taken by inserting data related to extraction to DB"
+        type: "number"
+paths:
+  /audio:
+    get:
+      description: "Returns list of available audio file names"
+      responses:
+        200:
+          description: "A list of file names"
+          schema:
+            type: array
+            items:
+              type: "string"
+          examples:
+            application/json: [
+                "102bpm_drum_loop.flac",
+                "102bpm_drum_loop.mp3"
+              ]
+  /audio/{file_name}:
+    get:
+      description: "Returns list of available audio file names"
+      parameters:
+      - in: path
+        name: file_name
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Details of given audio file"
+          schema:
+            $ref: "#/definitions/FileDetail"
+          examples:
+            application/json: {
+              created_on: "2018-08-16 08:58:49",
+              file_name: "102bpm_drum_loop.flac",
+              last_access: "2018-08-16 08:58:49",
+              last_modification: "2018-08-16 08:58:49",
+              size: 111690
+            }
+        400:
+          description: "file_name parameter was not provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Can not find a file with given name"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /audio/{file_name}/tag:
+    get:
+      description: "Returns given audio file tag"
+      parameters:
+      - in: path
+        name: file_name
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Id3 tag of given audio file"
+          schema:
+            $ref: "#/definitions/AudioTag"
+          examples:
+            application/json: {
+              album: "Unknown Album",
+              artist: "Unknown Artist",
+              date: 2017,
+              genre: "Unknown Genre",
+              title: "Unknown Title",
+              track: 1
+            }
+        204:
+          description: "Given audio file does not have Id3 tags"
+        400:
+          description: "file_name parameter was not provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Can not find a file with given name"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /plugin:
+    get:
+      description: "Returns list of available VAMP plugins"
+      responses:
+        200:
+          description: "List of available VAMP plugins"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          examples:
+            application/json: [
+              "vamp-example-plugins:amplitudefollower:amplitude",
+              "vamp-example-plugins:percussiononsets:onsets"
+            ]
+  /plugin/{vendor}/{name}/{output}:
+    get:
+      description: "Returns details of given VAMP plugin"
+      parameters:
+      - name: vendor
+        in: path
+        required: true
+        type: "string"
+      - name: name
+        in: path
+        required: true
+        type: "string"
+      - name: output
+        in: path
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Details of given VAMP plugin"
+          schema:
+            $ref: "#/definitions/VampPlugin"
+        400:
+          description: "Vendor, name or output parameter were not given"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Plugin with given vendor, name or output dos not exist"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /config/metric:
+    get:
+      description: "Returns available metric configuration"
+      responses:
+        200:
+          description: "Content of metric config JSON file"
+          schema:
+            $ref: "#/definitions/MetricConfig"
+          examples:
+            application/json: {
+              "bbc_energy_average_rms": {
+                "plugin":"bbc-vamp-plugins:bbc-energy:average",
+                "transformation": {
+                  "name":"none"
+                }
+              }
+            }
+        404:
+          description: "There was no metric config file found"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /config/plugin:
+    get:
+      description: "Returns available plugin configuration"
+      responses:
+        200:
+          description: "Content of plugin config JSON file"
+          schema:
+            $ref: "#/definitions/PluginConfig"
+          examples:
+            application/json: {
+              "vamp-example-plugins:amplitudefollower:amplitude": {
+                "block_size":4096,
+                "step_size":4096
+              }
+            }
+        404:
+          description: "There was no plugin config file found"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /metric:
+    get:
+      description: "Lists metric definition names that were inserted by finished extractions"
+      responses:
+        200:
+          description: "Metric definition names"
+          schema:
+            type: array
+            items:
+              type: "string"
+          examples:
+            application/json: ["example_amplitude"]
+  /metric/{name}:
+    get:
+      description: "Metric definition inserted by finished extraction"
+      parameters:
+      - name: name
+        in: path
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Returns metric definition given by its name"
+          schema:
+            $ref: "#/definitions/MetricDefinition"
+        400:
+          description: "Required name parameter was not provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Provided name parameter doesn't belong to any metric definition inserted by finished extractions"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /metric/{name}/values:
+    get:
+      description: "Returns metric values inserted by finished extractions"
+      parameters:
+        - name: name
+          in: path
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "List of task_ids that extracted metric values for given metric definitions"
+          schema:
+            type: array
+            items:
+              type: "string"
+              format: "uuid"
+          examples:
+            application/json: ["0b04c1b3-b366-5145-9248-6cb118d3be99"]
+        400:
+          description: "Required name parameter was not provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Provided name parameter doesn't belong to any metric definition inserted by finished extractions"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /metric/{name}/values/{task_id}:
+    get:
+      description: "Returns metric value extracted and calculated by the extraction task"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: name
+        in: path
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Metric value extracted and calculated by the extraction task"
+          schema:
+            type: "object"
+            properties:
+              task_id:
+                type: "string"
+                format: "uuid"
+              definition:
+                $ref: "#/definitions/MetricDefinition"
+              stats:
+                $ref: "#/definitions/MetricValue"
+          examples:
+            application/json: {
+              "definition": {
+                "function":"none",
+                "kwargs":{},
+                "name":"example_amplitude",
+                "plugin_key":"vamp-example-plugins:amplitudefollower:amplitude"
+              },
+              "stats": {
+                "count":26,
+                "maximum":0.303983,
+                "mean":0.148125,
+                "median":0.159242,
+                "minimum":0.0224164,
+                "standard_deviation":0.0915299,
+                "sum":3.85125,
+                "variance":0.00837772
+              },
+              "task_id": "68620db9-5c2f-5336-816a-d6db9f2850f3"
+            }
+        400:
+          description: "One of required URL parameters (task_id, name) was not provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Provided URL parameters (task_id, name) doesn't belong to any extracted metric value"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /request:
+    get:
+      description: "Returns list of received extraction requests"
+      responses:
+        200:
+          description: "List of UUIDs (task IDs) from received requests"
+          schema:
+            type: array
+            items:
+              type: "string"
+          examples:
+            application/json: [
+              "0b04c1b3-b366-5145-9248-6cb118d3be99",
+              "27f0ccab-349c-51f7-9acc-37e8ade111dc"
+            ]
+    post:
+      description: "Consumes extraction request parameters"
+      parameters:
+      - name: "request"
+        in: "body"
+        description: "Extraction request to be executed"
+        required: true
+        schema:
+          $ref: "#/definitions/ExtractionRequest"
+      responses:
+        201:
+          description: "Accepted extraction request for further processing"
+          schema:
+            type: "object"
+            properties:
+              task_id:
+                type: "string"
+                format: "uuid"
+            required:
+            - task_id
+        412:
+          description: "Task can not be processed because its already processed (illegal state)"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /request/{task_id}:
+    get:
+      description: "Returns details of extraction request selected by UUID (task ID)"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Details of extraction request"
+          schema:
+            type: "object"
+            properties:
+              task_id:
+                type: "string"
+                format: "uuid"
+              id3_tag:
+                $ref: "#/definitions/AudioTag"
+              plugin:
+                $ref: "#/definitions/VampPlugin"
+              plugin_config:
+                $ref: "#/definitions/PluginConfig"
+              audio_meta:
+                $ref: "#/definitions/FileDetail"
+          examples:
+            application/json: {
+              "audio_meta": {
+                "bit_rate_kbps":371.7,
+                "channels_count":1,
+                "file_name":"102bpm_drum_loop.flac",
+                "file_size_bytes":111690,
+                "length_sec":2.378,
+                "sample_rate":44100},
+              "id3_tag": {
+                "album":"Unknown Album",
+                "artist":"Unknown Artist",
+                "date":2017,
+                "genre":"Unknown Genre",
+                "title":"Unknown Title",
+                "track":1},
+              "plugin": {
+                "library_file_name":"vamp-example-plugins.so",
+                "name":"spectralcentroid",
+                "output":"logcentroid",
+                "vendor":"vamp-example-plugins"},
+              "plugin_config": {
+                "block_size":null,
+                "params":{},
+                "step_size":null},
+              "task_id":"0b04c1b3-b366-5145-9248-6cb118d3be99"
+            }
+        400:
+          description: "There was no task_id parameter provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "There is no extraction request with task_id (UUID) provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+    delete:
+      description: "Details extraction request selected by UUID (task ID)"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Deletes given extraction request"
+          schema:
+            type: "object"
+            properties:
+              task_id:
+                type: "string"
+                format: "uuid"
+        400:
+          description: "There was no task_id parameter provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "There is no extraction request with task_id (UUID) provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        412:
+          description: "Could not remove task request with given task_id because it's in wrong state"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /request/{task_id}/status:
+    get:
+      description: "Returns status of extraction request task selected by UUID (task ID)"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Returns details of requests task status"
+          schema:
+            $ref: "#/definitions/ExtractionStatus"
+          examples:
+            application/json: {
+              status: "done",
+              task_id: "0b04c1b3-b366-5145-9248-6cb118d3be99"
+            }
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Requested task status is not known, which means that either there was no request with given UUID (task_id), or the task did not execute yet"
+          schema:
+            $ref: "#/definitions/ExtractionStatus"
+  /request/{task_id}/meta:
+    get:
+      description: "Returns meta information about raw, extracted feature data"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Meta information about raw, extracted feature data"
+          schema:
+            $ref: "#/definitions/FeatureMeta"
+          examples:
+            application/json: {
+              "data_shape": [204, 1, 0],
+              "feature_size": 1368,
+              "feature_type": "constant_step",
+              "task_id": "0b04c1b3-b366-5145-9248-6cb118d3be99"
+            }
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature meta-information for given task_id (UUID)"
+          schema:
+            $ref: "#/definitions/ExtractionStatus"
+    delete:
+      description: "Deletes meta information of raw features"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Meta information about raw, extracted feature data"
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature meta-information for given task_id (UUID)"
+          schema:
+            $ref: "#/definitions/ExtractionStatus"
+  /request/{task_id}/stats:
+    get:
+      description: "Returns statistics of extracting feature data process"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Statistics of extracting feature data process"
+          schema:
+            $ref: "#/definitions/ExtractionStats"
+          examples:
+            application/json: {
+              compression_time: 0.003,
+              data_stats_build_time: 0,
+              encode_audio_time: 0.13,
+              extraction_time: 0.016,
+              metrics_extraction_time: 0,
+              result_store_time: 0.021,
+              task_id: "0b04c1b3-b366-5145-9248-6cb118d3be99",
+              total_time: 0.227
+            }
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature extraction statistics information for given task_id (UUID)"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+    delete:
+      description: "Deletes statistics information of a request"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Delete statistics of a given extraction"
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature extraction statistics for given task_id (UUID)"
+          schema:
+            $ref: "#/definitions/ExtractionStatus"
+  /request/{task_id}/data:
+    get:
+      description: "Returns raw feature data extracted by the task"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Raw feature data extracted by the task; data format may vary"
+          schema:
+            type: "object"
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature extraction data information for given task_id (UUID)"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+    delete:
+      description: "Deletes raw feature data of a given request"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        200:
+          description: "Deletes raw feature data of a given request"
+        400:
+          description: "Required parameter UUID (task_id) was not provided"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Could not find feature extraction statistics for given task_id (UUID)"
+          schema:
+            $ref: "#/definitions/ExtractionStatus"
+  /request/{task_id}/metric:
+    get:
+      description: "Lists metric definition names that were inserted by given extraction identified by task_id"
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          type: "string"
+          format: "uuid"
+      responses:
+        200:
+          description: "Metric definition names"
+          schema:
+            type: array
+            items:
+              type: "string"
+          examples:
+            application/json: ["example_amplitude"]
+        400:
+          description: "Required task_id parameter was not provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Provided task_id parameter doesn't belong to finished extraction"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /request/{task_id}/metric/{name}:
+    get:
+      description: "Returns metric value extracted and calculated by the extraction task"
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
+      - name: name
+        in: path
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Metric value extracted and calculated by the extraction task"
+          schema:
+            type: "object"
+            properties:
+              task_id:
+                type: "string"
+                format: "uuid"
+              definition:
+                $ref: "#/definitions/MetricDefinition"
+              stats:
+                $ref: "#/definitions/MetricValue"
+          examples:
+            application/json: {
+              "definition": {
+                "function":"none",
+                "kwargs":{},
+                "name":"example_amplitude",
+                "plugin_key":"vamp-example-plugins:amplitudefollower:amplitude"
+              },
+              "stats": {
+                "count":26,
+                "maximum":0.303983,
+                "mean":0.148125,
+                "median":0.159242,
+                "minimum":0.0224164,
+                "standard_deviation":0.0915299,
+                "sum":3.85125,
+                "variance":0.00837772
+              },
+              "task_id": "68620db9-5c2f-5336-816a-d6db9f2850f3"
+            }
+        400:
+          description: "One of required URL parameters (task_id, name) was not provided in URL"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Provided URL parameters (task_id, name) doesn't belong to any extracted metric value"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /request/automation:
+    post:
+      description: "Creates Cartesian product of requests from list of audio files and available (non-blacklisted) VAMP plugins and sends them for execution"
+      responses:
+        202:
+          description: "Returns details of generated requests"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ExtractionRequest"
+          examples:
+            application/json: [{
+               "audio_file_name": "102bpm_drum_loop.flac",
+               "metric_config": null,
+               "plugin_config": null,
+               "plugin_full_key": "vamp-example-plugins:spectralcentroid:logcentroid",
+               "uuid": "0b04c1b3-b366-5145-9248-6cb118d3be99"
+            }]
+        412:
+          description: "Audio files directory or VAMP plugins directory is empty; could not generate requests"
+          schema:
+            $ref: "#/definitions/ErrorModel"

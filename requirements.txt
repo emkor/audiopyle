@@ -1,6 +1,5 @@
 billiard
 celery[sqlalchemy]
-flasgger
 flask
 gevent
 mutagen

@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 import logging
-import os
 from logging import Logger
 
-from flasgger import Swagger
 from flask import Flask
 from gevent.pywsgi import WSGIServer
 
@@ -36,13 +34,6 @@ from audiopyle.api.result import ResultDataApi, ResultMetaApi, ResultStatsApi
 from audiopyle.api.request import RequestListApi, RequestDetailsApi, RequestStatusApi
 
 app = Flask(__name__)
-
-app.config['SWAGGER'] = {
-    'title': 'Audiopyle API',
-    'uiversion': 2
-}
-docs_dir_path, _ = os.path.split(__file__)
-swagger = Swagger(app, template_file=os.path.join(docs_dir_path, "open_api_docs.yml"))
 
 
 def main():
@@ -88,23 +79,29 @@ def start_app(logger: Logger, host: str, port: int):
     app.add_url_rule("/request/<task_id>/stats",
                      view_func=ResultStatsApi.as_view('result_stats_detail_api',
                                                       stats_repo=result_stats_repo))
+    app.add_url_rule("/request/<task_id>/metric",
+                     view_func=MetricValueListApi.as_view('metric_value_list_by_request_api',
+                                                          metric_repo=metric_value_repo))
+    app.add_url_rule("/request/<task_id>/metric/<name>",
+                     view_func=MetricValueDetailsApi.as_view('metric_value_details_by_request_api',
+                                                             metric_repo=metric_value_repo))
     app.add_url_rule("/plugin/<vendor>/<name>/<output>",
                      view_func=PluginDetailApi.as_view('plugin_detail_api',
                                                        plugin_provider=plugin_provider))
     app.add_url_rule("/plugin",
                      view_func=PluginListApi.as_view('plugin_list_api',
-                                                     plugin_provider=plugin_provider, ))
-    app.add_url_rule("/metric-def",
+                                                     plugin_provider=plugin_provider))
+    app.add_url_rule("/metric",
                      view_func=MetricDefinitionListApi.as_view('metric_definition_list_api',
                                                                metric_repo=metric_def_repo))
-    app.add_url_rule("/metric-def/<id>",
+    app.add_url_rule("/metric/<name>",
                      view_func=MetricDefinitionDetailsApi.as_view('metric_definition_details_api',
                                                                   metric_repo=metric_def_repo))
-    app.add_url_rule("/metric-val",
-                     view_func=MetricValueListApi.as_view('metric_value_list_api',
+    app.add_url_rule("/metric/<name>/values",
+                     view_func=MetricValueListApi.as_view('metric_value_list_by_definition_api',
                                                           metric_repo=metric_value_repo))
-    app.add_url_rule("/metric-val/<id>",
-                     view_func=MetricValueDetailsApi.as_view('metric_value_details_api',
+    app.add_url_rule("/metric/<name>/values/<task_id>",
+                     view_func=MetricValueDetailsApi.as_view('metric_value_details_by_definition_api',
                                                              metric_repo=metric_value_repo))
     app.add_url_rule("/config/plugin",
                      view_func=PluginActiveConfigApi.as_view('plugin_config_api',
