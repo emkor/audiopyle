@@ -22,3 +22,6 @@ eggs/
 # IDEA files
 .idea/
 *.iml
+
+# documentation directory
+spectacle_docs/
