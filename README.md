@@ -14,8 +14,8 @@ To start the app, follow these steps:
 - there's no UI available (*yet*), you can use REST API
 
 ### App REST API description
-File `open_api_docs.yml` contains audiopyle API documentation compliant with OpenAPI / Swagger 2.0 spec (you may just paste file contents into [Swagger editor](https://editor.swagger.io/)
-More convenient way is yet to come
+Hosted audiopyle API documentation is available from [GitHub Pages](https://emkor.github.io/audiopyle/api/)
+Alternative way is to paste `open_api_docs.yml` (OpenAPI / Swagger 2.0 compliant spec) file contents into [Swagger editor](https://editor.swagger.io/)
 
 ### How it works (mental model)
 - Extraction takes as input:
