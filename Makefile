@@ -7,7 +7,8 @@ config:
 	@mkdir -p ~/.venv
 	@rm -rf ~/.venv/audiopyle
 	@echo "---- Setting virtualenv ----"
-	@rm -rf ~/.venv/audiopyle && python -m venv ~/.venv/audiopyle
+	@rm -rf ~/.venv/audiopyle
+	python3 -m venv ~/.venv/audiopyle
 	@echo "---- Installing build dependencies ----"
 	@$(PYTHON3) -m pip install wheel mypy pytest pytest-cov assertpy
 	@echo "---- Installing app dependencies ----"
@@ -51,4 +52,4 @@ verify:
 	@echo "---- Running integration tests ----"
 	@docker-compose -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 
-.PHONY: all config test package package basedocker docker run verify
+.PHONY: all config test package basedocker docker run verify

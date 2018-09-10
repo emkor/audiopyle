@@ -1,3 +1,4 @@
+assertpy
 billiard
 celery[sqlalchemy]
 flask
@@ -7,8 +8,7 @@ numpy
 pydub
 pympler
 pymysql
+pytest
 requests
 sqlalchemy
 vamp
-pytest
-assertpy
