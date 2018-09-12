@@ -1,10 +1,4 @@
 {
-  "example_amplitude": {
-    "plugin": "vamp-example-plugins:amplitudefollower:amplitude",
-    "transformation": {
-      "name": "none"
-    }
-  },
   "bbc_energy_rms": {
     "plugin": "bbc-vamp-plugins:bbc-energy:rmsenergy",
     "transformation": {
@@ -132,7 +126,7 @@
     }
   },
   "bbc_spectral_contrast_peaks_bas": {
-    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
     "transformation": {
       "name": "select_row",
       "kwargs": {
@@ -141,7 +135,7 @@
     }
   },
   "bbc_spectral_contrast_peaks_lo_mid": {
-    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
     "transformation": {
       "name": "select_row",
       "kwargs": {
@@ -150,7 +144,7 @@
     }
   },
   "bbc_spectral_contrast_peaks_mid": {
-    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
     "transformation": {
       "name": "select_row",
       "kwargs": {
@@ -159,7 +153,7 @@
     }
   },
   "bbc_spectral_contrast_peaks_hi_mid": {
-    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
     "transformation": {
       "name": "select_row",
       "kwargs": {
@@ -168,7 +162,7 @@
     }
   },
   "bbc_spectral_contrast_peaks_lo_hi": {
-    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
     "transformation": {
       "name": "select_row",
       "kwargs": {
@@ -177,12 +171,42 @@
     }
   },
   "bbc_spectral_contrast_peaks_hi": {
-    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:peaks",
+    "plugin": "bbc-vamp-plugins:bbc-spectral-contrast:mean",
     "transformation": {
       "name": "select_row",
       "kwargs": {
         "row_index": 6
       }
+    }
+  },
+  "bbc_spectral_flux": {
+    "plugin": "bbc-vamp-plugins:bbc-spectral-flux:spectral-flux",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "bbc_speechness": {
+    "plugin": "bbc-vamp-plugins:bbc-speechmusic-segmenter:skewness",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "beatroot_beats": {
+    "plugin": "beatroot-vamp:beatroot:beats",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "nnls-chroma_harmonic_change_prob": {
+    "plugin": "nnls-chroma:chordino:harmonicchange",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "example_amplitude": {
+    "plugin": "vamp-example-plugins:amplitudefollower:amplitude",
+    "transformation": {
+      "name": "none"
     }
   },
   "qm_major_mode_share_ratio": {
@@ -191,15 +215,6 @@
       "name": "segment_share_ratio",
       "kwargs": {
         "label": "Major"
-      }
-    }
-  },
-  "qm_minor_mode_share_ratio": {
-    "plugin": "qm-vamp-plugins:qm-keydetector:mode",
-    "transformation": {
-      "name": "segment_share_ratio",
-      "kwargs": {
-        "label": "Minor"
       }
     }
   }
