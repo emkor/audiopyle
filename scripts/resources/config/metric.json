@@ -655,5 +655,17 @@
         "label": "Major"
       }
     }
+  },
+  "qm_onset_detection": {
+    "plugin": "qm-vamp-plugins:qm-onsetdetector:smoothed_df",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "qm_tempo": {
+    "plugin": "qm-vamp-plugins:qm-tempotracker:tempo",
+    "transformation": {
+      "name": "none"
+    }
   }
 }
