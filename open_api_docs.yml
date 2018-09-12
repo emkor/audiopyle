@@ -3,8 +3,8 @@ swagger: "2.0"
 info:
   description: "An API offering inputs and outputs from the Audiopyle app"
   title: "Audiopyle API"
-  version: "0.0.1"
-host: "localhost"
+  version: "0.1.0"
+host: "localhost:8080"
 basePath: "/"
 schemes:
   - "http"
