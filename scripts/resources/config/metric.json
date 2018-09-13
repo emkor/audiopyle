@@ -685,5 +685,29 @@
     "transformation": {
       "name": "none"
     }
+  },
+  "libxtract_deviation": {
+    "plugin": "vamp-libxtract:average_deviation:average_deviation",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectral_crest": {
+    "plugin": "vamp-libxtract:crest:crest",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_fundamental_frequency": {
+    "plugin": "vamp-libxtract:failsafe_f0:failsafe_f0",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectal_flatness": {
+    "plugin": "vamp-libxtract:flatness:flatness",
+    "transformation": {
+      "name": "none"
+    }
   }
 }

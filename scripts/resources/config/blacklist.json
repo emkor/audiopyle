@@ -107,5 +107,11 @@
   "vamp-example-plugins:powerspectrum:powerspectrum",
   "vamp-example-plugins:spectralcentroid:linearcentroid",
   "vamp-example-plugins:zerocrossing:counts",
-  "vamp-example-plugins:zerocrossing:zerocrossings"
+  "vamp-example-plugins:zerocrossing:zerocrossings",
+  "vamp-libxtract:amdf:amdf",
+  "vamp-libxtract:asdf:asdf",
+  "vamp-libxtract:autocorrelation:autocorrelation",
+  "vamp-libxtract:average_deviation:average_deviation",
+  "vamp-libxtract:dct:dct",
+  "vamp-libxtract:f0:f0"
 ]
