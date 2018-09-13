@@ -311,12 +311,6 @@
       "name": "none"
     }
   },
-  "example_amplitude": {
-    "plugin": "vamp-example-plugins:amplitudefollower:amplitude",
-    "transformation": {
-      "name": "none"
-    }
-  },
   "qm_beats": {
     "plugin": "qm-vamp-plugins:qm-barbeattracker:beatsd",
     "transformation": {
@@ -664,6 +658,30 @@
   },
   "qm_tempo": {
     "plugin": "qm-vamp-plugins:qm-tempotracker:tempo",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "ua_onset_detection": {
+    "plugin": "ua-vamp-plugins:onsetsua:odf",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "example_amplitude": {
+    "plugin": "vamp-example-plugins:amplitudefollower:amplitude",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "example_percussion_onset": {
+    "plugin": "vamp-example-plugins:percussiononsets:detectionfunction",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "example_spectral_log_centroid": {
+    "plugin": "vamp-example-plugins:spectralcentroid:logcentroid",
     "transformation": {
       "name": "none"
     }
