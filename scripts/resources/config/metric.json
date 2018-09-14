@@ -101,19 +101,19 @@
   "bbc_rhythm_onset_rate": {
     "plugin": "bbc-vamp-plugins:bbc-rhythm:avg-onset-freq",
     "transformation": {
-      "name": "singe_value"
+      "name": "single_value"
     }
   },
   "bbc_rhythm_strength": {
     "plugin": "bbc-vamp-plugins:bbc-rhythm:rhythm-strength",
     "transformation": {
-      "name": "singe_value"
+      "name": "single_value"
     }
   },
   "bbc_rhythm_tempo_bpm": {
     "plugin": "bbc-vamp-plugins:bbc-rhythm:tempo",
     "transformation": {
-      "name": "singe_value"
+      "name": "single_value"
     }
   },
   "bbc_spectral_contrast_mean_lo_bas": {
@@ -706,6 +706,102 @@
   },
   "libxtract_spectal_flatness": {
     "plugin": "vamp-libxtract:flatness:flatness",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_irregularity_1": {
+    "plugin": "vamp-libxtract:irregularity_j:irregularity_j",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_irregularity_2": {
+    "plugin": "vamp-libxtract:irregularity_k:irregularity_k",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_kurtosis": {
+    "plugin": "vamp-libxtract:kurtosis:kurtosis",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_loudness": {
+    "plugin": "vamp-libxtract:loudness:loudness",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_rms_amplitude": {
+    "plugin": "vamp-libxtract:rms_amplitude:rms_amplitude",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_non_zero": {
+    "plugin": "vamp-libxtract:nonzero_count:nonzero_count",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_harmonic_odd_to_even": {
+    "plugin": "vamp-libxtract:odd_even_ratio:odd_even_ratio",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_skewness": {
+    "plugin": "vamp-libxtract:skewness:skewness",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectrum_rolloff": {
+    "plugin": "vamp-libxtract:rolloff:rolloff",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectral_sharpness": {
+    "plugin": "vamp-libxtract:sharpness:sharpness",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectral_smoothness": {
+    "plugin": "vamp-libxtract:smoothness:smoothness",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectral_centroid": {
+    "plugin": "vamp-libxtract:spectral_centroid:spectral_centroid",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectral_inharmonicity": {
+    "plugin": "vamp-libxtract:spectral_inharmonicity:spectral_inharmonicity",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectral_kurtosis": {
+    "plugin": "vamp-libxtract:spectral_kurtosis:spectral_kurtosis",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectral_skewness": {
+    "plugin": "vamp-libxtract:spectral_skewness:spectral_skewness",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_spectral_slope": {
+    "plugin": "vamp-libxtract:spectral_slope:spectral_slope",
     "transformation": {
       "name": "none"
     }

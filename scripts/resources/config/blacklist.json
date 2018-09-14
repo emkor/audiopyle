@@ -113,5 +113,12 @@
   "vamp-libxtract:autocorrelation:autocorrelation",
   "vamp-libxtract:average_deviation:average_deviation",
   "vamp-libxtract:dct:dct",
-  "vamp-libxtract:f0:f0"
+  "vamp-libxtract:f0:f0",
+  "vamp-libxtract:harmonic_spectrum:amplitudes",
+  "vamp-libxtract:highest_value:highest_value",
+  "vamp-libxtract:mean:mean",
+  "vamp-libxtract:lowest_value:lowest_value",
+  "vamp-libxtract:mfcc:mfcc",
+  "vamp-libxtract:peak_spectrum:amplitudes",
+  "vamp-libxtract:noisiness",
 ]
