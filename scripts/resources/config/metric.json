@@ -835,5 +835,29 @@
     "transformation": {
       "name": "none"
     }
+  },
+  "libxtract_tristimulus_1": {
+    "plugin": "vamp-libxtract:tristimulus_1:tristimulus_1",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_tristimulus_2": {
+    "plugin": "vamp-libxtract:tristimulus_2:tristimulus_2",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_tristimulus_3": {
+    "plugin": "vamp-libxtract:tristimulus_3:tristimulus_3",
+    "transformation": {
+      "name": "none"
+    }
+  },
+  "libxtract_variance": {
+    "plugin": "vamp-libxtract:variance:variance",
+    "transformation": {
+      "name": "none"
+    }
   }
 }
