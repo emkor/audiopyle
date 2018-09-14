@@ -121,4 +121,5 @@
   "vamp-libxtract:mfcc:mfcc",
   "vamp-libxtract:peak_spectrum:amplitudes",
   "vamp-libxtract:noisiness",
+  "vamp-libxtract:spectrum:amplitudes"
 ]
