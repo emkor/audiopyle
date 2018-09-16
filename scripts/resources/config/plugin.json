@@ -1,4 +1,24 @@
 {
+  "bbc-vamp-plugins:bbc-rhythm:average": {
+    "block_size": 8192,
+    "step_size": 2048
+  },
+  "bbc-vamp-plugins:bbc-rhythm:onset_curve": {
+    "block_size": 8192,
+    "step_size": 2048
+  },
+  "bbc-vamp-plugins:bbc-speechmusic-segmenter:skewness": {
+    "block_size": 4096,
+    "step_size": 4096
+  },
+  "qm-vamp-plugins:qm-onsetdetector:smoothed_df": {
+    "block_size": 4096,
+    "step_size": 2048
+  },
+  "ua-vamp-plugins:onsetsua:odf": {
+    "block_size": 8916,
+    "step_size": 4458
+  },
   "vamp-example-plugins:amplitudefollower:amplitude": {
     "block_size": 4096,
     "step_size": 4096

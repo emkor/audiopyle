@@ -15,7 +15,7 @@ logger = get_logger()
 _REGISTERED_METRIC_TRANSFORMATIONS = {
     "none": NoneTransformation,
     "select_row": SelectRowTransformation,
-    "singe_value": SingleValueTransformation,
+    "single_value": SingleValueTransformation,
     "segment_share_ratio": SegmentLabelShareRatioTransformation
 }
 

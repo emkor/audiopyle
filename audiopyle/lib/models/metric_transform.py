@@ -51,7 +51,7 @@ class SelectRowTransformation(MetricTransformation):
 
 class SingleValueTransformation(MetricTransformation):
     def __init__(self, audio_meta, **kwargs) -> None:
-        super().__init__("singe_value", audio_meta, **kwargs)
+        super().__init__("single_value", audio_meta, **kwargs)
 
     def _call_on_constant_step(self, feature: VampyConstantStepFeature) -> numpy.ndarray:
         first_value = feature.values()[0]
