@@ -1,0 +1,23 @@
+{
+  "name": "audiopyle",
+  "version": "0.3.0",
+  "description": "Frontend for the audiopyle app",
+  "scripts": {
+    "start": "http-server -p 8008 -u 0.0.0.0",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emkor/audiopyle.git"
+  },
+  "author": "Mateusz Korzeniowski",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/emkor/audiopyle/issues"
+  },
+  "homepage": "https://github.com/emkor/audiopyle#readme",
+  "dependencies": {
+    "http-server": "^0.11.1",
+    "vue": "^2.5.17"
+  }
+}
