@@ -13,6 +13,7 @@ test:
 package:
 	@echo "---- Packaging Python env ---- "
 	@make --directory ./backend package
+	@make --directory ./frontend package
 
 basedocker:
 	@echo "---- Building base Docker image ----"
@@ -23,6 +24,7 @@ docker:
 	@docker build -t emkor/audiopyle-lib -f scripts/Dockerfile_lib ./scripts
 	@docker build -t emkor/audiopyle-worker -f scripts/Dockerfile_worker ./scripts
 	@docker build -t emkor/audiopyle-api -f scripts/Dockerfile_api ./scripts
+	make --directory ./frontend docker
 
 docs:
 	@echo "---- Generating static OpenAPI documentation using spectacle ---- "

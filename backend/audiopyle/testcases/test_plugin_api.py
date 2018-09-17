@@ -19,7 +19,7 @@ class PluginApiTest(TestCase):
 
     def test_should_list_plugins(self):
         expected_status_code = 200
-        expected_plugin_count = 6
+        expected_plugin_count = 3
         response = requests.get(url=self.plugin_url)
         assert_that(response.status_code).is_equal_to(expected_status_code)
         actual_response = response.json()
