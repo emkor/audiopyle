@@ -25,7 +25,7 @@ class RequestListApi(AbstractRestApi):
     def post(self, **kwargs) -> str:
         api_request = build_request(request, **kwargs)
         execution_request = self._parse_request(api_request)
-        task_id = execution_request.uuid
+        task_id = execution_request.task_id
         task_result = retrieve_result(task_id)
         if task_result.status in [TaskStatus.ignored, TaskStatus.in_progress, TaskStatus.done]:
             message = "Could not send task #{}: is already in state {}".format(task_id, task_result.status)
