@@ -120,7 +120,7 @@ definitions:
       - "audio_file_name"
       - "plugin_full_key"
     properties:
-      uuid:
+      task_id:
         type: "string"
         format: "uuid"
       audio_file_name:
@@ -532,7 +532,7 @@ paths:
       description: "Returns list of received extraction requests"
       responses:
         200:
-          description: "List of UUIDs (task IDs) from received requests"
+          description: "List of task IDs from received requests"
           schema:
             type: array
             items:
@@ -568,7 +568,7 @@ paths:
             $ref: "#/definitions/ErrorModel"
   /request/{task_id}:
     get:
-      description: "Returns details of extraction request selected by UUID (task ID)"
+      description: "Returns details of extraction request selected by task ID"
       parameters:
       - name: task_id
         in: path
@@ -624,11 +624,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "There is no extraction request with task_id (UUID) provided in URL"
+          description: "There is no extraction request with task_id provided in URL"
           schema:
             $ref: "#/definitions/ErrorModel"
     delete:
-      description: "Details extraction request selected by UUID (task ID)"
+      description: "Details extraction request selected by task ID"
       parameters:
       - name: task_id
         in: path
@@ -649,7 +649,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "There is no extraction request with task_id (UUID) provided in URL"
+          description: "There is no extraction request with task_id provided in URL"
           schema:
             $ref: "#/definitions/ErrorModel"
         412:
@@ -658,7 +658,7 @@ paths:
             $ref: "#/definitions/ErrorModel"
   /request/{task_id}/status:
     get:
-      description: "Returns status of extraction request task selected by UUID (task ID)"
+      description: "Returns status of extraction request task selected by task ID"
       parameters:
       - name: task_id
         in: path
@@ -676,11 +676,11 @@ paths:
               task_id: "0b04c1b3-b366-5145-9248-6cb118d3be99"
             }
         400:
-          description: "Required parameter UUID (task_id) was not provided"
+          description: "Required parameter task_id was not provided"
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Requested task status is not known, which means that either there was no request with given UUID (task_id), or the task did not execute yet"
+          description: "Requested task status is not known, which means that either there was no request with given task_id, or the task did not execute yet"
           schema:
             $ref: "#/definitions/ExtractionStatus"
   /request/{task_id}/meta:
@@ -705,11 +705,11 @@ paths:
               "task_id": "0b04c1b3-b366-5145-9248-6cb118d3be99"
             }
         400:
-          description: "Required parameter UUID (task_id) was not provided"
+          description: "Required parameter task_id was not provided"
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Could not find feature meta-information for given task_id (UUID)"
+          description: "Could not find feature meta-information for given task_id"
           schema:
             $ref: "#/definitions/ExtractionStatus"
     delete:
@@ -724,11 +724,11 @@ paths:
         200:
           description: "Meta information about raw, extracted feature data"
         400:
-          description: "Required parameter UUID (task_id) was not provided"
+          description: "Required parameter task_id was not provided"
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Could not find feature meta-information for given task_id (UUID)"
+          description: "Could not find feature meta-information for given task_id"
           schema:
             $ref: "#/definitions/ExtractionStatus"
   /request/{task_id}/stats:
@@ -757,11 +757,11 @@ paths:
               total_time: 0.227
             }
         400:
-          description: "Required parameter UUID (task_id) was not provided"
+          description: "Required parameter task_id was not provided"
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Could not find feature extraction statistics information for given task_id (UUID)"
+          description: "Could not find feature extraction statistics information for given task_id"
           schema:
             $ref: "#/definitions/ErrorModel"
     delete:
@@ -776,11 +776,11 @@ paths:
         200:
           description: "Delete statistics of a given extraction"
         400:
-          description: "Required parameter UUID (task_id) was not provided"
+          description: "Required parameter task_id was not provided"
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Could not find feature extraction statistics for given task_id (UUID)"
+          description: "Could not find feature extraction statistics for given task_id"
           schema:
             $ref: "#/definitions/ExtractionStatus"
   /request/{task_id}/data:
@@ -798,11 +798,11 @@ paths:
           schema:
             type: "object"
         400:
-          description: "Required parameter UUID (task_id) was not provided"
+          description: "Required parameter task_id was not provided"
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Could not find feature extraction data information for given task_id (UUID)"
+          description: "Could not find feature extraction data information for given task_id"
           schema:
             $ref: "#/definitions/ErrorModel"
     delete:
@@ -817,11 +817,11 @@ paths:
         200:
           description: "Deletes raw feature data of a given request"
         400:
-          description: "Required parameter UUID (task_id) was not provided"
+          description: "Required parameter task_id was not provided"
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Could not find feature extraction statistics for given task_id (UUID)"
+          description: "Could not find feature extraction statistics for given task_id"
           schema:
             $ref: "#/definitions/ExtractionStatus"
   /request/{task_id}/metric:
