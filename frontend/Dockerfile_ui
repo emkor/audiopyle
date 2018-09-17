@@ -1,0 +1,18 @@
+FROM node:8
+
+MAINTAINER emkor93@gmail.com
+LABEL version="0.1"
+LABEL description="Image containing front-end module of an Audiopyle app"
+
+# EXPOSE HTTP PORT
+EXPOSE 8008
+
+# COPY STARTUP SCRIPT AND SET PERMISSIONS
+USER root
+WORKDIR /home/audiopyle
+COPY ./* ./
+RUN chmod u+x ./*.sh
+RUN npm install
+
+# DEFINE ENTRY POINT AS AUDIOPYLE UI
+ENTRYPOINT ["./start_ui.sh"]

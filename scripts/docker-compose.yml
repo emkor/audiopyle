@@ -51,6 +51,17 @@ services:
       - MYSQL_SERVICE_PORT=3306
     depends_on:
       - rabbitmq
+  ui:
+    networks:
+      default:
+        aliases:
+        - api.local
+    image: "emkor/audiopyle-ui:latest"
+    hostname: "api"
+    ports:
+      - "8008:8008"
+    depends_on:
+      - api
   worker:
     networks:
       default:

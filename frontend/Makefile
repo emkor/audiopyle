@@ -1,9 +1,14 @@
-all: package
+all: package docker
 
 NPM = npm
+DOCKER = docker
 
 package:
-	@echo "---- Building NPM wheel package ---- "
+	@echo "---- Building NPM package ---- "
 	@$(NPM) install
 
-.PHONY: all package
+docker:
+	@echo "---- Building Docker image ---- "
+	@$(DOCKER) build -t emkor/audiopyle-ui -f Dockerfile_ui .
+
+.PHONY: all package docker run
