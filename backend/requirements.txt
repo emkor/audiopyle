@@ -2,6 +2,7 @@ assertpy
 billiard
 celery[sqlalchemy]
 flask
+flask-cors
 gevent
 mutagen
 numpy
