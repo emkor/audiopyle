@@ -14,21 +14,23 @@ var app = new Vue({
     methods: {
         fetchAudioDetails: function (event) {
             app.selected_file = event.currentTarget.name;
-            fetch(API_HOST + '/audio/' + app.selected_file)
+            let audioUrl = API_HOST + '/audio/' + app.selected_file;
+            fetch(audioUrl)
                 .then(function (response) {
                     response.json()
                         .then(value => app.selected_file_details = value)
-                        .catch(reason => console.error("Could not parse API response for details of file " + app.selected_file + ": " + reason));
+                        .catch(reason => console.error("Could not parse response from " + audioUrl + ": " + reason));
                 })
                 .catch(error => console.error("Could not fetch details for " + app.selected_file + ": " + error));
         },
         fetchPluginDetails: function (event) {
             app.selected_plugin = event.currentTarget.name;
-            fetch(API_HOST + '/plugin/' + app.selected_plugin.replace(":", "/"))
+            let pluginUrl = API_HOST + '/plugin/' + app.selected_plugin.replace(/:/g, "/");
+            fetch(pluginUrl)
                 .then(function (response) {
                     response.json()
                         .then(value => app.selected_plugin_details = value)
-                        .catch(reason => console.error("Could not parse API response for details of plugin " + app.selected_plugin + ": " + reason));
+                        .catch(reason => console.error("Could not parse response from " + pluginUrl + ": " + reason));
                 })
                 .catch(error => console.error("Could not fetch details for " + app.selected_plugin + ": " + error));
         }
