@@ -32,3 +32,24 @@
     grid-column: 2;
     grid-row: 3;
 }
+
+.request_button {
+    grid-column: 1 / 2;
+    grid-row: 4;
+}
+
+.request_button button {
+    display: block;
+    margin: 0 auto;
+}
+
+.request_list {
+    grid-column: 1;
+    grid-row: 5;
+}
+
+.request_details {
+    grid-column: 2;
+    grid-row: 5;
+}
+
