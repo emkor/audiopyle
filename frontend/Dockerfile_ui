@@ -7,11 +7,15 @@ LABEL description="Image containing front-end module of an Audiopyle app"
 # EXPOSE HTTP PORT
 EXPOSE 8008
 
-# COPY STARTUP SCRIPT AND SET PERMISSIONS
-USER root
+RUN groupadd -g 999 -r audiopyle && useradd -m -r -u 999 -g audiopyle audiopyle
+USER audiopyle
 WORKDIR /home/audiopyle
 COPY ./* ./
-RUN chmod u+x ./*.sh
+
+USER root
+RUN chown -R audiopyle:audiopyle ./* && chmod u+x ./*.sh
+
+USER audiopyle
 RUN npm install
 
 # DEFINE ENTRY POINT AS AUDIOPYLE UI
