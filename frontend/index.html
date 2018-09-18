@@ -2,10 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>audiopyle ui</title>
+    <title>audiopyle</title>
+    <link rel="stylesheet" href="layout.css">
 </head>
 <body>
-<div id="app">{{ message }}</div>
+<div id="app">
+    <div class="header">
+        <h2>audiopyle</h2>
+        <h3>Audio feature extraction engine</h3>
+        <p>Status: {{ api_status }}</p>
+    </div>
+
+    <div class="audio_list">
+        <h4>Audio files</h4>
+        <ul>
+            <li v-for="audio in audio_files">
+                <a v-bind:name="audio" v-on:click="fetchAudioDetails">{{ audio }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="plugin_list">
+        <h4>VAMP plugins</h4>
+        <ul>
+            <li v-for="plugin in vamp_plugins">
+                <a v-bind:name="plugin" v-on:click="fetchPluginDetails">{{ plugin }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="selected_audio">
+        <h4>Selected audio file</h4>
+        <h5>{{ selected_file }} details:</h5>
+        <p>{{ selected_file_details }}</p>
+    </div>
+    <div class="selected_plugin">
+        <h4>Selected VAMP plugin</h4>
+        <h5>{{ selected_plugin }} details:</h5>
+        <p>{{ selected_plugin_details }}</p>
+    </div>
+</div>
+
 <script src="node_modules/vue/dist/vue.min.js"></script>
 <script src="index.js"></script>
 </body>

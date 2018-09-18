@@ -1,0 +1,34 @@
+#app {
+    max-width: 1200px;
+    margin: 20px auto;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.header {
+    grid-column: 1 / 2;
+    grid-row: 1;
+}
+
+.audio_list {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.plugin_list {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.selected_audio {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.selected_plugin {
+    grid-column: 2;
+    grid-row: 3;
+}
