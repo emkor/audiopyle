@@ -123,8 +123,8 @@ def start_app(logger: Logger, host: str, port: int):
                                                           file_store=audio_file_store))
     app.add_url_rule("/", view_func=CoordinatorApi.as_view('coordinator_api'))
     logger.info("Starting API on {} port!".format(port))
-    logging.getLogger('werkzeug').setLevel(logging.INFO)
-    logging.getLogger('flask_cors').setLevel(logging.DEBUG)
+    logging.getLogger('werkzeug').setLevel(logging.WARNING)
+    logging.getLogger('flask_cors').setLevel(logging.WARNING)
     WSGIServer((host, port), app).serve_forever()
 
 
