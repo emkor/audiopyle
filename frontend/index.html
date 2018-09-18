@@ -33,12 +33,23 @@
     <div class="selected_audio">
         <h4>Selected audio file</h4>
         <h5>{{ selected_file }} details:</h5>
-        <p>{{ selected_file_details }}</p>
+        <ul v-if="selected_file_details">
+            <li>File name: {{ selected_file_details.file_name }}</li>
+            <li>Size (bytes): {{ selected_file_details.size }}</li>
+            <li>Created (UTC): {{ selected_file_details.created_on }}</li>
+            <li>Modified (UTC): {{ selected_file_details.last_modification }}</li>
+            <li>Accessed (UTC): {{ selected_file_details.last_access }}</li>
+        </ul>
     </div>
     <div class="selected_plugin">
         <h4>Selected VAMP plugin</h4>
         <h5>{{ selected_plugin }} details:</h5>
-        <p>{{ selected_plugin_details }}</p>
+        <ul v-if="selected_plugin_details">
+            <li>Vendor: {{ selected_plugin_details.vendor }}</li>
+            <li>Name: {{ selected_plugin_details.name }}</li>
+            <li>Output: {{ selected_plugin_details.output }}</li>
+            <li>Library file: {{ selected_plugin_details.library_file_name }}</li>
+        </ul>
     </div>
 </div>
 
