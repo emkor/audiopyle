@@ -29,7 +29,7 @@ from audiopyle.lib.services.audio_tag_providing import read_audio_tag
 from audiopyle.lib.services.feature_extraction import extract_raw_feature, build_feature_object
 from audiopyle.lib.services.feature_meta_extraction import build_feature_meta
 from audiopyle.lib.services.file_meta_providing import read_file_meta, read_audio_file_meta
-from audiopyle.lib.services.segment_providing import read_raw_audio_from_file
+from audiopyle.lib.services.audio_providing import read_raw_audio_from_file
 from audiopyle.lib.services.store_provider import Mp3FileStore
 from audiopyle.lib.utils.env_var import read_env_var
 
