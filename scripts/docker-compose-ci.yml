@@ -49,6 +49,17 @@ services:
       - RABBITMQ_SERIVCE_HOST=rabbitmq.local
       - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
+  ui:
+    networks:
+      default:
+        aliases:
+        - ui.local
+    image: "emkor/audiopyle-ui:latest"
+    hostname: "api"
+    ports:
+      - "8008:8008"
+    depends_on:
+      - api
   worker:
     networks:
       default:
@@ -79,5 +90,7 @@ services:
     image: "emkor/audiopyle-testcases:latest"
     hostname: "testcases"
     environment:
-      - COORDINATOR_SERVICE_HOST=api.local
-      - COORDINATOR_SERVICE_PORT=8080
+      - API_SERVICE_HOST=api.local
+      - API_SERVICE_PORT=8080
+      - UI_SERVICE_HOST=ui.local
+      - UI_SERVICE_PORT=8008

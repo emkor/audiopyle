@@ -11,11 +11,19 @@ DEFAULT_EXPECTED_STATUS = 200
 
 
 def get_api_host():
-    return read_env_var("COORDINATOR_SERVICE_HOST", str, "localhost")
+    return read_env_var("API_SERVICE_HOST", str, default="localhost")
 
 
 def get_api_port():
-    return read_env_var("COORDINATOR_SERVICE_PORT", int, 8080)
+    return read_env_var("API_SERVICE_PORT", int, default=8080)
+
+
+def get_ui_host():
+    return read_env_var("UI_SERVICE_HOST", str, default="localhost")
+
+
+def get_ui_port():
+    return read_env_var("UI_SERVICE_PORT", int, default=8008)
 
 
 class TimeoutException(Exception):
