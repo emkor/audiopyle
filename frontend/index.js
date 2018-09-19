@@ -36,13 +36,19 @@ var app = new Vue({
         selected_plugin_details: null,
         selected_request: null,
         selected_request_status: null,
-        selected_request_details: null,
-        requestPossible: false
+        selected_request_details: null
+    },
+    computed: {
+        requestNotPossible() {
+            return this.selected_file == null || this.selected_plugin == null;
+        },
+        nothingSelected() {
+            return this.selected_file == null && this.selected_plugin == null;
+        }
     },
     methods: {
         fetchAudioDetails: function (event) {
             app.selected_file = event.currentTarget.name;
-            app.requestPossible = app.selected_file != null && app.selected_plugin != null;
             app.selected_file_details = null;
             fetchJson(API_HOST + '/audio/' + app.selected_file,
                 v => app.selected_file_details = v,
@@ -50,7 +56,6 @@ var app = new Vue({
         },
         fetchPluginDetails: function (event) {
             app.selected_plugin = event.currentTarget.name;
-            app.requestPossible = app.selected_file != null && app.selected_plugin != null;
             app.selected_plugin_details = null;
             fetchJson(API_HOST + '/plugin/' + app.selected_plugin.replace(/:/g, "/"),
                 v => app.selected_plugin_details = v,
@@ -96,6 +101,12 @@ var app = new Vue({
                         .catch(reason => console.error("Could not parse response from " + sendRequestUrl + ": " + reason));
                 })
                 .catch(error => console.error("Could not fetch details for " + app.selected_request + ": " + error));
+        },
+        resetSelection: function(event) {
+            app.selected_file = null;
+            app.selected_file_details = null;
+            app.selected_plugin = null;
+            app.selected_plugin_details = null;
         }
     }
 });

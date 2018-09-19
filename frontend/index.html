@@ -51,7 +51,8 @@
     </div>
 
     <div class="request_button">
-        <button v-bind:disabled="!requestPossible" v-on:click="sendRequest">Send request</button>
+        <button :class="{ disabled: nothingSelected }" :disabled="nothingSelected" v-on:click="resetSelection">Clear selection</button>
+        <button :class="{ disabled: requestNotPossible }" :disabled="requestNotPossible" v-on:click="sendRequest">Send request</button>
     </div>
 
     <div class="request_list">

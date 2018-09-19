@@ -53,3 +53,6 @@
     grid-row: 5;
 }
 
+button:disabled {
+    color: #777;
+}
