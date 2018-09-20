@@ -4,6 +4,7 @@ import logging
 from logging import Logger
 
 from flask import Flask
+from flask_cors import CORS
 from gevent.pywsgi import WSGIServer
 
 from audiopyle.lib.db.engine import create_db_tables
@@ -20,6 +21,7 @@ from audiopyle.lib.services.metric_config_provider import MetricConfigProvider
 from audiopyle.lib.services.plugin_config_provider import PluginConfigProvider
 from audiopyle.lib.services.plugin_providing import VampyPluginProvider
 from audiopyle.lib.services.store_provider import Mp3FileStore, JsonFileStore
+from audiopyle.lib.utils.env_var import read_env_var
 from audiopyle.lib.utils.file_system import AUDIO_FILES_DIR, CONFIG_DIR, PLUGIN_BLACKLIST_CONFIG_FILE_NAME
 from audiopyle.lib.utils.logger import setup_logger, get_logger
 from audiopyle.api.audio_file import AudioFileListApi, AudioFileDetailApi
@@ -35,6 +37,8 @@ from audiopyle.api.request import RequestListApi, RequestDetailsApi, RequestStat
 
 app = Flask(__name__)
 
+allowed_origins = read_env_var("API_ALLOWED_ORIGIN", str, "http://localhost:8008,http://ui.local:8080").split(",")
+cors = CORS(app, origins=allowed_origins, methods=["GET", "POST", "DELETE", "PUT"])
 
 def main():
     setup_logger()
@@ -118,8 +122,9 @@ def start_app(logger: Logger, host: str, port: int):
                      view_func=AudioFileDetailApi.as_view('audio_detail_api',
                                                           file_store=audio_file_store))
     app.add_url_rule("/", view_func=CoordinatorApi.as_view('coordinator_api'))
-    logger.info("Starting Coordinator API on {} port!".format(port))
+    logger.info("Starting API on {} port!".format(port))
     logging.getLogger('werkzeug').setLevel(logging.WARNING)
+    logging.getLogger('flask_cors').setLevel(logging.WARNING)
     WSGIServer((host, port), app).serve_forever()
 
 

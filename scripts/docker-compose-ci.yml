@@ -49,11 +49,12 @@ services:
       - RABBITMQ_SERIVCE_HOST=rabbitmq.local
       - MYSQL_SERVICE_HOST=mysql.local
       - MYSQL_SERVICE_PORT=3306
+      - API_ALLOWED_ORIGIN=*
   ui:
     networks:
       default:
         aliases:
-        - ui.local
+          - ui.local
     image: "emkor/audiopyle-ui:latest"
     hostname: "api"
     ports:

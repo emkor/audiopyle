@@ -2,10 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>audiopyle ui</title>
+    <title>audiopyle</title>
+    <link rel="stylesheet" href="layout.css">
 </head>
 <body>
-<div id="app">{{ message }}</div>
+<div id="app">
+    <div class="header">
+        <h2>audiopyle</h2>
+        <h3>Audio feature extraction engine</h3>
+        <p>Status: {{ api_status }}</p>
+    </div>
+
+    <div class="audio_list">
+        <h4>Audio files</h4>
+        <ul>
+            <li v-for="audio in audio_files">
+                <a v-bind:name="audio" v-on:click="fetchAudioDetails">{{ audio }}</a>
+            </li>
+        </ul>
+    </div>
+    <div class="plugin_list">
+        <h4>VAMP plugins</h4>
+        <ul>
+            <li v-for="plugin in vamp_plugins">
+                <a v-bind:name="plugin" v-on:click="fetchPluginDetails">{{ plugin }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="selected_audio">
+        <h4>Details of audio file: {{ selected_file }}</h4>
+        <ul v-if="selected_file_details">
+            <li>File name: {{ selected_file_details.file_name }}</li>
+            <li>Size (bytes): {{ selected_file_details.size }}</li>
+            <li>Created (UTC): {{ selected_file_details.created_on }}</li>
+            <li>Modified (UTC): {{ selected_file_details.last_modification }}</li>
+            <li>Accessed (UTC): {{ selected_file_details.last_access }}</li>
+        </ul>
+    </div>
+    <div class="selected_plugin">
+        <h4>Details of VAMP plugin: {{ selected_plugin }}</h4>
+        <ul v-if="selected_plugin_details">
+            <li>Vendor: {{ selected_plugin_details.vendor }}</li>
+            <li>Name: {{ selected_plugin_details.name }}</li>
+            <li>Output: {{ selected_plugin_details.output }}</li>
+            <li>Library file: {{ selected_plugin_details.library_file_name }}</li>
+        </ul>
+    </div>
+
+    <div class="request_button">
+        <button :class="{ disabled: nothingSelected }" :disabled="nothingSelected" v-on:click="resetSelection">Clear selection</button>
+        <button :class="{ disabled: requestNotPossible }" :disabled="requestNotPossible" v-on:click="sendRequest">Send request</button>
+    </div>
+
+    <div class="request_list">
+        <h4>Extracted requests</h4>
+        <ul>
+            <li v-for="request in requests">
+                <a v-bind:name="request" v-on:click="fetchRequestDetails">{{ request }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="request_details">
+        <h4>Details of request: {{ selected_request }}</h4>
+        <h5 v-if="selected_request_status">Status: {{ selected_request_status }}</h5>
+        <ul v-if="selected_request_details">
+            <li>Task ID: {{ selected_request_details.task_id }}</li>
+            <li>Audio file name: {{ selected_request_details.audio_meta.file_name }}</li>
+            <li>Plugin: {{ selected_request_details.plugin.vendor }}:{{ selected_request_details.plugin.name }}:{{
+                selected_request_details.plugin.output }}
+            </li>
+        </ul>
+    </div>
+</div>
+
 <script src="node_modules/vue/dist/vue.min.js"></script>
 <script src="index.js"></script>
 </body>
