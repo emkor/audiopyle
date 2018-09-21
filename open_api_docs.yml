@@ -254,6 +254,21 @@ definitions:
         description: "Time (in seconds) taken by inserting data related to extraction to DB"
         type: "number"
 paths:
+  /:
+    get:
+      description: "Returns Audiopyle API status"
+      responses:
+        200:
+          description: "API status"
+          schema:
+            type: object
+            properties:
+              status:
+                type: "string"
+          examples:
+            application/json: {
+              "status": "ok"
+            }
   /audio:
     get:
       description: "Returns list of available audio file names"

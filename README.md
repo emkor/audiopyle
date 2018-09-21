@@ -10,8 +10,8 @@ To start the app, follow these steps:
     - `worker/volumes`
 - do `make run` from the directory with `Makefile`
 - docker should pull the audiopyle images now
-- do `GET` on `http://localhost:8080/` to check the audiopyle status
-- there's no UI available (*yet*), you can use REST API
+- do `GET` on `http://localhost:8080/` to check the audiopyle status via API
+- there's no UI available (*yet, work in progress*), you can use REST API
 
 ### App REST API description
 Hosted audiopyle API documentation is available from [GitHub Pages](https://emkor.github.io/audiopyle/api/)
