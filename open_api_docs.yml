@@ -203,8 +203,8 @@ definitions:
     - "task_id"
     properties:
       data_shape:
-        description: "3-element array describing element count in X, Y, Z dimensions"
-        type: array
+        description: "3-element describing element count in X, Y, Z dimensions"
+        type: "array"
         items:
           type: "integer"
       feature_size:
@@ -260,7 +260,7 @@ paths:
         200:
           description: "API status"
           schema:
-            type: object
+            type: "object"
             properties:
               status:
                 type: "string"
@@ -275,7 +275,7 @@ paths:
         200:
           description: "A list of file names"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
@@ -479,7 +479,7 @@ paths:
         200:
           description: "List of plugin keys with config defined in JSON file"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
@@ -518,7 +518,7 @@ paths:
         200:
           description: "Metric definition names"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
@@ -556,7 +556,7 @@ paths:
         200:
           description: "List of task_ids that extracted metric values for given metric definitions"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
               format: "uuid"
@@ -631,7 +631,7 @@ paths:
         200:
           description: "List of task IDs from received requests"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
@@ -934,7 +934,7 @@ paths:
         200:
           description: "Metric definition names"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
@@ -1008,7 +1008,7 @@ paths:
         202:
           description: "Returns details of generated requests"
           schema:
-            type: array
+            type: "array"
             items:
               $ref: "#/definitions/ExtractionRequest"
           examples:
