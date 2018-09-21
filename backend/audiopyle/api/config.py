@@ -15,7 +15,7 @@ class PluginConfigListApi(AbstractRestApi):
     def get(self, **kwargs) -> str:
         api_request = build_request(request, **kwargs)
         try:
-            api_response = ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_config_provider.get_plugins())
+            api_response = ApiResponse(status_code=HttpStatusCode.ok, payload=self.plugin_config_provider.get_plugin_names())
         except Exception:
             api_response = ApiResponse(HttpStatusCode.not_found,
                                        {"message": "Could not find config file: {}".format(PLUGIN_CONFIG_FILE_NAME)})

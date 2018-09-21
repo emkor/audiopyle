@@ -24,6 +24,6 @@ class PluginConfigProvider(object):
         full_config = self.get_all() or {}
         return full_config.get(plugin_full_key, {})
 
-    def get_plugins(self) -> List[str]:
+    def get_plugin_names(self) -> List[str]:
         full_config = self.get_all() or {}
         return list(full_config.keys())
