@@ -412,18 +412,38 @@ paths:
             $ref: "#/definitions/ErrorModel"
   /config/plugin:
     get:
-      description: "Returns available plugin configuration"
+      description: "Returns plugins for which there's available configuration"
       responses:
         200:
-          description: "Content of plugin config JSON file"
+          description: "Plugin keys list with config defined in JSON file"
+          schema:
+            type: array
+            items:
+              type: "string"
+          examples:
+            application/json: [
+              "vamp-example-plugins:amplitudefollower:amplitude"
+            ]
+        400:
+          description: "Vendor, name or output parameter were not given"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "There was no plugin config file found"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /config/plugin/{vendor}/{name}/{output}:
+    get:
+      description: "Returns available configuration for given plugin"
+      responses:
+        200:
+          description: "Content of plugin config JSON file for given plugin"
           schema:
             $ref: "#/definitions/PluginConfig"
           examples:
             application/json: {
-              "vamp-example-plugins:amplitudefollower:amplitude": {
-                "block_size":4096,
-                "step_size":4096
-              }
+              "block_size": 4096,
+              "step_size": 4096
             }
         404:
           description: "There was no plugin config file found"
