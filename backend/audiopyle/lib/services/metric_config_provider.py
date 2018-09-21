@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 
 from audiopyle.lib.services.store_provider import JsonFileStore, StoreError
 from audiopyle.lib.utils.file_system import METRIC_CONFIG_FILE_NAME
@@ -29,6 +29,17 @@ class MetricConfigProvider(object):
                 plugin_config.update({metric_name: metric_config})
         return plugin_config
 
-    def get_by_name(self, metric_name):
-        full_config = self.get_all()
-        return full_config.get(metric_name, {}) if full_config is not None else {}
+    def get_by_name(self, metric_name) -> Dict[str, Any]:
+        full_config = self.get_all() or {}
+        return full_config.get(metric_name, {})
+
+    def get_metric_names(self) -> List[str]:
+        full_config = self.get_all() or {}
+        return list(full_config.keys())
+
+    def get_metric_names_for_plugin(self, plugin_full_key: str) -> List[str]:
+        metric_names = []
+        for metric_name, metric_config in (self.get_all() or {}).items():
+            if plugin_full_key == metric_config["plugin"]:
+                metric_names.append(metric_name)
+        return metric_names

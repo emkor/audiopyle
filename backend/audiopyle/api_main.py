@@ -27,7 +27,8 @@ from audiopyle.lib.utils.logger import setup_logger, get_logger
 from audiopyle.api.audio_file import AudioFileListApi, AudioFileDetailApi
 from audiopyle.api.audio_tag import AudioTagApi
 from audiopyle.api.automation import AutomationApi
-from audiopyle.api.config import PluginConfigListApi, MetricActiveConfigApi, PluginConfigApi
+from audiopyle.api.config import PluginConfigListApi, MetricConfigListApi, PluginConfigApi, MetricByNameApi, \
+    MetricsByPluginApi
 from audiopyle.api.metric import MetricDefinitionListApi, MetricDefinitionDetailsApi, MetricValueListApi, \
     MetricValueDetailsApi
 from audiopyle.api.plugin import PluginListApi, PluginDetailApi
@@ -114,9 +115,15 @@ def start_app(logger: Logger, host: str, port: int):
     app.add_url_rule("/config/plugin/<vendor>/<name>/<output>",
                      view_func=PluginConfigApi.as_view('plugin_config_api',
                                                        plugin_config_provider=plugin_config_provider))
+    app.add_url_rule("/config/plugin/<vendor>/<name>/<output>/metric",
+                     view_func=MetricsByPluginApi.as_view('plugin_metric_names_api',
+                                                          metric_config_provider=metric_config_provider))
     app.add_url_rule("/config/metric",
-                     view_func=MetricActiveConfigApi.as_view('metric_config_api',
-                                                             metric_config_provider=metric_config_provider))
+                     view_func=MetricConfigListApi.as_view('metric_config_list_api',
+                                                           metric_config_provider=metric_config_provider))
+    app.add_url_rule("/config/metric/<name>",
+                     view_func=MetricByNameApi.as_view('metric_config_by_name_api',
+                                                       metric_config_provider=metric_config_provider))
     app.add_url_rule("/audio",
                      view_func=AudioFileListApi.as_view('audio_list_api',
                                                         file_store=audio_file_store))

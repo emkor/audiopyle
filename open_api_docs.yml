@@ -88,32 +88,31 @@ definitions:
         type: "integer"
   MetricConfig:
     type: "object"
-    additionalProperties:
-      type: "object"
-      required:
-        - "plugin"
-        - "transformation"
-      properties:
-        plugin:
-          type: "string"
-        transformation:
-          type: "object"
-          properties:
-            name:
-              type: "string"
-            kwargs:
-              type: "object"
-              additionalProperties: true
+    required:
+      - "plugin"
+      - "transformation"
+    properties:
+      plugin:
+        type: "string"
+      transformation:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+          kwargs:
+            type: "object"
+            additionalProperties: true
   PluginConfig:
     type: "object"
-    additionalProperties:
-      type: "object"
-      properties:
-        block_size:
-          type: "integer"
-        step_size:
-          type: "integer"
-      additionalProperties: true
+    required:
+      - block_size
+      - step_size
+    properties:
+      block_size:
+        type: "integer"
+      step_size:
+        type: "integer"
+    additionalProperties: true
   ExtractionRequest:
     type: "object"
     required:
@@ -386,7 +385,42 @@ paths:
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Plugin with given vendor, name or output dos not exist"
+          description: "Plugin with given vendor, name or output does not exist"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /plugin/{vendor}/{name}/{output}/metric:
+    get:
+      description: "Returns Metric defined for given plugin"
+      parameters:
+      - name: vendor
+        in: path
+        required: true
+        type: "string"
+      - name: name
+        in: path
+        required: true
+        type: "string"
+      - name: output
+        in: path
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "List of Metric names that are using given plugin as input"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          examples:
+            application/json: [
+              "bbc_rhythm_onset_average"
+            ]
+        400:
+          description: "Vendor, name or output parameter were not given"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Plugin with given vendor, name or output does not exist"
           schema:
             $ref: "#/definitions/ErrorModel"
   /config/metric:
@@ -395,6 +429,30 @@ paths:
       responses:
         200:
           description: "Content of metric config JSON file"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          examples:
+            application/json: [
+              "bbc_energy_rms",
+              "bbc_intensity_overall"
+            ]
+        404:
+          description: "There was no metric config file found"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /config/metric/{name}:
+    get:
+      description: "Returns metric definition with given name"
+      parameters:
+      - name: name
+        in: path
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Metric definition from configuration file"
           schema:
             $ref: "#/definitions/MetricConfig"
           examples:
@@ -406,8 +464,12 @@ paths:
                 }
               }
             }
+        400:
+          description: "Metric name parameter was not given"
+          schema:
+            $ref: "#/definitions/ErrorModel"
         404:
-          description: "There was no metric config file found"
+          description: "Metric with given name does not exist"
           schema:
             $ref: "#/definitions/ErrorModel"
   /config/plugin:
