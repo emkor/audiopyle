@@ -6,7 +6,7 @@ LABEL description="Image containing libraries of an Audiopyle app"
 
 # ADD AUDIOPYLE PACKAGE; EXECUTED AS ROOT
 USER root
-COPY audiopyle-*.whl /home/audiopyle/
+COPY ./audiopyle-*.whl /home/audiopyle/
 RUN chown audiopyle:audiopyle /home/audiopyle/*.whl
 
 # SET WORK DIRECTORY AND USER, INSTALL AUDIOPYLE
