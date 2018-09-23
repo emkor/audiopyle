@@ -25,9 +25,7 @@ basedocker:
 
 docker:
 	@echo "---- Building app Docker images ----"
-	@docker build -t emkor/audiopyle-lib -f scripts/Dockerfile_lib ./scripts
-	@docker build -t emkor/audiopyle-worker -f scripts/Dockerfile_worker ./scripts
-	@docker build -t emkor/audiopyle-api -f scripts/Dockerfile_api ./scripts
+	make --directory ./backend docker
 	make --directory ./frontend docker
 
 docs:
@@ -40,8 +38,6 @@ run:
 	@docker-compose -f ./scripts/docker-compose.yml up
 
 verify:
-	@echo "---- Building integration tests Docker image ----"
-	@docker build -t emkor/audiopyle-testcases -f scripts/Dockerfile_testcases ./scripts
 	@echo "---- Running integration tests ----"
 	@docker-compose -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 

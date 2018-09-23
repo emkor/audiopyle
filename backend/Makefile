@@ -1,4 +1,4 @@
-all: test build
+all: test build docker
 
 PY3 = python3
 VENV_PY3 = ~/.venv/audiopyle/bin/python3
@@ -23,7 +23,14 @@ test:
 
 build:
 	@echo "---- Building python wheel package ---- "
-	@$(VENV_PY3) setup.py bdist_wheel --python-tag py3 --dist-dir ../scripts/
+	@$(VENV_PY3) setup.py bdist_wheel --python-tag py3 --dist-dir ./
+
+docker:
+	@echo "---- Building app Docker images ----"
+	@docker build -t emkor/audiopyle-lib -f Dockerfile_lib .
+	@docker build -t emkor/audiopyle-worker -f Dockerfile_worker .
+	@docker build -t emkor/audiopyle-api -f Dockerfile_api .
+	@docker build -t emkor/audiopyle-testcases -f Dockerfile_testcases .
 
 cleanup:
 	@echo "---- Cleaning up ---- "
@@ -33,4 +40,4 @@ cleanup:
 	@rm -rf ./build
 	@rm -rf ./audiopyle-*.whl
 
-.PHONY: all config test build cleanup
+.PHONY: all config test build docker cleanup
