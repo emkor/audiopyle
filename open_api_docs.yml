@@ -7,11 +7,11 @@ info:
 host: "localhost:8080"
 basePath: "/"
 schemes:
-  - "http"
+- "http"
 consumes:
-  - "application/json"
+- "application/json"
 produces:
-  - "application/json"
+- "application/json"
 definitions:
   ErrorModel:
     type: "object"
@@ -23,11 +23,11 @@ definitions:
   FileDetail:
     type: "object"
     required:
-      - "file_name"
-      - "size"
-      - "created_on"
-      - "last_modification"
-      - "last_access"
+    - "file_name"
+    - "size"
+    - "created_on"
+    - "last_modification"
+    - "last_access"
     properties:
       file_name:
         type: "string"
@@ -49,10 +49,10 @@ definitions:
   VampPlugin:
     type: "object"
     required:
-      - "vendor"
-      - "name"
-      - "output"
-      - "library_file_name"
+    - "vendor"
+    - "name"
+    - "output"
+    - "library_file_name"
     properties:
       vendor:
         type: "string"
@@ -65,12 +65,12 @@ definitions:
   AudioTag:
     type: "object"
     required:
-      - "artist"
-      - "album"
-      - "title"
-      - "genre"
-      - "track"
-      - "date"
+    - "artist"
+    - "album"
+    - "title"
+    - "genre"
+    - "track"
+    - "date"
     properties:
       artist:
         type: "string"
@@ -88,37 +88,36 @@ definitions:
         type: "integer"
   MetricConfig:
     type: "object"
-    additionalProperties:
-      type: "object"
-      required:
-        - "plugin"
-        - "transformation"
-      properties:
-        plugin:
-          type: "string"
-        transformation:
-          type: "object"
-          properties:
-            name:
-              type: "string"
-            kwargs:
-              type: "object"
-              additionalProperties: true
+    required:
+    - "plugin"
+    - "transformation"
+    properties:
+      plugin:
+        type: "string"
+      transformation:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+          kwargs:
+            type: "object"
+            additionalProperties: true
   PluginConfig:
     type: "object"
-    additionalProperties:
-      type: "object"
-      properties:
-        block_size:
-          type: "integer"
-        step_size:
-          type: "integer"
-      additionalProperties: true
+    required:
+    - block_size
+    - step_size
+    properties:
+      block_size:
+        type: "integer"
+      step_size:
+        type: "integer"
+    additionalProperties: true
   ExtractionRequest:
     type: "object"
     required:
-      - "audio_file_name"
-      - "plugin_full_key"
+    - "audio_file_name"
+    - "plugin_full_key"
     properties:
       task_id:
         type: "string"
@@ -134,9 +133,9 @@ definitions:
   MetricDefinition:
     type: "object"
     required:
-      - "name"
-      - "plugin"
-      - "transformation"
+    - "name"
+    - "plugin"
+    - "transformation"
     properties:
       name:
         type: "string"
@@ -147,7 +146,7 @@ definitions:
       transformation:
         type: "object"
         required:
-          - "name"
+        - "name"
         properties:
           name:
             type: "string"
@@ -158,14 +157,14 @@ definitions:
   MetricValue:
     type: "object"
     required:
-      - "count"
-      - "maximum"
-      - "mean"
-      - "median"
-      - "minimum"
-      - "standard_deviation"
-      - "sum"
-      - "variance"
+    - "count"
+    - "maximum"
+    - "mean"
+    - "median"
+    - "minimum"
+    - "standard_deviation"
+    - "sum"
+    - "variance"
     properties:
       count:
         type: "integer"
@@ -186,8 +185,8 @@ definitions:
   ExtractionStatus:
     type: "object"
     required:
-      - "task_id"
-      - "status"
+    - "task_id"
+    - "status"
     properties:
       task_id:
         type: "string"
@@ -204,8 +203,8 @@ definitions:
     - "task_id"
     properties:
       data_shape:
-        description: "3-element array describing element count in X, Y, Z dimensions"
-        type: array
+        description: "3-element describing element count in X, Y, Z dimensions"
+        type: "array"
         items:
           type: "integer"
       feature_size:
@@ -220,14 +219,14 @@ definitions:
   ExtractionStats:
     type: "object"
     required:
-      - "task_id"
-      - "total_time"
-      - "compression_time"
-      - "data_stats_build_time"
-      - "encode_audio_time"
-      - "extraction_time"
-      - "metrics_extraction_time"
-      - "result_store_time"
+    - "task_id"
+    - "total_time"
+    - "compression_time"
+    - "data_stats_build_time"
+    - "encode_audio_time"
+    - "extraction_time"
+    - "metrics_extraction_time"
+    - "result_store_time"
     properties:
       task_id:
         type: "string"
@@ -254,6 +253,21 @@ definitions:
         description: "Time (in seconds) taken by inserting data related to extraction to DB"
         type: "number"
 paths:
+  /:
+    get:
+      description: "Returns Audiopyle API status"
+      responses:
+        200:
+          description: "API status"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+          examples:
+            application/json: {
+              "status": "ok"
+            }
   /audio:
     get:
       description: "Returns list of available audio file names"
@@ -261,14 +275,14 @@ paths:
         200:
           description: "A list of file names"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
             application/json: [
-                "102bpm_drum_loop.flac",
-                "102bpm_drum_loop.mp3"
-              ]
+              "102bpm_drum_loop.flac",
+              "102bpm_drum_loop.mp3"
+            ]
   /audio/{file_name}:
     get:
       description: "Returns list of available audio file names"
@@ -332,7 +346,7 @@ paths:
             $ref: "#/definitions/ErrorModel"
   /plugin:
     get:
-      description: "Returns list of available VAMP plugins"
+      description: "Returns list of available VAMP plugin full keys"
       responses:
         200:
           description: "List of available VAMP plugins"
@@ -371,7 +385,42 @@ paths:
           schema:
             $ref: "#/definitions/ErrorModel"
         404:
-          description: "Plugin with given vendor, name or output dos not exist"
+          description: "Plugin with given vendor, name or output does not exist"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /plugin/{vendor}/{name}/{output}/metric:
+    get:
+      description: "Returns Metric defined for given plugin"
+      parameters:
+      - name: vendor
+        in: path
+        required: true
+        type: "string"
+      - name: name
+        in: path
+        required: true
+        type: "string"
+      - name: output
+        in: path
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "List of Metric names that are using given plugin as input"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          examples:
+            application/json: [
+              "bbc_rhythm_onset_average"
+            ]
+        400:
+          description: "Vendor, name or output parameter were not given"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "Plugin with given vendor, name or output does not exist"
           schema:
             $ref: "#/definitions/ErrorModel"
   /config/metric:
@@ -380,6 +429,30 @@ paths:
       responses:
         200:
           description: "Content of metric config JSON file"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          examples:
+            application/json: [
+              "bbc_energy_rms",
+              "bbc_intensity_overall"
+            ]
+        404:
+          description: "There was no metric config file found"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /config/metric/{name}:
+    get:
+      description: "Returns metric definition with given name"
+      parameters:
+      - name: name
+        in: path
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Metric definition from configuration file"
           schema:
             $ref: "#/definitions/MetricConfig"
           examples:
@@ -391,24 +464,48 @@ paths:
                 }
               }
             }
+        400:
+          description: "Metric name parameter was not given"
+          schema:
+            $ref: "#/definitions/ErrorModel"
         404:
-          description: "There was no metric config file found"
+          description: "Metric with given name does not exist"
           schema:
             $ref: "#/definitions/ErrorModel"
   /config/plugin:
     get:
-      description: "Returns available plugin configuration"
+      description: "Returns plugins for which there's available configuration"
       responses:
         200:
-          description: "Content of plugin config JSON file"
+          description: "List of plugin keys with config defined in JSON file"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+          examples:
+            application/json: [
+              "vamp-example-plugins:amplitudefollower:amplitude"
+            ]
+        400:
+          description: "Vendor, name or output parameter were not given"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+        404:
+          description: "There was no plugin config file found"
+          schema:
+            $ref: "#/definitions/ErrorModel"
+  /config/plugin/{vendor}/{name}/{output}:
+    get:
+      description: "Returns available configuration for given plugin"
+      responses:
+        200:
+          description: "Content of plugin config JSON file for given plugin"
           schema:
             $ref: "#/definitions/PluginConfig"
           examples:
             application/json: {
-              "vamp-example-plugins:amplitudefollower:amplitude": {
-                "block_size":4096,
-                "step_size":4096
-              }
+              "block_size": 4096,
+              "step_size": 4096
             }
         404:
           description: "There was no plugin config file found"
@@ -421,7 +518,7 @@ paths:
         200:
           description: "Metric definition names"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
@@ -451,15 +548,15 @@ paths:
     get:
       description: "Returns metric values inserted by finished extractions"
       parameters:
-        - name: name
-          in: path
-          required: true
-          type: "string"
+      - name: name
+        in: path
+        required: true
+        type: "string"
       responses:
         200:
           description: "List of task_ids that extracted metric values for given metric definitions"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
               format: "uuid"
@@ -534,7 +631,7 @@ paths:
         200:
           description: "List of task IDs from received requests"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
@@ -828,16 +925,16 @@ paths:
     get:
       description: "Lists metric definition names that were inserted by given extraction identified by task_id"
       parameters:
-        - name: task_id
-          in: path
-          required: true
-          type: "string"
-          format: "uuid"
+      - name: task_id
+        in: path
+        required: true
+        type: "string"
+        format: "uuid"
       responses:
         200:
           description: "Metric definition names"
           schema:
-            type: array
+            type: "array"
             items:
               type: "string"
           examples:
@@ -911,17 +1008,17 @@ paths:
         202:
           description: "Returns details of generated requests"
           schema:
-            type: array
+            type: "array"
             items:
               $ref: "#/definitions/ExtractionRequest"
           examples:
             application/json: [{
-               "audio_file_name": "102bpm_drum_loop.flac",
-               "metric_config": null,
-               "plugin_config": null,
-               "plugin_full_key": "vamp-example-plugins:spectralcentroid:logcentroid",
-               "uuid": "0b04c1b3-b366-5145-9248-6cb118d3be99"
-            }]
+                                 "audio_file_name": "102bpm_drum_loop.flac",
+                                 "metric_config": null,
+                                 "plugin_config": null,
+                                 "plugin_full_key": "vamp-example-plugins:spectralcentroid:logcentroid",
+                                 "uuid": "0b04c1b3-b366-5145-9248-6cb118d3be99"
+                               }]
         412:
           description: "Audio files directory or VAMP plugins directory is empty; could not generate requests"
           schema:

@@ -43,6 +43,12 @@ verify:
 
 cleanup:
 	@echo "---- Cleaning up Audiopyle app ----"
+	@rm -rf ./backend/.mypy_cache
+	@rm -rf ./backend/.pytest_cache
+	@rm -rf ./backend/.coverage
+	@rm -rf ./frontend/node_modules
+	@rm -rf ./spectacle_docs
+	@rm -rf ./scripts/audiopyle-*.whl
 	@docker-compose -f ./scripts/docker-compose.yml down
 	@docker-compose -f ./scripts/docker-compose-ci.yml down
 
