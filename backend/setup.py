@@ -8,6 +8,9 @@ from setuptools import find_packages
 with open("requirements.txt") as f:
     REQUIREMENTS = [str(req) for req in parse_requirements(f.read())]
 
+with open("requirements-dev.txt") as f:
+    REQUIREMENTS_DEV = [str(req) for req in parse_requirements(f.read())]
+
 setup(
     name='audiopyle',
     version='0.3.0',
@@ -17,6 +20,9 @@ setup(
     url='https://github.com/emkor/audiopyle',
     packages=find_packages(exclude=["audiopyle.test", "audiopyle.test.*"]),
     install_requires=REQUIREMENTS,
+    extras_require={
+        'dev': REQUIREMENTS_DEV
+    },
     entry_points={
         'console_scripts': [
             'audiopyle-worker = audiopyle.worker_main:main',

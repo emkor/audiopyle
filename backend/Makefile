@@ -10,11 +10,9 @@ config:
 	@echo "---- Setting virtualenv ----"
 	@rm -rf ~/.venv/audiopyle
 	@$(PY3) -m venv ~/.venv/audiopyle
-	@echo "---- Installing build dependencies ----"
-	@$(VENV_PY3) -m pip install wheel mypy pytest pytest-cov assertpy
-	@echo "---- Installing app dependencies and app itself in editable mode ----"
-	@$(VENV_PY3) -m pip install numpy
-	@$(VENV_PY3) -m pip install vamp
+	@echo "---- Installing development dependencies ----"
+	@$(VENV_PY3) -m pip install -r ./requirements-dev.txt
+	@echo "---- Installing app production dependencies and app itself in editable mode ----"
 	@$(VENV_PY3) -m pip install -e .
 
 test:
