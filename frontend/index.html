@@ -49,7 +49,7 @@
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
                                                 data-target="#chooseAudio"
                                                 aria-expanded="false" aria-controls="collapseOne">
-                                            Choose audio file
+                                            Choose audio file ({{ audio_files.length }} available)
                                         </button>
                                     </h5>
                                 </div>
@@ -102,7 +102,7 @@
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
                                                 data-target="#chooseVamp"
                                                 aria-expanded="false" aria-controls="collapseOne">
-                                            Choose VAMP plugin
+                                            Choose VAMP plugin ({{ vamp_plugins.length }} available)
                                         </button>
                                     </h5>
                                 </div>
@@ -232,7 +232,7 @@
                                             <td>{{ request.plugin.vendor }}:{{ request.plugin.name }}:{{ request.plugin.output }}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-sm"
-                                                        v-bind:name="request"
+                                                        v-bind:name="request.task_id"
                                                         v-on:click="fetchRequestDetails">Select
                                                 </button>
                                             </td>
@@ -241,17 +241,37 @@
                                     </table>
                                 </div>
                             </div>
-                            <!--<div class="col-sm-5">-->
-                                <!--<h4>Details of request: {{ selected_request }}</h4>-->
-                                <!--<h5 v-if="selected_request_status">Status: {{ selected_request_status }}</h5>-->
-                                <!--<div v-if="selected_request_details">-->
-                                    <!--<p>-->
-                                        <!--Task ID: {{ selected_request_details.task_id }}<br />-->
-                                        <!--Audio file name: {{ selected_request_details.audio_meta.file_name }}<br />-->
-                                        <!--Plugin: {{ selected_request_details.plugin.vendor }}:{{ selected_request_details.plugin.name }}:{{ selected_request_details.plugin.output }}<br />-->
-                                    <!--</p>-->
-                                <!--</div>-->
-                            <!--</div>-->
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4>Details of request: {{ selected_request }}</h4>
+                                <h5 v-if="selected_request_status">Status: {{ selected_request_status }}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div v-if="selected_request_details">
+                                    <p>
+                                        Task ID: {{ selected_request_details.task_id }}<br/>
+                                        Audio file name: {{ selected_request_details.audio_meta.file_name }}<br />
+                                        Plugin: {{ selected_request_details.plugin.vendor }}:{{ selected_request_details.plugin.name }}:{{ selected_request_details.plugin.output }}<br />
+                                        Plugin config: <code>{{ selected_request_details.plugin_config }}</code><br />
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div v-if="selected_request_details">
+                                    <p>
+                                        Track channels: {{ selected_request_details.audio_meta.channels_count }}<br />
+                                        Track sample rate: {{ selected_request_details.audio_meta.sample_rate }} Hz<br />
+                                        Track bit-rate: {{ selected_request_details.audio_meta.bit_rate_kbps }} kbps<br />
+                                        Track length: {{ selected_request_details.audio_meta.length_sec }} seconds<br />
+                                        Artist: {{ selected_request_details.id3_tag.artist }}<br />
+                                        Album: {{ selected_request_details.id3_tag.album }}<br />
+                                        Title: {{ selected_request_details.id3_tag.title }}<br />
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="analyzeCompare" class="tab-pane">
