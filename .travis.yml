@@ -10,34 +10,43 @@ services:
 jobs:
   include:
     - stage: os_deps
+      name: "Setup OS"
       script:
       - chmod u+x **/*.sh
       - sudo apt-get install -y libav-tools
+      - make config
     - stage: config
+      name: "Setup audiopyle"
       script: make config
     - stage: unit_test
+      name: "Run tests"
       script: make test
     - stage: build
+      name: "Build backend and frontend packages"
       script: make build
     - stage: base_docker
+      name: "Build base docker backend image"
       script: make basedocker
     - stage: docker
+      name: "Build audiopyle docker images"
       script: make docker
     - stage: integration-test
+      name: "Deploy & run integration tests"
       script: make verify
     - stage: publish_images
+      name: "Push Docker images with audiopyle"
       script: scripts/push_images.sh $DOCKER_USERNAME $DOCKER_PASSWORD
 
 stages:
-  - os_deps
-  - config
-  - unit_test
-  - build
-  - base_docker
-  - docker
-  - integration_test
-  - name: publish_images
-    if: branch = master
+- os_deps
+- config
+- unit_test
+- build
+- base_docker
+- docker
+- integration_test
+- publish_images
+  if: branch = master
 
 notifications:
   email:
