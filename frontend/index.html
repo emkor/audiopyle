@@ -43,14 +43,14 @@
                             <div class="card">
                                 <div class="card-header" id="chooseAudioHeading">
                                     <h5 class="mb-0">
-                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#chooseAudio"
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#chooseAudio"
                                                 aria-expanded="false" aria-controls="collapseOne">
-                                            Choose an audio file
+                                            Choose audio file
                                         </button>
                                     </h5>
                                 </div>
-
-                                <div id="chooseAudio" class="collapse" aria-labelledby="headingOne"
+                                <div id="chooseAudio" class="collapse" aria-labelledby="chooseAudioHeading"
                                      data-parent="#accordion">
                                     <div class="card-body">
                                         <div class="row">
@@ -80,30 +80,30 @@
                                             <div class="col-sm-5">
                                                 <h6>Audio file details:</h6>
                                                 <div v-if="selected_file_details">
-                                                    <p>File name: {{ selected_file_details.file_name }}</p>
-                                                    <p>Size (bytes): {{ selected_file_details.size }}</p>
-                                                    <p>Created (UTC): {{ selected_file_details.created_on }}</p>
-                                                    <p>Modified (UTC): {{ selected_file_details.last_modification }}</p>
-                                                    <p>Accessed (UTC): {{ selected_file_details.last_access }}</p>
+                                                    <p>
+                                                        File name: {{ selected_file_details.file_name }}<br />
+                                                        Size (bytes): {{ selected_file_details.size }}<br />
+                                                        Created (UTC): {{ selected_file_details.created_on }}<br />
+                                                        Modified (UTC): {{ selected_file_details.last_modification }}<br />
+                                                        Accessed (UTC): {{ selected_file_details.last_access }}<br />
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
                             <div class="card">
                                 <div class="card-header" id="chooseVampHeading">
                                     <h5 class="mb-0">
-                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#chooseVamp"
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#chooseVamp"
                                                 aria-expanded="false" aria-controls="collapseOne">
                                             Choose VAMP plugin
                                         </button>
                                     </h5>
                                 </div>
-
-                                <div id="chooseVamp" class="collapse" aria-labelledby="headingOne"
+                                <div id="chooseVamp" class="collapse" aria-labelledby="chooseVampHeading"
                                      data-parent="#accordion">
                                     <div class="card-body">
                                         <div class="row">
@@ -133,30 +133,50 @@
                                             <div class="col-sm-5">
                                                 <h6>VAMP plugin details:</h6>
                                                 <div v-if="selected_plugin_details">
-                                                    <p>Key: {{ selected_plugin }}</p>
-                                                    <p>Vendor: {{ selected_plugin_details.vendor }}</p>
-                                                    <p>Name: {{ selected_plugin_details.name }}</p>
-                                                    <p>Output: {{ selected_plugin_details.output }}</p>
-                                                    <p>Library file: {{ selected_plugin_details.library_file_name }}</p>
+                                                    <p>
+                                                        Key: {{ selected_plugin }}<br />
+                                                        Vendor: {{ selected_plugin_details.vendor }}<br />
+                                                        Name: {{ selected_plugin_details.name }}<br />
+                                                        Output: {{ selected_plugin_details.output }}<br />
+                                                        Library file: {{ selected_plugin_details.library_file_name }}<br />
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card">
                                 <div class="card-header" id="reviewConfigHeading">
                                     <h5 class="mb-0">
-                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#reviewConfig"
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#reviewConfig"
                                                 aria-expanded="false" aria-controls="collapseOne">
                                             Review and make request
                                         </button>
                                     </h5>
                                 </div>
-                                <div id="reviewConfig" class="collapse" aria-labelledby="headingOne"
+                                <div id="reviewConfig" class="collapse" aria-labelledby="reviewConfigHeading"
                                      data-parent="#accordion">
                                     <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p>Selected audio file: {{ selected_file }}</p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p>Selected VAMP plugin: {{ selected_plugin }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p>Selected plugin config:<br /><code>{{ selected_plugin_config }}</code></p>
+
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p>Metrics that will be extracted:<br /><code>{{ selected_plugin_metrics }}</code></p>
+
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-sm-3 offset-3">
                                                 <button role="button" class="btn btn-md btn-default"
@@ -177,8 +197,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                     <div id="browseResults" class="tab-pane">
                         <div class="row">

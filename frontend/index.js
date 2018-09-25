@@ -34,9 +34,11 @@ var app = new Vue({
         selected_file_details: null,
         selected_plugin: null,
         selected_plugin_details: null,
+        selected_plugin_config: {},
+        selected_plugin_metrics: [],
         selected_request: null,
         selected_request_status: null,
-        selected_request_details: null
+        selected_request_details: null,
     },
     computed: {
         requestNotPossible() {
@@ -50,21 +52,30 @@ var app = new Vue({
         fetchAudioDetails: function (event) {
             app.selected_file = event.currentTarget.name;
             app.selected_file_details = null;
-            fetchJson(API_HOST + '/audio/' + app.selected_file,
+            fetchJson(API_HOST + '/audio/' + encodeURIComponent(app.selected_file),
                 v => app.selected_file_details = v,
                 e => app.selected_file_details = null);
         },
         fetchPluginDetails: function (event) {
             app.selected_plugin = event.currentTarget.name;
             app.selected_plugin_details = null;
-            fetchJson(API_HOST + '/plugin/' + app.selected_plugin.replace(/:/g, "/"),
-                v => app.selected_plugin_details = v,
+            let encodedPluginUrl = encodeURIComponent(app.selected_plugin.replace(/:/g, "/"));
+            fetchJson(API_HOST + '/plugin/' + encodedPluginUrl,
+                function (v) {
+                    app.selected_plugin_details = v;
+                    fetchJson(API_HOST + '/config/plugin/' + encodedPluginUrl + "/metric",
+                            m => app.selected_plugin_metrics = m,
+                            e => app.selected_plugin_metrics = []);
+                    fetchJson(API_HOST + '/config/plugin/' + encodedPluginUrl,
+                        c => app.selected_plugin_config = c,
+                        e => app.selected_plugin_config = {})
+                },
                 e => app.selected_plugin_details = null);
         },
         fetchRequestDetails: function (event) {
             app.selected_request = event.currentTarget.name;
             app.selected_request_details = null;
-            fetchJson(API_HOST + '/request/' + app.selected_request + '/status',
+            fetchJson(API_HOST + '/request/' + encodeURIComponent(app.selected_request) + '/status',
                 function (value) {
                     app.selected_request_status = value.status;
                     if (app.selected_request_status === 'done') {
