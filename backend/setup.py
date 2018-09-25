@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import os
 from distutils.core import setup
 
 from pkg_resources import parse_requirements
@@ -11,9 +11,14 @@ with open("requirements.txt") as f:
 with open("requirements-dev.txt") as f:
     REQUIREMENTS_DEV = [str(req) for req in parse_requirements(f.read())]
 
+with open("version.txt") as f:
+    MAJOR_MINOR_VER = str(f.read())
+
+BUILD_NUMBER = os.environ.get("TRAVIS_BUILD_NUMBER", default=0)
+
 setup(
     name='audiopyle',
-    version='0.3.0',
+    version="{}.{}".format(MAJOR_MINOR_VER, BUILD_NUMBER),
     description='Audiopyle - audio feature extraction app',
     author='Mateusz Korzeniowski',
     author_email='emkor93@gmail.com',
