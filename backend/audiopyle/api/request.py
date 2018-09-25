@@ -1,7 +1,10 @@
+from typing import List
+
 from flask import request
 
 from audiopyle.lib.abstractions.api import AbstractRestApi
 from audiopyle.lib.db.exception import EntityNotFound
+from audiopyle.lib.models.result import AnalysisRequest
 from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode, ClientError
 from audiopyle.api.utils import build_request, log_api_call, build_response
@@ -17,8 +20,8 @@ class RequestListApi(AbstractRestApi):
 
     def get(self, **kwargs) -> str:
         api_request = build_request(request, **kwargs)
-        all_results = self.request_repo.get_all_keys()  # type: ignore
-        api_response = ApiResponse(HttpStatusCode.ok, all_results)
+        all_results = self.request_repo.get_all()  # type: List[AnalysisRequest]
+        api_response = ApiResponse(HttpStatusCode.ok, [r.to_serializable() for r in all_results])
         log_api_call(api_request, api_response)
         return build_response(api_response)
 

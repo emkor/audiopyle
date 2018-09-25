@@ -11,15 +11,18 @@
 <div id="app">
     <div class="jumbotron">
         <h1 class="display-4">audiopyle</h1>
+        <hr class="my-4">
         <p class="lead">audio feature extraction engine based on standard VAMP plugins</p>
-        <hr class="my-4">
-        <a class="btn btn-primary btn-lg" href="https://emkor.github.io/audiopyle/api" role="button">API reference</a>
-        <a class="btn btn-primary btn-lg" href="https://www.vamp-plugins.org/" role="button">VAMP plugins reference</a>
-        <hr class="my-4">
-        <p>Backend API status: {{ api_status }}</p>
+        <a class="btn btn-primary btn-sm" href="https://emkor.github.io/audiopyle/api" role="button">API reference</a>
+        <a class="btn btn-primary btn-sm" href="https://www.vamp-plugins.org/" role="button">VAMP plugins reference</a>
+        <a class="btn btn-primary btn-sm" href="https://github.com/emkor/audiopyle" role="button">Code on GitHub</a>
     </div>
-
     <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <p class="text-muted">Backend API status: {{ api_status }}</p>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <ul class="nav nav-tabs">
@@ -200,36 +203,59 @@
                     </div>
                     <div id="browseResults" class="tab-pane">
                         <div class="row">
-                            <div class="col-sm-6">
-                                <h4>Extracted requests</h4>
-                                <ul>
-                                    <li v-for="request in requests">
-                                        <a v-bind:name="request" v-on:click="fetchRequestDetails">{{ request }}</a>
-                                    </li>
-                                </ul>
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Request ID</th>
+                                            <th>Audio file</th>
+                                            <th>Plugin key</th>
+                                            <th>Selection</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="request in requests">
+                                            <td>{{ request.task_id }}</td>
+                                            <td>{{ request.audio_meta.file_name }}</td>
+                                            <td>{{ request.plugin.vendor }}:{{ request.plugin.name }}:{{ request.plugin.output }}</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm"
+                                                        v-bind:name="request"
+                                                        v-on:click="fetchRequestDetails">Select
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="col-sm-6">
-                                <h4>Details of request: {{ selected_request }}</h4>
-                                <h5 v-if="selected_request_status">Status: {{ selected_request_status }}</h5>
-                                <ul v-if="selected_request_details">
-                                    <li>Task ID: {{ selected_request_details.task_id }}</li>
-                                    <li>Audio file name: {{ selected_request_details.audio_meta.file_name }}</li>
-                                    <li>Plugin: {{ selected_request_details.plugin.vendor }}:{{
-                                        selected_request_details.plugin.name }}:{{
-                                        selected_request_details.plugin.output }}
-                                    </li>
-                                </ul>
-                            </div>
+                            <!--<div class="col-sm-5">-->
+                                <!--<h4>Details of request: {{ selected_request }}</h4>-->
+                                <!--<h5 v-if="selected_request_status">Status: {{ selected_request_status }}</h5>-->
+                                <!--<div v-if="selected_request_details">-->
+                                    <!--<p>-->
+                                        <!--Task ID: {{ selected_request_details.task_id }}<br />-->
+                                        <!--Audio file name: {{ selected_request_details.audio_meta.file_name }}<br />-->
+                                        <!--Plugin: {{ selected_request_details.plugin.vendor }}:{{ selected_request_details.plugin.name }}:{{ selected_request_details.plugin.output }}<br />-->
+                                    <!--</p>-->
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
                     </div>
                     <div id="analyzeCompare" class="tab-pane">
-                        <p>Analyze & compare</p>
+                        <p>TO DO</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">audiopyle 2018 by emkor, see <a href="https://github.com/emkor/audiopyle/blob/master/LICENSE.md">license</a></span>
+    </div>
+</footer>
 
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
