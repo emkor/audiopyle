@@ -203,7 +203,18 @@
                     </div>
                     <div id="browseResults" class="tab-pane">
                         <div class="row">
+                            <div class="col-sm-3">
+                                <p>Request count: {{ requests.length }}</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary btn-sm"
+                                        v-on:click="fetchRequestList">Reload
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-sm-12">
+
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -260,6 +271,7 @@
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="node_modules/vue/dist/vue.min.js"></script>
+<script src="api_lib.js"></script>
 <script src="index.js"></script>
 </body>
 </html>
