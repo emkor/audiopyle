@@ -2,27 +2,51 @@ sudo: required
 language: python
 cache: pip
 python:
-    - "3.6"
+- "3.6"
 
 services:
-  - docker
+- docker
 
-before_script:
-  - chmod u+x **/*.sh
-  - sudo apt-get install -y libav-tools
-  - make config
+jobs:
+  include:
+  - stage: os-deps
+    name: "Setup OS"
+    script:
+    - chmod u+x **/*.sh
+    - sudo apt-get install -y libav-tools
+    - make config
+  - stage: config
+    name: "Setup audiopyle"
+    script: make config
+  - stage: unit-test
+    name: "Run tests"
+    script: make test
+  - stage: build
+    name: "Build backend and frontend packages"
+    script: make build
+  - stage: base-docker
+    name: "Build base docker backend image"
+    script: make basedocker
+  - stage: docker
+    name: "Build audiopyle docker images"
+    script: make docker
+  - stage: integration-test
+    name: "Deploy & run integration tests"
+    script: make verify
+  - stage: publish-images
+    name: "Push Docker images with audiopyle"
+    script: scripts/push_images.sh $DOCKER_USERNAME $DOCKER_PASSWORD
 
-script:
-  - make test
-  - make build
-  - make basedocker
-  - make docker
-  - make verify
-
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    scripts/push_images.sh $DOCKER_USERNAME $DOCKER_PASSWORD;
-    fi
+stages:
+- os-deps
+- config
+- unit-test
+- build
+- base-docker
+- docker
+- integration-test
+- publish-images
+  if: branch = master
 
 notifications:
   email:
