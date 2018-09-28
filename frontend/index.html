@@ -345,22 +345,23 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <h5>Selected metric details:</h5>
-                                                <div>
-                                                    <p>
-                                                        Audio file name: <span v-if="selected_request_selected_metric_value">{{ selected_file }}</span><br/>
-                                                        Plugin name: <span v-if="selected_request_selected_metric_value">{{ selected_plugin }}</span><br/>
-                                                        Metric name: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_name }}</span><br/>
-                                                        Count: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.count }}</span><br/>
-                                                        Sum: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.sum }}</span><br/>
-                                                        Min: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.minimum) }}</span><br/>
-                                                        Max: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.maximum) }}</span><br/>
-                                                        Mean: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.mean) }}</span><br/>
-                                                        Median: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.median) }}</span><br/>
-                                                        Std dev: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.standard_deviation) }}</span><br/>
-                                                        Variance: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.variance) }}</span><br/>
-                                                    </p>
-                                                </div>
+                                                <h5>Metric details:</h5>
+                                                <p>
+                                                    Metric name: <span v-if="selected_request_selected_metric_name">{{ selected_request_selected_metric_name }}</span><br/>
+                                                    Audio file name: <span v-if="selected_request_selected_metric_value">{{ selected_request_details.audio_meta.file_name }}</span><br/>
+                                                    Plugin name: <span v-if="selected_request_selected_metric_value">{{ selected_request_details.plugin.vendor }}:{{ selected_request_details.plugin.name }}:{{ selected_request_details.plugin.output }}</span><br/>
+                                                </p>
+                                                <h5>Metric value:</h5>
+                                                <p>
+                                                    Count: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.count }}</span><br/>
+                                                    Sum: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.sum }}</span><br/>
+                                                    Min: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.minimum) }}</span><br/>
+                                                    Max: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.maximum) }}</span><br/>
+                                                    Mean: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.mean) }}</span><br/>
+                                                    Median: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.median) }}</span><br/>
+                                                    Std dev: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.standard_deviation) }}</span><br/>
+                                                    Variance: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.variance) }}</span><br/>
+                                                </p>
                                             </div>
                                         </div>
 
