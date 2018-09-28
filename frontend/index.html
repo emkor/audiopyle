@@ -348,8 +348,11 @@
                                                 <h5>Selected metric details:</h5>
                                                 <div>
                                                     <p>
-                                                        Metric name: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.definition.name }}</span><br/>
-                                                        Length: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.count }}</span><br/>
+                                                        Audio file name: <span v-if="selected_request_selected_metric_value">{{ selected_file }}</span><br/>
+                                                        Plugin name: <span v-if="selected_request_selected_metric_value">{{ selected_plugin }}</span><br/>
+                                                        Metric name: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_name }}</span><br/>
+                                                        Count: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.count }}</span><br/>
+                                                        Sum: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.sum }}</span><br/>
                                                         Min: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.minimum) }}</span><br/>
                                                         Max: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.maximum) }}</span><br/>
                                                         Mean: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.mean) }}</span><br/>
