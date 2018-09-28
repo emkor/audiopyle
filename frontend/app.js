@@ -20,13 +20,6 @@ var makeRequestApp = new Vue({
         }
     },
     methods: {
-        toMegabytes: function (bytes) {
-            return (bytes / (1024 * 1024)).toFixed(2);
-        },
-        fromIsoToHumanDate: function (isoDateString) {
-            let dateObj = new Date(isoDateString);
-            return dateObj.toLocaleString();
-        },
         fetchAudioDetails: event => fetchAudioDetails(event.currentTarget.name),
         fetchPluginDetails: event => fetchPluginDetails(event.currentTarget.name),
         resetSelection: function (event) {
@@ -41,9 +34,7 @@ var makeRequestApp = new Vue({
             "plugin_full_key": makeRequestApp.selected_plugin,
             "plugin_config": makeRequestApp.selected_plugin_config,
             "metric_config": null
-        }, function (event) {
-            makeRequestApp.resetSelection();
-        }),
+        }, e => makeRequestApp.resetSelection()),
         initData: function () {
             fetchAudioFiles();
             fetchPluginList();
@@ -63,9 +54,6 @@ var viewResultsApp = new Vue({
         selected_request_selected_metric_value: null
     },
     methods: {
-        roundStat: function (number) {
-            return number.toFixed(3);
-        },
         fetchRequestDetails: event => fetchRequest(event.currentTarget.name),
         fetchRequestMetricDetails: event => fetchRequestMetricValues(event.currentTarget.name),
         fetchRequests: event => fetchRequestList(),
