@@ -128,6 +128,17 @@ function fetchRequest(requestId) {
         });
 }
 
+function fetchRequestMetricValues(metric_name) {
+    app.selected_request_selected_metric_name = metric_name;
+    app.selected_request_selected_metric_value = null;
+    let url = API_HOST
+        + '/request/' + encodeURIComponent(app.selected_request)
+        + '/metric/' + encodeURIComponent(app.selected_request_selected_metric_name);
+    fetchJson(url,
+        v => app.selected_request_selected_metric_value = v,
+        e => app.selected_request_selected_metric_value = null)
+}
+
 function resetSelection(event) {
     app.selected_file = null;
     app.selected_file_details = null;

@@ -320,14 +320,47 @@
                                 <div id="viewMetrics" class="collapse" aria-labelledby="viewMetricsHeading"
                                      data-parent="#browseResultsAccordion">
                                     <div class="card-body">
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                        richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
-                                        brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                                        sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
-                                        shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-                                        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
-                                        Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt
-                                        you probably haven't heard of them accusamus labore sustainable VHS.
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Metric name</th>
+                                                            <th>Selection</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr v-for="metric_name in selected_request_metrics">
+                                                            <td>{{ metric_name }}</td>
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm"
+                                                                        v-bind:name="metric_name"
+                                                                        v-on:click="fetchRequestMetricDetails">Select
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h5>Selected metric details:</h5>
+                                                <div>
+                                                    <p>
+                                                        Metric name: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.definition.name }}</span><br/>
+                                                        Length: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.count }}</span><br/>
+                                                        Min: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.minimum) }}</span><br/>
+                                                        Max: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.maximum) }}</span><br/>
+                                                        Mean: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.mean) }}</span><br/>
+                                                        Median: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.median) }}</span><br/>
+                                                        Std dev: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.standard_deviation) }}</span><br/>
+                                                        Variance: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.variance) }}</span><br/>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

@@ -16,7 +16,8 @@ var app = new Vue({
         selected_request_status: null,
         selected_request_details: null,
         selected_request_metrics: [],
-        selected_request_selected_metric_name: null
+        selected_request_selected_metric_name: null,
+        selected_request_selected_metric_value: null
     },
     computed: {
         requestNotPossible() {
@@ -34,9 +35,13 @@ var app = new Vue({
             let dateObj = new Date(isoDateString);
             return dateObj.toLocaleString();
         },
+        roundStat: function(number) {
+            return number.toFixed(3);
+        },
         fetchAudioDetails: event => fetchAudioDetails(event.currentTarget.name),
         fetchPluginDetails: event => fetchPluginDetails(event.currentTarget.name),
         fetchRequestDetails: event => fetchRequest(event.currentTarget.name),
+        fetchRequestMetricDetails: event => fetchRequestMetricValues(event.currentTarget.name),
         sendRequest: event => sendExtractionRequest(API_HOST + '/request', {
             "audio_file_name": app.selected_file,
             "plugin_full_key": app.selected_plugin,
