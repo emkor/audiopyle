@@ -15,4 +15,8 @@ cleanup:
 	@echo "---- Doing cleanup ---- "
 	@rm -rf ./node_modules
 
-.PHONY: all build docker cleanup
+run:
+	@echo "---- Starting front-end app ---- "
+	@$(NPM) start
+
+.PHONY: all build docker cleanup run

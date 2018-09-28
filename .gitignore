@@ -28,3 +28,6 @@ spectacle_docs/
 
 # frontend files
 node_modules
+
+# temporary files
+.tmp
