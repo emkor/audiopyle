@@ -54,9 +54,13 @@ function fetchRequestList() {
 function fetchAudioDetails(audioFileName) {
     app.selected_file = audioFileName;
     app.selected_file_details = null;
+    app.selected_file_tags = null;
     fetchJson(API_HOST + '/audio/' + encodeURIComponent(app.selected_file),
         v => app.selected_file_details = v,
         e => app.selected_file_details = null);
+    fetchJson(API_HOST + '/audio/' + encodeURIComponent(app.selected_file) + '/tag',
+        v => app.selected_file_tags = v,
+        e => app.selected_file_tags = null);
 }
 
 function fetchPluginDetails(pluginKey) {

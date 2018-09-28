@@ -18,11 +18,7 @@
         <a class="btn btn-primary btn-sm" href="https://github.com/emkor/audiopyle" role="button">Code on GitHub</a>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <p class="text-muted">Backend API status: {{ api_status }}</p>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col-sm-12">
                 <ul class="nav nav-tabs">
@@ -42,19 +38,19 @@
             <div class="col-sm-12">
                 <div class="tab-content">
                     <div id="makeRequest" class="tab-pane active">
-                        <div id="accordion">
+                        <div id="makeRequestAccordion">
                             <div class="card">
                                 <div class="card-header" id="chooseAudioHeading">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
                                                 data-target="#chooseAudio"
-                                                aria-expanded="false" aria-controls="collapseOne">
-                                            Choose audio file ({{ audio_files.length }} available)
+                                                aria-expanded="false" aria-controls="chooseAudio">
+                                            1. Choose audio file ({{ audio_files.length }} available)
                                         </button>
                                     </h5>
                                 </div>
                                 <div id="chooseAudio" class="collapse" aria-labelledby="chooseAudioHeading"
-                                     data-parent="#accordion">
+                                     data-parent="#makeRequestAccordion">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-sm-7">
@@ -81,14 +77,24 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-5">
-                                                <h6>Audio file details:</h6>
-                                                <div v-if="selected_file_details">
+                                                <h5>File details:</h5>
+                                                <div class="selectionDetails">
                                                     <p>
-                                                        File name: {{ selected_file_details.file_name }}<br />
-                                                        Size (bytes): {{ selected_file_details.size }}<br />
-                                                        Created (UTC): {{ selected_file_details.created_on }}<br />
-                                                        Modified (UTC): {{ selected_file_details.last_modification }}<br />
-                                                        Accessed (UTC): {{ selected_file_details.last_access }}<br />
+                                                        File name: <span v-if="selected_file_details">{{ selected_file_details.file_name }}</span><br/>
+                                                        Size: <span v-if="selected_file_details">{{ toMegabytes(selected_file_details.size) }} <small>MB</small></span><br/>
+                                                        Created: <span v-if="selected_file_details">{{ fromIsoToHumanDate(selected_file_details.created_on) }}</span><br/>
+                                                        Modified: <span v-if="selected_file_details">{{ fromIsoToHumanDate(selected_file_details.last_modification)
+                                                        }}</span><br/>
+                                                        Accessed: <span v-if="selected_file_details">{{ fromIsoToHumanDate(selected_file_details.last_access) }}</span><br/>
+                                                    </p>
+                                                </div>
+                                                <h5>Id3 tags:</h5>
+                                                <div class="selectionDetails">
+                                                    <p>
+                                                        Artist: <span v-if="selected_file_tags">{{ selected_file_tags.artist }}</span><br/>
+                                                        Album: <span v-if="selected_file_tags">{{ selected_file_tags.album }}</span><br/>
+                                                        Title: <span v-if="selected_file_tags">{{ selected_file_tags.title }}</span><br/>
+                                                        Genre: <span v-if="selected_file_tags">{{ selected_file_tags.genre }}</span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -101,13 +107,13 @@
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
                                                 data-target="#chooseVamp"
-                                                aria-expanded="false" aria-controls="collapseOne">
-                                            Choose VAMP plugin ({{ vamp_plugins.length }} available)
+                                                aria-expanded="false" aria-controls="chooseVamp">
+                                            2. Choose VAMP plugin ({{ vamp_plugins.length }} available)
                                         </button>
                                     </h5>
                                 </div>
                                 <div id="chooseVamp" class="collapse" aria-labelledby="chooseVampHeading"
-                                     data-parent="#accordion">
+                                     data-parent="#makeRequestAccordion">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-sm-7">
@@ -135,13 +141,14 @@
                                             </div>
                                             <div class="col-sm-5">
                                                 <h6>VAMP plugin details:</h6>
-                                                <div v-if="selected_plugin_details">
+                                                <div>
                                                     <p>
-                                                        Key: {{ selected_plugin }}<br />
-                                                        Vendor: {{ selected_plugin_details.vendor }}<br />
-                                                        Name: {{ selected_plugin_details.name }}<br />
-                                                        Output: {{ selected_plugin_details.output }}<br />
-                                                        Library file: {{ selected_plugin_details.library_file_name }}<br />
+                                                        Key: <span v-if="selected_plugin_details">{{ selected_plugin }}</span><br/>
+                                                        Vendor: <span v-if="selected_plugin_details">{{ selected_plugin_details.vendor }}</span><br/>
+                                                        Name: <span v-if="selected_plugin_details">{{ selected_plugin_details.name }}</span><br/>
+                                                        Output: <span v-if="selected_plugin_details">{{ selected_plugin_details.output }}</span><br/>
+                                                        Library file: <span v-if="selected_plugin_details">{{ selected_plugin_details.library_file_name
+                                                        }}</span><br/>
                                                     </p>
                                                 </div>
                                             </div>
@@ -154,13 +161,13 @@
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
                                                 data-target="#reviewConfig"
-                                                aria-expanded="false" aria-controls="collapseOne">
-                                            Review and make request
+                                                aria-expanded="false" aria-controls="reviewConfig">
+                                            3. Review and make request
                                         </button>
                                     </h5>
                                 </div>
                                 <div id="reviewConfig" class="collapse" aria-labelledby="reviewConfigHeading"
-                                     data-parent="#accordion">
+                                     data-parent="#makeRequestAccordion">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-sm-6">
@@ -172,11 +179,13 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <p>Selected plugin config:<br /><code>{{ selected_plugin_config }}</code></p>
+                                                <p>Selected plugin config:<br/><code>{{ selected_plugin_config }}</code>
+                                                </p>
 
                                             </div>
                                             <div class="col-sm-6">
-                                                <p>Metrics that will be extracted:<br /><code>{{ selected_plugin_metrics }}</code></p>
+                                                <p>Metrics that will be extracted:<br/><code>{{ selected_plugin_metrics
+                                                    }}</code></p>
 
                                             </div>
                                         </div>
@@ -202,46 +211,118 @@
                         </div>
                     </div>
                     <div id="browseResults" class="tab-pane">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p>Request count: {{ requests.length }}</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <button class="btn btn-primary btn-sm"
-                                        v-on:click="fetchRequestList">Reload
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
 
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                        <tr>
-                                            <th>Request ID</th>
-                                            <th>Audio file</th>
-                                            <th>Plugin key</th>
-                                            <th>Selection</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr v-for="request in requests">
-                                            <td>{{ request.task_id }}</td>
-                                            <td>{{ request.audio_meta.file_name }}</td>
-                                            <td>{{ request.plugin.vendor }}:{{ request.plugin.name }}:{{ request.plugin.output }}</td>
-                                            <td>
+
+                        <div id="browseResultsAccordion">
+                            <div class="card">
+                                <div class="card-header" id="listRequestsHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#listRequests"
+                                                aria-expanded="true" aria-controls="listRequests">
+                                            Choose request
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="listRequests" class="collapse show" aria-labelledby="listRequestsHeading"
+                                     data-parent="#browseResultsAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p>Request count: {{ requests.length }}</p>
+                                            </div>
+                                            <div class="col-sm-9">
                                                 <button class="btn btn-primary btn-sm"
-                                                        v-bind:name="request.task_id"
-                                                        v-on:click="fetchRequestDetails">Select
+                                                        v-on:click="fetchRequestList">Reload
                                                 </button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Request ID</th>
+                                                            <th>Audio file</th>
+                                                            <th>Plugin key</th>
+                                                            <th>Selection</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr v-for="request in requests">
+                                                            <td>{{ request.task_id }}</td>
+                                                            <td>{{ request.audio_meta.file_name }}</td>
+                                                            <td>{{ request.plugin.vendor }}:{{ request.plugin.name }}:{{
+                                                                request.plugin.output }}
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm"
+                                                                        v-bind:name="request.task_id"
+                                                                        v-on:click="fetchRequestDetails">Select
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#collapseTwo" aria-expanded="false"
+                                                aria-controls="collapseTwo">
+                                            Collapsible Group Item #2
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                     data-parent="#browseResultsAccordionAccordion">
+                                    <div class="card-body">
+                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                        richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
+                                        brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+                                        sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
+                                        shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson
+                                        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                                        Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt
+                                        you probably haven't heard of them accusamus labore sustainable VHS.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="headingThree">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#collapseThree" aria-expanded="false"
+                                                aria-controls="collapseThree">
+                                            Collapsible Group Item #3
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                     data-parent="#browseResultsAccordion">
+                                    <div class="card-body">
+                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                                        richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
+                                        brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+                                        sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
+                                        shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson
+                                        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                                        Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt
+                                        you probably haven't heard of them accusamus labore sustainable VHS.
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="row">
                             <div class="col-sm-12">
                                 <h4>Details of request: {{ selected_request }}</h4>
@@ -253,22 +334,25 @@
                                 <div v-if="selected_request_details">
                                     <p>
                                         Task ID: {{ selected_request_details.task_id }}<br/>
-                                        Audio file name: {{ selected_request_details.audio_meta.file_name }}<br />
-                                        Plugin: {{ selected_request_details.plugin.vendor }}:{{ selected_request_details.plugin.name }}:{{ selected_request_details.plugin.output }}<br />
-                                        Plugin config: <code>{{ selected_request_details.plugin_config }}</code><br />
+                                        Audio file name: {{ selected_request_details.audio_meta.file_name }}<br/>
+                                        Plugin: {{ selected_request_details.plugin.vendor }}:{{
+                                        selected_request_details.plugin.name }}:{{
+                                        selected_request_details.plugin.output }}<br/>
+                                        Plugin config: <code>{{ selected_request_details.plugin_config }}</code><br/>
                                     </p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div v-if="selected_request_details">
                                     <p>
-                                        Track channels: {{ selected_request_details.audio_meta.channels_count }}<br />
-                                        Track sample rate: {{ selected_request_details.audio_meta.sample_rate }} Hz<br />
-                                        Track bit-rate: {{ selected_request_details.audio_meta.bit_rate_kbps }} kbps<br />
-                                        Track length: {{ selected_request_details.audio_meta.length_sec }} seconds<br />
-                                        Artist: {{ selected_request_details.id3_tag.artist }}<br />
-                                        Album: {{ selected_request_details.id3_tag.album }}<br />
-                                        Title: {{ selected_request_details.id3_tag.title }}<br />
+                                        Track channels: {{ selected_request_details.audio_meta.channels_count }}<br/>
+                                        Track sample rate: {{ selected_request_details.audio_meta.sample_rate }} Hz<br/>
+                                        Track bit-rate: {{ selected_request_details.audio_meta.bit_rate_kbps }}
+                                        kbps<br/>
+                                        Track length: {{ selected_request_details.audio_meta.length_sec }} seconds<br/>
+                                        Artist: {{ selected_request_details.id3_tag.artist }}<br/>
+                                        Album: {{ selected_request_details.id3_tag.album }}<br/>
+                                        Title: {{ selected_request_details.id3_tag.title }}<br/>
                                     </p>
                                 </div>
                             </div>
@@ -281,12 +365,20 @@
             </div>
         </div>
     </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                <span class="text-muted">audiopyle 2018 by emkor, see <a
+                        href="https://github.com/emkor/audiopyle/blob/master/LICENSE.md">license</a></span>
+                </div>
+                <div class="col-sm-6">
+                    <p class="text-muted">Backend API status: {{ api_status }}</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
-<footer class="footer">
-    <div class="container">
-        <span class="text-muted">audiopyle 2018 by emkor, see <a href="https://github.com/emkor/audiopyle/blob/master/LICENSE.md">license</a></span>
-    </div>
-</footer>
 
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

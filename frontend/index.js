@@ -7,6 +7,7 @@ var app = new Vue({
         requests: [],
         selected_file: null,
         selected_file_details: null,
+        selected_file_tags: null,
         selected_plugin: null,
         selected_plugin_details: null,
         selected_plugin_config: {},
@@ -24,6 +25,13 @@ var app = new Vue({
         }
     },
     methods: {
+        toMegabytes: function(bytes) {
+            return (bytes/(1024*1024)).toFixed(2);
+        },
+        fromIsoToHumanDate: function(isoDateString) {
+            let dateObj = new Date(isoDateString);
+            return dateObj.toLocaleString();
+        },
         fetchAudioDetails: event => fetchAudioDetails(event.currentTarget.name),
         fetchPluginDetails: event => fetchPluginDetails(event.currentTarget.name),
         fetchRequestDetails: event => fetchRequestDetails(event.currentTarget.name),

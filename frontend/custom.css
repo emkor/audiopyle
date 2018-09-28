@@ -1,7 +1,3 @@
 #makeRequest div.table-responsive {
     max-height: 500px;
 }
-
-#browseResults .row {
-    margin-top: 0.8rem;
-}
