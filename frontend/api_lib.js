@@ -66,6 +66,8 @@ function fetchAudioDetails(audioFileName) {
 function fetchPluginDetails(pluginKey) {
     app.selected_plugin = pluginKey;
     app.selected_plugin_details = null;
+    app.selected_plugin_metrics = [];
+    app.selected_plugin_config = {};
     let encodedPluginUrl = encodeURIComponent(app.selected_plugin.replace(/:/g, "/"));
     fetchJson(API_HOST + '/plugin/' + encodedPluginUrl,
         function (v) {
@@ -96,21 +98,12 @@ function sendExtractionRequest(sendRequestUrl, payload, responseHandler) {
         .catch(error => console.error("Could not fetch request " + app.selected_request + ": " + error));
 }
 
-function fetchRequestDetails(task_id) {
-    fetchJson(API_HOST + '/request/' + task_id,
-        v => app.selected_request_details = v,
-        e => app.selected_request_details = null);
-}
-
-function fetchRequestMetricNames(task_id) {
-    fetchJson(API_HOST + '/request/' + task_id + "/metric",
-        v => app.selected_request_metrics = v,
-        e => app.selected_request_metrics = []);
-}
-
 function fetchRequest(requestId) {
     app.selected_request = requestId;
     app.selected_request_details = null;
+    app.selected_request_metrics = [];
+    app.selected_request_selected_metric_name = null;
+    app.selected_request_selected_metric_value = null;
     fetchJson(API_HOST + '/request/' + encodeURIComponent(app.selected_request) + '/status',
         function (value) {
             app.selected_request_status = value.status;
@@ -139,9 +132,22 @@ function fetchRequestMetricValues(metric_name) {
         e => app.selected_request_selected_metric_value = null)
 }
 
+function fetchRequestDetails(task_id) {
+    fetchJson(API_HOST + '/request/' + task_id,
+        v => app.selected_request_details = v,
+        e => app.selected_request_details = null);
+}
+
+function fetchRequestMetricNames(task_id) {
+    fetchJson(API_HOST + '/request/' + task_id + "/metric",
+        v => app.selected_request_metrics = v,
+        e => app.selected_request_metrics = []);
+}
+
 function resetSelection(event) {
     app.selected_file = null;
     app.selected_file_details = null;
     app.selected_plugin = null;
     app.selected_plugin_details = null;
+    app.selected_plugin_metrics = [];
 }

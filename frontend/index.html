@@ -279,17 +279,15 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <div v-if="selected_request_details">
-                                                    <p>
-                                                        Task ID: {{ selected_request_details.task_id }}<br/>
-                                                        Status: {{ selected_request_status }}<br />
-                                                        Audio file name: {{ selected_request_details.audio_meta.file_name }}<br/>
-                                                        Plugin: {{ selected_request_details.plugin.vendor }}:{{
+                                                <p>
+                                                    Task ID: <span v-if="selected_request_details">{{ selected_request_details.task_id }}</span><br/>
+                                                    Status: <span v-if="selected_request_details">{{ selected_request_status }}</span><br />
+                                                    Audio file name: <span v-if="selected_request_details">{{ selected_request_details.audio_meta.file_name }}</span><br/>
+                                                    Plugin: <span v-if="selected_request_details">{{ selected_request_details.plugin.vendor }}:{{
                                                         selected_request_details.plugin.name }}:{{
-                                                        selected_request_details.plugin.output }}<br/>
-                                                        Plugin config: <code>{{ selected_request_details.plugin_config }}</code><br/>
-                                                    </p>
-                                                </div>
+                                                        selected_request_details.plugin.output }}</span><br/>
+                                                    Plugin config: <span v-if="selected_request_details"><code>{{ selected_request_details.plugin_config }}</code></span><br/>
+                                                </p>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div v-if="selected_request_details">
@@ -315,7 +313,7 @@
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
                                                 data-target="#viewMetrics" aria-expanded="false"
                                                 aria-controls="viewMetrics">
-                                            Select and view Metrics
+                                            Select and view Metrics <span v-if="selected_request">({{ selected_request }})</span>
                                         </button>
                                     </h5>
                                 </div>
