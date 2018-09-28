@@ -20,8 +20,8 @@ var makeRequestApp = new Vue({
         }
     },
     methods: {
-        fetchAudioDetails: event => fetchAudioDetails(event.currentTarget.name),
-        fetchPluginDetails: event => fetchPluginDetails(event.currentTarget.name),
+        fetchAudioDetails: event => fetchAudioDetails(makeRequestApp, event.currentTarget.name),
+        fetchPluginDetails: event => fetchPluginDetails(makeRequestApp, event.currentTarget.name),
         resetSelection: function (event) {
             makeRequestApp.selected_file = null;
             makeRequestApp.selected_file_details = null;
@@ -29,15 +29,10 @@ var makeRequestApp = new Vue({
             makeRequestApp.selected_plugin_details = null;
             makeRequestApp.selected_plugin_metrics = [];
         },
-        sendRequest: event => sendExtractionRequest(API_HOST + '/request', {
-            "audio_file_name": makeRequestApp.selected_file,
-            "plugin_full_key": makeRequestApp.selected_plugin,
-            "plugin_config": makeRequestApp.selected_plugin_config,
-            "metric_config": null
-        }, e => makeRequestApp.resetSelection()),
+        sendRequest: event => sendExtractionRequest(makeRequestApp, v => makeRequestApp.resetSelection()),
         initData: function () {
-            fetchAudioFiles();
-            fetchPluginList();
+            fetchAudioFiles(makeRequestApp);
+            fetchPluginList(makeRequestApp);
         }
     }
 });

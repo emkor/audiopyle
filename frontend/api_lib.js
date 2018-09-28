@@ -23,25 +23,25 @@ function fetchJson(url, responseJsonHandler, errorHandler) {
         }));
 }
 
-function featchApiStatus() {
-    makeRequestApp.api_status = "...";
+function featchApiStatus(app) {
+    app.api_status = "...";
     fetchJson(API_HOST + '/',
-        v => makeRequestApp.api_status = v.status,
-        e => makeRequestApp.api_status = "not ok! " + e);
+        v => app.api_status = v.status,
+        e => app.api_status = "not ok! " + e);
 }
 
-function fetchAudioFiles() {
-    makeRequestApp.audio_files = [];
+function fetchAudioFiles(app) {
+    app.audio_files = [];
     fetchJson(API_HOST + '/audio',
-        v => makeRequestApp.audio_files = v,
-        r => makeRequestApp.audio_files = []);
+        v => app.audio_files = v,
+        r => app.audio_files = []);
 }
 
-function fetchPluginList() {
-    makeRequestApp.vamp_plugins = [];
+function fetchPluginList(app) {
+    app.vamp_plugins = [];
     fetchJson(API_HOST + '/plugin',
-        v => makeRequestApp.vamp_plugins = v,
-        e => makeRequestApp.vamp_plugins = []);
+        v => app.vamp_plugins = v,
+        e => app.vamp_plugins = []);
 }
 
 function fetchRequestList() {
@@ -51,51 +51,58 @@ function fetchRequestList() {
         e => viewResultsApp.requests = []);
 }
 
-function fetchAudioDetails(audioFileName) {
-    makeRequestApp.selected_file = audioFileName;
-    makeRequestApp.selected_file_details = null;
-    makeRequestApp.selected_file_tags = null;
-    fetchJson(API_HOST + '/audio/' + encodeURIComponent(makeRequestApp.selected_file),
-        v => makeRequestApp.selected_file_details = v,
-        e => makeRequestApp.selected_file_details = null);
-    fetchJson(API_HOST + '/audio/' + encodeURIComponent(makeRequestApp.selected_file) + '/tag',
-        v => makeRequestApp.selected_file_tags = v,
-        e => makeRequestApp.selected_file_tags = null);
+function fetchAudioDetails(app, audioFileName) {
+    app.selected_file = audioFileName;
+    app.selected_file_details = null;
+    app.selected_file_tags = null;
+    fetchJson(API_HOST + '/audio/' + encodeURIComponent(app.selected_file),
+        v => app.selected_file_details = v,
+        e => app.selected_file_details = null);
+    fetchJson(API_HOST + '/audio/' + encodeURIComponent(app.selected_file) + '/tag',
+        v => app.selected_file_tags = v,
+        e => app.selected_file_tags = null);
 }
 
-function fetchPluginDetails(pluginKey) {
-    makeRequestApp.selected_plugin = pluginKey;
-    makeRequestApp.selected_plugin_details = null;
-    makeRequestApp.selected_plugin_metrics = [];
-    makeRequestApp.selected_plugin_config = {};
-    let encodedPluginUrl = encodeURIComponent(makeRequestApp.selected_plugin.replace(/:/g, "/"));
+function fetchPluginDetails(app, pluginKey) {
+    app.selected_plugin = pluginKey;
+    app.selected_plugin_details = null;
+    app.selected_plugin_metrics = [];
+    app.selected_plugin_config = {};
+    let encodedPluginUrl = encodeURIComponent(app.selected_plugin.replace(/:/g, "/"));
     fetchJson(API_HOST + '/plugin/' + encodedPluginUrl,
         function (v) {
-            makeRequestApp.selected_plugin_details = v;
+            app.selected_plugin_details = v;
             fetchJson(API_HOST + '/config/plugin/' + encodedPluginUrl + "/metric",
-                m => makeRequestApp.selected_plugin_metrics = m,
-                e => makeRequestApp.selected_plugin_metrics = []);
+                m => app.selected_plugin_metrics = m,
+                e => app.selected_plugin_metrics = []);
             fetchJson(API_HOST + '/config/plugin/' + encodedPluginUrl,
-                c => makeRequestApp.selected_plugin_config = c,
-                e => makeRequestApp.selected_plugin_config = {})
+                c => app.selected_plugin_config = c,
+                e => app.selected_plugin_config = {})
         },
-        e => makeRequestApp.selected_plugin_details = null);
+        e => app.selected_plugin_details = null);
 }
 
-function sendExtractionRequest(sendRequestUrl, payload, responseHandler) {
+function sendExtractionRequest(app, responseHandler) {
+    let requestUrl = API_HOST + '/request';
+    let payload = {
+        "audio_file_name": app.selected_file,
+        "plugin_full_key": app.selected_plugin,
+        "plugin_config": app.selected_plugin_config,
+        "metric_config": null
+    };
     let request = {
         method: "POST",
         headers: {"Content-Type": "application/json; charset=utf-8"},
         redirect: "follow",
         body: JSON.stringify(payload)
     };
-    fetch(sendRequestUrl, request)
+    fetch(requestUrl, request)
         .then(function (response) {
             response.json()
                 .then(value => responseHandler(value))
-                .catch(reason => console.error("Could not parse response from " + sendRequestUrl + ": " + reason));
+                .catch(reason => console.error("Could not parse response from " + requestUrl + ": " + reason));
         })
-        .catch(error => console.error("Could not fetch request " + makeRequestApp.selected_request + ": " + error));
+        .catch(error => console.error("Could not fetch request " + app.selected_request + ": " + error));
 }
 
 function fetchRequest(requestId) {
