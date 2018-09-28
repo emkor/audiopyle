@@ -9,14 +9,19 @@ from audiopyle.lib.repository.request import RequestRepository
 from audiopyle.lib.abstractions.api_model import ApiRequest, ApiResponse, HttpStatusCode, ClientError
 from audiopyle.api.utils import build_request, log_api_call, build_response
 from audiopyle.lib.models.extraction_request import ExtractionRequest
+from audiopyle.lib.services.metric_config_provider import MetricConfigProvider
+from audiopyle.lib.services.plugin_config_provider import PluginConfigProvider
 from audiopyle.worker.engine.tasks import extract_feature
 from audiopyle.worker.result_model import TaskStatus
 from audiopyle.worker.task_api import run_task, retrieve_result, delete_result
 
 
 class RequestListApi(AbstractRestApi):
-    def __init__(self, request_repo: RequestRepository) -> None:
+    def __init__(self, request_repo: RequestRepository, plugin_config_provider: PluginConfigProvider,
+                 metric_config_provider: MetricConfigProvider) -> None:
         self.request_repo = request_repo
+        self.plugin_config_provider = plugin_config_provider
+        self.metric_config_provider = metric_config_provider
 
     def get(self, **kwargs) -> str:
         api_request = build_request(request, **kwargs)
@@ -43,6 +48,10 @@ class RequestListApi(AbstractRestApi):
     def _parse_request(self, the_request: ApiRequest) -> ExtractionRequest:
         try:
             request_json = the_request.payload
+            if request_json["plugin_config"] is None:
+                request_json["plugin_config"] = self.plugin_config_provider.get_for_plugin(request_json["plugin_full_key"])
+            if request_json["metric_config"] is None:
+                request_json["metric_config"] = self.metric_config_provider.get_for_plugin(request_json["plugin_full_key"])
             execution_request = ExtractionRequest.from_serializable(request_json)
             return execution_request
         except Exception as e:

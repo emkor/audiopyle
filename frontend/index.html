@@ -217,29 +217,18 @@
                             <div class="card">
                                 <div class="card-header" id="listRequestsHeading">
                                     <h5 class="mb-0">
-                                        <button class="btn btn-link" data-toggle="collapse" data-target="#listRequests"
-                                                aria-expanded="true" aria-controls="listRequests">
-                                            Choose request
+                                        <button class="btn btn-link" aria-expanded="true" data-toggle="collapse"
+                                                aria-controls="listRequests" data-target="#listRequests">
+                                            Choose request ({{ requests.length }} available)
+                                            <button class="btn btn-primary btn-sm" v-on:click="fetchRequestList">Reload</button>
                                         </button>
                                     </h5>
                                 </div>
-
                                 <div id="listRequests" class="collapse show" aria-labelledby="listRequestsHeading"
                                      data-parent="#browseResultsAccordion">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-sm-3">
-                                                <p>Request count: {{ requests.length }}</p>
-                                            </div>
-                                            <div class="col-sm-9">
-                                                <button class="btn btn-primary btn-sm"
-                                                        v-on:click="fetchRequestList">Reload
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-sm-12">
-
                                                 <div class="table-responsive">
                                                     <table class="table table-striped">
                                                         <thead>
@@ -272,41 +261,63 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="card">
-                                <div class="card-header" id="headingTwo">
+                                <div class="card-header" id="viewRequestHeading">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                data-target="#collapseTwo" aria-expanded="false"
-                                                aria-controls="collapseTwo">
-                                            Collapsible Group Item #2
+                                                data-target="#viewRequest" aria-expanded="false"
+                                                aria-controls="viewRequest">
+                                            View request details <span v-if="selected_request">({{ selected_request }})</span>
                                         </button>
                                     </h5>
                                 </div>
-                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                     data-parent="#browseResultsAccordionAccordion">
+                                <div id="viewRequest" class="collapse" aria-labelledby="viewRequestHeading"
+                                     data-parent="#browseResultsAccordion">
                                     <div class="card-body">
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                        richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
-                                        brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-                                        sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
-                                        shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-                                        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
-                                        Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt
-                                        you probably haven't heard of them accusamus labore sustainable VHS.
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div v-if="selected_request_details">
+                                                    <p>
+                                                        Task ID: {{ selected_request_details.task_id }}<br/>
+                                                        Status: {{ selected_request_status }}<br />
+                                                        Audio file name: {{ selected_request_details.audio_meta.file_name }}<br/>
+                                                        Plugin: {{ selected_request_details.plugin.vendor }}:{{
+                                                        selected_request_details.plugin.name }}:{{
+                                                        selected_request_details.plugin.output }}<br/>
+                                                        Plugin config: <code>{{ selected_request_details.plugin_config }}</code><br/>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div v-if="selected_request_details">
+                                                    <p>
+                                                        Channels: {{ selected_request_details.audio_meta.channels_count }}<br/>
+                                                        Sample rate: {{ selected_request_details.audio_meta.sample_rate }} Hz<br/>
+                                                        Bit rate: {{ selected_request_details.audio_meta.bit_rate_kbps }} kbps<br/>
+                                                        Length: {{ selected_request_details.audio_meta.length_sec }} seconds<br/>
+                                                        Artist: {{ selected_request_details.id3_tag.artist }}<br/>
+                                                        Album: {{ selected_request_details.id3_tag.album }}<br/>
+                                                        Title: {{ selected_request_details.id3_tag.title }}<br/>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="card">
-                                <div class="card-header" id="headingThree">
+                                <div class="card-header" id="viewMetricsHeading">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                data-target="#collapseThree" aria-expanded="false"
-                                                aria-controls="collapseThree">
-                                            Collapsible Group Item #3
+                                                data-target="#viewMetrics" aria-expanded="false"
+                                                aria-controls="viewMetrics">
+                                            Select and view Metrics
                                         </button>
                                     </h5>
                                 </div>
-                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                <div id="viewMetrics" class="collapse" aria-labelledby="viewMetricsHeading"
                                      data-parent="#browseResultsAccordion">
                                     <div class="card-body">
                                         Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
@@ -323,40 +334,7 @@
                         </div>
 
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h4>Details of request: {{ selected_request }}</h4>
-                                <h5 v-if="selected_request_status">Status: {{ selected_request_status }}</h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div v-if="selected_request_details">
-                                    <p>
-                                        Task ID: {{ selected_request_details.task_id }}<br/>
-                                        Audio file name: {{ selected_request_details.audio_meta.file_name }}<br/>
-                                        Plugin: {{ selected_request_details.plugin.vendor }}:{{
-                                        selected_request_details.plugin.name }}:{{
-                                        selected_request_details.plugin.output }}<br/>
-                                        Plugin config: <code>{{ selected_request_details.plugin_config }}</code><br/>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div v-if="selected_request_details">
-                                    <p>
-                                        Track channels: {{ selected_request_details.audio_meta.channels_count }}<br/>
-                                        Track sample rate: {{ selected_request_details.audio_meta.sample_rate }} Hz<br/>
-                                        Track bit-rate: {{ selected_request_details.audio_meta.bit_rate_kbps }}
-                                        kbps<br/>
-                                        Track length: {{ selected_request_details.audio_meta.length_sec }} seconds<br/>
-                                        Artist: {{ selected_request_details.id3_tag.artist }}<br/>
-                                        Album: {{ selected_request_details.id3_tag.album }}<br/>
-                                        Title: {{ selected_request_details.id3_tag.title }}<br/>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                     <div id="analyzeCompare" class="tab-pane">
                         <p>TO DO</p>

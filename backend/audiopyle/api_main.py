@@ -69,7 +69,9 @@ def start_app(logger: Logger, host: str, port: int):
 
     app.add_url_rule("/request",
                      view_func=RequestListApi.as_view('request_list_api',
-                                                      request_repo=request_repo))
+                                                      request_repo=request_repo,
+                                                      plugin_config_provider=plugin_config_provider,
+                                                      metric_config_provider=metric_config_provider,))
 
     app.add_url_rule("/request/<task_id>",
                      view_func=RequestDetailsApi.as_view('request_detail_api',

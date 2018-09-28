@@ -15,6 +15,8 @@ var app = new Vue({
         selected_request: null,
         selected_request_status: null,
         selected_request_details: null,
+        selected_request_metrics: [],
+        selected_request_selected_metric_name: null
     },
     computed: {
         requestNotPossible() {
@@ -34,11 +36,11 @@ var app = new Vue({
         },
         fetchAudioDetails: event => fetchAudioDetails(event.currentTarget.name),
         fetchPluginDetails: event => fetchPluginDetails(event.currentTarget.name),
-        fetchRequestDetails: event => fetchRequestDetails(event.currentTarget.name),
+        fetchRequestDetails: event => fetchRequest(event.currentTarget.name),
         sendRequest: event => sendExtractionRequest(API_HOST + '/request', {
             "audio_file_name": app.selected_file,
             "plugin_full_key": app.selected_plugin,
-            "plugin_config": null,
+            "plugin_config": app.selected_plugin_config,
             "metric_config": null
         }, function (event) { resetSelection(); }),
         resetSelection: event => resetSelection(),

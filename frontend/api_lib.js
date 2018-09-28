@@ -93,26 +93,34 @@ function sendExtractionRequest(sendRequestUrl, payload, responseHandler) {
                 .then(value => responseHandler(value))
                 .catch(reason => console.error("Could not parse response from " + sendRequestUrl + ": " + reason));
         })
-        .catch(error => console.error("Could not fetch details for " + app.selected_request + ": " + error));
+        .catch(error => console.error("Could not fetch request " + app.selected_request + ": " + error));
 }
 
-function fetchRequestDetailsIfFinished(url) {
-    if (app.selected_request_status === 'done') {
-        fetchJson(url,
-            v => app.selected_request_details = v,
-            e => app.selected_request_details = null);
-    } else {
-        console.info("Omitting fetching request details, because status is " + app.selected_request_status);
-    }
+function fetchRequestDetails(task_id) {
+    fetchJson(API_HOST + '/request/' + task_id,
+        v => app.selected_request_details = v,
+        e => app.selected_request_details = null);
 }
 
-function fetchRequestDetails(requestId) {
+function fetchRequestMetricNames(task_id) {
+    fetchJson(API_HOST + '/request/' + task_id + "/metric",
+        v => app.selected_request_metrics = v,
+        e => app.selected_request_metrics = []);
+}
+
+function fetchRequest(requestId) {
     app.selected_request = requestId;
     app.selected_request_details = null;
     fetchJson(API_HOST + '/request/' + encodeURIComponent(app.selected_request) + '/status',
         function (value) {
             app.selected_request_status = value.status;
-            fetchRequestDetailsIfFinished(API_HOST + '/request/' + app.selected_request);
+            if (app.selected_request_status === 'done') {
+                fetchRequestDetails(app.selected_request);
+                fetchRequestMetricNames(app.selected_request);
+            }
+            else {
+                console.info("Omitting fetching request details, because status is " + app.selected_request_status);
+            }
         },
         function (e) {
             app.selected_request = null;
