@@ -1,83 +1,404 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>audiopyle</title>
-    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="custom.css">
 </head>
 <body>
 <div id="app">
-    <div class="header">
-        <h2>audiopyle</h2>
-        <h3>Audio feature extraction engine</h3>
-        <p>Status: {{ api_status }}</p>
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">audiopyle</h1>
+            <hr class="my-4">
+            <p class="lead">audio feature extraction engine based on standard VAMP plugins</p>
+            <a class="btn btn-primary btn-sm" href="https://emkor.github.io/audiopyle/api" role="button">API reference</a>
+            <a class="btn btn-primary btn-sm" href="https://www.vamp-plugins.org/" role="button">VAMP plugins reference</a>
+            <a class="btn btn-primary btn-sm" href="https://github.com/emkor/audiopyle" role="button">Code on GitHub</a>
+        </div>
     </div>
+    <div class="container">
 
-    <div class="audio_list">
-        <h4>Audio files</h4>
-        <ul>
-            <li v-for="audio in audio_files">
-                <a v-bind:name="audio" v-on:click="fetchAudioDetails">{{ audio }}</a>
-            </li>
-        </ul>
-    </div>
-    <div class="plugin_list">
-        <h4>VAMP plugins</h4>
-        <ul>
-            <li v-for="plugin in vamp_plugins">
-                <a v-bind:name="plugin" v-on:click="fetchPluginDetails">{{ plugin }}</a>
-            </li>
-        </ul>
-    </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#makeRequest">Make request</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#browseResults">Browse results</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#analyzeCompare">Analyze & compare</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tab-content">
+                    <div id="makeRequest" class="tab-pane active">
+                        <div id="makeRequestAccordion">
+                            <div class="card">
+                                <div class="card-header" id="chooseAudioHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#chooseAudio"
+                                                aria-expanded="false" aria-controls="chooseAudio">
+                                            1. Choose audio file ({{ audio_files.length }} available)
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="chooseAudio" class="collapse" aria-labelledby="chooseAudioHeading"
+                                     data-parent="#makeRequestAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-7">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Audio file name</th>
+                                                            <th>Selection</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr v-for="audio in audio_files">
+                                                            <td>{{ audio }}</td>
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm"
+                                                                        v-bind:name="audio"
+                                                                        v-on:click="fetchAudioDetails">Select
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <h5>File details:</h5>
+                                                <div class="selectionDetails">
+                                                    <p>
+                                                        File name: <span v-if="selected_file_details">{{ selected_file_details.file_name }}</span><br/>
+                                                        Size: <span v-if="selected_file_details">{{ toMegabytes(selected_file_details.size) }} <small>MB</small></span><br/>
+                                                        Created: <span v-if="selected_file_details">{{ fromIsoToHumanDate(selected_file_details.created_on) }}</span><br/>
+                                                        Modified: <span v-if="selected_file_details">{{ fromIsoToHumanDate(selected_file_details.last_modification)
+                                                        }}</span><br/>
+                                                        Accessed: <span v-if="selected_file_details">{{ fromIsoToHumanDate(selected_file_details.last_access) }}</span><br/>
+                                                    </p>
+                                                </div>
+                                                <h5>Id3 tags:</h5>
+                                                <div class="selectionDetails">
+                                                    <p>
+                                                        Artist: <span v-if="selected_file_tags">{{ selected_file_tags.artist }}</span><br/>
+                                                        Album: <span v-if="selected_file_tags">{{ selected_file_tags.album }}</span><br/>
+                                                        Title: <span v-if="selected_file_tags">{{ selected_file_tags.title }}</span><br/>
+                                                        Genre: <span v-if="selected_file_tags">{{ selected_file_tags.genre }}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="chooseVampHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#chooseVamp"
+                                                aria-expanded="false" aria-controls="chooseVamp">
+                                            2. Choose VAMP plugin ({{ vamp_plugins.length }} available)
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="chooseVamp" class="collapse" aria-labelledby="chooseVampHeading"
+                                     data-parent="#makeRequestAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-7">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>VAMP plugin key</th>
+                                                            <th>Selection</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr v-for="plugin in vamp_plugins">
+                                                            <td>{{ plugin }}</td>
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm"
+                                                                        v-bind:name="plugin"
+                                                                        v-on:click="fetchPluginDetails">Select
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <h6>VAMP plugin details:</h6>
+                                                <div>
+                                                    <p>
+                                                        Key: <span v-if="selected_plugin_details">{{ selected_plugin }}</span><br/>
+                                                        Vendor: <span v-if="selected_plugin_details">{{ selected_plugin_details.vendor }}</span><br/>
+                                                        Name: <span v-if="selected_plugin_details">{{ selected_plugin_details.name }}</span><br/>
+                                                        Output: <span v-if="selected_plugin_details">{{ selected_plugin_details.output }}</span><br/>
+                                                        Library file: <span v-if="selected_plugin_details">{{ selected_plugin_details.library_file_name
+                                                        }}</span><br/>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header" id="reviewConfigHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#reviewConfig"
+                                                aria-expanded="false" aria-controls="reviewConfig">
+                                            3. Review and make request
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="reviewConfig" class="collapse" aria-labelledby="reviewConfigHeading"
+                                     data-parent="#makeRequestAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p>Selected audio file: {{ selected_file }}</p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p>Selected VAMP plugin: {{ selected_plugin }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p>Selected plugin config:<br/><code>{{ selected_plugin_config }}</code>
+                                                </p>
 
-    <div class="selected_audio">
-        <h4>Details of audio file: {{ selected_file }}</h4>
-        <ul v-if="selected_file_details">
-            <li>File name: {{ selected_file_details.file_name }}</li>
-            <li>Size (bytes): {{ selected_file_details.size }}</li>
-            <li>Created (UTC): {{ selected_file_details.created_on }}</li>
-            <li>Modified (UTC): {{ selected_file_details.last_modification }}</li>
-            <li>Accessed (UTC): {{ selected_file_details.last_access }}</li>
-        </ul>
-    </div>
-    <div class="selected_plugin">
-        <h4>Details of VAMP plugin: {{ selected_plugin }}</h4>
-        <ul v-if="selected_plugin_details">
-            <li>Vendor: {{ selected_plugin_details.vendor }}</li>
-            <li>Name: {{ selected_plugin_details.name }}</li>
-            <li>Output: {{ selected_plugin_details.output }}</li>
-            <li>Library file: {{ selected_plugin_details.library_file_name }}</li>
-        </ul>
-    </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <p>Metrics that will be extracted:<br/><code>{{ selected_plugin_metrics
+                                                    }}</code></p>
 
-    <div class="request_button">
-        <button :class="{ disabled: nothingSelected }" :disabled="nothingSelected" v-on:click="resetSelection">Clear selection</button>
-        <button :class="{ disabled: requestNotPossible }" :disabled="requestNotPossible" v-on:click="sendRequest">Send request</button>
-    </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3 offset-3">
+                                                <button role="button" class="btn btn-md btn-default"
+                                                        :class="{ disabled: nothingSelected }"
+                                                        :disabled="nothingSelected"
+                                                        v-on:click="resetSelection">Clear selection
+                                                </button>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <button role="button" class="btn btn-md btn-primary"
+                                                        :class="{ disabled: requestNotPossible }"
+                                                        :disabled="requestNotPossible"
+                                                        v-on:click="sendRequest">Send request
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="browseResults" class="tab-pane">
 
-    <div class="request_list">
-        <h4>Extracted requests</h4>
-        <ul>
-            <li v-for="request in requests">
-                <a v-bind:name="request" v-on:click="fetchRequestDetails">{{ request }}</a>
-            </li>
-        </ul>
-    </div>
 
-    <div class="request_details">
-        <h4>Details of request: {{ selected_request }}</h4>
-        <h5 v-if="selected_request_status">Status: {{ selected_request_status }}</h5>
-        <ul v-if="selected_request_details">
-            <li>Task ID: {{ selected_request_details.task_id }}</li>
-            <li>Audio file name: {{ selected_request_details.audio_meta.file_name }}</li>
-            <li>Plugin: {{ selected_request_details.plugin.vendor }}:{{ selected_request_details.plugin.name }}:{{
-                selected_request_details.plugin.output }}
-            </li>
-        </ul>
+                        <div id="browseResultsAccordion">
+                            <div class="card">
+                                <div class="card-header" id="listRequestsHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" aria-expanded="true" data-toggle="collapse"
+                                                aria-controls="listRequests" data-target="#listRequests">
+                                            Choose request ({{ requests.length }} available)
+                                            <button class="btn btn-primary btn-sm" v-on:click="fetchRequestList">Reload</button>
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="listRequests" class="collapse show" aria-labelledby="listRequestsHeading"
+                                     data-parent="#browseResultsAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Request ID</th>
+                                                            <th>Audio file</th>
+                                                            <th>Plugin key</th>
+                                                            <th>Selection</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr v-for="request in requests">
+                                                            <td>{{ request.task_id }}</td>
+                                                            <td>{{ request.audio_meta.file_name }}</td>
+                                                            <td>{{ request.plugin.vendor }}:{{ request.plugin.name }}:{{
+                                                                request.plugin.output }}
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm"
+                                                                        v-bind:name="request.task_id"
+                                                                        v-on:click="fetchRequestDetails">Select
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="viewRequestHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#viewRequest" aria-expanded="false"
+                                                aria-controls="viewRequest">
+                                            View request details <span v-if="selected_request">({{ selected_request }})</span>
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="viewRequest" class="collapse" aria-labelledby="viewRequestHeading"
+                                     data-parent="#browseResultsAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <p>
+                                                    Task ID: <span v-if="selected_request_details">{{ selected_request_details.task_id }}</span><br/>
+                                                    Status: <span v-if="selected_request_details">{{ selected_request_status }}</span><br />
+                                                    Audio file name: <span v-if="selected_request_details">{{ selected_request_details.audio_meta.file_name }}</span><br/>
+                                                    Plugin: <span v-if="selected_request_details">{{ selected_request_details.plugin.vendor }}:{{
+                                                        selected_request_details.plugin.name }}:{{
+                                                        selected_request_details.plugin.output }}</span><br/>
+                                                    Plugin config: <span v-if="selected_request_details"><code>{{ selected_request_details.plugin_config }}</code></span><br/>
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div v-if="selected_request_details">
+                                                    <p>
+                                                        Channels: {{ selected_request_details.audio_meta.channels_count }}<br/>
+                                                        Sample rate: {{ selected_request_details.audio_meta.sample_rate }} Hz<br/>
+                                                        Bit rate: {{ selected_request_details.audio_meta.bit_rate_kbps }} kbps<br/>
+                                                        Length: {{ selected_request_details.audio_meta.length_sec }} seconds<br/>
+                                                        Artist: {{ selected_request_details.id3_tag.artist }}<br/>
+                                                        Album: {{ selected_request_details.id3_tag.album }}<br/>
+                                                        Title: {{ selected_request_details.id3_tag.title }}<br/>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header" id="viewMetricsHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#viewMetrics" aria-expanded="false"
+                                                aria-controls="viewMetrics">
+                                            Select and view Metrics <span v-if="selected_request">({{ selected_request }})</span>
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="viewMetrics" class="collapse" aria-labelledby="viewMetricsHeading"
+                                     data-parent="#browseResultsAccordion">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Metric name</th>
+                                                            <th>Selection</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr v-for="metric_name in selected_request_metrics">
+                                                            <td>{{ metric_name }}</td>
+                                                            <td>
+                                                                <button class="btn btn-primary btn-sm"
+                                                                        v-bind:name="metric_name"
+                                                                        v-on:click="fetchRequestMetricDetails">Select
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <h5>Metric details:</h5>
+                                                <p>
+                                                    Metric name: <span v-if="selected_request_selected_metric_name">{{ selected_request_selected_metric_name }}</span><br/>
+                                                    Audio file name: <span v-if="selected_request_selected_metric_value">{{ selected_request_details.audio_meta.file_name }}</span><br/>
+                                                    Plugin name: <span v-if="selected_request_selected_metric_value">{{ selected_request_details.plugin.vendor }}:{{ selected_request_details.plugin.name }}:{{ selected_request_details.plugin.output }}</span><br/>
+                                                </p>
+                                                <h5>Metric value:</h5>
+                                                <p>
+                                                    Count: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.count }}</span><br/>
+                                                    Sum: <span v-if="selected_request_selected_metric_value">{{ selected_request_selected_metric_value.stats.sum }}</span><br/>
+                                                    Min: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.minimum) }}</span><br/>
+                                                    Max: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.maximum) }}</span><br/>
+                                                    Mean: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.mean) }}</span><br/>
+                                                    Median: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.median) }}</span><br/>
+                                                    Std dev: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.standard_deviation) }}</span><br/>
+                                                    Variance: <span v-if="selected_request_selected_metric_value">{{ roundStat(selected_request_selected_metric_value.stats.variance) }}</span><br/>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div id="analyzeCompare" class="tab-pane">
+                        <p>TO DO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                <span class="text-muted">audiopyle 2018 by emkor, see <a
+                        href="https://github.com/emkor/audiopyle/blob/master/LICENSE.md">license</a></span>
+                </div>
+                <div class="col-sm-6">
+                    <p class="text-muted">Backend API status: {{ api_status }}</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
 
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="node_modules/vue/dist/vue.min.js"></script>
+<script src="api_lib.js"></script>
 <script src="index.js"></script>
 </body>
 </html>
