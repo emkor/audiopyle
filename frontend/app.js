@@ -49,9 +49,9 @@ var viewResultsApp = new Vue({
         selected_request_selected_metric_value: null
     },
     methods: {
-        fetchRequestDetails: event => fetchRequest(event.currentTarget.name),
-        fetchRequestMetricDetails: event => fetchRequestMetricValues(event.currentTarget.name),
-        fetchRequests: event => fetchRequestList(),
+        fetchRequestDetails: event => fetchRequest(viewResultsApp, event.currentTarget.name),
+        fetchRequestMetricDetails: event => fetchRequestMetricValues(viewResultsApp, event.currentTarget.name),
+        fetchRequests: event => fetchRequestList(viewResultsApp),
         initData: function () {
             this.fetchRequests();
         }

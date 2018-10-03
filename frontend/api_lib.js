@@ -1,27 +1,5 @@
 API_HOST = 'http://localhost:8080';
 
-function fetchJson(url, responseJsonHandler, errorHandler) {
-    // on success, calls responseJsonHandler() with response JSON, on failure - calls errorHandler() with error message
-    fetch(url)
-        .then(function (response) {
-            if (response.ok) {
-                response.json()
-                    .then(value => responseJsonHandler(value))
-                    .catch(function (reason) {
-                        console.error("Could not parse response from " + url + ": " + reason);
-                        errorHandler(reason);
-                    });
-            }
-            else {
-                console.error("Response from " + url + " was " + response.status + " (" + response.statusText + ")");
-                errorHandler(response.statusText);
-            }
-        })
-        .catch((function (reason) {
-            console.error("Could not parse response from " + url + ": " + reason);
-            errorHandler(reason);
-        }));
-}
 
 function featchApiStatus(app) {
     app.api_status = "...";
@@ -44,11 +22,11 @@ function fetchPluginList(app) {
         e => app.vamp_plugins = []);
 }
 
-function fetchRequestList() {
-    viewResultsApp.requests = [];
+function fetchRequestList(app) {
+    app.requests = [];
     fetchJson(API_HOST + '/request',
-        v => viewResultsApp.requests = v,
-        e => viewResultsApp.requests = []);
+        v => app.requests = v,
+        e => app.requests = []);
 }
 
 function fetchAudioDetails(app, audioFileName) {
@@ -105,48 +83,48 @@ function sendExtractionRequest(app, responseHandler) {
         .catch(error => console.error("Could not fetch request " + app.selected_request + ": " + error));
 }
 
-function fetchRequest(requestId) {
-    viewResultsApp.selected_request = requestId;
-    viewResultsApp.selected_request_details = null;
-    viewResultsApp.selected_request_metrics = [];
-    viewResultsApp.selected_request_selected_metric_name = null;
-    viewResultsApp.selected_request_selected_metric_value = null;
-    fetchJson(API_HOST + '/request/' + encodeURIComponent(viewResultsApp.selected_request) + '/status',
+function fetchRequest(app, requestId) {
+    app.selected_request = requestId;
+    app.selected_request_details = null;
+    app.selected_request_metrics = [];
+    app.selected_request_selected_metric_name = null;
+    app.selected_request_selected_metric_value = null;
+    fetchJson(API_HOST + '/request/' + encodeURIComponent(app.selected_request) + '/status',
         function (value) {
-            viewResultsApp.selected_request_status = value.status;
-            if (viewResultsApp.selected_request_status === 'done') {
-                fetchRequestDetails(viewResultsApp.selected_request);
-                fetchRequestMetricNames(viewResultsApp.selected_request);
+            app.selected_request_status = value.status;
+            if (app.selected_request_status === 'done') {
+                fetchRequestDetails(app, app.selected_request);
+                fetchRequestMetricNames(app, app.selected_request);
             }
             else {
-                console.info("Omitting fetching request details, because status is " + viewResultsApp.selected_request_status);
+                console.info("Omitting fetching request details, because status is " + app.selected_request_status);
             }
         },
         function (e) {
-            viewResultsApp.selected_request = null;
-            viewResultsApp.selected_request_details = null;
+            app.selected_request = null;
+            app.selected_request_details = null;
         });
 }
 
-function fetchRequestMetricValues(metric_name) {
-    viewResultsApp.selected_request_selected_metric_name = metric_name;
-    viewResultsApp.selected_request_selected_metric_value = null;
+function fetchRequestMetricValues(app, metric_name) {
+    app.selected_request_selected_metric_name = metric_name;
+    app.selected_request_selected_metric_value = null;
     let url = API_HOST
-        + '/request/' + encodeURIComponent(viewResultsApp.selected_request)
-        + '/metric/' + encodeURIComponent(viewResultsApp.selected_request_selected_metric_name);
+        + '/request/' + encodeURIComponent(app.selected_request)
+        + '/metric/' + encodeURIComponent(app.selected_request_selected_metric_name);
     fetchJson(url,
-        v => viewResultsApp.selected_request_selected_metric_value = v,
-        e => viewResultsApp.selected_request_selected_metric_value = null)
+        v => app.selected_request_selected_metric_value = v,
+        e => app.selected_request_selected_metric_value = null)
 }
 
-function fetchRequestDetails(task_id) {
+function fetchRequestDetails(app, task_id) {
     fetchJson(API_HOST + '/request/' + task_id,
-        v => viewResultsApp.selected_request_details = v,
-        e => viewResultsApp.selected_request_details = null);
+        v => app.selected_request_details = v,
+        e => app.selected_request_details = null);
 }
 
-function fetchRequestMetricNames(task_id) {
+function fetchRequestMetricNames(app, task_id) {
     fetchJson(API_HOST + '/request/' + task_id + "/metric",
-        v => viewResultsApp.selected_request_metrics = v,
-        e => viewResultsApp.selected_request_metrics = []);
+        v => app.selected_request_metrics = v,
+        e => app.selected_request_metrics = []);
 }
