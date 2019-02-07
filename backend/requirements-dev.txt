@@ -1,0 +1,6 @@
+wheel
+mypy
+pytest
+pytest-cov
+assertpy
+numpy

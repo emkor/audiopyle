@@ -18,7 +18,7 @@ class ConfigApiTest(TestCase):
 
         assert_that(response.status_code).is_equal_to(expected_status_code)
         json_response = response.json()
-        assert_that(len(json_response.keys())).is_greater_than_or_equal_to(expected_plugin_config_records_count)
+        assert_that(len(json_response)).is_greater_than_or_equal_to(expected_plugin_config_records_count)
 
     def test_should_return_metric_config_content(self):
         expected_status_code = 200
@@ -27,4 +27,4 @@ class ConfigApiTest(TestCase):
 
         assert_that(response.status_code).is_equal_to(expected_status_code)
         json_response = response.json()
-        assert_that(len(json_response.keys())).is_greater_than_or_equal_to(expected_metric_config_records_count)
+        assert_that(len(json_response)).is_greater_than_or_equal_to(expected_metric_config_records_count)

@@ -1,19 +1,23 @@
-all: test package basedocker docker verify
+all: test build basedocker docker verify
 
 SPECTACLE = spectacle
+NPM = npm
 
 config:
 	@echo "---- Configuring Python env ----"
 	@make --directory ./backend config
+	@echo "---- Installing tool for documentation generation ----"
+	@$(NPM) install -g spectacle
 
 test:
-	@echo "---- Testing Python env ---- "
+	@echo "---- Testing Python backend ---- "
 	@make --directory ./backend test
 
-package:
-	@echo "---- Packaging Python env ---- "
-	@make --directory ./backend package
-	@make --directory ./frontend package
+build:
+	@echo "---- Packaging Python backend ---- "
+	@make --directory ./backend build
+	@echo "---- Packaging JS frontend ---- "
+	@make --directory ./frontend build
 
 basedocker:
 	@echo "---- Building base Docker image ----"
@@ -21,9 +25,7 @@ basedocker:
 
 docker:
 	@echo "---- Building app Docker images ----"
-	@docker build -t emkor/audiopyle-lib -f scripts/Dockerfile_lib ./scripts
-	@docker build -t emkor/audiopyle-worker -f scripts/Dockerfile_worker ./scripts
-	@docker build -t emkor/audiopyle-api -f scripts/Dockerfile_api ./scripts
+	make --directory ./backend docker
 	make --directory ./frontend docker
 
 docs:
@@ -36,14 +38,15 @@ run:
 	@docker-compose -f ./scripts/docker-compose.yml up
 
 verify:
-	@echo "---- Building integration tests Docker image ----"
-	@docker build -t emkor/audiopyle-testcases -f scripts/Dockerfile_testcases ./scripts
 	@echo "---- Running integration tests ----"
 	@docker-compose -f ./scripts/docker-compose-ci.yml up --no-build --abort-on-container-exit --timeout 30 --exit-code-from testcases
 
 cleanup:
 	@echo "---- Cleaning up Audiopyle app ----"
+	@make --directory ./backend cleanup
+	@make --directory ./frontend cleanup
+	@rm -rf ./spectacle_docs
 	@docker-compose -f ./scripts/docker-compose.yml down
 	@docker-compose -f ./scripts/docker-compose-ci.yml down
 
-.PHONY: all config test docs package basedocker docker run verify
+.PHONY: all config test docs build basedocker docker run verify
